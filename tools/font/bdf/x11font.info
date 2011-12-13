@@ -1,0 +1,30 @@
+Files:
+  micro.bdf
+  cursor.bdf
+  4x6.bdf
+  5x7.bdf
+  5x8.bdf
+  6x10.bdf
+  6x12.bdf
+  6x13B.bdf
+  6x13.bdf
+  6x13O.bdf
+  6x9.bdf
+  7x13B.bdf
+  7x13.bdf
+  7x13O.bdf
+  7x14B.bdf
+  7x14.bdf
+  8x13B.bdf
+  8x13.bdf
+  8x13O.bdf
+  9x15B.bdf
+  9x15.bdf
+  9x18B.bdf
+  9x18.bdf
+  10x20.bdf
+Source: /usr/share/fonts/X11/misc/, http://www.x.org/releases/X11R7.6/src/font/
+Font Copyright Statement:  
+  Public domain terminal emulator font.  Share and enjoy. (6x10.bdf, 6x12.bdf)
+  These "glyphs" are unencumbered (cursor.bdf)
+  Public domain font.  Share and enjoy. (all other files)
