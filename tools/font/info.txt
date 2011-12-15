@@ -1,0 +1,13 @@
+Toolchain Steps
+  A) ttf --> bdf
+    Conversion with otf2bdf
+  B) bdf --> c-file
+    Conversion with bdf2u8g
+
+Source Folders
+  bdf: Fonts which are available as bdf file (x11 fonts, unifont)
+  ttf: Fonts which are available as ttf file
+  
+Rebuild
+  Execute "do_u8g_fonts.sh" inside build folder
+  
