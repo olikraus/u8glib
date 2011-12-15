@@ -46,6 +46,7 @@ DEFS:=-DARDUINO=22
   
 U8G_PATH:=$(shell cd ../../.. && pwd)/csrc/
 U8G_FONT_PATH:=$(shell cd ../../.. && pwd)/fntsrc/
+U8G_DOGM_PATH:=$(shell cd ../../.. && pwd)/dogmsrc/
 
 # The location where the avr tools (e.g. avr-gcc) are located. Requires a '/' at the end.
 # Can be empty if all tools are accessable through the search path
@@ -92,7 +93,7 @@ PDESRC:=$(shell ls *.pde)
 TARGETNAME=$(basename $(PDESRC))
 
 CDIRS:=$(EXTRA_DIRS) $(addsuffix utility/,$(EXTRA_DIRS))
-CDIRS:=*.c utility/*.c $(U8G_PATH)*.c $(U8G_FONT_PATH)*.c $(addsuffix *.c,$(CDIRS)) $(ARDUINO_PATH)hardware/arduino/cores/arduino/*.c
+CDIRS:=*.c utility/*.c $(U8G_PATH)*.c $(U8G_FONT_PATH)*.c $(U8G_DOGM_PATH)*.c $(addsuffix *.c,$(CDIRS)) $(ARDUINO_PATH)hardware/arduino/cores/arduino/*.c
 #CDIRS:=*.c utility/*.c $(addsuffix *.c,$(CDIRS)) $(ARDUINO_PATH)hardware/arduino/cores/arduino/*.c
 CSRC:=$(shell ls $(CDIRS) 2>/dev/null)
 
@@ -155,7 +156,7 @@ COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
 COMMON_FLAGS += -Wl,--relax
 COMMON_FLAGS += -mcall-prologues 
 COMMON_FLAGS += -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-COMMON_FLAGS += -I. -I$(U8G_PATH)
+COMMON_FLAGS += -I. -I$(U8G_PATH) -I$(U8G_DOGM_PATH)
 COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/cores/arduino
 COMMON_FLAGS += $(addprefix -I,$(EXTRA_DIRS)) $(addprefix -I,$(addsuffix utility/,$(EXTRA_DIRS)))
 
