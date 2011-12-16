@@ -24,16 +24,16 @@ int main(void)
     w = u8g_GetFontBBXWidth(&u8g);
     h = u8g_GetFontBBXHeight(&u8g);
     //u8g_DrawStr(&u8g, 0, 2*h, 0, "ABCgdef");
-    u8g_DrawStr(&u8g, 0, 5, 0, "g");
-    u8g_DrawStr(&u8g, 10, 7, 0, "g");
-    u8g_DrawStr(&u8g, 20, 9, 0, "g");
-    u8g_DrawStr(&u8g, 20, 9, 0, "ga");
+    u8g_DrawStrDir(&u8g, 0, 5, 0, "g");
+    u8g_DrawStrDir(&u8g, 10, 7, 0, "g");
+    u8g_DrawStrDir(&u8g, 20, 9, 0, "g");
+    u8g_DrawStrDir(&u8g, 20, 9, 0, "ga");
 
     //u8g_DrawStr(&u8g, 40, 9, 0, "g");
-    u8g_DrawStr(&u8g, 70, 25, 0, "gabc");
-    u8g_DrawStr(&u8g, 70, 25, 1, "gabc");
-    u8g_DrawStr(&u8g, 70, 25, 2, "gabc");
-    u8g_DrawStr(&u8g, 70, 25, 3, "gabc");
+    u8g_DrawStr(&u8g, 70+3, 25, "gabc");
+    u8g_DrawStr90(&u8g, 70, 25+3, "gabc");
+    u8g_DrawStr180(&u8g, 70-3, 25, "gabc");
+    u8g_DrawStr270(&u8g, 70, 25-3, "gabc");
 
     
     //u8g_DrawFrame(&u8g, 2, 2, 9, 3);

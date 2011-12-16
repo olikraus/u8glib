@@ -53,10 +53,6 @@ void u8g_font_GetGlyphBox(const void *font, u8g_glyph_t g, uint8_t *x, uint8_t *
 void u8g_font_GetStrBox(const void *font, const char *s, uint8_t *x, uint8_t *y, uint8_t *width, uint8_t *height);
 void u8g_font_GetStrBoxP(const void *font, const char *s, uint8_t *x, uint8_t *y, uint8_t *width, uint8_t *height);
 
-int8_t u8g_font_DrawGlyph(u8g_t *u8g, const void *font, u8g_uint_t x, u8g_uint_t y, uint8_t encoding);
-void u8g_font_DrawStr(u8g_t *u8g, const void *font, u8g_uint_t x, u8g_uint_t y, const char *s);
-void u8g_font_DrawStrP(const void *font, u8g_uint_t x, u8g_uint_t y, const char *s);
-
 
 /* use case: What is the width and the height of the minimal box into which string s fints? */
 void u8g_font_GetStrSize(const void *font, const char *s, u8g_uint_t *width, u8g_uint_t *height);
@@ -400,15 +396,13 @@ size_t u8g_font_GetSize(const void *font)
   Draw a glyph
   x,y: left baseline position of the glyph
 */
-int8_t u8g_DrawGlyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t encoding)
+int8_t u8g_DrawGlyphDir(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t encoding)
 {
   u8g_glyph_t g;
   uint8_t w, h, i, j;
   const u8g_pgm_uint8_t *data;
   uint8_t bytes_per_line;
   u8g_uint_t ix, iy;
-  
-
 
   g = u8g_GetGlyph(u8g, encoding);
   if ( g == NULL  )
@@ -517,15 +511,194 @@ int8_t u8g_DrawGlyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_
         }
         ix++;
       }
-      break;
-    
+      break;    
   }
-  
-  
-  
-  
   return u8g->glyph_dx;
 }
+
+
+int8_t u8g_DrawGlyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+{
+  const u8g_pgm_uint8_t *data;
+  uint8_t w, h;
+  uint8_t i, j;
+  u8g_uint_t ix, iy;
+
+  {
+    u8g_glyph_t g = u8g_GetGlyph(u8g, encoding);
+    if ( g == NULL  )
+      return 0;
+    data = u8g_font_GetGlyphDataStart(u8g->font, g);
+  }
+  
+  w = u8g->glyph_width;
+  h = u8g->glyph_height;
+  
+  x += u8g->glyph_x;
+  y -= u8g->glyph_y;
+  y--;
+  
+  if ( u8g_IsBBXIntersection(u8g, x, y-h+1, w, h) == 0 )
+    return u8g->glyph_dx;
+
+  /* now, w is reused as bytes per line */
+  w += 7;
+  w /= 8;
+  
+  iy = y;
+  iy -= h;
+  iy++;
+
+  for( j = 0; j < h; j++ )
+  {
+    ix = x;
+    for( i = 0; i < w; i++ )
+    {
+      u8g_Draw8Pixel(u8g, ix, iy, 0, u8g_pgm_read(data));
+      data++;
+      ix+=8;
+    }
+    iy++;
+  }
+  return u8g->glyph_dx;
+}
+
+int8_t u8g_DrawGlyph90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+{
+  const u8g_pgm_uint8_t *data;
+  uint8_t w, h;
+  uint8_t i, j;
+  u8g_uint_t ix, iy;
+
+  {
+    u8g_glyph_t g = u8g_GetGlyph(u8g, encoding);
+    if ( g == NULL  )
+      return 0;
+    data = u8g_font_GetGlyphDataStart(u8g->font, g);
+  }
+  
+  w = u8g->glyph_width;
+  h = u8g->glyph_height;
+  
+  x += u8g->glyph_y;
+  x++;
+  y += u8g->glyph_x;
+  
+  if ( u8g_IsBBXIntersection(u8g, x, y, h, w) == 0 )
+    return u8g->glyph_dx;
+
+  /* now, w is reused as bytes per line */
+  w += 7;
+  w /= 8;
+  
+  ix = x;
+  ix += h;
+  ix--;
+  for( j = 0; j < h; j++ )
+  {
+    iy = y;
+    for( i = 0; i < w; i++ )
+    {
+      u8g_Draw8Pixel(u8g, ix, iy, 1, u8g_pgm_read(data));
+      data++;
+      iy+=8;
+    }
+    ix--;
+  }
+  return u8g->glyph_dx;
+}
+
+int8_t u8g_DrawGlyph180(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+{
+  const u8g_pgm_uint8_t *data;
+  uint8_t w, h;
+  uint8_t i, j;
+  u8g_uint_t ix, iy;
+
+  {
+    u8g_glyph_t g = u8g_GetGlyph(u8g, encoding);
+    if ( g == NULL  )
+      return 0;
+    data = u8g_font_GetGlyphDataStart(u8g->font, g);
+  }
+  
+  w = u8g->glyph_width;
+  h = u8g->glyph_height;
+  
+  x -= u8g->glyph_x;
+  y += u8g->glyph_y;
+  y++;
+  
+  if ( u8g_IsBBXIntersection(u8g, x-w-1, y, w, h) == 0 )
+    return u8g->glyph_dx;
+
+  /* now, w is reused as bytes per line */
+  w += 7;
+  w /= 8;
+  
+  iy = y;
+  iy += h;
+  iy--;
+  for( j = 0; j < h; j++ )
+  {
+    ix = x;
+    for( i = 0; i < w; i++ )
+    {
+      u8g_Draw8Pixel(u8g, ix, iy, 2, u8g_pgm_read(data));
+      data++;
+      ix-=8;
+    }
+    iy--;
+  }
+  return u8g->glyph_dx;
+}
+
+int8_t u8g_DrawGlyph270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+{
+  const u8g_pgm_uint8_t *data;
+  uint8_t w, h;
+  uint8_t i, j;
+  u8g_uint_t ix, iy;
+
+  {
+    u8g_glyph_t g = u8g_GetGlyph(u8g, encoding);
+    if ( g == NULL  )
+      return 0;
+    data = u8g_font_GetGlyphDataStart(u8g->font, g);
+  }
+  
+  w = u8g->glyph_width;
+  h = u8g->glyph_height;
+  
+  x -= u8g->glyph_y;
+  x--;
+  y -= u8g->glyph_x;
+  
+  if ( u8g_IsBBXIntersection(u8g, x-h-1, y-w-1, h, w) == 0 )
+    return u8g->glyph_dx;
+
+  /* now, w is reused as bytes per line */
+  w += 7;
+  w /= 8;  
+      
+  ix = x;
+  ix -= h;
+  ix++;
+  
+  for( j = 0; j < h; j++ )
+  {
+    iy = y;
+    for( i = 0; i < w; i++ )
+    {
+      u8g_Draw8Pixel(u8g, ix, iy, 3, u8g_pgm_read(data));
+      data++;
+      iy-=8;
+    }
+    ix++;
+  }
+  return u8g->glyph_dx;
+}
+
 
 /*
   Draw a glyph
@@ -536,36 +709,80 @@ int8_t u8g_DrawGlyphFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir,
   /* TODO: apply "dir" */
   x -= u8g_GetFontBBXOffX(u8g);
   y += u8g_GetFontBBXOffY(u8g);
-  return u8g_DrawGlyph(u8g, x, y, dir, encoding);
+  return u8g_DrawGlyphDir(u8g, x, y, dir, encoding);
 }
 
 
-u8g_uint_t u8g_DrawStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s)
+u8g_uint_t u8g_DrawStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
 {
   u8g_uint_t t = 0;
   int8_t d;
   while( *s != '\0' )
   {
-    d = u8g_DrawGlyph(u8g, x, y, dir, *s );
-    switch(dir)
-    {
-      case 0:
-        x += d;
-        break;
-      case 1:
-        y += d;
-        break;
-      case 2:
-        x -= d;
-        break;
-      case 3:
-        y -= d;
-        break;
-    }
+    d = u8g_DrawGlyph(u8g, x, y, *s);
+    x += d;
     t += d;
     s++;
   }
   return t;
+}
+
+u8g_uint_t u8g_DrawStr90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
+{
+  u8g_uint_t t = 0;
+  int8_t d;
+  while( *s != '\0' )
+  {
+    d = u8g_DrawGlyph90(u8g, x, y, *s);
+    y += d;
+    t += d;
+    s++;
+  }
+  return t;
+}
+
+u8g_uint_t u8g_DrawStr180(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
+{
+  u8g_uint_t t = 0;
+  int8_t d;
+  while( *s != '\0' )
+  {
+    d = u8g_DrawGlyph180(u8g, x, y, *s);
+    x -= d;
+    t += d;
+    s++;
+  }
+  return t;
+}
+
+u8g_uint_t u8g_DrawStr270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
+{
+  u8g_uint_t t = 0;
+  int8_t d;
+  while( *s != '\0' )
+  {
+    d = u8g_DrawGlyph270(u8g, x, y, *s);
+    y -= d;
+    t += d;
+    s++;
+  }
+  return t;
+}
+
+u8g_uint_t u8g_DrawStrDir(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s)
+{
+  switch(dir)
+  {
+    case 0:
+      return u8g_DrawStr(u8g, x, y, s);
+    case 1:
+      return u8g_DrawStr90(u8g, x, y, s);
+    case 2:
+      return u8g_DrawStr180(u8g, x, y, s);
+    case 3:
+      return u8g_DrawStr270(u8g, x, y, s);
+  }
+  return 0;
 }
 
 u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const u8g_pgm_uint8_t  *s)
@@ -574,7 +791,7 @@ u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, con
   int8_t d;
   while( u8g_pgm_read(s) != '\0' )
   {
-    d = u8g_DrawGlyph(u8g, x, y, dir, u8g_pgm_read(s) );
+    d = u8g_DrawGlyphDir(u8g, x, y, dir, u8g_pgm_read(s) );
     switch(dir)
     {
       case 0:
@@ -600,7 +817,7 @@ u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t di
 {
   x -= u8g_GetFontBBXOffX(u8g);
   y += u8g_GetFontBBXOffY(u8g);
-  return u8g_DrawStr(u8g, x, y, dir, s);
+  return u8g_DrawStrDir(u8g, x, y, dir, s);
 }
 
 
