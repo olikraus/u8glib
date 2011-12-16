@@ -130,14 +130,14 @@ uint8_t dog_DrawStr(uint8_t x, uint8_t y, DOG_PGM_P font, const char *s)
 {
   y = dog_height_minus_one - y;
   u8g_SetFont(&u8g_dogm128_obj, font);
-  return u8g_DrawStr(&u8g_dogm128_obj, x, y, 0, s);
+  return u8g_DrawStr(&u8g_dogm128_obj, x, y, s);
 }
 
 uint8_t dog_DrawStrP(uint8_t x, uint8_t y, DOG_PGM_P font, const u8g_pgm_uint8_t  *s)
 {
   y = dog_height_minus_one - y;
   u8g_SetFont(&u8g_dogm128_obj, font);
-  return u8g_DrawStrP(&u8g_dogm128_obj, x, y, 0, s);
+  return u8g_DrawStrP(&u8g_dogm128_obj, x, y, s);
 }
 
 

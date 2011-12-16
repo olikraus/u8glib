@@ -285,6 +285,8 @@ uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 /*===============================================================*/
 /* u8g_ll_api.c */
 
+typedef void (*u8g_draw_cursor_fn)(u8g_t *u8g);
+
 struct _u8g_t
 {
   u8g_uint_t width;
@@ -295,8 +297,10 @@ struct _u8g_t
   const u8g_pgm_uint8_t *font;             /* regular font for all text procedures */
   const u8g_pgm_uint8_t *cursor_font;  /* special font for cursor procedures */
   uint8_t cursor_fg_color, cursor_bg_color;
-  uint8_t cursor_dir;
   uint8_t cursor_encoding;
+  u8g_uint_t cursor_x;
+  u8g_uint_t cursor_y;
+  u8g_draw_cursor_fn cursor_fn;
   
   int8_t glyph_dx;
   int8_t glyph_x;
@@ -306,6 +310,7 @@ struct _u8g_t
   
   u8g_dev_arg_pixel_t arg_pixel;
   /* uint8_t color_index; */
+  
 };
 
 uint8_t u8g_call_dev_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
@@ -370,9 +375,16 @@ u8g_uint_t u8g_DrawStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s);
 u8g_uint_t u8g_DrawStr90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s);
 u8g_uint_t u8g_DrawStr180(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s);
 u8g_uint_t u8g_DrawStr270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s);
+
 u8g_uint_t u8g_DrawStrDir(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s);
 
-u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const u8g_pgm_uint8_t *s);
+
+u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
+u8g_uint_t u8g_DrawStr90P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
+u8g_uint_t u8g_DrawStr180P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
+u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
+
+
 
 u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s);
 
@@ -396,8 +408,9 @@ void u8g_DrawBitmapP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t cnt, u8g
 
 /* u8g_cursor.c */
 void u8g_SetCursorFont(u8g_t *u8g, const u8g_pgm_uint8_t *cursor_font);
-void u8g_SetCursorStyle(u8g_t *u8g, uint8_t encoding, uint8_t dir);
-void u8g_DrawCursor(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y);
+void u8g_SetCursorStyle(u8g_t *u8g, uint8_t encoding);
+void u8g_SetCursorPos(u8g_t *u8g, u8g_uint_t cursor_x, u8g_uint_t cursor_y);
+void u8g_DrawCursor(u8g_t *u8g);
 
 
 

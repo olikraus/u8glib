@@ -32,15 +32,16 @@ void draw_common(u8g_t *u8g, u8g_uint_t ox, u8g_uint_t oy, u8g_uint_t w, u8g_uin
   
   /* draw the display frame */
   u8g_SetFont(u8g, u8g_font_6x10);
-  u8g_DrawStr(u8g, ox+w-35, oy-2, 0, "128x64");
+  u8g_DrawStr(u8g, ox+w-35, oy-2, "128x64");
   u8g_DrawFrame(u8g, ox-1, oy-1, w+2, h+2);
   //u8g_DrawFrame(u8g, ox-2, oy-2, w+4, h+4);
 
   /* draw upper left corner */
   u8g_SetFont(u8g, u8g_font_6x10);
-  u8g_DrawStr(u8g, ox-45, oy+4, 0, "(0,0)");
-  u8g_SetCursorStyle(u8g, 144, 0);
-  u8g_DrawCursor(u8g, ox, oy);
+  u8g_DrawStr(u8g, ox-45, oy+4, "(0,0)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox, oy);
+  u8g_DrawCursor(u8g);
 }
 
 void draw_v_measure(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t h)
@@ -51,7 +52,7 @@ void draw_v_measure(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t h)
   u8g_DrawHLine(u8g, x-1, y+h-1, 3);
   u8g_DrawVLine(u8g, x, y, h);
   sprintf(buf, "%d", h);
-  u8g_DrawStr(u8g, x+2, y+(h-1)/2+4, 0, buf);
+  u8g_DrawStr(u8g, x+2, y+(h-1)/2+4, buf);
 }
 
 void draw_h_measure(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w)
@@ -62,7 +63,7 @@ void draw_h_measure(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w)
   u8g_DrawVLine(u8g, x+w-1, y-1, 3);
   u8g_DrawHLine(u8g, x, y, w);
   sprintf(buf, "%d", w);
-  u8g_DrawStr(u8g, x+(w-1)/2-5, y+9, 0, buf);
+  u8g_DrawStr(u8g, x+(w-1)/2-5, y+9, buf);
 }
 
 
@@ -82,9 +83,10 @@ void draw_display(u8g_t *u8g)
 
   /* draw lower right corner */
   u8g_SetFont(u8g, u8g_font_6x10);
-  u8g_DrawStr(u8g, ox+w-1+17, oy+h-1+4, 0, "(127,63)");
-  u8g_SetCursorStyle(u8g, 144, 2);
-  u8g_DrawCursor(u8g, ox+w-1, oy+h-1);
+  u8g_DrawStr(u8g, ox+w-1+17, oy+h-1+4, "(127,63)");
+  u8g_SetCursorStyle(u8g, 142);
+  u8g_SetCursorPos(u8g, ox+w-1, oy+h-1);
+  u8g_DrawCursor(u8g);
 }
 
 
@@ -99,21 +101,22 @@ void draw_text_abc(u8g_t *u8g)
   draw_common(u8g, ox, oy, w, h);
   
   u8g_SetFont(u8g, u8g_font_osb18);
-  u8g_DrawStr(u8g, ox+0, oy+20, 0, "ABC");  
+  u8g_DrawStr(u8g, ox+0, oy+20, "ABC");  
   
   draw_v_measure(u8g, ox+56, oy+2, 18);
   
   u8g_SetFont(u8g, u8g_font_6x10);
-  u8g_DrawStr(u8g, ox+0-51, oy+20+4, 0, "(0,20)");
-  u8g_SetCursorStyle(u8g, 144, 0);
-  u8g_DrawCursor(u8g, ox+0, oy+20);
+  u8g_DrawStr(u8g, ox+0-51, oy+20+4, "(0,20)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+0, oy+20);
+  u8g_DrawCursor(u8g);
 }
 
 /*
   the lower draw cmd is 
-  u8g_DrawStr(u8g, 0-1, 40, 0, "ABC");  
+  u8g_DrawStr(u8g, 0-1, 40, "ABC");  
   for 8 bit graphics this is identical to
-  u8g_DrawStr(u8g, 256-1, 40, 0, "ABC");  
+  u8g_DrawStr(u8g, 256-1, 40, "ABC");  
   It is valid and possible that the reference point for a string is outside the display area.
   
 */
@@ -128,18 +131,20 @@ void draw_abc_left(u8g_t *u8g)
   draw_common(u8g, ox, oy, w, h);
   
   u8g_SetFont(u8g, u8g_font_osb18);
-  u8g_DrawStr(u8g, ox+0, oy+20, 0, "ABC");  
+  u8g_DrawStr(u8g, ox+0, oy+20, "ABC");  
   u8g_SetFont(u8g, u8g_font_6x10);
-  u8g_DrawStr(u8g, ox+0-51, oy+20+4, 0, "(0,20)");
-  u8g_SetCursorStyle(u8g, 144, 0);
-  u8g_DrawCursor(u8g, ox+0, oy+20);
+  u8g_DrawStr(u8g, ox+0-51, oy+20+4, "(0,20)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+0, oy+20);
+  u8g_DrawCursor(u8g);
   
   u8g_SetFont(u8g, u8g_font_osb18);
-  u8g_DrawStr(u8g, ox+0-1, oy+40, 0, "ABC");  
+  u8g_DrawStr(u8g, ox+0-1, oy+40, "ABC");  
   u8g_SetFont(u8g, u8g_font_6x10);
-  u8g_DrawStr(u8g, ox+0-1-63, oy+40+4, 0, "(255,40)");
-  u8g_SetCursorStyle(u8g, 144, 0);
-  u8g_DrawCursor(u8g, ox+0-1, oy+40);
+  u8g_DrawStr(u8g, ox+0-1-63, oy+40+4, "(255,40)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+0-1, oy+40);
+  u8g_DrawCursor(u8g);
   
 }
 
@@ -158,9 +163,10 @@ void draw_box(u8g_t *u8g)
   draw_h_measure(u8g, ox+10, oy+12+30+3, 20);
   
   u8g_SetFont(u8g, u8g_font_6x10);
-  u8g_DrawStr(u8g, ox+10-57, oy+12+4, 0, "(10,12)");
-  u8g_SetCursorStyle(u8g, 144, 0);
-  u8g_DrawCursor(u8g, ox+10, oy+12);
+  u8g_DrawStr(u8g, ox+10-57, oy+12+4, "(10,12)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+10, oy+12);
+  u8g_DrawCursor(u8g);
   
 }
 
@@ -175,15 +181,16 @@ void draw_rotate_b(u8g_t *u8g)
   draw_common(u8g, ox, oy, w, h);
   
   u8g_SetFont(u8g, u8g_font_osb18);
-  u8g_DrawStr(u8g, ox+20, oy+30, 0, "B");  
-  u8g_DrawStr(u8g, ox+20, oy+30, 1, "B");  
-  u8g_DrawStr(u8g, ox+20, oy+30, 2, "B");  
-  u8g_DrawStr(u8g, ox+20, oy+30, 3, "B");  
+  u8g_DrawStr(u8g, ox+20, oy+30, "B");  
+  u8g_DrawStr90(u8g, ox+20, oy+30, "B");  
+  u8g_DrawStr180(u8g, ox+20, oy+30, "B");  
+  u8g_DrawStr270(u8g, ox+20, oy+30, "B");  
   u8g_SetFont(u8g, u8g_font_6x10);
   
-  u8g_DrawStr(u8g, ox+20-63, oy+30+4, 0, "(20,30)");
-  u8g_SetCursorStyle(u8g, 144, 0);
-  u8g_DrawCursor(u8g, ox+20, oy+30);
+  u8g_DrawStr(u8g, ox+20-63, oy+30+4, "(20,30)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+20, oy+30);
+  u8g_DrawCursor(u8g);
   
   
 }
@@ -202,14 +209,14 @@ void draw_minbox_abcdefg(u8g_t *u8g)
   u8g_SetFont(u8g, u8g_font_osb18);
   tx = ox+4;
   ty = oy+26;
-  u8g_DrawStr(u8g, tx, ty, 0, "abcdefg");
+  u8g_DrawStr(u8g, tx, ty, "abcdefg");
   u8g_GetStrMinBox(u8g, "abcdefg", &tx, &ty, &tw, &th);
 
   u8g_DrawFrame(u8g, tx, ty, tw, th);
 
   tx = ox+4;
   ty = oy+54;
-  u8g_DrawStr(u8g, tx, ty, 0, "abcdefg");
+  u8g_DrawStr(u8g, tx, ty, "abcdefg");
   u8g_GetStrMinBox(u8g, "abcdefg", &tx, &ty, &tw, &th);
 
   u8g_DrawPixel(u8g, tx, ty);
@@ -233,14 +240,14 @@ void draw_minbox_ace(u8g_t *u8g)
   
   tx = ox+4;
   ty = oy+26;
-  u8g_DrawStr(u8g, tx, ty, 0, "ace");
+  u8g_DrawStr(u8g, tx, ty, "ace");
   u8g_GetStrMinBox(u8g, "ace", &tx, &ty, &tw, &th);
 
   u8g_DrawFrame(u8g, tx, ty, tw, th);
 
   tx = ox+4;
   ty = oy+54;
-  u8g_DrawStr(u8g, tx, ty, 0, "ace");
+  u8g_DrawStr(u8g, tx, ty, "ace");
   u8g_GetStrMinBox(u8g, "ace", &tx, &ty, &tw, &th);
 
   u8g_DrawPixel(u8g, tx, ty);
@@ -251,14 +258,14 @@ void draw_minbox_ace(u8g_t *u8g)
 
   tx = ox+4+50;
   ty = oy+26;
-  u8g_DrawStr(u8g, tx, ty, 0, "ace A");
+  u8g_DrawStr(u8g, tx, ty, "ace A");
   u8g_GetStrAMinBox(u8g, "ace", &tx, &ty, &tw, &th);
 
   u8g_DrawFrame(u8g, tx, ty, tw, th);
 
   tx = ox+4+50;
   ty = oy+54;
-  u8g_DrawStr(u8g, tx, ty, 0, "ace A");
+  u8g_DrawStr(u8g, tx, ty, "ace A");
   u8g_GetStrAMinBox(u8g, "ace", &tx, &ty, &tw, &th);
 
   u8g_DrawPixel(u8g, tx, ty);

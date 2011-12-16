@@ -1,0 +1,353 @@
+
+========================================================
+  overview on displays: http://beck-oled-lcd-tft-display.de/
+  
+  handy displays: http://www.module.ro/nokia_3510.html
+  
+  open source display software driver: http://serdisplib.sourceforge.net/
+
+  baugleiche nokia modelle 
+      nokiaport.de
+  nokia 2310    TFT, 65.000 Farben, 96 x 68 Pixel 
+    Display ist auch in 1600 2310 6125 vielleicht auch 1208 1209
+    baugleich mit 1110 1110i 1112 1200 1208 1600 2310 2610 6030
+    
+      Bei der suche nach dem 1600, hinweis auf 
+      A)  ST7626 65K Color 68 X 98RGB -- COG 68(8/16), 80(8/16), 4L, 3L
+          http://www.sitronix.com.tw/sitronix/product.nsf/Doc/ST7626?OpenDocument
+          (Quelle: http://forum.lcdinfo.com/viewtopic.php?t=2735)
+      B) Andere quelle spricht vom PCF8833 für das 1600
+          http://rossum.posterous.com/screen-play-lots-of-other-screens-for-microco
+          https://sourceforge.net/projects/nokiasuperbreak/
+              --> sourcecode benutzt den PCF8833
+              
+          Dann gibt es noch diesen da: SPFD54124B
+  
+    vielleicht kompatibel mit dem nokia 6100, controller wären dann S1D15G10 oder PCF8833
+        Nokia Display tutorial by Jams Lynch
+      Epson datasheet EPSON-S1D15G00_REV1_0.pdf
+      Phillips datasheet PHILIPS-lds176_spec.pdf
+      Phillips PCF8833 datasheet philips-PCF8833_1.pdf
+
+  Displays, die man mal kaufen könnte
+  DFRobot ST7920
+  http://www.komputer.de/zen/index.php?main_page=product_info&products_id=146&zenid=b4dc26bdef02415db0d74e51121d4bcb
+  oder hier:
+  http://www.mindkits.co.nz/store/led-lcds/128x64-graphic-lcd
+  
+  Von Newhaven gibt es auch ein ST7920 display: 
+  http://www.newhavendisplay.com/specs/NHD-19232WG-BTMI-VT.pdf          lieferbar!!!
+  http://www.newhavendisplay.com/app_notes/ST7920.pdf
+  Das ST7920 gibt es auch hier:
+    http://www.komputer.de/zen/index.php?main_page=product_info&cPath=30&products_id=146
+
+  auch interessant:
+  http://www.ledsee.com/index.php?page=shop.browse&category_id=24&option=com_virtuemart&Itemid=1
+  z.B. ein 192x64 display, 
+  
+  4D displays:
+    http://www.tigal.com/category/148
+  oder von hier:
+    http://www.tinkersoup.de/product_info.php?products_id=359
+  
+  Sparkfun Color LCD Shield (Nokia 6100)
+    http://www.sparkfun.com/products/9363
+  Das Sparkfun Nokia 6100 display gibt es im arduino shop
+    http://store.arduino.cc/ww/index.php?main_page=product_info&cPath=11&products_id=125
+  oder in berlin zu haben:
+    http://www.tinkersoup.de/product_info.php?products_id=427
+
+  http://www.shieldlist.org/nuelectronics/colorlcd-joystick
+  
+  http://www.shieldlist.org/nuelectronics/tft-2.8-lcd
+  
+  http://www.display3000.com/  --> komisch, sehr sparsam mit dokumentation
+  
+  http://www.watterott.com/de/MI0283QT-2-Adapter   ---> GUTER PREIS, deutsch?
+  
+  auch interessant:
+  http://www.seeedstudio.com/depot/grove-oled-display-12864-p-781.html?cPath=163_167
+  
+  Nokia LCD 84x48
+  http://www.komputer.de/zen/index.php?main_page=product_info&cPath=0&products_id=74
+  oder dieses:
+  http://www.komputer.de/zen/index.php?main_page=product_info&cPath=32&products_id=52
+  
+  Newhaven 128x64 OLED mit SSD1325 (16 Graustufen):
+    http://www.newhavendisplay.com/index.php?main_page=product_info&cPath=315&products_id=3621
+    mouser:
+    http://de.mouser.com/ProductDetail/Newhaven-Display/NHD-27-12864UCY3/?qs=EQmeiuRlVUS%252btJZDdlK%252bDg%3d%3d
+
+  FAZIT: 
+    Nokia 6100 color lcd wäre mal was: http://www.tinkersoup.de/product_info.php?products_id=427
+  
+  
+========================================================
+
+
+21.10.2011
+  - U8G_DEV_MSG_PRIMITIVE_START und U8G_DEV_MSG_PRIMITIVE_END durch U8G_DEV_MSG_IS_BBX_INTERSECTION ersetzen
+      --> 22.10.2011 ERLEDIGT
+  - check for bbx --> nachricht an device
+      --> 24.10.2011 ERLEDIGT
+  - check for bbx --> in den high level procedures implementieren
+      --> 24.10.2011 ERLEDIGT
+  - COM treiber schreiben
+      --> 23.10.2011 ERLEDIGT
+  - die WIDTH / HEIGHT nachrichten zusammenfassen und die größen in der haupt-struktur ablegen.
+      --> erstmal aufgeschoben
+  - dev_rot und dev_stdout sind hinsichtlich der internen speicherverwendung inkonsistent.
+     jede dev sollte einen öffentliche speicher besitzen, der irgendwie als parameter übergeben wird. 
+     gleiches wird wohl für den COM treiber gelten.
+     --> 22.10.2011 ERLEDIGT (rot erscheint aber nicht mehr als device, sondern ist jetzt eine api funktion)
+       .... noch keine 100% lösung... siehe nächster punkt
+       --> nochmal alles angepasst
+  - Im moment greift der dev treiber noch über das u8g auf seinen eigenen speicher zu. das ist schlecht,
+      weil damit keine doppelt devices realisiert werden können.
+      den devices muss ihr eigener speicher übergeben werden
+      zusätzlicher parameter an die device-funktionen
+      --> nein, der parameter ist in der u8g struktur enthalten
+      --> 22.10.2011 ERLEDIGT
+       --> nochmal alles angepasst, mem parameter nicht mehr in der struct --> argument der device function
+      
+  - das pbm device muss  noch angepasst werden
+      --> 22.10.2011 ERLEDIGT
+  
+  - die anderen rotations procedures schreiben (rot180, rot270), rot180 funktioniert
+      --> 23.10.2011 ERLEDIGT
+  - stdout funktioniert nicht richtig, wenn die höhe nicht durch 8 teilbar ist (sieht man beim rot180)
+      --> 23.10.2011 ERLEDIGT (dabei auch einen fehler in den page routinen gefunden 
+  - Der com Treiber braucht noch eine PROGMEM Sequence Write funktion
+      --> 23.10.2011 ERLEDIGT
+  31.10.2011
+    - cu12 font: upper lower page mit bdf2u8g benutzen und einen font erzeugen
+      --> 31.10.2011 ERLEDIGT
+    - die ttf fonts convertieren
+      --> 31.10.2011 ERLEDIGT
+    - pcs fonts convertieren
+      --> 31.10.2011 ERLEDIGT
+    - alles geeignet ablegen
+      --> 31.10.2011 ERLEDIGT
+  - prüfen: weglassen nicht benötigter funktionen durch den linker: Funktioniert das auch indirekt mit nicht benutzten Strukturen (u8g_dev_t)?
+        mal überprüfen, wenn es mehrere com devices pro display gibt
+        konkret ist die frage, ob mehrere devices in einer datei ligen dürfen.
+      --> siehe unten
+  - generische delay function 
+      --> siehe unten
+  - generische callback procedure für pb8v1 erstellen und in den device procedures aufrufen
+      --> ERLEDIGT
+  
+  - mehr tests mit buchstaben rotation und bildschirm rotation erstellen. Im zusammenhang mit den IsBBXIntersection bin ich mir
+      da nicht so sicher, ob das funktioniert
+      --> siehe unten
+      
+  - Prüfen, was passiert, wenn ein illegales zeichen abgerufen wird.
+      --> ERLEDIGT (hinreichend geprüft im picgen)
+  - Umsetzen font format 1: data len muss noch angepasst werden, da die struktur ja jetzt nur 4 bytes groß ist
+      --> 4.11.2011 alles ERLEDIGT
+  - ausgabe der zeichen sollte bei 1 beginnen (picgen und bdf2u8g ändern!)
+      --> 4.11.2011 wohl ERLEDIGT
+  - die berechnungsroutine der font größe an format 1 anpassen
+      --> 9.11.2011 ERLEDIGT
+  - fonts müssen bei 0 (oder 1) anfangen können --> picgen anpassen, ggf format 0 anpassen
+      es tritt noch ein fehler hier auf:
+          ../bdf2u8g/bdf2u8g -l 78 -u 79 ../bdf/10x20.bdf u8g_font_10x20_78_79 u8g_font_10x20_78_79.c > /dev/null
+          wieso taucht da ein code 128 auf????
+      --> 7.11.2011 ERLEDIGT --> format 0 komplett umgestellt, fehler waren wohl die positionsangaben für A und a
+  - Encoding aus format 0 entfernen, ende byte entfernen
+      --> 9.11.2011 ERLEDIGT
+
+31.10.2011
+  
+  
+  - Capital A berechnung: Wenn a nicht vorhanden, dann 0 nehmen --> number fonts!
+        --> 11.11.2011 ERLEDIGT
+  - Warum wird beim cursor font das das " " nicht angezeigt?
+        --> 11.11.2011 ERLEDIGT
+  - pb8v1               --> siehe unten
+    1) device structur um color index erweitern
+    2) routinen so umbauen, dass überall das dev-arg übergeben wird
+    
+  - fehler gefunden: wenn ein g mit dem 10x20 font an 0,5 geschrieben wird, dann wird das g nur zum teil gezeichnet.
+      g ist 12 pixel hoch und hat ein y von -4, obere linke ecke der bounding box wäre dann 5 + 4 - 12 + 1= -3 + 1 
+      --> in DrawGlyph korrigiert, aus
+            if ( u8g_IsBBXIntersection(u8g, x, y-h-1, w, h) == 0 )
+          wurde
+            if ( u8g_IsBBXIntersection(u8g, x, y-h+1, w, h) == 0 )
+      ist aber auch (noch) nicht korrekt: das g an (0,5) geht immer noch nicht
+        --> das problem ist die intersection bedingung in u8g_pb8v1_IsYIntersection
+            if ( c2 && c3 ) return 0;
+          allerdings wäre gerade diese bedingung wichtig für die performance: wenn c2 und c3 true sind, dann sind
+          beide grenzen oberhalb von y2. Wegen der unsigned rechnung ist das tatsächlich auch wahr.
+          allerdings, man könnte eine zusätzliche prüfung einführen, nämlich y1 < y2
+        --> soweit gelöst durch einführung einer neuen bedingung c
+        --> nochmal alle bedingungen zur intersection systematisch prüfen.
+        --> soweit in dem extra programm durchgeführt und neue routine ermittelnt --> muss noch übertragen werden + prüfung ob das tut
+        --> 16.11.2011 ERLEDIGT
+
+  - wird bei DrawFrame eigentlich die intersection geprüft ---> mal nachschauen
+      --> siehe unten
+  
+  
+  - restructurierung: addons aufsplitten in "tools" und "sys". Verzeichniss "arduino" kommt nach "sys".
+     testapps wird in "stdout" umbenannt und kommt auch nach "sys"
+        --> 16.11.2011 ERLEDIGT
+        
+  - micror font herausnehmen (schon erledigt für picgen, fehlt noch build)
+      build script und .h datei erledigt
+        --> 19.11.2011 ERLEDIGT
+  
+  - u8g_DrawStr(&u8g, 80, 9, 1, "gabc"); sieht falsch aus (das g ist nach rechts (unten) statt nach unten (rechts) verschoben) --> helloworld sdl
+        --> 19.11.2011 ERLEDIGT (x,y waren falsch für dir 1, 2 & 3)
+
+  - place u8g_dev_arg_pixel_t into u8g struct, remove color_index, replace by color from pixel_arg
+        --> 19.11.2011 ERLEDIGT (jedenfalls das meiste)
+  
+  - pb8v1: Es wird bei den 4 richtungen immer der color index 1 verwendet --> ändern
+        --> 19.11.2011 ERLEDIGT (war auskommentiert)
+        
+  - com routine: erweitern. es macht vermutlich mehr sinn, einiges explizit einzubauen:
+      * adress line (d.h. data/command), ersetzt das EXTRA signal --> soweit erledigt
+      * reset
+      * chip select, ersetzt das ENABLE/DISABLE signal  --> in umsetzung....
+      enable und write signal (für KS0108) sollte intern behandelt werden.
+        --> 20.11.2011 ERLEDIGT
+      
+  - KS0108 umsetzen
+        --> 21.11.2011 ERLEDIGT
+  
+  - das pbm und stdout device in den entsprechenden system ordner verschieben (ähnlich sdl device)
+        --> 22.11.2011 ERLEDIGT
+        
+  - SetPixel und Set8Pixel in DrawPixel und Draw8Pixel umbenennen
+        --> siehe unten
+  
+  - DrawBitmap
+        --> 23.11.2011 ERLEDIGT
+ 
+  
+  - gprof variante: die pb8v1 base function aufrufen. teilweise umgesetzt, noch testen
+        --> siehe unten
+  
+  
+  - Optional: man sollte von rechtecken doch eher die untere linke ecke angeben
+      naja, zumindest nach der doku ist das gleich wie in der glcd lib
+      --> BLEIBT WIE ES IST.
+  
+     
+23.11.2011
+  - pb8v1             
+    1) device structur um color index erweitern
+      --> ERLEDIGT
+    2) routinen so umbauen, dass überall das dev-arg übergeben wird
+      --> ERLEDIGT
+  - wird bei DrawFrame eigentlich die intersection geprüft ---> mal nachschauen
+  - SetPixel und Set8Pixel in DrawPixel und Draw8Pixel umbenennen
+      --> ERLEDIGT, 23.11.2011
+  - die WIDTH / HEIGHT nachrichten zusammenfassen und die größen in der haupt-struktur ablegen.
+      --> erstmal aufgeschoben
+      
+  - prüfen: weglassen nicht benötigter funktionen durch den linker: Funktioniert das auch indirekt mit nicht benutzten Strukturen (u8g_dev_t)?
+        mal überprüfen, wenn es mehrere com devices pro display gibt
+        konkret ist die frage, ob mehrere devices in einer datei ligen dürfen.
+        
+  - mehr tests mit buchstaben rotation und bildschirm rotation erstellen. Im zusammenhang mit den IsBBXIntersection bin ich mir
+      da nicht so sicher, ob das funktioniert
+  - gprof variante: die pb8v1 base function aufrufen. teilweise umgesetzt, noch testen
+  
+  - documentation: picture loop: (1) use procedure (2) do all inits (font, color index)
+  - zur Erinnerung: 
+      sed
+        find . -name "*.[hc]" -exec sed -i 's/m2_rom_byte_p/m2_rom_char_p/g' {} \;
+      ffmpeg (aus einzelbildern animation erstellen)
+        ffmpeg -f image2 -i img%02d.jpg -b 500k output2.mpg
+      sdl surface speichern
+        http://www.libsdl.org/docs/html/sdlsavebmp.html
+      aus bildern gif erzeugen
+        convert -delay 100 -loop 0 image*.jpg animation.gif
+      
+  - Interface for dogm128.h schreiben
+        spacetrash.c compiliert schon mal, dog_itoa muss noch übernommen werden, noch nichs getestet
+      --> ERLEDIGT, 25.11.2011 (.. für SLD, aber texte sind allerdings ein pixel zu tief)
+  
+  - spacetrash sollte nicht in dem normalen source folder liegen (zumindest nicht die variante, die noch das alte api benutzt)
+      --> ERLEDIGT, 30.11.2011 (das ganze dogm api umgezogen)
+
+  - spacetrash: fps counter implementieren
+      umgesetzt für das .pde file --> mal testen
+      --> ERLEDIGT, 29.11.2011
+  
+  - spacetrash: auf das neue api umstellen
+  
+  - spacetrash kleiner machen.
+      vielleicht hilft:     nm --size-sort SpaceTrash.elf 
+      
+  - bei spacetrash rutscht der FPS counter über die punkte-anzeige... warum?
+  
+  - font routinen & use cases zur font metrik berechnung
+  
+  - GetWidth, GetHeight --> das sollten keine unterprogrammaufrufe sein. Vielmehr sollte die dimension des displays in der u8g struct gecached werden.
+      --> ERLEDIGT, 23.11.2011
+  - u8g_DrawStrP() fehlt
+      --> ERLEDIGT, 24.11.2011
+      
+  - warum gibt es ein #ifdef ARDUINO um die dev treiber????
+      --> muss ich noch machen (27.11.2011)
+      --> ERLEDIGT, 27.11.2011
+   
+  - generische delay function 
+      --> vor allem deshalb wichtig, damit wir die Arduini-abhängigen includes aus den dev treibern herausbekomment
+      --> u8g_dev_dogs102 muss noch auf u8g_Delay() umgestellt werden
+      --> ERLEDIGT, 27.11.2011
+
+ -  hw-spi programmieren
+      --> ERLEDIGT, 29.11.2011
+ 
+ - pb8v2 programmieren
+      --> ERLEDIGT, 02.12.2011
+ 
+ - pb8v4 programmieren
+ 
+ - was die pb proceduren betrifft, könnte man durchaus ein paar generische routinen schreiben:
+    Clear, x/y intersection, u8g_pb8v2_WriteBuffer
+        u8g_pb.c erstellt
+      --> ERLEDIGT, 2.12.2011
+    
+ - wenn SetFont nicht ausgeführt wurde, stürzt u8g_GetFontBBXWidth ab, weil der font ptr NULL ist
+    --> dokumentieren
+ 
+ - Wenn kein font gesetzt wurde, stürzen die font funktionen ab --> abfangen
+
+
+- set8pixel procedures optimieren
+      soweit abgeschlossen, es wird etwas mehr platz benötigt als bei dogm128
+      --> ERLEDIGT, 2.12.2011
+
+ - Namenskonvention für devices
+      u8g_dev_<chip>_<display_or_size>
+      
+      <chip>: name of the display controller
+      <display_or_size>:  <width>x<height> or name of the display
+      --> dokumentieren und umbenennen
+ 
+ - Cursor Mal-Routinen implementieren
+      wenn man dem subsystem mitteilt, dass sich nur der cursor geändert hat, müssten nur die pages neu
+        gezeichnet werden, wo der cursor vorher war und wo er dann hinkommt.
+        --> aufwändig
+        --> cursor mal routinen möglichst einfach halten
+      --> ERLEDIGT, 2.12.2011
+ 
+ - u8g_cursorr.c weiter reduzieren und die 255 am ende entfernen (range limit)
+      --> ERLEDIGT, 2.12.2011
+      
+ - Cursor Mal-Routinen am ende von Next aufrufen, hide&show procedure
+      --> ERLEDIGT, 17.12.2011
+        
+ - DrawStr routinen: jeweils eine für die richtungen, dir parameter entfallen lassen
+       --> ERLEDIGT, 17.12.2011
+
+ - tastatur handling für spacetrash
+ 
+ - chess portieren
+ 
+ 

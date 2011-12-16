@@ -785,28 +785,56 @@ u8g_uint_t u8g_DrawStrDir(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, c
   return 0;
 }
 
-u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const u8g_pgm_uint8_t  *s)
+u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s)
 {
   u8g_uint_t t = 0;
   int8_t d;
-  while( u8g_pgm_read(s) != '\0' )
+  while( *s != '\0' )
   {
-    d = u8g_DrawGlyphDir(u8g, x, y, dir, u8g_pgm_read(s) );
-    switch(dir)
-    {
-      case 0:
-        x += d;
-        break;
-      case 1:
-        y += d;
-        break;
-      case 2:
-        x -= d;
-        break;
-      case 3:
-        y -= d;
-        break;
-    }
+    d = u8g_DrawGlyph(u8g, x, y, u8g_pgm_read(s));
+    x += d;
+    t += d;
+    s++;
+  }
+  return t;
+}
+
+u8g_uint_t u8g_DrawStr90P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s)
+{
+  u8g_uint_t t = 0;
+  int8_t d;
+  while( *s != '\0' )
+  {
+    d = u8g_DrawGlyph90(u8g, x, y, u8g_pgm_read(s));
+    y += d;
+    t += d;
+    s++;
+  }
+  return t;
+}
+
+u8g_uint_t u8g_DrawStr180P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s)
+{
+  u8g_uint_t t = 0;
+  int8_t d;
+  while( *s != '\0' )
+  {
+    d = u8g_DrawGlyph180(u8g, x, y, u8g_pgm_read(s));
+    x -= d;
+    t += d;
+    s++;
+  }
+  return t;
+}
+
+u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s)
+{
+  u8g_uint_t t = 0;
+  int8_t d;
+  while( *s != '\0' )
+  {
+    d = u8g_DrawGlyph270(u8g, x, y, u8g_pgm_read(s));
+    y -= d;
     t += d;
     s++;
   }

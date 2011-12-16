@@ -121,7 +121,8 @@ uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)
   u8g->cursor_bg_color = 0;
   u8g->cursor_fg_color = 1;
   u8g->cursor_encoding = 34;
-  u8g->cursor_dir = 0;
+  u8g->cursor_fn = (u8g_draw_cursor_fn)0;
+
   u8g_SetColorIndex(u8g, 1);
   if ( u8g_InitLL(u8g, u8g->dev) == 0 )
     return 0;
@@ -136,6 +137,10 @@ void u8g_FirstPage(u8g_t *u8g)
 
 uint8_t u8g_NextPage(u8g_t *u8g)
 {
+  if  ( u8g->cursor_fn != (u8g_draw_cursor_fn)0 )
+  {
+    u8g->cursor_fn(u8g);
+  }
   return u8g_NextPageLL(u8g, u8g->dev);
 }
 

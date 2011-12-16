@@ -41,10 +41,9 @@ void u8g_SetCursorFont(u8g_t *u8g, const u8g_pgm_uint8_t *cursor_font)
   u8g->cursor_font = cursor_font;
 }
 
-void u8g_SetCursorStyle(u8g_t *u8g, uint8_t encoding, uint8_t dir)
+void u8g_SetCursorStyle(u8g_t *u8g, uint8_t encoding)
 {
   u8g->cursor_encoding = encoding;
-  u8g->cursor_dir = dir;
 }
 
 void u8g_SetCursorColor(u8g_t *u8g, uint8_t fg, uint8_t bg)
@@ -53,7 +52,14 @@ void u8g_SetCursorColor(u8g_t *u8g, uint8_t fg, uint8_t bg)
   u8g->cursor_fg_color = fg;
 }
 
-void u8g_DrawCursor(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y)
+void u8g_SetCursorPos(u8g_t *u8g, u8g_uint_t cursor_x, u8g_uint_t cursor_y)
+{
+  u8g->cursor_x = cursor_x;
+  u8g->cursor_y = cursor_y;
+}
+
+
+void u8g_DrawCursor(u8g_t *u8g)
 {
   const u8g_pgm_uint8_t *font;
   uint8_t color = u8g_GetColorIndex(u8g);
@@ -64,10 +70,21 @@ void u8g_DrawCursor(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y)
   
   encoding++;
   u8g_SetColorIndex(u8g, u8g->cursor_bg_color); 
-  u8g_DrawGlyph(u8g, x, y, u8g->cursor_dir, encoding);
+  u8g_DrawGlyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding);
   encoding--;
   u8g_SetColorIndex(u8g, u8g->cursor_fg_color); 
-  u8g_DrawGlyph(u8g, x, y, u8g->cursor_dir, encoding);
+  u8g_DrawGlyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding);
   
   u8g_SetColorIndex(u8g, color); 
 }
+
+void u8g_EnableCursor(u8g_t *u8g)
+{
+    u8g->cursor_fn = u8g_DrawCursor;
+}
+
+void u8g_DisableCursor(u8g_t *u8g)
+{
+    u8g->cursor_fn = (u8g_draw_cursor_fn)0;
+}
+
