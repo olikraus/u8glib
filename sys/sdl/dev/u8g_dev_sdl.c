@@ -113,6 +113,7 @@ int u8g_sdl_get_key(void)
         case SDL_KEYDOWN:
           switch( event.key.keysym.sym )
           {
+            /*     /usr/include/SDL/SDL_keysym.h */
             case SDLK_a: return 'a';
             case SDLK_b: return 'b';
             case SDLK_c: return 'c';
@@ -139,6 +140,12 @@ int u8g_sdl_get_key(void)
             case SDLK_x: return 'x';
             case SDLK_y: return 'y';
             case SDLK_z: return 'z';
+            case SDLK_SPACE: return ' ';
+            case SDLK_UP: return 273;
+            case SDLK_DOWN: return 274;
+            case SDLK_RIGHT: return 275;
+            case SDLK_LEFT: return 276;
+            
             default: return 0;
           }
     }
