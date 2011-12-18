@@ -25,7 +25,6 @@ uint8_t isKeyPad = 0;
 // setup the user interface
 void uiSetup(void) {
   
-  
   // configure internal variables
   isKeyPad = 0;
   // assign some (more or less) useful values to the output variables
