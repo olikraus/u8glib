@@ -225,6 +225,7 @@ void u8g_SetAddress(u8g_t *u8g, u8g_dev_t *dev, uint8_t address);
 uint8_t u8g_WriteByte(u8g_t *u8g, u8g_dev_t *dev, uint8_t val);
 uint8_t u8g_WriteSequence(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, uint8_t *seq);
 uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, u8g_pgm_uint8_t *seq);
+uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq);
 
 
 
@@ -288,6 +289,27 @@ uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 
 typedef void (*u8g_draw_cursor_fn)(u8g_t *u8g);
 
+#define U8G_PIN_LIST_LEN 14
+
+/* reset pin, usually optional */
+#define U8G_PIN_RESET 0
+
+/* address / data or instruction */
+#define U8G_PIN_A0 1
+#define U8G_PIN_DI 1
+
+/* chip select line */
+#define U8G_PIN_CS 2
+#define U8G_PIN_CS1 2
+#define U8G_PIN_CS2 3
+
+/* enable / clock signal */
+#define U8G_PIN_EN 4
+#define U8G_PIN_SCK 4
+
+
+
+
 struct _u8g_t
 {
   u8g_uint_t width;
@@ -311,7 +333,8 @@ struct _u8g_t
   
   u8g_dev_arg_pixel_t arg_pixel;
   /* uint8_t color_index; */
-  
+
+  uint8_t pin_list[U8G_PIN_LIST_LEN];
 };
 
 uint8_t u8g_call_dev_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);

@@ -83,4 +83,52 @@ uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, u8g_pgm_uint
   return dev->com_fn(u8g, U8G_COM_MSG_WRITE_SEQ_P, cnt, seq);
 }
 
-
+/*
+  sequence := { direct_value | escape_sequence }
+  direct_value := 0..254
+  escape_sequence := value_255 | sequence_end | delay | not_used 
+  value_255 := 255 255
+  sequence_end = 255 254
+  delay := 255 0..100
+  not_used := 255 101..254
+*/
+uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq)
+{
+  uint8_t is_escape = 0;
+  uint8_t value;
+  for(;;)
+  {
+    value = u8g_pgm_read(esc_seq);
+    if ( is_escape == 0 )
+    {
+      if ( value != 255 )
+      {
+        if ( u8g_WriteByte(u8g, dev, value) == 0 )
+          return 0;
+      }
+      else
+      {
+        is_escape = 1;
+      }
+    }
+    else
+    {
+      if ( value == 255 )
+      {
+        if ( u8g_WriteByte(u8g, dev, value) == 0 )
+          return 0;
+      }
+      else if ( value == 254 )
+      {
+        break;
+      }
+      else if ( value >= 0 && value <= 100 )
+      {
+        u8g_Delay(value);
+      }
+      is_escape = 0;
+    }
+    esc_seq++;
+  }
+  return 1;
+}
