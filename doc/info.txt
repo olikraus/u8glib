@@ -347,6 +347,7 @@
        --> ERLEDIGT, 17.12.2011
 
  - tastatur handling für spacetrash
+      display muss noch rotiert werden --> erweiterung des dogm wrappers
  
  - chess portieren
  
