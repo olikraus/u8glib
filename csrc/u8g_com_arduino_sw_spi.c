@@ -74,17 +74,23 @@ uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
   switch(msg)
   {
     case U8G_COM_MSG_INIT:
+      u8g_com_arduino_assign_pin_output_high(u8g);
+      digitalWrite(u8g->pin_list[U8G_PI_SCK], LOW);
+      digitalWrite(u8g->pin_list[U8G_PI_MOSI], LOW);
+
       pinMode(PIN_SCK, OUTPUT);
       digitalWrite(PIN_SCK, LOW);
       pinMode(PIN_MOSI, OUTPUT);
       digitalWrite(PIN_MOSI, LOW);
       pinMode(PIN_A0, OUTPUT); 
-      pinMode(PIN_CS, OUTPUT);			/* this is the user chip select */
+      pinMode(PIN_CS, OUTPUT);
       digitalWrite(PIN_CS, HIGH);
+    /*
 #ifdef PIN_RST
       pinMode(PIN_RST, OUTPUT);
       digitalWrite(PIN_RST, HIGH);
-#endif    
+#endif
+    */
       break;
     
     case U8G_COM_MSG_STOP:

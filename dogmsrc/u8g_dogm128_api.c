@@ -3,7 +3,37 @@
   u8g_dogm128_api.c
   
   Simulation of the dogm128 api for the u8g library
+
+  Universal 8bit Graphics Library
   
+  Copyright (c) 2011, olikraus@gmail.com
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice, this list 
+    of conditions and the following disclaimer.
+    
+  * Redistributions in binary form must reproduce the above copyright notice, this 
+    list of conditions and the following disclaimer in the documentation and/or other 
+    materials provided with the distribution.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  
+
 */
 
 #include "u8g_dogm128_api.h"
@@ -11,14 +41,34 @@
 u8g_t u8g_dogm128_obj;
 uint8_t dog_height_minus_one;
 
+static void u8g_init_dogm_common(void)
+{
+  dog_height_minus_one = DOG_HEIGHT;
+  dog_height_minus_one--;
+}
 
 uint8_t u8g_InitDogm128API(u8g_dev_t *dev)
 {
   if ( u8g_Init(&u8g_dogm128_obj, dev) == 0 )
     return 0;
-  dog_height_minus_one = DOG_HEIGHT;
-  dog_height_minus_one--;
+  u8g_init_dogm_common();
   return 1;
+}
+
+uint8_t u8g_InitSPIDogm128API(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset)
+{
+
+  if ( u8g_InitSPI(&u8g_dogm128_obj, dev, sck, mosi, cs, a0, reset) == 0 )
+    return 0;
+  u8g_init_dogm_common();
+  return 1;
+  
+}
+
+
+void u8g_SetDogmRot180(void)
+{
+  u8g_SetRot180(&u8g_dogm128_obj);
 }
 
 

@@ -227,6 +227,9 @@ uint8_t u8g_WriteSequence(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, uint8_t *seq)
 uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, u8g_pgm_uint8_t *seq);
 uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq);
 
+/*===============================================================*/
+/* u8g_arduino_common.c */
+void u8g_com_arduino_assign_pin_output_high(u8g_t *u8g);
 
 
 /*===============================================================*/
@@ -291,24 +294,41 @@ typedef void (*u8g_draw_cursor_fn)(u8g_t *u8g);
 
 #define U8G_PIN_LIST_LEN 14
 
+/* PI = Pin Index */
+
 /* reset pin, usually optional */
-#define U8G_PIN_RESET 0
+#define U8G_PI_RESET 0
 
 /* address / data or instruction */
-#define U8G_PIN_A0 1
-#define U8G_PIN_DI 1
+#define U8G_PI_A0 1
+#define U8G_PI_DI 1
 
 /* chip select line */
-#define U8G_PIN_CS 2
-#define U8G_PIN_CS1 2
-#define U8G_PIN_CS2 3
+#define U8G_PI_CS 2
+#define U8G_PI_CS1 2
+#define U8G_PI_CS2 3
 
 /* enable / clock signal */
-#define U8G_PIN_EN 4
-#define U8G_PIN_SCK 4
+#define U8G_PI_EN 4
+#define U8G_PI_SCK 4
 
 
+/* data pins, shared with SPI pins */
+#define U8G_PI_D0 5
+#define U8G_PI_MOSI 5
+#define U8G_PI_D1 6
+#define U8G_PI_MISO 6
+#define U8G_PI_D2 7
+#define U8G_PI_D3 8
+#define U8G_PI_D4 9
+#define U8G_PI_D5 10
+#define U8G_PI_D6 11
+#define U8G_PI_D7 12
 
+/* read/write pin (not required) */
+/* #define U8G_PI_RW 13 */
+
+#define U8G_PIN_NONE 255
 
 struct _u8g_t
 {
@@ -350,6 +370,7 @@ u8g_uint_t u8g_GetHeightLL(u8g_t *u8g, u8g_dev_t *dev);
 
 void u8g_UpdateDimension(u8g_t *u8g);
 uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev);
+uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset);
 void u8g_FirstPage(u8g_t *u8g);
 uint8_t u8g_NextPage(u8g_t *u8g);
 void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y);
