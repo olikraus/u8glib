@@ -104,6 +104,15 @@ void setup(void)
   //u8g_InitDogm128API(&u8g_dev_uc1701_dogs102_sw_spi);
   //u8g_InitDogm128API(&u8g_dev_uc1701_dogs102_hw_spi);
 
+  /*
+#define PIN_SCK 13
+#define PIN_MISO  12
+#define PIN_MOSI 11
+#define PIN_CS 10
+#define PIN_A0 9
+#define PIN_RST 8
+  */
+
   u8g_InitSPIDogm128API(&u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
   //u8g_SetDogmRot180();
   

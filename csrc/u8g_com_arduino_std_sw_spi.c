@@ -1,6 +1,6 @@
 /*
   
-  u8g_arduino_sw_spi.c
+  u8g_arduino_std_sw_spi.c
 
   Universal 8bit Graphics Library
   
@@ -39,59 +39,28 @@
 #if defined(ARDUINO)
 
 #if ARDUINO < 100 
-#include <WProgram.h>    
-#include "wiring_private.h"
-#include "pins_arduino.h"
-
+#include <WProgram.h>
 #else 
 #include <Arduino.h> 
-#include "wiring_private.h"
 #endif
 
-uint8_t u8g_bitData, u8g_bitNotData;
-uint8_t u8g_bitClock, u8g_bitNotClock;
-volatile uint8_t *u8g_outData;
-volatile uint8_t *u8g_outClock;
-
-static void u8g_com_arduino_init_shift_out(uint8_t dataPin, uint8_t clockPin)
+void u8g_arduino_sw_spi_shift_out(uint8_t dataPin, uint8_t clockPin, uint8_t val)
 {
-  u8g_outData = portOutputRegister(digitalPinToPort(dataPin));
-  u8g_outClock = portOutputRegister(digitalPinToPort(clockPin));
-  u8g_bitData = digitalPinToBitMask(dataPin);
-  u8g_bitClock = digitalPinToBitMask(clockPin);
-
-  u8g_bitNotClock = u8g_bitClock;
-  u8g_bitNotClock ^= 0x0ff;
-
-  u8g_bitNotData = u8g_bitData;
-  u8g_bitNotData ^= 0x0ff;
-}
-
-static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
-{
-  uint8_t cnt = 8;
-  uint8_t bitData = u8g_bitData;
-  uint8_t bitNotData = u8g_bitNotData;
-  uint8_t bitClock = u8g_bitClock;
-  uint8_t bitNotClock = u8g_bitNotClock;
-  volatile uint8_t *outData = u8g_outData;
-  volatile uint8_t *outClock = u8g_outClock;
+  uint8_t i = 8;
   do
   {
     if ( val & 128 )
-      *outData |= bitData;
+      digitalWrite(dataPin, HIGH);
     else
-      *outData &= bitNotData;
-   
-    *outClock |= bitClock;
-    *outClock &= bitNotClock;
+      digitalWrite(dataPin, LOW);
     val <<= 1;
-    cnt--;
-  } while( cnt != 0 );
+    digitalWrite(clockPin, HIGH);
+    digitalWrite(clockPin, LOW);		
+    i--;
+  } while( i != 0 );
 }
 
-
-uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_arduino_std_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   switch(msg)
   {
@@ -125,8 +94,7 @@ uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       break;
 
     case U8G_COM_MSG_WRITE_BYTE:
-      u8g_com_arduino_do_shift_out_msb_first( arg_val );
-      //u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], arg_val);
+      u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], arg_val);
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
@@ -134,8 +102,7 @@ uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_arduino_do_shift_out_msb_first(*ptr++);
-          // u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], *ptr++);
+          u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], *ptr++);
           arg_val--;
         }
       }
@@ -146,8 +113,7 @@ uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_arduino_do_shift_out_msb_first( u8g_pgm_read(ptr) );
-          //u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], u8g_pgm_read(ptr));
+          u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], u8g_pgm_read(ptr));
           ptr++;
           arg_val--;
         }
@@ -163,7 +129,7 @@ uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
 
 #else /* ARDUINO */
 
-uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_arduino_std_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   return 1;
 }

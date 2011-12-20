@@ -113,10 +113,9 @@ void u8g_UpdateDimension(u8g_t *u8g)
   u8g->height = u8g_GetHeightLL(u8g, u8g->dev);
 }
 
-uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)
+static void u8g_init_data(u8g_t *u8g)
 {
   uint8_t i;
-  u8g->dev = dev;
   u8g->font = NULL;
   u8g->cursor_font = NULL;
   u8g->cursor_bg_color = 0;
@@ -128,7 +127,13 @@ uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)
 
   for( i = 0; i < U8G_PIN_LIST_LEN; i++ )
     u8g->pin_list[i] = U8G_PIN_NONE;
-    
+}
+
+uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)
+{
+  u8g_init_data(u8g);
+  u8g->dev = dev;
+  
   if ( u8g_InitLL(u8g, u8g->dev) == 0 )
     return 0;
   u8g_UpdateDimension(u8g);
@@ -137,13 +142,24 @@ uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)
 
 uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset)
 {
-  if ( u8g_Init(u8g, dev) == 0 )
-    return 0;
+  /* fill data structure with some suitable values */
+  u8g_init_data(u8g);
+  u8g->dev = dev;
+  
+  
+  /* assign user pins */
   u8g->pin_list[U8G_PI_SCK] = sck;
   u8g->pin_list[U8G_PI_MOSI] = mosi;
   u8g->pin_list[U8G_PI_CS] = cs;
   u8g->pin_list[U8G_PI_A0] = a0;
   u8g->pin_list[U8G_PI_RESET] = reset;
+  
+  /* call and init low level driver and com device */
+  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
+    return 0;
+
+  /* fetch width and height from the low level */
+  u8g_UpdateDimension(u8g);
   return 1;
 }
 
