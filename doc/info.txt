@@ -359,5 +359,6 @@
  
  - fehlende zeilen bei spacetrash mit dogs102
       --> gilt auch für das 0 Grad spacetrash
+       --> ERLEDIGT, 20.12.2011 (War ein fehler in den box routinen)
  
  

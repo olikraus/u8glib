@@ -113,9 +113,11 @@ void dog_XorPixel(uint8_t x, uint8_t y)
 /* x1 must be lower or equal to x2 */
 void dog_SetHLine(uint8_t x1, uint8_t x2, uint8_t y)
 {
+  //printf("SetHLine x1:%d x2:%d y:%d\n", x1, x2, y);
   y = dog_height_minus_one - y;
   u8g_SetColorIndex(&u8g_dogm128_obj, 1);
   u8g_DrawHLine(&u8g_dogm128_obj, x1, y, x2-x1+1);
+  //printf("SetHLine x:%d y:%d w:%d \n", x1, y, x2-x1+1);
 }
 
 void dog_ClrHLine(uint8_t x1, uint8_t x2, uint8_t y)
@@ -167,7 +169,7 @@ void dog_SetBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
   y1 = dog_height_minus_one - y1;
   y2 = dog_height_minus_one - y2;
   u8g_SetColorIndex(&u8g_dogm128_obj, 1);
-  u8g_DrawBox(&u8g_dogm128_obj, x1, y1, x2-x1+1, y1-y2+1);
+  u8g_DrawBox(&u8g_dogm128_obj, x1, y2, x2-x1+1, y1-y2+1);
 }
 
 void dog_ClrBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
@@ -176,7 +178,8 @@ void dog_ClrBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
   y1 = dog_height_minus_one - y1;
   y2 = dog_height_minus_one - y2;
   u8g_SetColorIndex(&u8g_dogm128_obj, 0);
-  u8g_DrawBox(&u8g_dogm128_obj, x1, y1, x2-x1+1, y1-y2+1);
+  u8g_DrawBox(&u8g_dogm128_obj, x1, y2, x2-x1+1, y1-y2+1);
+  //printf("Clrbox x:%d y:%d w:%d h:%d\n", x1, y2, x2-x1+1, y1-y2+1);
 }
 
 void dog_XorBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
