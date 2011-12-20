@@ -67,6 +67,7 @@ static void u8g_com_arduino_init_shift_out(uint8_t dataPin, uint8_t clockPin)
   u8g_bitNotData ^= 0x0ff;
 }
 
+static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val) U8G_NOINLINE;
 static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
 {
   uint8_t cnt = 8;

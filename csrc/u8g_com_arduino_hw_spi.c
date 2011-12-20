@@ -52,12 +52,9 @@
 #define PIN_SCK 13
 #define PIN_MISO  12
 #define PIN_MOSI 11
+
+/* a pin which could be redefined */
 #define PIN_CS 10
-
-/* changeable pins */
-#define PIN_A0 9
-#define PIN_RST 8
-
 
 //static uint8_t u8g_spi_out(uint8_t data) U8G_NOINLINE;
 static uint8_t u8g_spi_out(uint8_t data)
@@ -81,19 +78,17 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       break;
     
     case U8G_COM_MSG_INIT:
+      u8g_com_arduino_assign_pin_output_high(u8g);
       pinMode(PIN_SCK, OUTPUT);
       digitalWrite(PIN_SCK, LOW);
       pinMode(PIN_MOSI, OUTPUT);
       digitalWrite(PIN_MOSI, LOW);
       /* pinMode(PIN_MISO, INPUT); */
 
-      pinMode(PIN_A0, OUTPUT);
-      pinMode(PIN_CS, OUTPUT);			/* this is the user chip select */
+      pinMode(PIN_CS, OUTPUT);			/* system chip select for the atmega board */
       digitalWrite(PIN_CS, HIGH);
-#ifdef PIN_RST
-      pinMode(PIN_RST, OUTPUT);
-      digitalWrite(PIN_RST, HIGH);
-#endif    
+    
+
 
       /*
         SPR1 SPR0
@@ -108,28 +103,27 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       break;
     
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      digitalWrite(PIN_A0, arg_val);
+      u8g_com_arduino_digital_write(u8g, U8G_PI_A0, arg_val);
       break;
 
     case U8G_COM_MSG_CHIP_SELECT:
       if ( arg_val == 0 )
       {
         /* disable */
-        digitalWrite(PIN_CS, HIGH);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
       }
       else
       {
         /* enable */
-        digitalWrite(PIN_SCK, LOW);
-        digitalWrite(PIN_CS, LOW);  
+        u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
       }
       break;
       
-#ifdef PIN_RST
     case U8G_COM_MSG_RESET:
-      digitalWrite(PIN_RST, arg_val);
+      if ( u8g->pin_list[U8G_PI_RESET] != U8G_PIN_NONE )
+        u8g_com_arduino_digital_write(u8g, U8G_PI_RESET, arg_val);
       break;
-#endif    
     
     case U8G_COM_MSG_WRITE_BYTE:
       u8g_spi_out(arg_val);

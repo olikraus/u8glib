@@ -163,6 +163,27 @@ uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8
   return 1;
 }
 
+uint8_t u8g_InitHWSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset)
+{
+  /* fill data structure with some suitable values */
+  u8g_init_data(u8g);
+  u8g->dev = dev;
+  
+  
+  /* assign user pins */
+  u8g->pin_list[U8G_PI_CS] = cs;
+  u8g->pin_list[U8G_PI_A0] = a0;
+  u8g->pin_list[U8G_PI_RESET] = reset;
+  
+  /* call and init low level driver and com device */
+  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
+    return 0;
+
+  /* fetch width and height from the low level */
+  u8g_UpdateDimension(u8g);
+  return 1;
+}
+
 void u8g_FirstPage(u8g_t *u8g)
 {
   u8g_FirstPageLL(u8g, u8g->dev);

@@ -373,6 +373,7 @@ u8g_uint_t u8g_GetHeightLL(u8g_t *u8g, u8g_dev_t *dev);
 void u8g_UpdateDimension(u8g_t *u8g);
 uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev);
 uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset);
+uint8_t u8g_InitHWSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset);
 void u8g_FirstPage(u8g_t *u8g);
 uint8_t u8g_NextPage(u8g_t *u8g);
 void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y);

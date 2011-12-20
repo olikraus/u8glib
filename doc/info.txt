@@ -352,9 +352,12 @@
  - chess portieren
  
  - pins klappen gar nicht :-(
+       --> ERLEDIGT, 20.12.2011
+
  
  - spacetrash rotation um 180 auf dem dogs102 klappt nicht
  
  - fehlende zeilen bei spacetrash mit dogs102
+      --> gilt auch für das 0 Grad spacetrash
  
  

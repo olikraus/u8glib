@@ -789,9 +789,13 @@ u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_ui
 {
   u8g_uint_t t = 0;
   int8_t d;
-  while( *s != '\0' )
+  uint8_t c;
+  for(;;)
   {
-    d = u8g_DrawGlyph(u8g, x, y, u8g_pgm_read(s));
+    c = u8g_pgm_read(s);
+    if ( c == '\0' )
+      break;
+    d = u8g_DrawGlyph(u8g, x, y, c);
     x += d;
     t += d;
     s++;

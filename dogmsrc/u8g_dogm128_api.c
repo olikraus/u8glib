@@ -61,8 +61,16 @@ uint8_t u8g_InitSPIDogm128API(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t
   if ( u8g_InitSPI(&u8g_dogm128_obj, dev, sck, mosi, cs, a0, reset) == 0 )
     return 0;
   u8g_init_dogm_common();
+  return 1;  
+}
+
+uint8_t u8g_InitHWSPIDogm128API(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset)
+{
+
+  if ( u8g_InitHWSPI(&u8g_dogm128_obj, dev, cs, a0, reset) == 0 )
+    return 0;
+  u8g_init_dogm_common();
   return 1;
-  
 }
 
 

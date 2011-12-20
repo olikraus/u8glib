@@ -75,6 +75,7 @@ extern u8g_t u8g_dogm128_obj;
 /* this is a special u8g procedure to start up the dogm128 interface */
 uint8_t u8g_InitDogm128API(u8g_dev_t *dev);
 uint8_t u8g_InitSPIDogm128API(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset);
+uint8_t u8g_InitHWSPIDogm128API(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset);
 void u8g_SetDogmRot180(void);
 
 
