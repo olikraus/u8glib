@@ -108,9 +108,11 @@ uint8_t u8g_dev_rot90_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       }
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
     case U8G_DEV_MSG_GET_WIDTH:
-      return u8g_GetHeightLL(u8g,rotation_chain);
+      *((u8g_uint_t *)arg) = u8g_GetHeightLL(u8g,rotation_chain);
+      break;
     case U8G_DEV_MSG_GET_HEIGHT:
-      return u8g_GetWidthLL(u8g, rotation_chain);
+      *((u8g_uint_t *)arg) = u8g_GetWidthLL(u8g, rotation_chain);
+      break;
     case U8G_DEV_MSG_SET_PIXEL:
       {
         u8g_uint_t x, y;
@@ -181,11 +183,13 @@ uint8_t u8g_dev_rot180_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         bbx->x = x;
         bbx->y = y;
       }
-      u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
+      return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
     case U8G_DEV_MSG_GET_WIDTH:
-      return u8g_GetWidthLL(u8g,rotation_chain);
+      *((u8g_uint_t *)arg) = u8g_GetWidthLL(u8g,rotation_chain);
+      break;
     case U8G_DEV_MSG_GET_HEIGHT:
-      return u8g_GetHeightLL(u8g, rotation_chain);
+      *((u8g_uint_t *)arg) = u8g_GetHeightLL(u8g, rotation_chain);
+      break;
     case U8G_DEV_MSG_SET_PIXEL:
       {
         u8g_uint_t x, y;
@@ -268,9 +272,11 @@ uint8_t u8g_dev_rot270_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       }
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
     case U8G_DEV_MSG_GET_WIDTH:
-      return u8g_GetHeightLL(u8g,rotation_chain);
+      *((u8g_uint_t *)arg) = u8g_GetHeightLL(u8g,rotation_chain);
+      break;
     case U8G_DEV_MSG_GET_HEIGHT:
-      return u8g_GetWidthLL(u8g, rotation_chain);
+      *((u8g_uint_t *)arg) = u8g_GetWidthLL(u8g, rotation_chain);
+      break;
     case U8G_DEV_MSG_SET_PIXEL:
       {
         u8g_uint_t x, y;
