@@ -89,6 +89,7 @@ uint8_t u8g_dev_rot90_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         
         /* transform the reference point */
         y = bbx->x;
+        /* TODO: this could be replaced by x = u8g->height */
         x = u8g_GetWidthLL(u8g, rotation_chain);
         x -= bbx->y; 
         x--;
@@ -164,11 +165,13 @@ uint8_t u8g_dev_rot180_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         u8g_uint_t x, y, tmp;
         
         /* transform the reference point */
-        y = u8g_GetHeightLL(u8g, rotation_chain);
+        //y = u8g_GetHeightLL(u8g, rotation_chain);
+        y = u8g->height;
         y -= bbx->y; 
         y--;
         
-        x = u8g_GetWidthLL(u8g, rotation_chain);
+        //x = u8g_GetWidthLL(u8g, rotation_chain);
+        x = u8g->width;
         x -= bbx->x; 
         x--;
         
@@ -253,6 +256,7 @@ uint8_t u8g_dev_rot270_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         /* transform the reference point */
         x = bbx->y;
         
+        /* TODO: this could be replaced by y = u8g->width */
         y = u8g_GetHeightLL(u8g, rotation_chain);
         y -= bbx->x; 
         y--;

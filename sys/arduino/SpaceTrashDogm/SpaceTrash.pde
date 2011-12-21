@@ -114,7 +114,7 @@ void setup(void)
 
   u8g_InitHWSPIDogm128API(&u8g_dev_uc1701_dogs102_hw_spi, 10, 9, U8G_PIN_NONE);
   //u8g_InitSPIDogm128API(&u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
-  //u8g_SetDogmRot180();
+  u8g_SetDogmRot180();
   
   uiSetup();
   next_sec_time = millis() + 1000UL;
