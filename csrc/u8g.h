@@ -226,6 +226,13 @@ void u8g_SetAddress(u8g_t *u8g, u8g_dev_t *dev, uint8_t address);
 uint8_t u8g_WriteByte(u8g_t *u8g, u8g_dev_t *dev, uint8_t val);
 uint8_t u8g_WriteSequence(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, uint8_t *seq);
 uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, u8g_pgm_uint8_t *seq);
+
+#define U8G_ESC_DLY(x) 255, ((x) & 0x7f)
+#define U8G_ESC_CS(x) 255, (0xd0 | ((x)&0x0f))
+#define U8G_ESC_ADR(x) 255, (0xe0 | ((x)&0x0f))
+#define U8G_ESC_RST(x) 255, (0xc0 | ((x)&0x0f))
+#define U8G_ESC_END 255, 254
+#define U8G_ESC_255 255, 255
 uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq);
 
 /*===============================================================*/

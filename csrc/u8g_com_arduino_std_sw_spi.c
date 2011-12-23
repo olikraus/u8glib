@@ -68,7 +68,6 @@ uint8_t u8g_com_arduino_std_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, 
       u8g_com_arduino_assign_pin_output_high(u8g);
       u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
       u8g_com_arduino_digital_write(u8g, U8G_PI_MOSI, LOW);
-      u8g_com_arduino_init_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK]);
       break;
     
     case U8G_COM_MSG_STOP:

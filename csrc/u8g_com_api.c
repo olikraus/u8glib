@@ -86,11 +86,21 @@ uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, u8g_pgm_uint
 /*
   sequence := { direct_value | escape_sequence }
   direct_value := 0..254
-  escape_sequence := value_255 | sequence_end | delay | not_used 
+  escape_sequence := value_255 | sequence_end | delay | adr | cs | not_used 
   value_255 := 255 255
   sequence_end = 255 254
-  delay := 255 0..100
+  delay := 255 0..127
+  adr := 255 0x0e0 .. 0x0ef 
+  cs := 255 0x0d0 .. 0x0df 
   not_used := 255 101..254
+
+#define U8G_ESC_DLY(x) 255, ((x) & 0x7f)
+#define U8G_ESC_CS(x) 255, (0xd0 | ((x)&0x0f))
+#define U8G_ESC_ADR(x) 255, (0xe0 | ((x)&0x0f))
+#define U8G_ESC_END 255, 254
+#define U8G_ESC_255 255, 255
+#define U8G_ESC_RST(x) 255, (0xc0 | ((x)&0x0f))
+
 */
 uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq)
 {
@@ -122,8 +132,26 @@ uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq)
       {
         break;
       }
-      else if ( value >= 0 && value <= 100 )
+      else if ( value >= 0 && value <= 127 )
       {
+        u8g_Delay(value);
+      }
+      else if ( value >= 0xe0 && value <= 0x0ef )
+      {
+        u8g_SetAddress(u8g, dev, value & 0x0f);
+      }
+      else if ( value >= 0xd0 && value <= 0x0df )
+      {
+        u8g_SetChipSelect(u8g, dev, value & 0x0f);
+      }
+      else if ( value >= 0xc0 && value <= 0x0cf )
+      {
+        u8g_SetResetLow(u8g, dev);
+        value & 0x0f;
+        value <<= 4;
+        value+=2;
+        u8g_Delay(value);
+        u8g_SetResetHigh(u8g, dev);
         u8g_Delay(value);
       }
       is_escape = 0;

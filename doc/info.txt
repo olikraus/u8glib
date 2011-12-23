@@ -348,6 +348,7 @@
 
  - tastatur handling für spacetrash
       display muss noch rotiert werden --> erweiterung des dogm wrappers
+       --> ERLEDIGT, 21.12.2011 
  
  - chess portieren
  
@@ -356,9 +357,11 @@
 
  
  - spacetrash rotation um 180 auf dem dogs102 klappt nicht
+       --> ERLEDIGT, 21.12.2011 
  
  - fehlende zeilen bei spacetrash mit dogs102
       --> gilt auch für das 0 Grad spacetrash
        --> ERLEDIGT, 20.12.2011 (War ein fehler in den box routinen)
- 
+
+ - dev handler: einsetzen der ESC-Write procedure
  

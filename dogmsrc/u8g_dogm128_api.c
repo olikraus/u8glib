@@ -74,11 +74,23 @@ uint8_t u8g_InitHWSPIDogm128API(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t 
 }
 
 
+void u8g_SetDogmRot90(void)
+{
+  u8g_SetRot90(&u8g_dogm128_obj);
+  u8g_init_dogm_common();
+}
+
 void u8g_SetDogmRot180(void)
 {
   u8g_SetRot180(&u8g_dogm128_obj);
+  u8g_init_dogm_common();
 }
 
+void u8g_SetDogmRot270(void)
+{
+  u8g_SetRot270(&u8g_dogm128_obj);
+  u8g_init_dogm_common();
+}
 
 void dog_StartPage(void)
 {

@@ -47,12 +47,26 @@
 
 
 u8g_pgm_uint8_t u8g_dev_pcd8544_init_seq[] = {
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
+  U8G_ESC_CS(1),             /* enable chip */
   0x021,		/* activate chip (PD=0), horizontal increment (V=0), enter extended command set (H=1) */
   0x006,		/* temp. control: b10 = 2 */
   0x013,		/* bias system 1:48 */
   0x0c0,		/* medium Vop */
   0x020,		/* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
-  0x00c		/* display on, normal operation */
+  0x00c,		/* display on, normal operation */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  0x020,		                /* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
+  0x00d,		                /* display on, invert */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  0x020,		                /* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
+  0x00c,		                /* display on, normal */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_END                /* end of sequence */
 };
 
 uint8_t u8g_dev_pcd8544_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
@@ -61,28 +75,7 @@ uint8_t u8g_dev_pcd8544_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
-    
-      u8g_SetChipSelect(u8g, dev, 0);
-      u8g_SetAddress(u8g, dev, 0);           /* command mode */
-    
-      u8g_SetResetLow(u8g, dev);
-      u8g_Delay(100);
-      u8g_SetResetHigh(u8g, dev);
-      u8g_Delay(100);
-    
-      u8g_SetChipSelect(u8g, dev, 1);
-      u8g_WriteSequenceP(u8g, dev, sizeof(u8g_dev_pcd8544_init_seq), u8g_dev_pcd8544_init_seq);      
-    
-      u8g_Delay(500);
-      u8g_WriteByte(u8g, dev, 0x020 );		/* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
-      u8g_WriteByte(u8g, dev, 0x00d );		/* invert mode */
-      u8g_Delay(500);
-      u8g_WriteByte(u8g, dev, 0x020 );		/* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
-      u8g_WriteByte(u8g, dev, 0x00c );		/* normal mode */
-
-    
-      u8g_SetChipSelect(u8g, dev, 0);
-    
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_pcd8544_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
@@ -91,15 +84,12 @@ uint8_t u8g_dev_pcd8544_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
         u8g_SetAddress(u8g, dev, 0);           /* command mode */
         u8g_SetChipSelect(u8g, dev, 1);
-        
         u8g_WriteByte(u8g, dev, 0x020 );		/* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
-        
         u8g_WriteByte(u8g, dev, 0x080 );                        /* set X address */
         u8g_WriteByte(u8g, dev, 0x040 | pb->p.page); /* set Y address */
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
         if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
           return 0;
-      
         u8g_SetChipSelect(u8g, dev, 0);
       }
       break;
@@ -108,5 +98,5 @@ uint8_t u8g_dev_pcd8544_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 }
 
 
-U8G_PB_DEV(u8g_dev_pcd8544_84x48_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_pcd8544_fn, u8g_com_arduino_sw_spi_fn);
+U8G_PB_DEV(u8g_dev_pcd8544_84x48_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_pcd8544_fn, u8g_com_arduino_std_sw_spi_fn);
 

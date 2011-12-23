@@ -76,7 +76,9 @@ extern u8g_t u8g_dogm128_obj;
 uint8_t u8g_InitDogm128API(u8g_dev_t *dev);
 uint8_t u8g_InitSPIDogm128API(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset);
 uint8_t u8g_InitHWSPIDogm128API(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset);
+void u8g_SetDogmRot90(void);
 void u8g_SetDogmRot180(void);
+void u8g_SetDogmRot270(void);
 
 
 /* the following procedures are supported in the dogm128 API */

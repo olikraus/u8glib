@@ -63,7 +63,7 @@ int main(void)
   uint32_t x;
   
   u8g_InitDogm128API(&u8g_dev_sdl_1bit);
-  u8g_SetDogmRot180();
+  u8g_SetDogmRot90();
   
   uiSetup();
   
@@ -74,7 +74,7 @@ int main(void)
     {
       st_Draw(0);
     } while( dog_NextPage() );
-    //SDL_Delay(10);
+    SDL_Delay(10);
     uiStep();
     st_Step(shipLocation, isAutoFire, isFire);
     

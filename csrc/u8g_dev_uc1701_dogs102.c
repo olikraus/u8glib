@@ -40,66 +40,60 @@
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
-
 u8g_pgm_uint8_t u8g_dev_dogs102_init_seq[] = {
-  0x040,		/* set display start line to 0 */
-  0x0a1,		/* ADC set to reverse */
-  0x0c0,		/* common output mode */
-  0x0a6,		/* display normal, bit val 0: LCD pixel off. */
-  0x0a2,		/* LCD bias 1/9 */
-  0x02f,		/* all power  control circuits on */
-  0x027,		/* regulator, booster and follower */
-  0x081,		/* set contrast */
-  0x00e,		/* contrast value, EA default: 0x010, previous value for S102: 0x0e */
-  0x0fa,		/* Set Temp compensation */ 
-  0x090,		/* 0.11 deg/c WP Off WC Off*/
-  0x0a4,		/* normal display  */
-  0x0af		/* display on */
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
+  U8G_ESC_CS(1),             /* enable chip */
+  0x040,		                /* set display start line to 0 */
+  0x0a1,		                /* ADC set to reverse */
+  0x0c0,		                /* common output mode */
+  0x0a6,		                /* display normal, bit val 0: LCD pixel off. */
+  0x0a2,		                /* LCD bias 1/9 */
+  0x02f,		                /* all power  control circuits on */
+  0x027,		                /* regulator, booster and follower */
+  0x081,		                /* set contrast */
+  0x00e,		                /* contrast value, EA default: 0x010, previous value for S102: 0x0e */
+  0x0fa,		                /* Set Temp compensation */ 
+  0x090,		                /* 0.11 deg/c WP Off WC Off*/
+  0x0a4,		                /* normal display  */
+  0x0af,		                /* display on */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  0x0a5,		                /* display all points, ST7565, UC1610 */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  0x0a4,		                /* normal display */
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_END                /* end of sequence */
 };
 
+u8g_pgm_uint8_t u8g_dev_dogs102_data_start[] = {
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),             /* enable chip */
+  0x010,		/* set upper 4 bit of the col adr to 0 */
+  0x000,		/* set lower 4 bit of the col adr to 0 */      
+  U8G_ESC_END                /* end of sequence */
+};
 
 uint8_t u8g_dev_dogs102_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
-  
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
-      /*
-      if ( u8g_InitCom(u8g, dev) == 0 )
-        return 0;
-      */
       u8g_InitCom(u8g, dev);
-      //u8g_DisableCom(u8g, dev);
-      u8g_SetChipSelect(u8g, dev, 0);
-      u8g_SetAddress(u8g, dev, 0);           /* command mode */
-      //u8g_EnableCom(u8g, dev);
-      u8g_SetChipSelect(u8g, dev, 1);
-      u8g_WriteSequenceP(u8g, dev, sizeof(u8g_dev_dogs102_init_seq), u8g_dev_dogs102_init_seq);      
-      u8g_Delay(300);
-      u8g_WriteByte(u8g, dev, 0x0a5);		/* display all points, ST7565, UC1610 */
-      u8g_Delay(300);
-      u8g_WriteByte(u8g, dev, 0x0a4);		/* normal display  */
-      u8g_Delay(300);      
-      u8g_SetChipSelect(u8g, dev, 0);
-      //u8g_DisableCom(u8g, dev);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_dogs102_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-        u8g_SetAddress(u8g, dev, 0);           /* command mode */
-        //u8g_EnableCom(u8g, dev);
-        u8g_SetChipSelect(u8g, dev, 1);
+        u8g_WriteEscSeqP(u8g, dev, u8g_dev_dogs102_data_start);    
         u8g_WriteByte(u8g, dev, 0x0b0 | pb->p.page); /* select current page (ST7565R) */
-        u8g_WriteByte(u8g, dev, 0x010 );		/* set upper 4 bit of the col adr to 0 */
-        u8g_WriteByte(u8g, dev, 0x000 );		/* set lower 4 bit of the col adr to 0 */      
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
         if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
           return 0;
-      
         u8g_SetChipSelect(u8g, dev, 0);
-        //u8g_DisableCom(u8g, dev);
       }
       break;
   }
