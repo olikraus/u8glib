@@ -37,9 +37,11 @@
     0x0c0       Start Display at line 0
     0x040 | y   write to y address (y:0..63)
     0x0b8 | x   write to page [0..7]
-  
-  
 
+
+  u8g_Init8Bit(u8g, dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset)
+  u8g_Init8Bit(u8g, dev,  8,    9, 10, 11,   4,   5,   6,   7, 18, 14, 15, 17, 16, U8G_PIN_NONE)
+  
 */
 
 #include "u8g.h"
@@ -96,7 +98,6 @@ uint8_t u8g_dev_ks0108_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
         u8g_WriteSequence(u8g, dev, 64, 64+(uint8_t *)pb->buf);
         u8g_SetChipSelect(u8g, dev, 0);
         
-        //((uint8_t *)pb->buf)[0] = 1;
       }
       break;
   }

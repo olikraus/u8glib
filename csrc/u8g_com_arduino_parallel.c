@@ -32,6 +32,23 @@
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
   
 
+  PIN_D0 8
+  PIN_D1 9
+  PIN_D2 10
+  PIN_D3 11
+  PIN_D4 4
+  PIN_D5 5
+  PIN_D6 6
+  PIN_D7 7
+
+  PIN_CS1 14
+  PIN_CS2 15
+  PIN_RW 16
+  PIN_DI 17
+  PIN_EN 18
+  
+  u8g_Init8Bit(u8g, dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset)
+  u8g_Init8Bit(u8g, dev,  8,    9, 10, 11,   4,   5,   6,   7, 18, 14, 15, 17, 16, U8G_PIN_NONE)
 
 */
 
@@ -47,85 +64,31 @@
 #endif
 
 
-#define PIN_D0 8
-#define PIN_D1 9
-#define PIN_D2 10
-#define PIN_D3 11
-#define PIN_D4 4
-#define PIN_D5 5
-#define PIN_D6 6
-#define PIN_D7 7
-
-#define PIN_CS1 14
-#define PIN_CS2 15
-#define PIN_RW 16
-#define PIN_DI 17
-#define PIN_EN 18
-
-//#define PIN_RESET
 
 
 
 
-
-static void u8g_com_arduino_parallel_init(void)
+void u8g_com_arduino_parallel_write(u8g_t *u8g, uint8_t val)
 {
-  pinMode(PIN_D0, OUTPUT);
-  digitalWrite(PIN_D0, LOW);
-  pinMode(PIN_D1, OUTPUT);
-  digitalWrite(PIN_D1, LOW);
-  pinMode(PIN_D2, OUTPUT);
-  digitalWrite(PIN_D2, LOW);
-  pinMode(PIN_D3, OUTPUT);
-  digitalWrite(PIN_D3, LOW);
-  pinMode(PIN_D4, OUTPUT);
-  digitalWrite(PIN_D4, LOW);
-  pinMode(PIN_D5, OUTPUT);
-  digitalWrite(PIN_D5, LOW);
-  pinMode(PIN_D6, OUTPUT);
-  digitalWrite(PIN_D6, LOW);
-  pinMode(PIN_D7, OUTPUT);
-  digitalWrite(PIN_D7, LOW);
-  
-  pinMode(PIN_EN, OUTPUT);
-  digitalWrite(PIN_EN, LOW);
-
-  pinMode(PIN_DI, OUTPUT);
-  digitalWrite(PIN_DI, HIGH);
-
-  pinMode(PIN_RW, OUTPUT);
-  digitalWrite(PIN_RW, LOW);
-
-  pinMode(PIN_CS1, OUTPUT);
-  digitalWrite(PIN_CS1, HIGH);
-  pinMode(PIN_CS2, OUTPUT);
-  digitalWrite(PIN_CS2, HIGH);
-}
-
-
-
-
-void u8g_com_arduino_parallel_write(uint8_t val)
-{
-  digitalWrite(PIN_D0, val&1);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_D0, val&1);
   val >>= 1;
-  digitalWrite(PIN_D1, val&1);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_D1, val&1);
   val >>= 1;
-  digitalWrite(PIN_D2, val&1);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_D2, val&1);
   val >>= 1;
-  digitalWrite(PIN_D3, val&1);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_D3, val&1);
   val >>= 1;
-  digitalWrite(PIN_D4, val&1);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_D4, val&1);
   val >>= 1;
-  digitalWrite(PIN_D5, val&1);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_D5, val&1);
   val >>= 1;
-  digitalWrite(PIN_D6, val&1);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_D6, val&1);
   val >>= 1;
-  digitalWrite(PIN_D7, val&1);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_D7, val&1);
   
   /* EN cycle time must be 1 micro second, digitalWrite is slow enough to do this */
-  digitalWrite(PIN_EN, HIGH);
-  digitalWrite(PIN_EN, LOW);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_EN, HIGH);
+  u8g_com_arduino_digital_write(u8g, U8G_PI_EN, LOW);
 }
 
 
@@ -134,48 +97,52 @@ uint8_t u8g_com_arduino_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, vo
   switch(msg)
   {
     case U8G_COM_MSG_INIT:
-      u8g_com_arduino_parallel_init();
+      /* setup the RW pin as output and force it to low */
+      if ( u8g->pin_list[U8G_PI_RW] != U8G_PIN_NONE )
+      {
+        pinMode(u8g->pin_list[U8G_PI_RW], OUTPUT);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_RW, LOW);
+      }
+      /* set all pins (except RW pin) */
+      u8g_com_arduino_assign_pin_output_high(u8g);
       break;
-    
     case U8G_COM_MSG_STOP:
       break;
-
     case U8G_COM_MSG_CHIP_SELECT:
       if ( arg_val == 0 )
       {
         /* disable */
-        digitalWrite(PIN_CS1, HIGH);
-        digitalWrite(PIN_CS2, HIGH);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS1, HIGH);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS2, HIGH);
       }
       else if ( arg_val == 1 )
       {
         /* enable */
-        digitalWrite(PIN_CS1, LOW);
-        digitalWrite(PIN_CS2, HIGH);  
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS1, LOW);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS2, HIGH);
       }
       else if ( arg_val == 2 )
       {
         /* enable */
-        digitalWrite(PIN_CS1, HIGH);
-        digitalWrite(PIN_CS2, LOW);  
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS1, HIGH);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS2, LOW);
       }
       else
       {
         /* enable */
-        digitalWrite(PIN_CS1, LOW);
-        digitalWrite(PIN_CS2, LOW);  
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS1, LOW);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS2, LOW);
       }
       break;
-
     case U8G_COM_MSG_WRITE_BYTE:
-      u8g_com_arduino_parallel_write(arg_val);
+      u8g_com_arduino_parallel_write(u8g, arg_val);
       break;
     case U8G_COM_MSG_WRITE_SEQ:
       {
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_arduino_parallel_write(*ptr++);
+          u8g_com_arduino_parallel_write(u8g, *ptr++);
           arg_val--;
         }
       }
@@ -185,14 +152,14 @@ uint8_t u8g_com_arduino_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, vo
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_arduino_parallel_write(u8g_pgm_read(ptr));
+          u8g_com_arduino_parallel_write(u8g, u8g_pgm_read(ptr));
           ptr++;
           arg_val--;
         }
       }
       break;
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      digitalWrite(PIN_DI, arg_val);
+      u8g_com_arduino_digital_write(u8g, U8G_PI_DI, arg_val);
       break;
   }
   return 1;

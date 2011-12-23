@@ -1,3 +1,39 @@
+/*
+
+  HelloWorld.pde
+  
+  Universal 8bit Graphics Library
+  
+  Copyright (c) 2011, olikraus@gmail.com
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice, this list 
+    of conditions and the following disclaimer.
+    
+  * Redistributions in binary form must reproduce the above copyright notice, this 
+    list of conditions and the following disclaimer in the documentation and/or other 
+    materials provided with the distribution.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  
+
+
+*/
 
 
 #include "u8g.h"
@@ -11,7 +47,8 @@ void setup(void)
 
   
   //u8g_Init(&u8g, &u8g_dev_pcf8812_96x65_sw_spi);
-  u8g_Init(&u8g, &u8g_dev_ks0108_128x64);
+  //u8g_Init(&u8g, &u8g_dev_ks0108_128x64);
+  u8g_Init8Bit(&u8g, &u8g_dev_ks0108_128x64_fast,  8,    9, 10, 11,   4,   5,   6,   7, 18, 14, 15, 17, 16, U8G_PIN_NONE);
   //u8g_Init(&u8g, &u8g_dev_uc1701_dogs102_sw_spi);
   /*
 #define PIN_SCK 13
@@ -50,7 +87,7 @@ void loop(void)
     
     u8g_SetFont(&u8g, u8g_font_6x10);
     
-    u8g_DrawStr(&u8g, 80, 10, u8g_u8toa(u8g.pin_list[U8G_PI_CS], 3)   );
+    u8g_DrawStr(&u8g, 80, 10, u8g_u8toa(u8g.pin_list[U8G_PI_RW], 3)   );
 
     u8g_DrawPixel(&u8g, 10,0);
     u8g_DrawPixel(&u8g, 20,0);

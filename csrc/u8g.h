@@ -301,8 +301,6 @@ uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 
 typedef void (*u8g_draw_cursor_fn)(u8g_t *u8g);
 
-#define U8G_PIN_LIST_LEN 14
-
 /* PI = Pin Index */
 
 /* reset pin, usually optional */
@@ -334,8 +332,11 @@ typedef void (*u8g_draw_cursor_fn)(u8g_t *u8g);
 #define U8G_PI_D6 11
 #define U8G_PI_D7 12
 
-/* read/write pin (not required) */
-/* #define U8G_PI_RW 13 */
+/* read/write pin, must be the last pin in the list, this means U8G_PIN_LIST_LEN =  U8G_PI_RW + 1*/
+#define U8G_PI_RW 13 
+
+#define U8G_PIN_LIST_LEN 14
+
 
 #define U8G_PIN_NONE 255
 
@@ -381,6 +382,8 @@ void u8g_UpdateDimension(u8g_t *u8g);
 uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev);
 uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset);
 uint8_t u8g_InitHWSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset);
+uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+  uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset);
 void u8g_FirstPage(u8g_t *u8g);
 uint8_t u8g_NextPage(u8g_t *u8g);
 void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y);
