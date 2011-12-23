@@ -45,6 +45,7 @@ DEFS:=-DARDUINO=22
 
   
 U8G_PATH:=$(shell cd ../../.. && pwd)/csrc/
+U8G_CPP_PATH:=$(shell cd ../../.. && pwd)/cppsrc/
 U8G_FONT_PATH:=$(shell cd ../../.. && pwd)/fntsrc/
 
 # The location where the avr tools (e.g. avr-gcc) are located. Requires a '/' at the end.
@@ -99,7 +100,7 @@ CSRC:=$(shell ls $(CDIRS) 2>/dev/null)
 CCSRC:=$(shell ls *.cc 2>/dev/null)
 
 CPPDIRS:=$(EXTRA_DIRS) $(addsuffix utility/,$(EXTRA_DIRS))
-CPPDIRS:=*.cpp utility/*.cpp $(addsuffix *.cpp,$(CPPDIRS)) $(ARDUINO_PATH)hardware/arduino/cores/arduino/*.cpp 
+CPPDIRS:=*.cpp utility/*.cpp $(addsuffix *.cpp,$(CPPDIRS)) $(U8G_CPP_PATH)/*.cpp $(ARDUINO_PATH)hardware/arduino/cores/arduino/*.cpp 
 CPPSRC:=$(shell ls $(CPPDIRS) 2>/dev/null)
 
 #=== build internal variables ===
@@ -155,7 +156,7 @@ COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
 COMMON_FLAGS += -Wl,--relax
 COMMON_FLAGS += -mcall-prologues 
 COMMON_FLAGS += -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-COMMON_FLAGS += -I. -I$(U8G_PATH)
+COMMON_FLAGS += -I. -I$(U8G_PATH) -I$(U8G_CPP_PATH)
 COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/cores/arduino
 COMMON_FLAGS += $(addprefix -I,$(EXTRA_DIRS)) $(addprefix -I,$(addsuffix utility/,$(EXTRA_DIRS)))
 
