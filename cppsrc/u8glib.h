@@ -72,6 +72,6 @@ class U8GLIB_DOGS102 : public U8GLIB
     U8GLIB_DOGS102(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
       : U8GLIB(&u8g_dev_uc1701_dogs102_sw_spi, cs, a0, reset)
       { }
-}
+};
 
 
