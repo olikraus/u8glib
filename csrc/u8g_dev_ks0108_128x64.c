@@ -48,6 +48,22 @@
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
+u8g_pgm_uint8_t u8g_dev_ks0108_128x64_init_seq[] = {
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
+  U8G_ESC_CS(1),             /* enable chip 1 */
+  0x03f,		                /* display on */
+  0x0c0,		                /* start at line 0 */
+  U8G_ESC_DLY(20),         /* delay 20 ms */
+  U8G_ESC_CS(2),             /* enable chip 2 */
+  0x03f,		                /* display on */
+  0x0c0,		                /* start at line 0 */
+  U8G_ESC_DLY(20),         /* delay 20 ms */
+  U8G_ESC_CS(0),             /* disable all chips */
+  U8G_ESC_END                /* end of sequence */
+};
+
 
 uint8_t u8g_dev_ks0108_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -56,28 +72,7 @@ uint8_t u8g_dev_ks0108_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
-      u8g_SetChipSelect(u8g, dev, 0);
-      u8g_SetAddress(u8g, dev, 0);           /* command mode */
-        
-      u8g_SetChipSelect(u8g, dev, 1);                /* select 1st chip */
-      u8g_WriteByte(u8g, dev, 0x03f);		/* display on */
-      u8g_WriteByte(u8g, dev, 0x0c0);		/* start at line 0 */
-    
-      u8g_SetChipSelect(u8g, dev, 2);                /* select 2nd chip */
-      u8g_WriteByte(u8g, dev, 0x03f);		/* display on */
-      u8g_WriteByte(u8g, dev, 0x0c0);		/* start at line 0 */
-
-      /*
-      u8g_WriteByte(u8g, dev, 0x0b7 ); 
-      u8g_WriteByte(u8g, dev, 0x040 );	
-      u8g_SetAddress(u8g, dev, 1);
-      u8g_WriteByte(u8g, dev, 0x0ff );	
-    */
-    
-      u8g_Delay(20);
-
-    
-      u8g_SetChipSelect(u8g, dev, 0);                 /* deselect all chips */
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ks0108_128x64_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;

@@ -11,7 +11,7 @@ void setup(void)
 
   
   //u8g_Init(&u8g, &u8g_dev_pcf8812_96x65_sw_spi);
-  // u8g_Init(&u8g, &u8g_dev_ks0108_128x64);
+  u8g_Init(&u8g, &u8g_dev_ks0108_128x64);
   //u8g_Init(&u8g, &u8g_dev_uc1701_dogs102_sw_spi);
   /*
 #define PIN_SCK 13
@@ -24,7 +24,7 @@ void setup(void)
   
   //u8g_InitSPI(&u8g, &u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
   //u8g_InitSPI(&u8g, &u8g_dev_pcf8812_96x65_sw_spi, 13, 11, 10, 9, 8);
-  u8g_InitSPI(&u8g, &u8g_dev_pcd8544_84x48_sw_spi, 13, 11, 10, 9, 8);
+  //u8g_InitSPI(&u8g, &u8g_dev_pcd8544_84x48_sw_spi, 13, 11, 10, 9, 8);
   
   //u8g_InitSPI(&u8g, &u8g_dev_uc1701_dogs102_sw_spi);
   //u8g_SetRot180(&u8g);
@@ -75,6 +75,6 @@ void loop(void)
   o++;
   o = o & 15;
   
-  //delay(500);
+  u8g_Delay(100);
 }
 

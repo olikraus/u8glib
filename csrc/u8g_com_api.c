@@ -132,26 +132,30 @@ uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq)
       {
         break;
       }
-      else if ( value >= 0 && value <= 127 )
+      else if ( value >= 0x0f0 )
       {
-        u8g_Delay(value);
+        /* not yet used, do nothing */
       }
-      else if ( value >= 0xe0 && value <= 0x0ef )
+      else if ( value >= 0xe0  )
       {
         u8g_SetAddress(u8g, dev, value & 0x0f);
       }
-      else if ( value >= 0xd0 && value <= 0x0df )
+      else if ( value >= 0xd0 )
       {
         u8g_SetChipSelect(u8g, dev, value & 0x0f);
       }
-      else if ( value >= 0xc0 && value <= 0x0cf )
+      else if ( value >= 0xc0 )
       {
         u8g_SetResetLow(u8g, dev);
-        value & 0x0f;
+        value &= 0x0f;
         value <<= 4;
         value+=2;
         u8g_Delay(value);
         u8g_SetResetHigh(u8g, dev);
+        u8g_Delay(value);
+      }
+      else if ( value <= 127 )
+      {
         u8g_Delay(value);
       }
       is_escape = 0;
