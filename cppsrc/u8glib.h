@@ -70,6 +70,11 @@ class U8GLIB
 
     void drawPixel(u8g_uint_t x, u8g_uint_t y) { return u8g_DrawPixel(&u8g, x, y); }
 
+    void drawHLine(u8g_uint_t x, u8g_uint_t y, u8g_uint_t w) { u8g_DrawHLine(&u8g, x, y, w); }  
+    void drawVLine(u8g_uint_t x, u8g_uint_t y, u8g_uint_t w) { u8g_DrawVLine(&u8g, x, y, w); }
+    
+    void drawFrame(u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h) { u8g_DrawFrame(&u8g, x, y, w, h); }
+    void drawBox(u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h) { u8g_DrawBox(&u8g, x, y, w, h); }
     
     /* font handling */
     void setFont(const u8g_pgm_uint8_t *font) {u8g_SetFont(&u8g, font); }
