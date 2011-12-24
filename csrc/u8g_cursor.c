@@ -58,6 +58,15 @@ void u8g_SetCursorPos(u8g_t *u8g, u8g_uint_t cursor_x, u8g_uint_t cursor_y)
   u8g->cursor_y = cursor_y;
 }
 
+void u8g_EnableCursor(u8g_t *u8g)
+{
+    u8g->cursor_fn = u8g_DrawCursor;
+}
+
+void u8g_DisableCursor(u8g_t *u8g)
+{
+    u8g->cursor_fn = (u8g_draw_cursor_fn)0;
+}
 
 void u8g_DrawCursor(u8g_t *u8g)
 {
@@ -76,15 +85,5 @@ void u8g_DrawCursor(u8g_t *u8g)
   u8g_DrawGlyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding);
   
   u8g_SetColorIndex(u8g, color); 
-}
-
-void u8g_EnableCursor(u8g_t *u8g)
-{
-    u8g->cursor_fn = u8g_DrawCursor;
-}
-
-void u8g_DisableCursor(u8g_t *u8g)
-{
-    u8g->cursor_fn = (u8g_draw_cursor_fn)0;
 }
 

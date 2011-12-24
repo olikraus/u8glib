@@ -364,4 +364,8 @@
        --> ERLEDIGT, 20.12.2011 (War ein fehler in den box routinen)
 
  - dev handler: einsetzen der ESC-Write procedure
+       --> ERLEDIGT, 23.12.2011 
+      
+ - Image Draw Procedure
+    höhe, breite, bits pro pixel, rohdaten
  

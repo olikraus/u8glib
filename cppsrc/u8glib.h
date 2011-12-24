@@ -69,18 +69,31 @@ class U8GLIB
     u8g_uint_t getHeight(void) { return u8g_GetHeight(&u8g); }
 
     void drawPixel(u8g_uint_t x, u8g_uint_t y) { return u8g_DrawPixel(&u8g, x, y); }
-
     void drawHLine(u8g_uint_t x, u8g_uint_t y, u8g_uint_t w) { u8g_DrawHLine(&u8g, x, y, w); }  
     void drawVLine(u8g_uint_t x, u8g_uint_t y, u8g_uint_t w) { u8g_DrawVLine(&u8g, x, y, w); }
     
     void drawFrame(u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h) { u8g_DrawFrame(&u8g, x, y, w, h); }
     void drawBox(u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h) { u8g_DrawBox(&u8g, x, y, w, h); }
     
+    /* bitmap handling */
+    void drawBitmap(u8g_uint_t x, u8g_uint_t y, u8g_uint_t cnt, u8g_uint_t h, const uint8_t *bitmap) 
+      { u8g_DrawBitmap(&u8g, x, y, cnt, h, bitmap); }
+    void drawBitmapP(u8g_uint_t x, u8g_uint_t y, u8g_uint_t cnt, u8g_uint_t h, const u8g_pgm_uint8_t *bitmap)
+      { u8g_DrawBitmapP(&u8g, x, y, cnt, h, bitmap); }
+    
     /* font handling */
     void setFont(const u8g_pgm_uint8_t *font) {u8g_SetFont(&u8g, font); }
     u8g_uint_t drawStr(u8g_uint_t x, u8g_uint_t y, const char *s) { return u8g_DrawStr(&u8g, x, y, s); }
     u8g_uint_t drawStrP(u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s) { return u8g_DrawStrP(&u8g, x, y, s); }
     
+    /* cursor handling */
+    void setCursorFont(const u8g_pgm_uint8_t *cursor_font) { u8g_SetCursorFont(&u8g, cursor_font); }
+    void setCursorStyle(uint8_t encoding) { u8g_SetCursorStyle(&u8g, encoding); }
+    void setCursorPos(u8g_uint_t cursor_x, u8g_uint_t cursor_y) { u8g_SetCursorPos(&u8g, cursor_x, cursor_y); }
+    void setCursorColor(uint8_t fg, uint8_t bg) { u8g_SetCursorColor(&u8g, fg, bg); }
+    void enableCursor(void) { u8g_EnableCursor(&u8g); }
+    void disableCursor(void) { u8g_DisableCursor(&u8g); }
+    void drawCursor(void)  { u8g_DrawCursor(&u8g); }
 };
 
 
