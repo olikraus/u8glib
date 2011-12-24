@@ -49,6 +49,7 @@ class U8GLIB
         uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE);
   public:
   
+    /* constructor */
     U8GLIB(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset) 
       { initSPI(dev, sck, mosi, cs, a0, reset); }
     U8GLIB(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset) 
@@ -56,10 +57,25 @@ class U8GLIB
     U8GLIB(u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
         uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset) 
       { init8Bit(dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset); }
-      
+    
+     /* picture loop */
+    void firstPage(void) { u8g_FirstPage(&u8g); }
+    uint8_t nextPage(void) { return u8g_NextPage(&u8g); }
+    
+    /* graphic primitives */
+    void setColorIndex(uint8_t color_index) { u8g_SetColorIndex(&u8g, color_index); }
+    uint8_t getColorIndex(void) { return u8g_GetColorIndex(&u8g); }
+    u8g_uint_t getWidth(void) { return u8g_GetWidth(&u8g); }
+    u8g_uint_t getHeight(void) { return u8g_GetHeight(&u8g); }
+
+    void drawPixel(u8g_uint_t x, u8g_uint_t y) { return u8g_DrawPixel(&u8g, x, y); }
+
+    
+    /* font handling */
     void setFont(const u8g_pgm_uint8_t *font) {u8g_SetFont(&u8g, font); }
     u8g_uint_t drawStr(u8g_uint_t x, u8g_uint_t y, const char *s) { return u8g_DrawStr(&u8g, x, y, s); }
     u8g_uint_t drawStrP(u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s) { return u8g_DrawStrP(&u8g, x, y, s); }
+    
 };
 
 
