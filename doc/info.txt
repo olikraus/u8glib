@@ -368,4 +368,24 @@
       
  - Image Draw Procedure
     höhe, breite, bits pro pixel, rohdaten
+    
+ - irgendwas stimmt mit dem unifont nicht --> arduino Hello World
  
+ - Beschreibung im Wiki
+      C++ Prototype:
+      
+      C Prototype:
+      
+      Description:
+      
+      Arguments:
+      
+      Returns:
+      
+      Use:               Inside/Outside Picture Loop
+      
+      Note:
+      
+      Example:
+      
+      See also:

@@ -43,7 +43,7 @@ u8g_t u8g;
 
 void setup(void)
 {
-  //pinMode(13, OUTPUT);
+  pinMode(13, OUTPUT);
 
   
   //u8g_Init8Bit(&u8g, &u8g_dev_ks0108_128x64_fast,  8,    9, 10, 11,   4,   5,   6,   7, 18, 14, 15, 17, 16, U8G_PIN_NONE);
@@ -60,25 +60,53 @@ void setup(void)
   //u8g_InitSPI(&u8g, &u8g_dev_pcf8812_96x65_sw_spi, 13, 11, 10, 9, 8);
   //u8g_InitSPI(&u8g, &u8g_dev_pcd8544_84x48_sw_spi, 13, 11, 10, 9, 8);
   
-  //u8g_InitSPI(&u8g, &u8g_dev_uc1701_dogs102_sw_spi);
   //u8g_SetRot180(&u8g);
 }
 
 void loop(void)
 {
   u8g_uint_t w,h;
+  static u8g_uint_t o = 0;
 
   u8g_FirstPage(&u8g);
   
   do
   {
-    //u8g_SetFont(&u8g, u8g_font_unifont);
     u8g_SetFont(&u8g, u8g_font_osb18r);
-    w = u8g_GetWidth(&u8g);
-    h = u8g_GetHeight(&u8g);
+    w = u8g_GetFontBBXWidth(&u8g);
+    h = u8g_GetFontBBXHeight(&u8g);
     
-    u8g_DrawStr(&u8g, 0, 20, "Hello!");
+    u8g_DrawStr(&u8g, 20+2+o, h, "A");
+    u8g_DrawStr90(&u8g, 20+2+o, h+2, "B");
+    u8g_DrawStr180(&u8g, 20+o, h+2, "C");
+    u8g_DrawStr270(&u8g, 20+o, h, "D");
+    
+    u8g_SetFont(&u8g, u8g_font_6x10);
+    
+    u8g_DrawStr(&u8g, 80, 10, u8g_u8toa(u8g.pin_list[U8G_PI_RW], 3)   );
+
+    u8g_DrawPixel(&u8g, 10,0);
+    u8g_DrawPixel(&u8g, 20,0);
+    u8g_DrawPixel(&u8g, 30,0);
+    
+    u8g_DrawPixel(&u8g, 60,0);
+    u8g_DrawPixel(&u8g, 70,0);
+    u8g_DrawPixel(&u8g, 80,0);
+
+    
+    u8g_DrawFrame(&u8g, 2, 2+3, 9, 3+3);
+    u8g_DrawFrame(&u8g, 0, 0+3, 13, 7+3);
+    
+    u8g_DrawFrame(&u8g, 60, 40, 1+o, 1+o);
+    
+    /*
+    u8g_DrawFrame(&u8g, 0, 0, 2, 64);
+    
+    u8g_SetPixel(&u8g, 20, 5);
+    */
   } while( u8g_NextPage(&u8g) );
+  o++;
+  o = o & 15;
   
   u8g_Delay(100);
 }

@@ -80,15 +80,15 @@ echo "10x20"
 ../bdf2u8g/bdf2u8g -l 78 -u 79 ../bdf/10x20.bdf u8g_font_10x20_78_79 u8g_font_10x20_78_79.c > /dev/null
 
 echo "unifont"
-../bdf2u8g/bdf2u8g -l 0 -u 1 -b 0 -e 255  ../bdf/unifont-5.1.20080820.bdf u8g_font_unifont u8g_font_unifont.c > /dev/null
-../bdf2u8g/bdf2u8g -l 0 -u 1 -b 32 -e 127  ../bdf/unifont-5.1.20080820.bdf u8g_font_unifontr u8g_font_unifontr.c > /dev/null
-../bdf2u8g/bdf2u8g -l 18 -u 19 -b 0 -e 255 ../bdf/unifont-5.1.20080820.bdf u8g_font_unifont_18_19 u8g_font_unifont_18_19.c > /dev/null
-../bdf2u8g/bdf2u8g -l 72 -u 73 -b 0 -e 255 ../bdf/unifont-5.1.20080820.bdf u8g_font_unifont_72_73 u8g_font_unifont_72_73.c > /dev/null
-../bdf2u8g/bdf2u8g -l 67 -u 75 -b 16 -e 255 ../bdf/unifont-5.1.20080820.bdf u8g_font_unifont_67_75 u8g_font_unifont_67_75.c > /dev/null
-../bdf2u8g/bdf2u8g -l 78 -u 79 -b 1 -e 255 ../bdf/unifont-5.1.20080820.bdf u8g_font_unifont_78_79 u8g_font_unifont_78_79.c > /dev/null
-../bdf2u8g/bdf2u8g -l 86 -u 87 -s 32 -b 32 -e 116 ../bdf/unifont-5.1.20080820.bdf u8g_font_unifont_86 u8g_font_unifont_86.c > /dev/null
-../bdf2u8g/bdf2u8g -l 77 -u 87 -s 32 -b 32 -e 99 ../bdf/unifont-5.1.20080820.bdf u8g_font_unifont_77 u8g_font_unifont_77.c > /dev/null
-../bdf2u8g/bdf2u8g -l 76 -u 87 -s 32 -b 32 -e 159  ../bdf/unifont-5.1.20080820.bdf u8g_font_unifont_76 u8g_font_unifont_76.c > /dev/null
+../bdf2u8g/bdf2u8g -l 0 -u 1 -b 0 -e 255  ../bdf/unifont.bdf u8g_font_unifont u8g_font_unifont.c > /dev/null
+../bdf2u8g/bdf2u8g -l 0 -u 1 -b 32 -e 127  ../bdf/unifont.bdf u8g_font_unifontr u8g_font_unifontr.c > /dev/null
+../bdf2u8g/bdf2u8g -l 18 -u 19 -b 0 -e 255 ../bdf/unifont.bdf u8g_font_unifont_18_19 u8g_font_unifont_18_19.c > /dev/null
+../bdf2u8g/bdf2u8g -l 72 -u 73 -b 0 -e 255 ../bdf/unifont.bdf u8g_font_unifont_72_73 u8g_font_unifont_72_73.c > /dev/null
+../bdf2u8g/bdf2u8g -l 67 -u 75 -b 16 -e 255 ../bdf/unifont.bdf u8g_font_unifont_67_75 u8g_font_unifont_67_75.c > /dev/null
+../bdf2u8g/bdf2u8g -l 78 -u 79 -b 1 -e 255 ../bdf/unifont.bdf u8g_font_unifont_78_79 u8g_font_unifont_78_79.c > /dev/null
+../bdf2u8g/bdf2u8g -l 86 -u 87 -s 32 -b 32 -e 116 ../bdf/unifont.bdf u8g_font_unifont_86 u8g_font_unifont_86.c > /dev/null
+../bdf2u8g/bdf2u8g -l 77 -u 87 -s 32 -b 32 -e 99 ../bdf/unifont.bdf u8g_font_unifont_77 u8g_font_unifont_77.c > /dev/null
+../bdf2u8g/bdf2u8g -l 76 -u 87 -s 32 -b 32 -e 159  ../bdf/unifont.bdf u8g_font_unifont_76 u8g_font_unifont_76.c > /dev/null
 
 
 
