@@ -72,12 +72,12 @@ void loop(void)
   
   do
   {
-    //u8g_SetFont(&u8g, u8g_font_unifont);
-    u8g_SetFont(&u8g, u8g_font_osb18r);
+    u8g_SetFont(&u8g, u8g_font_unifont);
+    //u8g_SetFont(&u8g, u8g_font_osb18r);
     w = u8g_GetWidth(&u8g);
     h = u8g_GetHeight(&u8g);
     
-    u8g_DrawStr(&u8g, 0, 20, "Hello!");
+    u8g_DrawStr(&u8g, 0, 20, "Hello World!");
   } while( u8g_NextPage(&u8g) );
   
   u8g_Delay(100);
