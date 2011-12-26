@@ -35,7 +35,8 @@
 
 */
 
-
+#ifndef _CPP_U8GLIB
+#define _CPP_U8GLIB
 
 #include "u8g.h"
 
@@ -109,3 +110,4 @@ class U8GLIB_DOGS102 : public U8GLIB
 };
 
 
+#endif /* _CPP_U8GLIB */
