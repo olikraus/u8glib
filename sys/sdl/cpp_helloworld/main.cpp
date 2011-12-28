@@ -1,28 +1,28 @@
 
 
-#include "u8g.h"
+#include "u8glib.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 
 int u8g_sdl_get_key(void);
 
+U8GLIB u8g(&u8g_dev_sdl_1bit);
 
 
 int main(void)
 {
   
-  u8g_t u8g;
-  u8g_Init(&u8g, &u8g_dev_sdl_1bit);
-  u8g_FirstPage(&u8g);
+  //u8g_t u8g;
+  //u8g_Init(&u8g, &u8g_dev_sdl_1bit);
+  u8g.firstPage();
   
   do
   {
-    u8g_SetFont(&u8g, u8g_font_unifont);
-    //u8g_SetFont(&u8g, u8g_font_osb18r);
+    u8g.setFont(u8g_font_unifont);
     
-    u8g_DrawStr(&u8g, 0, 20, "Hello World!");
-  } while( u8g_NextPage(&u8g) );
+    u8g.drawStr(0, 20, "Hello World!");
+  } while( u8g.nextPage() );
 
   while( u8g_sdl_get_key() < 0 )
     ;

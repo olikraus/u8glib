@@ -1,5 +1,5 @@
 CFLAGS = -g -Wall -I../../../csrc/.  -DU8G_16BIT `sdl-config --cflags`
-CXXFLAGS = -g -Wall -I../../../csrc/.  -DU8G_16BIT `sdl-config --cflags`
+CXXFLAGS = -g -Wall -I../../../csrc/. -I../../../cppsrc/. -DU8G_16BIT `sdl-config --cflags`
 
 SRC = $(shell ls ../../../csrc/*.c) $(shell ls ../../../fntsrc/u8g_font_10x20*.c ../../../fntsrc/u8g_font_osb*.c ../../../fntsrc/u8g_font_uni*.c ../../../fntsrc/u8g_font_fur*.c ../../../fntsrc/u8g_font_cursor*.c) ../dev/u8g_dev_sdl.c
 CPPSRC = $(shell ls ../../../cppsrc/*.cpp) main.cpp
