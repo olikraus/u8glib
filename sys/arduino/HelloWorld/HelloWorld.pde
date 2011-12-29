@@ -57,7 +57,7 @@ void setup(void)
   */
   
   //u8g_InitSPI(&u8g, &u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
-  u8g_InitSPI(&u8g, &u8g_dev_ssd1325_nhd_27_12864ucy3_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
+  u8g_InitSPI(&u8g, &u8g_dev_ssd1325_nhd_27_12864ucy3_hw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
   
   //u8g_InitSPI(&u8g, &u8g_dev_pcf8812_96x65_sw_spi, 13, 11, 10, 9, 8);
   //u8g_InitSPI(&u8g, &u8g_dev_pcd8544_84x48_sw_spi, 13, 11, 10, 9, 8);
@@ -68,20 +68,17 @@ void setup(void)
 
 void loop(void)
 {
-  u8g_uint_t w,h;
-
+  static u8g_uint_t y = 0;
   u8g_FirstPage(&u8g);
   
   do
   {
     u8g_SetFont(&u8g, u8g_font_unifont);
-    //u8g_SetFont(&u8g, u8g_font_osb18r);
-    w = u8g_GetWidth(&u8g);
-    h = u8g_GetHeight(&u8g);
-    
-    u8g_DrawStr(&u8g, 0, 20, "Hello World!");
+    u8g_DrawStr(&u8g, 0, 20+y, "Hello World!");
   } while( u8g_NextPage(&u8g) );
   
+  y++;
+  y&= 0x01f;
   u8g_Delay(100);
 }
 

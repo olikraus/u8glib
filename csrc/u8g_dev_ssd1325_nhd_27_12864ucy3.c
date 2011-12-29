@@ -48,7 +48,7 @@
 #define PAGE_HEIGHT 8
 
 /* http://www.newhavendisplay.com/app_notes/OLED_2_7_12864.txt */
-u8g_pgm_uint8_t u8g_dev_ssd1325_nhd_27_12864ucy3_init_seq[] = {
+u8g_pgm_uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_init_seq[] = {
   U8G_ESC_DLY(10),              /* delay 10 ms */
   U8G_ESC_CS(0),                 /* disable chip */
   U8G_ESC_ADR(0),               /* instruction mode */
@@ -64,7 +64,7 @@ u8g_pgm_uint8_t u8g_dev_ssd1325_nhd_27_12864ucy3_init_seq[] = {
   0x086,                                /* full current range (0x084, 0x085, 0x086) */
   0x0b8,                                /* set gray scale table */
       0x01, 0x011, 0x022, 0x032, 0x043, 0x054, 0x065, 0x076,
-  0x081, 0x040,                    /* contrast, brightness, 0..128 */
+  0x081, 0x070,                    /* contrast, brightness, 0..128, Newhaven: 0x040 */
   0x0b2, 0x051,                    /* frame frequency (row period) */
   0x0b1, 0x055,                    /* phase length */
   0x0bc, 0x010,                    /* pre-charge voltage level */
@@ -78,44 +78,26 @@ u8g_pgm_uint8_t u8g_dev_ssd1325_nhd_27_12864ucy3_init_seq[] = {
   U8G_ESC_DLY(100),             /* delay 100 ms */
   0x0a4,                                 /* normal display mode */
   U8G_ESC_CS(0),             /* disable chip */
-  
-  U8G_ESC_DLY(100),             /* delay 100 ms */
-  U8G_ESC_CS(1),             /* enable chip */
-  0x015, 0x000, 0x004,          /* set column address */
-  0x075, 0x000, 0x004,          /* set row address */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  U8G_ESC_ADR(0),               /* instruction mode */
-  U8G_ESC_CS(0),             /* disable chip */
-  
   U8G_ESC_END                /* end of sequence */
 };
 
-static void u8g_ssd1325_prepare_page(u8g_t *u8g, u8g_dev_t *dev, uint8_t page)
+u8g_pgm_uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_prepare_page_seq[] = {
+  U8G_ESC_ADR(0),               /* instruction mode */
+  U8G_ESC_CS(1),                /* enable chip */
+  0x015,       /* column address... */
+  0x000,       /* start at column 0 */
+  0x03f,       /* end at column 63 (which is y == 127), because there are two pixel in one column */
+  0x075,       /* row address... */
+  U8G_ESC_END                /* end of sequence */
+};
+
+
+static void u8g_ssd1325_prepare_page(u8g_t *u8g, u8g_dev_t *dev)
 {
-  u8g_SetAddress(u8g, dev, 0);          /* cmd mode */
-  u8g_SetChipSelect(u8g, dev, 1);          /* activate device */
+  uint8_t page = ((u8g_pb_t *)(dev->dev_mem))->p.page;
   
-  u8g_WriteByte(u8g, dev, 0x015);       /* column address... */
-  u8g_WriteByte(u8g, dev, 0x000);       /* start at column 0 */
-  u8g_WriteByte(u8g, dev, 0x03f);       /* end at column 63 (which is y == 127), because there are two pixel in one column */
+  u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_prepare_page_seq);
   
-  u8g_WriteByte(u8g, dev, 0x075);       /* row address... */
   page <<= 3;
   u8g_WriteByte(u8g, dev, page);       /* start at the selected page */
   page += 7;
@@ -124,7 +106,7 @@ static void u8g_ssd1325_prepare_page(u8g_t *u8g, u8g_dev_t *dev, uint8_t page)
   u8g_SetAddress(u8g, dev, 1);          /* data mode */
 }
 
-/* assumes row autoincrement */
+/* assumes row autoincrement and activated nibble remap */
 static  void u8g_ssd1325_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
 {
   uint8_t d, cnt;
@@ -143,6 +125,23 @@ static  void u8g_ssd1325_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left
   }while ( cnt > 0 );
 }
 
+static void u8g_ssd1325_write_buffer(u8g_t *u8g, u8g_dev_t *dev)
+{
+  uint8_t cnt, left, right;
+  uint8_t *ptr;
+  u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+  
+  cnt = pb->width;
+  cnt >>= 1;
+  ptr = pb->buf;
+  do
+  {
+    left = *ptr++;
+    right = *ptr++;
+    u8g_ssd1325_write_16_pixel(u8g, dev, left, right);
+    cnt--;
+  } while( cnt > 0 );
+}
 
 uint8_t u8g_dev_ssd1325_nhd_27_12864ucy3_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -150,25 +149,15 @@ uint8_t u8g_dev_ssd1325_nhd_27_12864ucy3_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t 
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_nhd_27_12864ucy3_init_seq);
-      u8g_ssd1325_prepare_page(u8g, dev, 2);
-      //u8g_ssd1325_write_16_pixel(u8g, dev, 0, 0);
-      u8g_ssd1325_write_16_pixel(u8g, dev, 0x081, 0xff);
-      u8g_SetChipSelect(u8g, dev, 0);          /* dectivate device */
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
-        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-#ifdef XYZ        
-        u8g_SetChipSelect(u8g, dev, 1);
-        u8g_WriteByte(u8g, dev, 0x0b0 | pb->p.page); /* select current page (ST7565R) */
-        u8g_SetAddress(u8g, dev, 1);           /* data mode */
-        if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
-          return 0;
-        u8g_SetChipSelect(u8g, dev, 0);
-#endif
+        u8g_ssd1325_prepare_page(u8g, dev);
+        u8g_ssd1325_write_buffer(u8g, dev);
+        u8g_SetChipSelect(u8g, dev, 0);        
       }
       break;
   }
