@@ -1,6 +1,6 @@
 /*
 
-  u8g_dev_ssd1325_128x64.c
+  u8g_dev_ssd1325_nhd27ucy3_128x64.c
   
   Driver for SSD1325 Controller (OLED Display)
   Tested with NHD-2.7-12864UCY3
@@ -34,12 +34,16 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
   
-  
+  SSD130x       Monochrom OLED Controller
+  SSD131x       Character OLED Controller
+  SSD132x       Graylevel OLED Controller
+  SSD1331       Color OLED Controller       
+
 */
 
 #include "u8g.h"
 
-#define WIDTH 102
+#define WIDTH 128
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
