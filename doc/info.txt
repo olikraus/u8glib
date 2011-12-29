@@ -366,10 +366,15 @@
  - dev handler: einsetzen der ESC-Write procedure
        --> ERLEDIGT, 23.12.2011 
       
- - Image Draw Procedure
-    höhe, breite, bits pro pixel, rohdaten
-    
  - irgendwas stimmt mit dem unifont nicht --> arduino Hello World
+       --> ERLEDIGT, 30.12.2011 (script war falsch)
+       
+ - Image Draw Procedure
+    höhe, breite, bits pro pixel (?), rohdaten
+    statt bits pro pixel, lieber eigene proceduren
+    
+- NHD 27  --> 2-bit treiber schreiben, den alten umbenennen, aber wie?
+       
  
  - Beschreibung im Wiki
       C++ Prototype:
