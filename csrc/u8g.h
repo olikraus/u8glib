@@ -122,6 +122,10 @@ extern u8g_dev_t u8g_dev_pcd8544_84x48_sw_spi;
 /* Nokia 96x65 Display with PCF8812 */
 extern u8g_dev_t u8g_dev_pcf8812_96x65_sw_spi;
 
+/* NHD-2.7-12864UCY3 OLED Display with SSD1325 Controller */
+extern u8g_dev_t u8g_dev_ssd1325_nhd_27_12864ucy3_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1325_nhd_27_12864ucy3_hw_spi;
+
 /*===============================================================*/
 /* device messages */
 
