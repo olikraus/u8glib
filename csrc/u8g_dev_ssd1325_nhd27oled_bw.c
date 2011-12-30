@@ -1,8 +1,8 @@
 /*
 
-  u8g_dev_ssd1325_nhd_2712864ucy3.c
+  u8g_dev_ssd1325_nhd27oled_bw.c
   
-  Driver for SSD1325 Controller (OLED Display)
+  1-Bit (BW) Driver for SSD1325 Controller (OLED Display)
   Tested with NHD-2.7-12864UCY3
 
   Universal 8bit Graphics Library
@@ -143,7 +143,7 @@ static void u8g_ssd1325_write_buffer(u8g_t *u8g, u8g_dev_t *dev)
   } while( cnt > 0 );
 }
 
-uint8_t u8g_dev_ssd1325_nhd_27_12864ucy3_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
@@ -164,7 +164,7 @@ uint8_t u8g_dev_ssd1325_nhd_27_12864ucy3_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t 
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_ssd1325_nhd_27_12864ucy3_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1325_nhd_27_12864ucy3_fn, u8g_com_arduino_sw_spi_fn);
-U8G_PB_DEV(u8g_dev_ssd1325_nhd_27_12864ucy3_hw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1325_nhd_27_12864ucy3_fn, u8g_com_arduino_hw_spi_fn);
+U8G_PB_DEV(u8g_dev_ssd1325_nhd27oled_bw_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1325_nhd27oled_bw_fn, u8g_com_arduino_sw_spi_fn);
+U8G_PB_DEV(u8g_dev_ssd1325_nhd27oled_bw_hw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1325_nhd27oled_bw_fn, u8g_com_arduino_hw_spi_fn);
 
 

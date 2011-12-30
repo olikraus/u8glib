@@ -123,8 +123,8 @@ extern u8g_dev_t u8g_dev_pcd8544_84x48_sw_spi;
 extern u8g_dev_t u8g_dev_pcf8812_96x65_sw_spi;
 
 /* NHD-2.7-12864UCY3 OLED Display with SSD1325 Controller */
-extern u8g_dev_t u8g_dev_ssd1325_nhd_27_12864ucy3_sw_spi;
-extern u8g_dev_t u8g_dev_ssd1325_nhd_27_12864ucy3_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_hw_spi;
 
 /*===============================================================*/
 /* device messages */
@@ -281,11 +281,24 @@ uint8_t u8g_pb_IsIntersection(u8g_pb_t *pb, u8g_dev_arg_bbx_t *bbx);
 uint8_t u8g_pb_Is8PixelVisible(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel);
 uint8_t u8g_pb_WriteBuffer(u8g_pb_t *b, u8g_t *u8g, u8g_dev_t *dev);
 
+/*
+  note on __attribute__ ((nocommon))
+    AVR scripts often use  --gc-sections on the linker to remove unused section.
+    This works fine for initialed data and text sections. In principle .bss is also
+    handled, but the name##_pb definition is not removed. Reason is, that
+    array definitions are placed in the COMMON section, by default
+    The attribute "nocommon" removes this automatic assignment to the
+    COMMON section and directly puts it into .bss. As a result, if more
+    than one buffer is defined in one file, then it will be removed with --gc-sections
 
+    .. not sure if Arduino IDE uses -fno-common... if yes, then the attribute is
+    redundant.
+*/
 #define U8G_PB_DEV(name, width, height, page_height, dev_fn, com_fn) \
-uint8_t name##_buf[width]; \
+uint8_t name##_buf[width] __attribute__ ((nocommon)) ; \
 u8g_pb_t name##_pb = { {page_height, height, 0, 0, 0},  width, name##_buf}; \
 u8g_dev_t name = { dev_fn, &name##_pb, com_fn }
+
 
 void u8g_pb8v1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)   U8G_NOINLINE;
 void u8g_pb8v1_Clear(u8g_pb_t *b) U8G_NOINLINE;

@@ -246,10 +246,14 @@
       --> ERLEDIGT, 23.11.2011
   - die WIDTH / HEIGHT nachrichten zusammenfassen und die größen in der haupt-struktur ablegen.
       --> erstmal aufgeschoben
+      --> ERLEDIGT
       
   - prüfen: weglassen nicht benötigter funktionen durch den linker: Funktioniert das auch indirekt mit nicht benutzten Strukturen (u8g_dev_t)?
         mal überprüfen, wenn es mehrere com devices pro display gibt
         konkret ist die frage, ob mehrere devices in einer datei ligen dürfen.
+          Es scheint grundsätzlich nicht für COMMONS zu gelten. Wenn -fno-commons gesetzt ist oder das attribut nocommens angegeben is,
+          dann werden variablen direct in die bss section geladen.
+      --> ERLEDIGT
         
   - mehr tests mit buchstaben rotation und bildschirm rotation erstellen. Im zusammenhang mit den IsBBXIntersection bin ich mir
       da nicht so sicher, ob das funktioniert

@@ -36,49 +36,29 @@
 */
 
 
-#include "u8g.h"
+#include "u8glib.h"
 
-u8g_t u8g;
+/* SCK = 13, MOSI = 11, CS = 10, A0 = 9 */
+U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);
 
 
 void setup(void)
 {
-  //pinMode(13, OUTPUT);
-
-  
-  //u8g_Init8Bit(&u8g, &u8g_dev_ks0108_128x64_fast,  8,    9, 10, 11,   4,   5,   6,   7, 18, 14, 15, 17, 16, U8G_PIN_NONE);
-  /*
-#define PIN_SCK 13
-#define PIN_MISO  12
-#define PIN_MOSI 11
-#define PIN_CS 10
-#define PIN_A0 9
-#define PIN_RST 8
-  */
-  
-  //u8g_InitSPI(&u8g, &u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
-  u8g_InitSPI(&u8g, &u8g_dev_ssd1325_nhd_27_12864ucy3_hw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
-  
-  //u8g_InitSPI(&u8g, &u8g_dev_pcf8812_96x65_sw_spi, 13, 11, 10, 9, 8);
-  //u8g_InitSPI(&u8g, &u8g_dev_pcd8544_84x48_sw_spi, 13, 11, 10, 9, 8);
-  
-  //u8g_InitSPI(&u8g, &u8g_dev_uc1701_dogs102_sw_spi);
-  //u8g_SetRot180(&u8g);
 }
 
 void loop(void)
 {
   static u8g_uint_t y = 0;
-  u8g_FirstPage(&u8g);
+  u8g.firstPage();
   
   do
   {
-    u8g_SetFont(&u8g, u8g_font_unifont);
-    u8g_DrawStr(&u8g, 0, 20+y, "Hello World!");
-  } while( u8g_NextPage(&u8g) );
+    u8g.setFont(u8g_font_unifont);
+    u8g.drawStr( 0, 20+y, "Hello World!");
+  } while( u8g.nextPage() );
   
   y++;
   y&= 0x01f;
-  u8g_Delay(100);
+  delay(100);
 }
 
