@@ -31,34 +31,32 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
   
-
-
 */
 
 
-#include "u8glib.h"
+#include "U8glib.h"
 
-/* SCK = 13, MOSI = 11, CS = 10, A0 = 9 */
+// setup u8glib
+// SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);
 
-
-void setup(void)
-{
+void draw(void) {
+  // graphic commands to redraw the complete screen should be placed here  
+  u8g.setFont(u8g_font_unifont);
+  u8g.drawStr( 0, 20, "Hello World!");
 }
 
-void loop(void)
-{
-  static u8g_uint_t y = 0;
-  u8g.firstPage();
+void setup(void) {
+}
+
+void loop(void) {
   
-  do
-  {
-    u8g.setFont(u8g_font_unifont);
-    u8g.drawStr( 0, 20+y, "Hello World!");
+  // picture loop
+  u8g.firstPage();  
+  do {
+    draw();
   } while( u8g.nextPage() );
   
-  y++;
-  y&= 0x01f;
-  delay(100);
+  delay(1000);
 }
 

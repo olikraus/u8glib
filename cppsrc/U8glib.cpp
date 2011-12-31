@@ -1,6 +1,6 @@
 /*
 
-  u8glib.cpp
+  U8glib.cpp
 
   C++ Interface
 
@@ -35,7 +35,7 @@
 
 */
 
-#include "u8glib.h"
+#include "U8glib.h"
 
 
 uint8_t U8GLIB::initSPI(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset)

@@ -1,6 +1,6 @@
 /*
 
-  u8glib.h
+  U8glib.h
   
   C++ Interface
 
