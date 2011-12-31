@@ -13,7 +13,7 @@ cp ../../../csrc/*.c ./libraries/U8glib/utility/.
 cp ../../../csrc/*.h ./libraries/U8glib/utility/.
 cp ../../../fntsrc/*.c ./libraries/U8glib/utility/.
 cp ../../../sys/arduino/HelloWorld/*.pde ./libraries/U8glib/examples/HelloWorld/.
-sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
+# sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
 
 cd libraries 
 zip -r ../u8glib_arduino_`../../print_release.sh`.zip *
