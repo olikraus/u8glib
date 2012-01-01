@@ -15,6 +15,8 @@ cp ../../../fntsrc/*.c ./libraries/U8glib/utility/.
 cp ../../../sys/arduino/HelloWorld/*.pde ./libraries/U8glib/examples/HelloWorld/.
 # sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
 
+
+chmod -R og=u libraries
 cd libraries 
 zip -r ../u8glib_arduino_`../../print_release.sh`.zip *
 cd ..

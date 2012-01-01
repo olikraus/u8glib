@@ -398,3 +398,10 @@
       Example:
       
       See also:
+      
+      
+         sudo apt-get install python-docutils  --> rst2xyz (various conversions)
+         sudo apt-get install python-setuptools   --> easy_install
+         easy_install wikir
+         wikir --> convert rst to google code wiki
+         
