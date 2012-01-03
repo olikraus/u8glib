@@ -126,7 +126,7 @@ void html_out(const char *s)
 
 void html_start_table(void)
 {
-  html_out("<table border=\"1\">\n");
+  html_out("<table border=\"1\" cellspacing=\"0\">\n");
 }
 
 void html_end_table(void)
@@ -159,9 +159,9 @@ void html_start_field(int pos)
   is_in_field = 1;  
   rowspan = table_get_row_span(table_line, pos);
   if ( rowspan >= 2 )
-    sprintf(buf, "<td rowspan=\"%d\">\n", rowspan);
+    sprintf(buf, "<td rowspan=\"%d\"><font size=\"-1\">\n", rowspan);
   else
-    sprintf(buf, "<td>\n");
+    sprintf(buf, "<td><font size=\"-1\">\n");
   html_out(buf);
 }
 
@@ -170,7 +170,7 @@ void html_end_field(int pos)
   if ( is_in_field == 0 )
     return;
   is_in_field = 0;
-  html_out("</td>\n");
+  html_out("</font></td>\n");
 }
 
 void table_add_field_phase2(int pos)
@@ -256,7 +256,6 @@ void table_read_fp(FILE *fp)
       if ( buf[1] == ':' )
       {
         /* force next line */
-        table_column(buf+1);
         if ( phase == 0 )
         {
         }

@@ -40,21 +40,28 @@
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
-//#include <wiring.h>	/
 
 #if ARDUINO < 100 
 #include <WProgram.h> 
-#else 
-#include <Arduino.h> 
-#endif
 
 /* fixed pins */
 #define PIN_SCK 13
 #define PIN_MISO  12
 #define PIN_MOSI 11
-
-/* a pin which could be redefined */
 #define PIN_CS 10
+
+#else 
+#include <Arduino.h> 
+
+/* use Arduino pin definitions */
+#define PIN_SCK SCK
+#define PIN_MISO  MISO
+#define PIN_MOSI MOSI
+#define PIN_CS SS
+
+#endif
+
+
 
 //static uint8_t u8g_spi_out(uint8_t data) U8G_NOINLINE;
 static uint8_t u8g_spi_out(uint8_t data)
