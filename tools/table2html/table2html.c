@@ -69,13 +69,18 @@ int col_is_field_visible(int pos)
   return col_field_visible[pos];
 }
 
+void table_next_line(void)
+{
+  table_line++;
+  col_clear_field_visibility();
+}
+
 void table_finish_line(void)
 {
   int i;
   for( i = 0; i < col_cnt; i++ )
     table_visibility[table_line][i] = (unsigned char)col_is_field_visible(i);
-  table_line++;
-  col_clear_field_visibility();
+  table_next_line();
 }
 
 void table_add_field(int pos)
@@ -180,8 +185,7 @@ void table_add_field_phase2(int pos)
   {
     html_end_field(col_last);
     html_end_row();
-    table_line++;
-    col_clear_field_visibility();
+    table_next_line();
     html_start_row();
     col_mark_field_visible(pos);
     html_start_field(pos);
@@ -248,9 +252,35 @@ void table_read_fp(FILE *fp)
     if ( fgets(buf, LINE_MAX, fp) == NULL )
       return;
     if ( buf[0] == ':' )
-      table_column(buf+1);
+    {
+      if ( buf[1] == ':' )
+      {
+        /* force next line */
+        table_column(buf+1);
+        if ( phase == 0 )
+        {
+        }
+        else if ( phase == 1 )
+        {
+          table_finish_line();
+        }
+        else if ( phase == 2 )
+        {
+          html_end_field(col_last);
+          html_end_row();
+          table_next_line();
+          html_start_row();
+        }
+      }
+      else
+      {
+        table_column(buf+1);
+      }
+    }
     else
+    {
       table_text(buf);
+    }
   }
 }
 
