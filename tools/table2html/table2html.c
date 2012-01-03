@@ -286,6 +286,7 @@ void table_read_fp(FILE *fp)
 
 void table_read_file(const char *filename)
 {
+  int i;
   /* count rows */
   FILE *fp;
   fp = fopen(filename, "r");
@@ -316,6 +317,17 @@ void table_read_file(const char *filename)
   
   /* render html */
   html_start_table();
+  
+  html_start_row();
+  for( i = 0; i< col_cnt; i++ )
+  {
+    html_out("<td>\n");
+    html_out(col_name[i]);
+    html_out("</td>\n");
+  }
+  html_end_row();
+
+  
   html_start_row();
   fp = fopen(filename, "r");
   if ( fp == NULL )
