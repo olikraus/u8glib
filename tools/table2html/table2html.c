@@ -154,9 +154,9 @@ void html_start_field(int pos)
   is_in_field = 1;  
   rowspan = table_get_row_span(table_line, pos);
   if ( rowspan >= 2 )
-    sprintf(buf, "<td rowspan=\"%d\" %d %d>\n", rowspan, table_line, pos);
+    sprintf(buf, "<td rowspan=\"%d\">\n", rowspan);
   else
-    sprintf(buf, "<td %d %d>\n", table_line, pos);
+    sprintf(buf, "<td>\n");
   html_out(buf);
 }
 
