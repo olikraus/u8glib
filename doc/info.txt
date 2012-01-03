@@ -399,9 +399,13 @@
       
       See also:
       
-      
+  - conversions, idee: alles in rst schreiben und von dort nach google code und pdflatex convertieren
+         http://docutils.sourceforge.net/docs/index.html
+         http://code.google.com/p/wikir/
          sudo apt-get install python-docutils  --> rst2xyz (various conversions)
          sudo apt-get install python-setuptools   --> easy_install
          easy_install wikir
          wikir --> convert rst to google code wiki
+         rst quick ref: http://docutils.sourceforge.net/docs/user/rst/quickref.html
+         rst2html file.rst > file.html
          
