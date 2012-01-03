@@ -1,7 +1,6 @@
 /*
 
-  table2wiki.c
-  
+  table2html.c
   
   syntax:
     file := {line}
@@ -315,4 +314,5 @@ int main(int argc, char **argv)
   }
   table_read_file(argv[1]);
   /* table_show_visibilty_matrx(); */
+  return 0;
 }
