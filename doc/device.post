@@ -1,0 +1,11 @@
+
+ * Mode
+  * BW: Black and white mode, one bit per pixel.
+
+ * Com
+  * HW SPI: Use pin definitions from the Arduino variant files
+  * SW SPI: Use internal software SPI communication
+  * 8Bit: 8 bit parallel communication with {{{digitalWrite}}}
+  * 8Bit Fast: 8 bit parallel communication with {{{digitalPinToPort}}} 
+  
+  
