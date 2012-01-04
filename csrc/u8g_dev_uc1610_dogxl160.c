@@ -74,6 +74,26 @@ u8g_pgm_uint8_t u8g_dev_uc1610_dogxl160_data_start[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
+static uint8_t u8g_dev_1to2(uint8_t n)
+{
+  register uint8_t a,b,c;
+  a = n;
+  a &= 1;
+  n <<= 1;
+  b = n;
+  b &= 4;  
+  n <<= 1;
+  c = n;
+  c &= 16;
+  n <<= 1;
+  n &= 64;
+  n |= a;
+  n |= b;
+  n |= c;
+  n |= n << 1;
+  return n;
+}
+
 uint8_t u8g_dev_uc1610_dogxl160_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
@@ -86,12 +106,24 @@ uint8_t u8g_dev_uc1610_dogxl160_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, v
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
+        int i;
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
         u8g_WriteEscSeqP(u8g, dev, u8g_dev_uc1610_dogxl160_data_start);    
-        u8g_WriteByte(u8g, dev, 0x060 | (pb->p.page*2) ); /* select current page (UC1610) */
+        u8g_WriteByte(u8g, dev, 0x060 | (pb->p.page*2) ); /* select current page 1/2 (UC1610) */
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
-        if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
-          return 0;
+        for( i = 0; i < WIDTH; i++ )
+        {
+          u8g_WriteByte(u8g, dev, u8g_dev_1to2( ((uint8_t *)(pb->buf))[i] ) );          
+        }
+
+        u8g_WriteEscSeqP(u8g, dev, u8g_dev_uc1610_dogxl160_data_start);    
+        u8g_WriteByte(u8g, dev, 0x060 | (pb->p.page*2+1) ); /* select current page 2/2 (UC1610) */
+        u8g_SetAddress(u8g, dev, 1);           /* data mode */
+        for( i = 0; i < WIDTH; i++ )
+        {
+          u8g_WriteByte(u8g, dev, u8g_dev_1to2( ((uint8_t *)(pb->buf))[i] >> 4 ) );          
+        }
+        
         u8g_SetChipSelect(u8g, dev, 0);
       }
       break;
