@@ -97,4 +97,45 @@ BW
 <tt>u8g_dev_ks0108_128x64_fast</tt>
 :C++ Constructor
 
+::
+
+:Controller
+stdout
+:Display/Size
+Console, 70x30
+:Mode
+BW
+:Page Size
+70 Bytes
+:Com
+
+:Device
+<tt>u8g_dev_stdout</tt>
+:C++ Constructor
+
+::
+
+:Controller
+SDL
+:Display/Size
+Desktop, 128x64
+:Mode
+BW
+:Page Size
+128 Bytes
+:Com
+
+:Device
+<tt>u8g_dev_sdl_1bit</tt>
+:C++ Constructor
+
+:Mode
+4L
+:Page Size
+128 Bytes
+:Com
+
+:Device
+<tt>u8g_dev_sdl_2bit</tt>
+:C++ Constructor
 

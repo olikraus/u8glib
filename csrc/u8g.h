@@ -103,7 +103,7 @@ int u8g_sdl_get_key(void);
 /* Size: 70x30 monochrom, stdout */
 extern u8g_dev_t u8g_dev_stdout;
 
-/* Size: 240x250 monochrom, writes "u8g.pbm" */
+/* Size: monochrom, writes "u8g.pbm" */
 extern u8g_dev_t u8g_dev_pbm;
 
 /* Size: 128x64 monochrom, no output, used for performance measure */
@@ -112,6 +112,9 @@ extern u8g_dev_t u8g_dev_gprof;
 /* Display: EA DOGS102, Size: 102x64 monochrom */
 extern u8g_dev_t u8g_dev_uc1701_dogs102_sw_spi;
 extern u8g_dev_t u8g_dev_uc1701_dogs102_hw_spi;
+
+extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_sw_spi;
+extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_hw_spi;
 
 /* Display: Generic KS0108b, Size: 128x64 monochrom */
 extern u8g_dev_t u8g_dev_ks0108_128x64;         /* official Arduino Library interface */
@@ -125,6 +128,7 @@ extern u8g_dev_t u8g_dev_pcf8812_96x65_sw_spi;
 /* NHD-2.7-12864UCY3 OLED Display with SSD1325 Controller */
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_hw_spi;
+
 
 /*===============================================================*/
 /* device messages */

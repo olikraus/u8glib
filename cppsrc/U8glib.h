@@ -111,6 +111,17 @@ class U8GLIB_DOGS102 : public U8GLIB
       { }
 };
 
+class U8GLIB_DOGXL160_BW : public U8GLIB 
+{
+  public:
+    U8GLIB_DOGXL160_BW(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_uc1610_dogxl160_bw_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_DOGXL160_BW(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_uc1610_dogxl160_bw_hw_spi, cs, a0, reset)
+      { }
+};
+
 class U8GLIB_NHD27OLED_BW : public U8GLIB 
 {
   public:

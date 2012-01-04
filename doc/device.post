@@ -1,6 +1,7 @@
 
  * Mode
   * BW: Black and white mode, one bit per pixel.
+  * 4L: Four gray levels, two bits per pixel
 
  * Com
   * HW SPI: Use pin definitions from the Arduino variant files
