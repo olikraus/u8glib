@@ -1,6 +1,6 @@
 /*
 
-  u8g_dev_st7565_dogm128.c
+  u8g_dev_st7565_dogm132.c
 
   Universal 8bit Graphics Library
   
@@ -36,20 +36,34 @@
 
 #include "u8g.h"
 
-#define WIDTH 128
-#define HEIGHT 64
+#define WIDTH 132
+#define HEIGHT 32
 #define PAGE_HEIGHT 8
 
-u8g_pgm_uint8_t u8g_dev_st7565_dogm128_init_seq[] = {
+u8g_pgm_uint8_t u8g_dev_st7565_dogm132_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
   U8G_ESC_CS(1),             /* enable chip */
-  
+
+  0x040,		/* set display start line to 0 */
+  0x0a1,		/* ADC set to reverse */
+  0x0c0,		/* common output mode */
+  0x0a6,		/* display normal, bit val 0: LCD pixel off. */
+  0x0a2,		/* LCD bias 1/9 */
+  0x02f,		/* all power  control circuits on */
+  0x0f8,		/* set booster ratio to */
+  0x000,		/* 4x */
+  0x023,		/* set V0 voltage resistor ratio to large */
+  0x081,		/* set contrast */
+  0x01f,		/* contrast value, EA default: 0x01f */
+  0x0ac,		/* indicator */
+  0x000,		/* disable */
+  0x0af,		/* display on */
+
+#ifdef OBSOLETE_DOGM128  
   0x040,		                /* set display start line */
-  0x0a1,		                /* ADC set to reverse */
-  0x0c0,		                /* common output mode: set scan direction normal operation */
-  0x0a6,                           /* display normal, bit val 0: LCD pixel off. */
+  0x0c8,		                /* set scan direction inverse operation */
   0x0a2,		                /* LCD bias 1/9 */
   0x02f,		                /* all power  control circuits on */
   0x0f8,		                /* set booster ratio to */
@@ -60,6 +74,8 @@ u8g_pgm_uint8_t u8g_dev_st7565_dogm128_init_seq[] = {
   0x0ac,		                /* indicator */
   0x000,		                /* disable */
   0x0af,		                /* display on */
+#endif
+
 
   U8G_ESC_DLY(100),       /* delay 100 ms */
   0x0a5,		                /* display all points, ST7565 */
@@ -70,28 +86,28 @@ u8g_pgm_uint8_t u8g_dev_st7565_dogm128_init_seq[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
-u8g_pgm_uint8_t u8g_dev_st7565_dogm128_data_start[] = {
+u8g_pgm_uint8_t u8g_dev_st7565_dogm132_data_start[] = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
   0x010,		/* set upper 4 bit of the col adr to 0 */
-  0x000,		/* set lower 4 bit of the col adr to 0 */      
+  0x000,		/* set lower 4 bit of the col adr to 4  */
   U8G_ESC_END                /* end of sequence */
 };
 
-uint8_t u8g_dev_st7565_dogm128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_st7565_dogm132_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_dogm128_init_seq);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_dogm132_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-        u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_dogm128_data_start);    
+        u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_dogm132_data_start);    
         u8g_WriteByte(u8g, dev, 0x0b0 | pb->p.page); /* select current page (ST7565R) */
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
         if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
@@ -103,7 +119,7 @@ uint8_t u8g_dev_st7565_dogm128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_st7565_dogm128_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_dogm128_fn, u8g_com_arduino_sw_spi_fn);
-U8G_PB_DEV(u8g_dev_st7565_dogm128_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_dogm128_fn, u8g_com_arduino_hw_spi_fn);
+U8G_PB_DEV(u8g_dev_st7565_dogm132_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_dogm132_fn, u8g_com_arduino_sw_spi_fn);
+U8G_PB_DEV(u8g_dev_st7565_dogm132_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_dogm132_fn, u8g_com_arduino_hw_spi_fn);
 
 

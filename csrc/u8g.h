@@ -113,6 +113,12 @@ extern u8g_dev_t u8g_dev_gprof;
 extern u8g_dev_t u8g_dev_uc1701_dogs102_sw_spi;
 extern u8g_dev_t u8g_dev_uc1701_dogs102_hw_spi;
 
+
+/* Display: EA DOGM132, Size: 128x32 monochrom */
+extern u8g_dev_t u8g_dev_st7565_dogm132_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_dogm132_hw_spi;
+
+
 /* Display: EA DOGM128, Size: 128x64 monochrom */
 extern u8g_dev_t u8g_dev_st7565_dogm128_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_dogm128_hw_spi;

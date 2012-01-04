@@ -1,7 +1,9 @@
 /*
-
-  HelloWorld.pde
   
+  u8g_com_arduino_common.c
+  
+  shared procedures for the arduino communication procedures
+
   Universal 8bit Graphics Library
   
   Copyright (c) 2011, olikraus@gmail.com
@@ -31,37 +33,39 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
   
+
 */
 
+#include "u8g.h"
 
-#include "U8glib.h"
+#if defined(ARDUINO)
 
-// setup u8glib
-// SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);
-//U8GLIB_DOGS102 u8g(13, 11, 10, 9);
-//U8GLIB_DOGM132 u8g(13, 11, 10, 9);
-U8GLIB_DOGM128 u8g(13, 11, 10, 9);
-//U8GLIB_DOGXL160_BW u8g(13, 11, 10, 9);
-//U8GLIB_DOGXL160_GR u8g(13, 11, 10, 9);
+#if ARDUINO < 100 
+#include <WProgram.h> 
+#else 
+#include <Arduino.h> 
+#endif
 
-void draw(void) {
-  // graphic commands to redraw the complete screen should be placed here  
-  u8g.setFont(u8g_font_unifont);
-  u8g.drawStr( 0, 20, "Hello World!");
+void u8g_com_arduino_digital_write(u8g_t *u8g, uint8_t pin_index, uint8_t value)
+{
+      digitalWrite(u8g->pin_list[pin_index], value);
 }
 
-void setup(void) {
+/* this procedure does not set the RW pin */
+void u8g_com_arduino_assign_pin_output_high(u8g_t *u8g)
+{
+  uint8_t i;
+  /* skip the RW pin, which is the last pin in the list */
+  for( i = 0; i < U8G_PIN_LIST_LEN-1; i++ )
+  {
+    //if ( i != U8G_PI_RW )
+      if ( u8g->pin_list[i] != U8G_PIN_NONE )
+      {
+        pinMode(u8g->pin_list[i], OUTPUT);	
+        digitalWrite(u8g->pin_list[i], HIGH);
+      }
+  }
 }
 
-void loop(void) {
-  
-  // picture loop
-  u8g.firstPage();  
-  do {
-    draw();
-  } while( u8g.nextPage() );
-  
-  delay(1000);
-}
 
+#endif

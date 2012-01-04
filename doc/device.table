@@ -47,6 +47,7 @@ HW SPI
 
 :Controller
 ST7565
+
 :Display/Size
 DOGM128, 128x64
 :Mode
@@ -66,6 +67,28 @@ HW SPI
 <tt>u8g_dev_st7565_dogm128_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGM128(cs, a0 [, reset])</tt>
+
+::
+
+:Display/Size
+DOGM132, 132x32
+:Mode
+BW
+:Page Size
+132 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7565_dogm132_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_DOGM132(sck, mosi, cs, a0 [, reset])</tt>
+
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7565_dogm132_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_DOGM132(cs, a0 [, reset])</tt>
 
 ::
 
