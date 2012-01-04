@@ -38,7 +38,6 @@
 
 #define WIDTH 160
 #define HEIGHT 104
-#define PAGE_HEIGHT 8
 
 u8g_pgm_uint8_t u8g_dev_uc1610_dogxl160_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
@@ -100,7 +99,34 @@ uint8_t u8g_dev_uc1610_dogxl160_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, v
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_uc1610_dogxl160_bw_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_uc1610_dogxl160_bw_fn, u8g_com_arduino_sw_spi_fn);
-U8G_PB_DEV(u8g_dev_uc1610_dogxl160_bw_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_uc1610_dogxl160_bw_fn, u8g_com_arduino_hw_spi_fn);
+uint8_t u8g_dev_uc1610_dogxl160_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_InitCom(u8g, dev);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_uc1610_dogxl160_init_seq);
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        u8g_WriteEscSeqP(u8g, dev, u8g_dev_uc1610_dogxl160_data_start);    
+        u8g_WriteByte(u8g, dev, 0x060 | (pb->p.page) ); /* select current page (UC1610) */
+        u8g_SetAddress(u8g, dev, 1);           /* data mode */
+        if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
+          return 0;
+        u8g_SetChipSelect(u8g, dev, 0);
+      }
+      break;
+  }
+  return u8g_dev_pb8v2_base_fn(u8g, dev, msg, arg);
+}
 
+U8G_PB_DEV(u8g_dev_uc1610_dogxl160_bw_sw_spi, WIDTH, HEIGHT, 8, u8g_dev_uc1610_dogxl160_bw_fn, u8g_com_arduino_sw_spi_fn);
+U8G_PB_DEV(u8g_dev_uc1610_dogxl160_bw_hw_spi, WIDTH, HEIGHT, 8, u8g_dev_uc1610_dogxl160_bw_fn, u8g_com_arduino_hw_spi_fn);
+
+U8G_PB_DEV(u8g_dev_uc1610_dogxl160_gr_sw_spi, WIDTH, HEIGHT, 4, u8g_dev_uc1610_dogxl160_gr_fn, u8g_com_arduino_sw_spi_fn);
+U8G_PB_DEV(u8g_dev_uc1610_dogxl160_gr_hw_spi, WIDTH, HEIGHT, 4, u8g_dev_uc1610_dogxl160_gr_fn, u8g_com_arduino_hw_spi_fn);
 
