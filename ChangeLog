@@ -3,3 +3,6 @@ u8glib ChangeLog
 
 2012-01-01      v0.01   Oliver Kraus <olikraus@gmail.com>
   * first beta release for Arduino IDE with simple SSD1325 support
+2012-01-04      v0.02   Oliver Kraus <olikraus@gmail.com>
+  * support for some more display types
+  

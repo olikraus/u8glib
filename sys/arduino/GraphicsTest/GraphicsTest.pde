@@ -56,8 +56,8 @@ void setup(void)
 #define PIN_RST 8
   */
   
-  u8g_InitSPI(&u8g, &u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
-  //u8g_InitSPI(&u8g, &u8g_dev_pcf8812_96x65_sw_spi, 13, 11, 10, 9, 8);
+  //u8g_InitSPI(&u8g, &u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
+  u8g_InitSPI(&u8g, &u8g_dev_pcf8812_96x65_sw_spi, 13, 11, 10, 9, 8);
   //u8g_InitSPI(&u8g, &u8g_dev_pcd8544_84x48_sw_spi, 13, 11, 10, 9, 8);
   
   //u8g_SetRot180(&u8g);

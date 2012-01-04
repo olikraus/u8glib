@@ -149,7 +149,7 @@ SW SPI
 :Device
 <tt>u8g_dev_pcd8544_84x48_sw_spi</tt>
 :C++ Constructor
-
+<tt>U8GLIB_PCD8544(sck, mosi, cs, a0 [, reset])</tt>
 
 ::
 
@@ -166,6 +166,7 @@ SW SPI
 :Device
 <tt>u8g_dev_pcf8812_96x65_sw_spi</tt>
 :C++ Constructor
+<tt>U8GLIB_PCF8812(sck, mosi, cs, a0 [, reset])</tt>
 
 ::
 

@@ -37,13 +37,15 @@
 #include "U8glib.h"
 
 // setup u8glib
-// SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);
-//U8GLIB_DOGS102 u8g(13, 11, 10, 9);
-//U8GLIB_DOGM132 u8g(13, 11, 10, 9);
-U8GLIB_DOGM128 u8g(13, 11, 10, 9);
-//U8GLIB_DOGXL160_BW u8g(13, 11, 10, 9);
-//U8GLIB_DOGXL160_GR u8g(13, 11, 10, 9);
+
+//U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGXL160_BW u8g(13, 11, 10, 9);            // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGXL160_GR u8g(13, 11, 10, 9);             // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_PCD8544 u8g(13, 11, 10, 9, 8);                    // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
+//U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
 
 void draw(void) {
   // graphic commands to redraw the complete screen should be placed here  
