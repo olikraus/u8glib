@@ -166,9 +166,77 @@ void draw_box(u8g_t *u8g)
   u8g_DrawStr(u8g, ox+10-57, oy+12+4, "(10,12)");
   u8g_SetCursorStyle(u8g, 144);
   u8g_SetCursorPos(u8g, ox+10, oy+12);
-  u8g_DrawCursor(u8g);
-  
+  u8g_DrawCursor(u8g);  
 }
+
+void draw_frame(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+
+  u8g_DrawFrame(u8g, ox+10, oy+12, 30, 20);  
+  draw_v_measure(u8g, ox+10+30+3, oy+12, 20);
+  draw_h_measure(u8g, ox+10, oy+12+20+3, 30);
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+10-57, oy+12+4, "(10,12)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+10, oy+12);
+  u8g_DrawCursor(u8g);  
+}
+
+void draw_pixel(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+
+  u8g_DrawPixel(u8g, ox+14, oy+23);  
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+14+3, oy+23+4, "(14,23)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+10, oy+23);
+  //u8g_DrawCursor(u8g);  
+}
+
+void draw_clear_pixel(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+
+  u8g_DrawBox(u8g, ox+10, oy+12, 20, 30);  
+  draw_v_measure(u8g, ox+10+20+3, oy+12, 30);
+  draw_h_measure(u8g, ox+10, oy+12+30+3, 20);
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+10-57, oy+12+4, "(10,12)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+10, oy+12);
+  u8g_DrawCursor(u8g);  
+  
+  u8g_SetColorIndex(u8g, 0);
+  u8g_DrawPixel(u8g, ox+28, oy+14);  
+
+  u8g_SetColorIndex(u8g, 1);
+  u8g_DrawStr(u8g, ox+28+10, oy+14+4, "(28,14)");
+
+}
+
 
 void draw_rotate_b(u8g_t *u8g)
 {
@@ -283,6 +351,9 @@ int main(void)
   create_picture(draw_abc_left, "abc_left");
   create_picture(draw_rotate_b, "rotate_b");
   create_picture(draw_box, "box");
+  create_picture(draw_frame, "frame");
+  create_picture(draw_pixel, "pixel");
+  create_picture(draw_clear_pixel, "clear_pixel");  
   create_picture(draw_minbox_abcdefg, "minbox_abcdefg");
   create_picture(draw_minbox_ace, "minbox_ace");
   return 0;

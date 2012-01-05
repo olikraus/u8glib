@@ -71,12 +71,15 @@ void u8g_DisableCursor(u8g_t *u8g)
 void u8g_DrawCursor(u8g_t *u8g)
 {
   const u8g_pgm_uint8_t *font;
-  uint8_t color = u8g_GetColorIndex(u8g);
+  uint8_t color;
   uint8_t encoding = u8g->cursor_encoding;
   
+  /* get current values */
+  color = u8g_GetColorIndex(u8g);
   font = u8g->font;
-  u8g->font = u8g->cursor_font;
   
+  /* draw cursor */
+  u8g->font = u8g->cursor_font;  
   encoding++;
   u8g_SetColorIndex(u8g, u8g->cursor_bg_color); 
   u8g_DrawGlyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding);
@@ -84,6 +87,8 @@ void u8g_DrawCursor(u8g_t *u8g)
   u8g_SetColorIndex(u8g, u8g->cursor_fg_color); 
   u8g_DrawGlyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding);
   
+  /* restore previous values */
+  u8g->font = font;
   u8g_SetColorIndex(u8g, color); 
 }
 
