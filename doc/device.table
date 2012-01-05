@@ -18,9 +18,7 @@ HW SPI
 <tt>u8g_dev_ssd1325_nhd27oled_bw_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_BW(cs, a0 [, reset])</tt>
-
 ::
-
 :Controller
 UC1701
 :Display/Size
@@ -35,19 +33,15 @@ SW SPI
 <tt>u8g_dev_uc1701_dogs102_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGS102(sck, mosi, cs, a0 [, reset])</tt>
-
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_uc1701_dogs102_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGS102(cs, a0 [, reset])</tt>
-
 ::
-
 :Controller
 ST7565
-
 :Display/Size
 DOGM128, 128x64
 :Mode
@@ -60,16 +54,13 @@ SW SPI
 <tt>u8g_dev_st7565_dogm128_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGM128(sck, mosi, cs, a0 [, reset])</tt>
-
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_st7565_dogm128_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGM128(cs, a0 [, reset])</tt>
-
 ::
-
 :Display/Size
 DOGM132, 132x32
 :Mode
@@ -82,16 +73,13 @@ SW SPI
 <tt>u8g_dev_st7565_dogm132_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGM132(sck, mosi, cs, a0 [, reset])</tt>
-
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_st7565_dogm132_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGM132(cs, a0 [, reset])</tt>
-
 ::
-
 :Controller
 UC1610
 :Display/Size
@@ -106,16 +94,13 @@ SW SPI
 <tt>u8g_dev_uc1610_dogxl160_bw_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_BW(sck, mosi, cs, a0 [, reset])</tt>
-
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_uc1610_dogxl160_bw_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_BW(cs, a0 [, reset])</tt>
-
 ::
-
 :Mode
 4L
 :Page Size
@@ -126,16 +111,13 @@ SW SPI
 <tt>u8g_dev_uc1610_dogxl160_gr_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_GR(sck, mosi, cs, a0 [, reset])</tt>
-
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_uc1610_dogxl160_gr_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_GR(cs, a0 [, reset])</tt>
-
 ::
-
 :Controller
 PCD8544
 :Display/Size
@@ -150,9 +132,7 @@ SW SPI
 <tt>u8g_dev_pcd8544_84x48_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_PCD8544(sck, mosi, cs, a0 [, reset])</tt>
-
 ::
-
 :Controller
 PCF8812
 :Display/Size
@@ -167,9 +147,7 @@ SW SPI
 <tt>u8g_dev_pcf8812_96x65_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_PCF8812(sck, mosi, cs, a0 [, reset])</tt>
-
 ::
-
 :Controller
 KS0108
 :Display/Size
@@ -183,15 +161,12 @@ BW
 :Device
 <tt>u8g_dev_ks0108_128x64</tt>
 :C++ Constructor
-
 :Com
 8Bit Fast
 :Device
 <tt>u8g_dev_ks0108_128x64_fast</tt>
 :C++ Constructor
-
 ::
-
 :Controller
 stdout
 :Display/Size
@@ -201,13 +176,11 @@ BW
 :Page Size
 70 Bytes
 :Com
-
 :Device
 <tt>u8g_dev_stdout</tt>
 :C++ Constructor
 
 ::
-
 :Controller
 SDL
 :Display/Size

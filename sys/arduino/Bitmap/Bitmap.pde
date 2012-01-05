@@ -47,10 +47,21 @@
 U8GLIB_PCD8544 u8g(13, 11, 10, 9, 8);                    // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
 //U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI communication: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
 
+
+const uint8_t rook_bitmap[] PROGMEM = {
+  0x00,         // 00000000 
+  0x55,         // 01010101
+  0x7f,          // 01111111
+  0x3e,         // 00111110
+  0x3e,         // 00111110 
+  0x3e,         // 00111110
+  0x3e,         // 00111110 
+  0x7f           // 01111111
+};
+
 void draw(void) {
   // graphic commands to redraw the complete screen should be placed here  
-  u8g.setFont(u8g_font_unifont);
-  u8g.drawStr( 0, 20, "Hello World!");
+  u8g.drawBitmapP( 0, 0, 1, 8, rook_bitmap);
 }
 
 void setup(void) {
