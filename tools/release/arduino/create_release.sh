@@ -3,6 +3,8 @@ mkdir libraries
 mkdir libraries/U8glib
 mkdir libraries/U8glib/examples
 mkdir libraries/U8glib/examples/HelloWorld
+mkdir libraries/U8glib/examples/Bitmap
+mkdir libraries/U8glib/examples/Console
 mkdir libraries/U8glib/utility
 cp ../../../ChangeLog ./libraries/U8glib/.
 cp ../../../license.txt ./libraries/U8glib/.
@@ -13,6 +15,8 @@ cp ../../../csrc/*.c ./libraries/U8glib/utility/.
 cp ../../../csrc/*.h ./libraries/U8glib/utility/.
 cp ../../../fntsrc/*.c ./libraries/U8glib/utility/.
 cp ../../../sys/arduino/HelloWorld/*.pde ./libraries/U8glib/examples/HelloWorld/.
+cp ../../../sys/arduino/Bitmap/*.pde ./libraries/U8glib/examples/Bitmap/.
+cp ../../../sys/arduino/Console/*.pde ./libraries/U8glib/examples/Console/.
 # sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
 
 
