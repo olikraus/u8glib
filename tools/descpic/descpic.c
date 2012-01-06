@@ -8,7 +8,7 @@
 void post_processing(const char *target_pic_name)
 {
   char cmd[256];
-  sprintf(cmd, "convert u8g.pbm -trim -scale '300%%' %s.png", target_pic_name );
+  sprintf(cmd, "convert u8g.pbm -trim -scale '200%%' %s.png", target_pic_name );
   system(cmd);
 }
 
@@ -209,6 +209,30 @@ void draw_pixel(u8g_t *u8g)
   //u8g_DrawCursor(u8g);  
 }
 
+
+const uint8_t rook_bitmap[] = {
+  0x00,         // 00000000 
+  0x55,         // 01010101
+  0x7f,          // 01111111
+  0x3e,         // 00111110
+  0x3e,         // 00111110 
+  0x3e,         // 00111110
+  0x3e,         // 00111110 
+  0x7f           // 01111111
+};
+
+void draw_bitmap(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  u8g_DrawBitmap(u8g, ox, oy, 1, 8, rook_bitmap);
+}
+
 void draw_clear_pixel(u8g_t *u8g)
 {
   u8g_uint_t ox, oy, w, h;
@@ -353,6 +377,7 @@ int main(void)
   create_picture(draw_box, "box");
   create_picture(draw_frame, "frame");
   create_picture(draw_pixel, "pixel");
+  create_picture(draw_bitmap, "bitmap");
   create_picture(draw_clear_pixel, "clear_pixel");  
   create_picture(draw_minbox_abcdefg, "minbox_abcdefg");
   create_picture(draw_minbox_ace, "minbox_ace");
