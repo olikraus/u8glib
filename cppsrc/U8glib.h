@@ -70,6 +70,7 @@ class U8GLIB
     uint8_t getColorIndex(void) { return u8g_GetColorIndex(&u8g); }
     u8g_uint_t getWidth(void) { return u8g_GetWidth(&u8g); }
     u8g_uint_t getHeight(void) { return u8g_GetHeight(&u8g); }
+    uint8_t getMode(void) { return u8g_GetMode(&u8g); }
 
     void drawPixel(u8g_uint_t x, u8g_uint_t y) { return u8g_DrawPixel(&u8g, x, y); }
     void drawHLine(u8g_uint_t x, u8g_uint_t y, u8g_uint_t w) { u8g_DrawHLine(&u8g, x, y, w); }  

@@ -105,12 +105,20 @@ u8g_uint_t u8g_GetHeightLL(u8g_t *u8g, u8g_dev_t *dev)
   return r;
 }
 
+u8g_uint_t u8g_GetModeLL(u8g_t *u8g, u8g_dev_t *dev)
+{       
+  return u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_GET_MODE, NULL);
+}
+
+
+
 /*====================================================================*/
 
 void u8g_UpdateDimension(u8g_t *u8g)
 {
   u8g->width = u8g_GetWidthLL(u8g, u8g->dev);
   u8g->height = u8g_GetHeightLL(u8g, u8g->dev);
+  u8g->mode = u8g_GetModeLL(u8g, u8g->dev);
 }
 
 static void u8g_init_data(u8g_t *u8g)

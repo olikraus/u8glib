@@ -185,6 +185,18 @@ typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 
 #define U8G_DEV_MSG_GET_WIDTH                           70
 #define U8G_DEV_MSG_GET_HEIGHT                           71
+#define U8G_DEV_MSG_GET_MODE                  72
+
+/*===============================================================*/
+/* device modes */
+#define U8G_MODE(is_color, bits_per_pixel) (((is_color)<<4)|(bits_per_pixel))
+
+#define U8G_MODE_UNKNOWN     0
+#define U8G_MODE_BW     U8G_MODE(0, 1)
+#define U8G_MODE_GRAY2BIT     U8G_MODE(0, 2)
+
+#define U8G_MODE_GET_BIT_PER_PIXEL(mode) ((mode)&15)
+#define U8G_MODE_IS_COLOR(mode) (((mode)&16)==0?0:1)
 
 
 /*===============================================================*/
@@ -385,6 +397,7 @@ struct _u8g_t
   const u8g_pgm_uint8_t *cursor_font;  /* special font for cursor procedures */
   uint8_t cursor_fg_color, cursor_bg_color;
   uint8_t cursor_encoding;
+  uint8_t mode;                         /* display mode, one of U8G_MODE_xxx */
   u8g_uint_t cursor_x;
   u8g_uint_t cursor_y;
   u8g_draw_cursor_fn cursor_fn;
@@ -430,7 +443,7 @@ uint8_t u8g_GetColorIndex(u8g_t *u8g);
 
 #define u8g_GetWidth(u8g) ((u8g)->width)
 #define u8g_GetHeight(u8g) ((u8g)->height)
-
+#define u8g_GetMode(u8g) ((u8g)->mode)
 
 /* u8g_dev_rot.c */
 

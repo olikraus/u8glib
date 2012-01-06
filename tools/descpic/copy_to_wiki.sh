@@ -4,3 +4,4 @@ cp bitmap.png ../../../wiki/descpic/.
 cp box.png ../../../wiki/descpic/.
 cp frame.png ../../../wiki/descpic/.
 cp clear_pixel.png ../../../wiki/descpic/.
+cp text_abc.png ../../../wiki/descpic/.

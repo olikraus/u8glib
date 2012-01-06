@@ -169,6 +169,8 @@ uint8_t u8g_dev_pb8v1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
       break;
     case U8G_DEV_MSG_SET_XY_CB:
       break;
+    case U8G_DEV_MSG_GET_MODE:
+      return U8G_MODE_BW;
   }
   return 1;
 }
