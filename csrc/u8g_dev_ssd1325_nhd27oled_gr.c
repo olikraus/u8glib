@@ -45,10 +45,9 @@
 
 #define WIDTH 128
 #define HEIGHT 64
-#define PAGE_HEIGHT 8
 
 /* http://www.newhavendisplay.com/app_notes/OLED_2_7_12864.txt */
-u8g_pgm_uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_init_seq[] = {
+u8g_pgm_uint8_t u8g_dev_ssd1325_2bit_nhd_27_12864ucy3_init_seq[] = {
   U8G_ESC_DLY(10),              /* delay 10 ms */
   U8G_ESC_CS(0),                 /* disable chip */
   U8G_ESC_ADR(0),               /* instruction mode */
@@ -81,7 +80,7 @@ u8g_pgm_uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_init_seq[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
-u8g_pgm_uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_prepare_page_seq[] = {
+u8g_pgm_uint8_t u8g_dev_ssd1325_2bit_nhd_27_12864ucy3_prepare_page_seq[] = {
   U8G_ESC_ADR(0),               /* instruction mode */
   U8G_ESC_CS(1),                /* enable chip */
   0x015,       /* column address... */
@@ -92,40 +91,42 @@ u8g_pgm_uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_prepare_page_seq[] = {
 };
 
 
-static void u8g_dev_ssd1325_1bit_prepare_page(u8g_t *u8g, u8g_dev_t *dev)
+static void u8g_dev_ssd1325_2bit_prepare_page(u8g_t *u8g, u8g_dev_t *dev)
 {
   uint8_t page = ((u8g_pb_t *)(dev->dev_mem))->p.page;
   
-  u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_prepare_page_seq);
+  u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_2bit_nhd_27_12864ucy3_prepare_page_seq);
   
-  page <<= 3;
+  page <<= 2;
   u8g_WriteByte(u8g, dev, page);       /* start at the selected page */
-  page += 7;
+  page += 3;
   u8g_WriteByte(u8g, dev, page);       /* end within the selected page */  
   
   u8g_SetAddress(u8g, dev, 1);          /* data mode */
 }
 
 /* assumes row autoincrement and activated nibble remap */
-static  void u8g_dev_ssd1325_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
+static  void u8g_dev_ssd1325_2bit_write_4_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
 {
-  uint8_t d, cnt;
-  cnt = 8;
+  uint8_t d, tmp, cnt;
+  cnt = 4;
   do
   {
-    d = 0;
-    if ( left & 1 )
-      d |= 0x0f0;
-    if ( right & 1 )
-      d |= 0x00f;
+    d = left;
+    d &= 3;
+    d <<= 4;    
+    tmp = right;    
+    tmp &= 3;
+    d |= tmp;
+    d <<= 2;
     u8g_WriteByte(u8g, dev, d);
-    left >>= 1;
-    right >>= 1;
+    left >>= 2;
+    right >>= 2;
     cnt--;
   }while ( cnt > 0 );
 }
 
-static void u8g_dev_ssd1325_1bit_write_buffer(u8g_t *u8g, u8g_dev_t *dev)
+static void u8g_dev_ssd1325_2bit_write_buffer(u8g_t *u8g, u8g_dev_t *dev)
 {
   uint8_t cnt, left, right;
   uint8_t *ptr;
@@ -138,33 +139,33 @@ static void u8g_dev_ssd1325_1bit_write_buffer(u8g_t *u8g, u8g_dev_t *dev)
   {
     left = *ptr++;
     right = *ptr++;
-    u8g_dev_ssd1325_1bit_write_16_pixel(u8g, dev, left, right);
+    u8g_dev_ssd1325_2bit_write_4_pixel(u8g, dev, left, right);
     cnt--;
   } while( cnt > 0 );
 }
 
-uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_ssd1325_nhd27oled_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_init_seq);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_2bit_nhd_27_12864ucy3_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
-        u8g_dev_ssd1325_1bit_prepare_page(u8g, dev);
-        u8g_dev_ssd1325_1bit_write_buffer(u8g, dev);
+        u8g_dev_ssd1325_2bit_prepare_page(u8g, dev);
+        u8g_dev_ssd1325_2bit_write_buffer(u8g, dev);
         u8g_SetChipSelect(u8g, dev, 0);        
       }
       break;
   }
-  return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
+  return u8g_dev_pb8v2_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_ssd1325_nhd27oled_bw_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1325_nhd27oled_bw_fn, u8g_com_arduino_sw_spi_fn);
-U8G_PB_DEV(u8g_dev_ssd1325_nhd27oled_bw_hw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1325_nhd27oled_bw_fn, u8g_com_arduino_hw_spi_fn);
+U8G_PB_DEV(u8g_dev_ssd1325_nhd27oled_gr_sw_spi , WIDTH, HEIGHT, 4, u8g_dev_ssd1325_nhd27oled_gr_fn, u8g_com_arduino_sw_spi_fn);
+U8G_PB_DEV(u8g_dev_ssd1325_nhd27oled_gr_hw_spi , WIDTH, HEIGHT, 4, u8g_dev_ssd1325_nhd27oled_gr_fn, u8g_com_arduino_hw_spi_fn);
 
 

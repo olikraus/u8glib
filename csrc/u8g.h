@@ -147,6 +147,8 @@ extern u8g_dev_t u8g_dev_pcf8812_96x65_sw_spi;
 /* NHD-2.7-12864UCY3 OLED Display with SSD1325 Controller */
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_gr_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_gr_hw_spi;
 
 
 /*===============================================================*/
