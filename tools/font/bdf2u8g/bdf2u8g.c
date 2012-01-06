@@ -134,6 +134,7 @@ ISO-8859-1 was incorporated as the first 256 code points of ISO/IEC 10646 and Un
 #include <string.h>
 #include <assert.h>
 
+#define BDF2U8G_COMPACT_OUTPUT
 
 /*=== result data ===*/
 #define DATA_BUF_SIZE (1024*64)
@@ -157,7 +158,11 @@ void data_Write(FILE *out_fp, const char *indent)
   int bytes_per_line = 16;
   for( i = 0; i < data_pos; i++ )
   {
+#ifdef BDF2U8G_COMPACT_OUTPUT
+    fprintf(out_fp, "%d", data_buf[i]);
+#else
     fprintf(out_fp, "%3d", data_buf[i]);
+#endif
     if ( i+1 != data_pos )
       fprintf(out_fp, ",");
     if ( (i+1) % bytes_per_line == 0 )
@@ -471,7 +476,7 @@ int bdf_encoding_65_pos;
 int bdf_encoding_97_pos;
 int bdf_is_encoding_successfully_done;
 
-char bdf_info[32000];
+char bdf_info[32000*2];
 
 int bdf_is_put_glyph_completed = 0; /* indicator, when the glyph has been processed */
 
@@ -1017,7 +1022,10 @@ void bdf_WriteC(const char *outname, const char *fontname)
   fprintf(out_fp, "  ");
   data_Write(out_fp, "  ");
   fprintf(out_fp, "};\n");
+#ifdef BDF2U8G_COMPACT_OUTPUT
+#else
   fprintf(out_fp, "%s\n", bdf_info);
+#endif
 
   fclose(out_fp);
 }

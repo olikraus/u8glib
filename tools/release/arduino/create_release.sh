@@ -13,7 +13,7 @@ cp ../../../cppsrc/*.h ./libraries/U8glib/.
 sed -i 's|u8g.h|utility/u8g.h|g' ./libraries/U8glib/U8glib.h
 cp ../../../csrc/*.c ./libraries/U8glib/utility/.
 cp ../../../csrc/*.h ./libraries/U8glib/utility/.
-cp ../../../fntsrc/*.c ./libraries/U8glib/utility/.
+cp ../../../sfntsrc/*.c ./libraries/U8glib/utility/.
 cp ../../../sys/arduino/HelloWorld/*.pde ./libraries/U8glib/examples/HelloWorld/.
 cp ../../../sys/arduino/Bitmap/*.pde ./libraries/U8glib/examples/Bitmap/.
 cp ../../../sys/arduino/Console/*.pde ./libraries/U8glib/examples/Console/.

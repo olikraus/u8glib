@@ -1,6 +1,8 @@
 /*
 
-  HelloWorld.pde
+  Bitmap.pde
+  
+  Show simple bitmap
   
   Universal 8bit Graphics Library
   

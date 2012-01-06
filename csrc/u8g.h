@@ -464,7 +464,7 @@ size_t u8g_font_GetSize(const void *font);
 uint8_t u8g_font_GetFontStartEncoding(const void *font) U8G_NOINLINE;
 uint8_t u8g_font_GetFontEndEncoding(const void *font) U8G_NOINLINE;
 
-void u8g_SetFont(u8g_t *u8g, const u8g_pgm_uint8_t *font);
+void u8g_SetFont(u8g_t *u8g, const u8g_fntpgm_uint8_t *font);
 
 uint8_t u8g_GetFontBBXWidth(u8g_t *u8g);
 uint8_t u8g_GetFontBBXHeight(u8g_t *u8g);

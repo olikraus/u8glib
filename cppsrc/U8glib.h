@@ -86,7 +86,7 @@ class U8GLIB
       { u8g_DrawBitmapP(&u8g, x, y, cnt, h, bitmap); }
     
     /* font handling */
-    void setFont(const u8g_pgm_uint8_t *font) {u8g_SetFont(&u8g, font); }
+    void setFont(const u8g_fntpgm_uint8_t *font) {u8g_SetFont(&u8g, font); }
     u8g_uint_t drawStr(u8g_uint_t x, u8g_uint_t y, const char *s) { return u8g_DrawStr(&u8g, x, y, s); }
     u8g_uint_t drawStrP(u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s) { return u8g_DrawStrP(&u8g, x, y, s); }
     

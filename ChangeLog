@@ -7,4 +7,6 @@ u8glib ChangeLog
   * support for some more display types
 2012-01-07      v0.03   Oliver Kraus <olikraus@gmail.com>
   * fixed some bugs, added more examples
+2012-01-07      v0.04   Oliver Kraus <olikraus@gmail.com>
+  * single font file
   
