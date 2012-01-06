@@ -6,7 +6,7 @@
   Calculated Min Values x=0 y=-8 dx=0 dy=0
 */
 #include "u8g.h"
-const u8g_pgm_uint8_t u8g_font_osb29n[1233] = {
+const u8g_fntpgm_uint8_t u8g_font_osb29n[1233] U8G_SECTION(".progmem.u8g_font_osb29n") = {
     0,107, 49,223,245, 28,  0,  0,  0,  0, 42, 57, 14, 16, 32, 19,
     3, 12,  3,  0,  7,128,  7,128,199, 24,227, 60,242,124,122,248,
     7,128,  7,128,250,248,242,124,227, 60,199, 24,  7,128,  7,128,

@@ -46,7 +46,7 @@ DEFS:=-DARDUINO=22
   
 U8G_PATH:=$(shell cd ../../.. && pwd)/csrc/
 U8G_CPP_PATH:=$(shell cd ../../.. && pwd)/cppsrc/
-U8G_FONT_PATH:=$(shell cd ../../.. && pwd)/fntsrc/
+U8G_FONT_PATH:=$(shell cd ../../.. && pwd)/sfntsrc/
 
 # The location where the avr tools (e.g. avr-gcc) are located. Requires a '/' at the end.
 # Can be empty if all tools are accessable through the search path

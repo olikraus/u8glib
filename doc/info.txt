@@ -408,4 +408,4 @@
          wikir --> convert rst to google code wiki
          rst quick ref: http://docutils.sourceforge.net/docs/user/rst/quickref.html
          rst2html file.rst > file.html
-         
+         --> ERLEDIGT, eigener convertierer nach HTML
