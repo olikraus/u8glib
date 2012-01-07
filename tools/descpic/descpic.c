@@ -126,6 +126,21 @@ void draw_text_abc(u8g_t *u8g)
   u8g_DrawCursor(u8g);
 }
 
+void draw_hello_world(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_unifont);
+  u8g_DrawStr(u8g, ox+0, oy+20, "Hello World!");  
+  
+}
+
 void draw_text_abc_rot(u8g_t *u8g)
 {
   u8g_uint_t ox, oy, w, h;
@@ -432,6 +447,8 @@ void draw_minbox_ace(u8g_t *u8g)
 
 int main(void)
 {
+  
+  create_picture(draw_hello_world, "hello_world");
   create_picture(draw_display, "display");
   create_picture(draw_text_abc, "text_abc");
   create_picture(draw_abc_left, "abc_left");

@@ -9,4 +9,7 @@ u8glib ChangeLog
   * fixed some bugs, added more examples
 2012-01-07      v0.04   Oliver Kraus <olikraus@gmail.com>
   * single font file
-  
+2012-01-08      v0.05   Oliver Kraus <olikraus@gmail.com>
+  * Cleanup
+  * More examples
+  * SSD1325 graylevel support
