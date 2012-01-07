@@ -26,6 +26,20 @@ void create_picture( void (*draw_procedure)(u8g_t *u8g), const char *target_pic_
   post_processing(target_pic_name);
 }
 
+void create_picture_rot90( void (*draw_procedure)(u8g_t *u8g), const char *target_pic_name)
+{
+  u8g_t u8g;
+  u8g_Init(&u8g, &u8g_dev_pbm);
+  u8g_FirstPage(&u8g);
+  u8g_SetRot90(&u8g);
+  do
+  {
+    draw_procedure(&u8g);
+  }while( u8g_NextPage(&u8g) );
+  
+  post_processing(target_pic_name);
+}
+
 void draw_common(u8g_t *u8g, u8g_uint_t ox, u8g_uint_t oy, u8g_uint_t w, u8g_uint_t h)
 {
   u8g_SetCursorFont(u8g, u8g_font_cursor);
@@ -110,6 +124,54 @@ void draw_text_abc(u8g_t *u8g)
   u8g_SetCursorStyle(u8g, 144);
   u8g_SetCursorPos(u8g, ox+0, oy+20);
   u8g_DrawCursor(u8g);
+}
+
+void draw_text_abc_rot(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+w-35, oy-2, "128x64");
+  u8g_DrawFrame(u8g, ox-1, oy-1, w+2, h+2);
+  
+  u8g_SetFont(u8g, u8g_font_osb18);
+  u8g_DrawStr(u8g, ox+0, oy+20, "ABC");  
+  
+  draw_v_measure(u8g, ox+56, oy+2, 18);
+  
+//  u8g_SetFont(u8g, u8g_font_6x10);
+//  u8g_DrawStr(u8g, ox+0-51, oy+20+4, "(0,20)");
+//  u8g_SetCursorStyle(u8g, 144);
+//  u8g_SetCursorPos(u8g, ox+0, oy+20);
+//  u8g_DrawCursor(u8g);
+}
+
+void draw_text_abc_rot90(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr270(u8g, ox-2, oy+34, "64x128");
+  u8g_DrawFrame(u8g, ox-1, oy-1, w+2, h+2);
+  
+  u8g_SetFont(u8g, u8g_font_osb18);
+  u8g_DrawStr(u8g, ox+0, oy+20, "ABC");  
+  
+  draw_v_measure(u8g, ox+56, oy+2, 18);
+  
+//  u8g_SetFont(u8g, u8g_font_6x10);
+//  u8g_DrawStr(u8g, ox+0-51, oy+20+4, "(0,20)");
+//  u8g_SetCursorStyle(u8g, 144);
+//  u8g_SetCursorPos(u8g, ox+0, oy+20);
+//  u8g_DrawCursor(u8g);
 }
 
 /*
@@ -381,5 +443,8 @@ int main(void)
   create_picture(draw_clear_pixel, "clear_pixel");  
   create_picture(draw_minbox_abcdefg, "minbox_abcdefg");
   create_picture(draw_minbox_ace, "minbox_ace");
+  
+  create_picture(draw_text_abc_rot, "rot0");
+  create_picture_rot90(draw_text_abc_rot90, "rot90");
   return 0;
 }

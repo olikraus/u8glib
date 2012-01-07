@@ -201,7 +201,7 @@ typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 #define U8G_MODE_BW     U8G_MODE(0, 1)
 #define U8G_MODE_GRAY2BIT     U8G_MODE(0, 2)
 
-#define U8G_MODE_GET_BIT_PER_PIXEL(mode) ((mode)&15)
+#define U8G_MODE_GET_BITS_PER_PIXEL(mode) ((mode)&15)
 #define U8G_MODE_IS_COLOR(mode) (((mode)&16)==0?0:1)
 
 
