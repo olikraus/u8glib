@@ -56,7 +56,8 @@ void draw(void) {
 }
 
 void setup(void) {
-  u8g.setRot270();
+  // flip screen, if required
+  // u8g.setRot180();
 }
 
 void loop(void) {
