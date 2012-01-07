@@ -45,6 +45,8 @@ u8g_dev_t u8g_dev_rot = { u8g_dev_rot90_fn, NULL, NULL };
 
 void u8g_SetRot90(u8g_t *u8g)
 {
+  if ( u8g->dev == &u8g_dev_rot )
+    return;
   u8g_dev_rot.dev_fn = u8g_dev_rot90_fn;
   u8g_dev_rot.dev_mem = u8g->dev;
   u8g->dev = &u8g_dev_rot;
@@ -53,6 +55,8 @@ void u8g_SetRot90(u8g_t *u8g)
 
 void u8g_SetRot180(u8g_t *u8g)
 {
+  if ( u8g->dev == &u8g_dev_rot )
+    return;
   u8g_dev_rot.dev_fn = u8g_dev_rot180_fn;
   u8g_dev_rot.dev_mem = u8g->dev;
   u8g->dev = &u8g_dev_rot;
@@ -61,6 +65,8 @@ void u8g_SetRot180(u8g_t *u8g)
 
 void u8g_SetRot270(u8g_t *u8g)
 {
+  if ( u8g->dev == &u8g_dev_rot )
+    return;
   u8g_dev_rot.dev_fn = u8g_dev_rot270_fn;
   u8g_dev_rot.dev_mem = u8g->dev;
   u8g->dev = &u8g_dev_rot;
@@ -162,7 +168,7 @@ uint8_t u8g_dev_rot180_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
       {
         u8g_dev_arg_bbx_t *bbx = (u8g_dev_arg_bbx_t *)arg;
-        u8g_uint_t x, y, tmp;
+        u8g_uint_t x, y;
         
         /* transform the reference point */
         //y = u8g_GetHeightLL(u8g, rotation_chain);

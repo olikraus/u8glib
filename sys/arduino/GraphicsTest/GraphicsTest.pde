@@ -46,7 +46,7 @@ void setup(void)
   pinMode(13, OUTPUT);
 
   
-  //u8g_Init8Bit(&u8g, &u8g_dev_ks0108_128x64_fast,  8,    9, 10, 11,   4,   5,   6,   7, 18, 14, 15, 17, 16, U8G_PIN_NONE);
+  //u8g_Init8Bit(&u8g, &u8g_dev_ks0108_128x64_fast,  8,  9, 10, 11,   4,   5,   6,   7, 18, 14, 15, 17, 16, U8G_PIN_NONE);
   /*
 #define PIN_SCK 13
 #define PIN_MISO  12

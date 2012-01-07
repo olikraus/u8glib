@@ -60,7 +60,12 @@ class U8GLIB
     U8GLIB(u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
         uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset) 
       { init8Bit(dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset); }
-    
+
+     /* screen rotation */
+    void setRot90(void) { u8g_SetRot90(&u8g); }
+    void setRot180(void) { u8g_SetRot180(&u8g); }
+    void setRot270(void) { u8g_SetRot270(&u8g); }
+      
      /* picture loop */
     void firstPage(void) { u8g_FirstPage(&u8g); }
     uint8_t nextPage(void) { return u8g_NextPage(&u8g); }

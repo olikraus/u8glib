@@ -56,6 +56,7 @@ void draw(void) {
 }
 
 void setup(void) {
+  u8g.setRot270();
 }
 
 void loop(void) {
