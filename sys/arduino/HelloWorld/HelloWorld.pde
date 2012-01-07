@@ -2,9 +2,14 @@
 
   HelloWorld.pde
   
-  Universal 8bit Graphics Library
+  "Hello World!" example code.
   
-  Copyright (c) 2011, olikraus@gmail.com
+  >>> Before compiling: Please remove comment from the constructor of the 
+  >>> connected graphics display (see below).
+  
+  Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
+  
+  Copyright (c) 2012, olikraus@gmail.com
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
@@ -36,7 +41,7 @@
 
 #include "U8glib.h"
 
-// setup u8glib
+// setup u8g object, please remove comment from one of the following constructor calls
 
 //U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
@@ -47,7 +52,7 @@
 //U8GLIB_DOGXL160_GR u8g(13, 11, 10, 9);             // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_PCD8544 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
 //U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
-U8GLIB_KS0108_128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs1=14, cs2=15,di=17,rw=16
+//U8GLIB_KS0108_128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs1=14, cs2=15,di=17,rw=16
 
 void draw(void) {
   // graphic commands to redraw the complete screen should be placed here  

@@ -1,15 +1,15 @@
 /*
 
-  Bitmap.pde
+  U8gLogo.pde
   
-  Show simple bitmap
-
+  Put the U8GLIB logo on the display.
+  
   >>> Before compiling: Please remove comment from the constructor of the 
   >>> connected graphics display (see below).
-
+  
   Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
   
-  Copyright (c) 2011, olikraus@gmail.com
+  Copyright (c) 2012, olikraus@gmail.com
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
@@ -54,24 +54,42 @@
 //U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
 //U8GLIB_KS0108_128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs1=14, cs2=15,di=17,rw=16
 
+void drawLogo(uint8_t d)
+{
+  u8g.setFont(u8g_font_gdr25r);
+  u8g.drawStr(0+d, 30+d, "U");
+  u8g.setFont(u8g_font_gdr30n);
+  u8g.drawStr90(23+d,10+d,"8");
+  u8g.setFont(u8g_font_gdr25r);
+  u8g.drawStr(53+d,30+d,"g");
+  
+  u8g.drawHLine(2+d, 35+d, 47);
+  u8g.drawVLine(45+d, 32+d, 12);
+}
 
-const uint8_t rook_bitmap[] PROGMEM = {
-  0x00,         // 00000000 
-  0x55,         // 01010101
-  0x7f,          // 01111111
-  0x3e,         // 00111110
-  0x3e,         // 00111110 
-  0x3e,         // 00111110
-  0x3e,         // 00111110 
-  0x7f           // 01111111
-};
+void drawURL(void)
+{
+  u8g.setFont(u8g_font_4x6);
+  u8g.drawStr(1,54,"code.google.com/p/u8glib");
+}
 
-void draw(void) {
-  // graphic commands to redraw the complete screen should be placed here  
-  u8g.drawBitmapP( 0, 0, 1, 8, rook_bitmap);
+void draw(void)
+{
+  u8g.setColorIndex(1);
+  if ( U8G_MODE_GET_BITS_PER_PIXEL(u8g.getMode()) > 1 )
+  {
+    drawLogo(2);
+    u8g.setColorIndex(2);
+    drawLogo(1);
+    u8g.setColorIndex(3);
+  }
+  drawLogo(0);
+  drawURL();
 }
 
 void setup(void) {
+  // flip screen, if required
+  // u8g.setRot180();
 }
 
 void loop(void) {
