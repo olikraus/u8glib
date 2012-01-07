@@ -100,7 +100,6 @@ typedef struct _u8g_box_t u8g_box_t;
 /*===============================================================*/
 /* device list */
 
-
 /* Size: 128x64 SDL, u8g_dev_sdl.c */
 extern u8g_dev_t u8g_dev_sdl_1bit;
 extern u8g_dev_t u8g_dev_sdl_2bit;
@@ -119,11 +118,9 @@ extern u8g_dev_t u8g_dev_gprof;
 extern u8g_dev_t u8g_dev_uc1701_dogs102_sw_spi;
 extern u8g_dev_t u8g_dev_uc1701_dogs102_hw_spi;
 
-
 /* Display: EA DOGM132, Size: 128x32 monochrom */
 extern u8g_dev_t u8g_dev_st7565_dogm132_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_dogm132_hw_spi;
-
 
 /* Display: EA DOGM128, Size: 128x64 monochrom */
 extern u8g_dev_t u8g_dev_st7565_dogm128_sw_spi;
@@ -141,6 +138,7 @@ extern u8g_dev_t u8g_dev_ks0108_128x64_fast;    /* faster, but uses private tabl
 
 /* Nokia 84x48 Display with PCD8544 */
 extern u8g_dev_t u8g_dev_pcd8544_84x48_sw_spi;
+
 /* Nokia 96x65 Display with PCF8812 */
 extern u8g_dev_t u8g_dev_pcf8812_96x65_sw_spi;
 

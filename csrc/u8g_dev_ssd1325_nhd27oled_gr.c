@@ -62,7 +62,8 @@ u8g_pgm_uint8_t u8g_dev_ssd1325_2bit_nhd_27_12864ucy3_init_seq[] = {
   0x0a0, 0x056,                     /* remap configuration, vertical address increment, enable nibble remap (upper nibble is left) */
   0x086,                                /* full current range (0x084, 0x085, 0x086) */
   0x0b8,                                /* set gray scale table */
-      0x01, 0x011, 0x022, 0x032, 0x043, 0x054, 0x065, 0x076,
+      //0x01, 0x011, 0x022, 0x032, 0x043, 0x054, 0x065, 0x076,
+      0x01, 0x011, 0x022, 0x032, 0x043, 0x054, 0x077, 0x077,            // 4L mode uses 0, 2, 4, 7
   0x081, 0x070,                    /* contrast, brightness, 0..128, Newhaven: 0x040 */
   0x0b2, 0x051,                    /* frame frequency (row period) */
   0x0b1, 0x055,                    /* phase length */

@@ -183,6 +183,7 @@ BW
 :Device
 <tt>u8g_dev_ks0108_128x64_fast</tt>
 :C++ Constructor
+<tt>U8GLIB_KS0108_128(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
 ::
 :Controller
 stdout
