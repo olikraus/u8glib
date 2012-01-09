@@ -58,6 +58,18 @@ void draw_common(u8g_t *u8g, u8g_uint_t ox, u8g_uint_t oy, u8g_uint_t w, u8g_uin
   u8g_DrawCursor(u8g);
 }
 
+void draw_common_simple(u8g_t *u8g, u8g_uint_t ox, u8g_uint_t oy, u8g_uint_t w, u8g_uint_t h)
+{
+  u8g_SetCursorFont(u8g, u8g_font_cursor);
+  
+  /* draw the display frame */
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+w-35, oy-2, "128x64");
+  u8g_DrawFrame(u8g, ox-1, oy-1, w+2, h+2);
+  //u8g_DrawFrame(u8g, ox-2, oy-2, w+4, h+4);
+
+}
+
 void draw_v_measure(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t h)
 {
   char buf[20];
@@ -444,6 +456,61 @@ void draw_minbox_ace(u8g_t *u8g)
 
 }
 
+void draw_pl_full(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  u8g_SetColorIndex(u8g, 1);
+  draw_common_simple(u8g, ox, oy, w, h);
+
+  u8g_DrawBox(u8g, ox+10, oy+12, 20, 38);  
+  u8g_SetFont(u8g, u8g_font_osb35);
+  u8g_DrawStr(u8g, ox+40, oy+50, "A");
+  u8g_SetColorIndex(u8g, 0);
+  u8g_DrawPixel(u8g, ox+28, oy+14);  
+}
+
+void draw_pl_upper(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  u8g_SetColorIndex(u8g, 1);
+  draw_common_simple(u8g, ox, oy, w, h);
+
+  u8g_DrawBox(u8g, ox+10, oy+12, 20, 38);  
+  u8g_SetFont(u8g, u8g_font_osb35);
+  u8g_DrawStr(u8g, ox+40, oy+50, "A");
+  u8g_SetColorIndex(u8g, 0);
+  u8g_DrawPixel(u8g, ox+28, oy+14);  
+  u8g_DrawBox(u8g, ox, oy, w, h/2);  
+}
+
+void draw_pl_lower(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  u8g_SetColorIndex(u8g, 1);
+  draw_common_simple(u8g, ox, oy, w, h);
+
+  u8g_DrawBox(u8g, ox+10, oy+12, 20, 38);  
+  u8g_SetFont(u8g, u8g_font_osb35);
+  u8g_DrawStr(u8g, ox+40, oy+50, "A");
+  u8g_SetColorIndex(u8g, 0);
+  u8g_DrawPixel(u8g, ox+28, oy+14);  
+  u8g_DrawBox(u8g, ox, oy+h/2, w, h/2);  
+}
 
 int main(void)
 {
@@ -460,6 +527,10 @@ int main(void)
   create_picture(draw_clear_pixel, "clear_pixel");  
   create_picture(draw_minbox_abcdefg, "minbox_abcdefg");
   create_picture(draw_minbox_ace, "minbox_ace");
+
+  create_picture(draw_pl_full, "pl_full");
+  create_picture(draw_pl_lower, "pl_lower");
+  create_picture(draw_pl_upper, "pl_upper");
   
   create_picture(draw_text_abc_rot, "rot0");
   create_picture_rot90(draw_text_abc_rot90, "rot90");
