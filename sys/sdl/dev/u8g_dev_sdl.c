@@ -62,9 +62,11 @@ void u8g_sdl_init(void)
   }
   printf("At %d bits-per-pixel mode\n", u8g_sdl_screen->format->BitsPerPixel);
   
+  #define W(x,w) (((x)*(w))/100)
+  
   u8g_sdl_color[0] = SDL_MapRGB( u8g_sdl_screen->format, 0, 0, 0 );
-  u8g_sdl_color[1] = SDL_MapRGB( u8g_sdl_screen->format, 25, 64, 0 );
-  u8g_sdl_color[2] = SDL_MapRGB( u8g_sdl_screen->format, 50, 128, 0 );
+  u8g_sdl_color[1] = SDL_MapRGB( u8g_sdl_screen->format, W(100, 50), W(255,50), 0 );
+  u8g_sdl_color[2] = SDL_MapRGB( u8g_sdl_screen->format, W(100, 80), W(255,80), 0 );
   u8g_sdl_color[3] = SDL_MapRGB( u8g_sdl_screen->format, 100, 255, 0 );
 
   /*

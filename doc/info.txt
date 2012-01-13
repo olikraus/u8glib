@@ -378,6 +378,7 @@
     statt bits pro pixel, lieber eigene proceduren
     
 - NHD 27  --> 2-bit treiber schreiben, den alten umbenennen, aber wie?
+       --> ERLEDIGT
        
  
  - Beschreibung im Wiki
@@ -409,3 +410,10 @@
          rst quick ref: http://docutils.sourceforge.net/docs/user/rst/quickref.html
          rst2html file.rst > file.html
          --> ERLEDIGT, eigener convertierer nach HTML
+         
+  - antialiased lines: 
+    http://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm --> pseudo code
+    http://www.codeproject.com/KB/GDI/antialias.aspx --> integer version
+    http://freespace.virgin.net/hugo.elias/graphics/x_wuline.htm
+    Michael Abrash's Graphics Programming Black Book Special Edition, p 780
+    

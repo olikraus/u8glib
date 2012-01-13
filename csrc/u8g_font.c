@@ -44,14 +44,7 @@ typedef void * u8g_glyph_t;
 #define U8G_FONT_DATA_STRUCT_SIZE 12
 
 static uint8_t u8g_font_get_byte(const u8g_fntpgm_uint8_t *font, uint8_t offset) U8G_NOINLINE;
-
-
-
 u8g_glyph_t u8g_GetGlyph(u8g_t *u8g, uint8_t requested_encoding);
-
-void u8g_font_GetGlyphBox(const void *font, u8g_glyph_t g, uint8_t *x, uint8_t *y, uint8_t *width, uint8_t *height);
-void u8g_font_GetStrBox(const void *font, const char *s, uint8_t *x, uint8_t *y, uint8_t *width, uint8_t *height);
-void u8g_font_GetStrBoxP(const void *font, const char *s, uint8_t *x, uint8_t *y, uint8_t *width, uint8_t *height);
 
 
 /* use case: What is the width and the height of the minimal box into which string s fints? */
@@ -79,13 +72,22 @@ static uint8_t u8g_font_get_byte(const u8g_fntpgm_uint8_t *font, uint8_t offset)
   return u8g_pgm_read( (u8g_pgm_uint8_t *)font );  
 }
 
+static uint16_t u8g_font_get_word(const u8g_fntpgm_uint8_t *font, uint8_t offset) U8G_NOINLINE; 
+static uint16_t u8g_font_get_word(const u8g_fntpgm_uint8_t *font, uint8_t offset)
+{
+    uint16_t pos;
+    font += offset;
+    pos = u8g_pgm_read( (u8g_pgm_uint8_t *)font );
+    font++;
+    pos <<= 8;
+    pos += u8g_pgm_read( (u8g_pgm_uint8_t *)font);
+    return pos;
+}
 
 static uint8_t u8g_font_GetFormat(const u8g_fntpgm_uint8_t *font) U8G_NOINLINE;
 static uint8_t u8g_font_GetFormat(const u8g_fntpgm_uint8_t *font)
 {
-  // return ((uint8_t *)font)[1];
   return u8g_font_get_byte(font, 0);
-  //return u8g_pgm_read( ((u8g_fntpgm_uint8_t *)font) + 0 );
 }
 
 static uint8_t u8g_font_GetFontGlyphStructureSize(const u8g_fntpgm_uint8_t *font) U8G_NOINLINE;
@@ -102,7 +104,6 @@ static uint8_t u8g_font_GetFontGlyphStructureSize(const u8g_fntpgm_uint8_t *font
 static uint8_t u8g_font_GetBBXWidth(const void *font)
 {
   return u8g_font_get_byte(font, 1);
-  //return u8g_pgm_read( ((u8g_fntpgm_uint8_t *)font) + 1 );
 }
 
 uint8_t u8g_GetFontBBXWidth(u8g_t *u8g)
@@ -113,7 +114,6 @@ uint8_t u8g_GetFontBBXWidth(u8g_t *u8g)
 static uint8_t u8g_font_GetBBXHeight(const void *font)
 {
   return u8g_font_get_byte(font, 2);
-  //return u8g_pgm_read( ((u8g_fntpgm_uint8_t *)font) + 2 );
 }
 
 uint8_t u8g_GetFontBBXHeight(u8g_t *u8g)
@@ -124,8 +124,6 @@ uint8_t u8g_GetFontBBXHeight(u8g_t *u8g)
 static int8_t u8g_font_GetBBXOffX(const void *font)
 {
   return u8g_font_get_byte(font, 3);
-  //return ((int8_t *)font)[3];
-  //return u8g_pgm_read( ((u8g_fntpgm_uint8_t *)font) + 3 );
 }
 
 int8_t u8g_GetFontBBXOffX(u8g_t *u8g) U8G_NOINLINE;
@@ -136,9 +134,7 @@ int8_t u8g_GetFontBBXOffX(u8g_t *u8g)
 
 static int8_t u8g_font_GetBBXOffY(const void *font)
 {
-  //return ((int8_t *)font)[4];
   return u8g_font_get_byte(font, 4);
-  //return u8g_pgm_read( ((u8g_fntpgm_uint8_t *)font) + 4 );
 }
 
 int8_t u8g_GetFontBBXOffY(u8g_t *u8g) U8G_NOINLINE;
@@ -149,27 +145,13 @@ int8_t u8g_GetFontBBXOffY(u8g_t *u8g)
 
 uint8_t u8g_font_GetCapitalAHeight(const void *font)
 {
-  //return ((uint8_t *)font)[5];
   return u8g_font_get_byte(font, 5);
-  //return u8g_pgm_read( ((u8g_fntpgm_uint8_t *)font) + 5 );
 }
 
 uint8_t u8g_GetFontCapitalAHeight(u8g_t *u8g) U8G_NOINLINE; 
 uint8_t u8g_GetFontCapitalAHeight(u8g_t *u8g)
 {
   return u8g_font_GetCapitalAHeight(u8g->font);
-}
-
-static uint16_t u8g_font_get_word(const u8g_fntpgm_uint8_t *font, uint8_t offset) U8G_NOINLINE; 
-static uint16_t u8g_font_get_word(const u8g_fntpgm_uint8_t *font, uint8_t offset)
-{
-    uint16_t pos;
-    font += offset;
-    pos = u8g_pgm_read( (u8g_pgm_uint8_t *)font );
-    font++;
-    pos <<= 8;
-    pos += u8g_pgm_read( (u8g_pgm_uint8_t *)font);
-    return pos;
 }
 
 uint16_t u8g_font_GetEncoding65Pos(const void *font) U8G_NOINLINE;
