@@ -44,7 +44,7 @@
 typedef void * u8g_glyph_t;
 
 /* size of the font data structure, there is no struct or class... */
-#define U8G_FONT_DATA_STRUCT_SIZE 12
+#define U8G_FONT_DATA_STRUCT_SIZE 15
 
 /*
   ... instead the fields of the font data structure are accessed directly by offset 
@@ -60,6 +60,7 @@ typedef void * u8g_glyph_t;
   8             start 'a'
   10            encoding start
   11            encoding end
+  12            descent og 
 */
 
 /* use case: What is the width and the height of the minimal box into which string s fints? */
@@ -391,6 +392,9 @@ uint8_t u8g_IsGlyph(u8g_t *u8g, uint8_t requested_encoding)
 }
 
 
+/*========================================================================*/
+/* glyph drawing procedures */
+
 /*
   Draw a glyph
   x,y: left baseline position of the glyph
@@ -711,6 +715,9 @@ int8_t u8g_DrawGlyphFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir,
   return u8g_DrawGlyphDir(u8g, x, y, dir, encoding);
 }
 
+/*========================================================================*/
+/* string drawing procedures */
+
 
 u8g_uint_t u8g_DrawStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
 {
@@ -851,6 +858,9 @@ u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t di
   return u8g_DrawStrDir(u8g, x, y, dir, s);
 }
 
+
+/*========================================================================*/
+/* calculation of font/glyph/string characteristics */
 
 
 /*
@@ -1022,6 +1032,7 @@ void u8g_GetStrMinBox(u8g_t *u8g, const char *s, u8g_uint_t *x, u8g_uint_t *y, u
   u8g_font_calc_str_min_box(u8g, s, &buf);
   u8g_font_get_str_box_fill_args(u8g, s, &buf, x, y, width, height);
 }
+
 
 void u8g_GetStrAMinBox(u8g_t *u8g, const char *s, u8g_uint_t *x, u8g_uint_t *y, u8g_uint_t *width, u8g_uint_t *height)
 {

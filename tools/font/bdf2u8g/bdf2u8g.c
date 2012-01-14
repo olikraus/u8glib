@@ -89,6 +89,9 @@
   8             start 'a'
   10            encoding start
   11            encoding end
+  12            descent 'g'                     negative: below baseline
+  13            font max ascent
+  14            font min decent             negative: below baseline 
 
 format 0
     glyph information 
@@ -448,10 +451,13 @@ int bdf_font_y;            /* FONTBOUNDINGBOX arg 4 */
 
 int bdf_capital_A_height;
 int bdf_capital_1_height;
+int bdf_lower_g_descent;
 
 int bdf_char_width;     /* BBX arg 1 */
 int bdf_char_max_width;
 int bdf_char_height;    /* BBX arg 2 */
+int bdf_char_ascent;    /* defined as BBX arg 2 + BBX arg 4 */
+int bdf_char_max_ascent;
 int bdf_char_max_height;
 int bdf_char_x;            /* BBX arg 3 */
 int bdf_char_max_x;
@@ -493,6 +499,7 @@ void bdf_ResetMax(void)
   bdf_delta_min_x = 0;
   bdf_delta_min_y = 0;
   bdf_glyph_data_max_len = 0;
+  bdf_char_max_ascent = 0;
 }
 
 void bdf_UpdateMax(void)
@@ -526,6 +533,9 @@ void bdf_UpdateMax(void)
   
   if ( bdf_glyph_data_max_len < bdf_glyph_data_len )
     bdf_glyph_data_max_len = bdf_glyph_data_len;
+  
+  if ( bdf_char_max_ascent < bdf_char_ascent )
+    bdf_char_max_ascent = bdf_char_ascent;
 }
 
 
@@ -584,6 +594,9 @@ void bdf_PutGlyph(void)
     bdf_capital_A_height = bdf_char_height;
   if ( bdf_encoding == '1' )
     bdf_capital_1_height = bdf_char_height;
+  
+  if ( bdf_encoding == 'g' )
+    bdf_lower_g_descent = bdf_char_y;
 
   if ( bdf_requested_encoding != bdf_encoding )
     return;
@@ -846,6 +859,7 @@ void bdf_ReadLine(const char *s)
       bdf_char_height = p_get_val();
       bdf_char_x = p_get_val();
       bdf_char_y = p_get_val();
+      bdf_char_ascent = bdf_char_height + bdf_char_y;
     }
     else if ( strcmp(p_buf, "BITMAP") == 0 )
     {
@@ -945,6 +959,9 @@ void bdf_GenerateFontData(const char *filename, int begin, int end)
   data_Put(0);
   data_Put(begin);
   data_Put(end);                /* will be overwritten later */
+  data_Put(0);                  /* lower g descent */
+  data_Put(0);                  /* max ascent */
+  data_Put(0);                  /* min y = descent */
 }
 
 void bdf_GenerateGlyph(const char *filename, int encoding)
@@ -997,6 +1014,11 @@ void bdf_Generate(const char *filename, int begin, int end)
   data_buf[7] = (bdf_encoding_65_pos & 255);
   data_buf[8] = (bdf_encoding_97_pos >> 8);
   data_buf[9] = (bdf_encoding_97_pos & 255);
+  
+  data_buf[12] = bdf_lower_g_descent;
+  data_buf[13] = bdf_char_max_ascent;
+  data_buf[14] = bdf_char_min_y;
+  
   // data_buf[11] = last_valid_encoding;
 }
 
@@ -1010,10 +1032,12 @@ void bdf_WriteC(const char *outname, const char *fontname)
   fprintf(out_fp, "  Fontname: %s\n", bdf_font);
   fprintf(out_fp, "  Copyright: %s\n", bdf_copyright);
   fprintf(out_fp, "  Capital A Height: %d, '1' Height: %d\n", bdf_capital_A_height, bdf_capital_1_height);
-  fprintf(out_fp, "  Calculated Max Values w=%d h=%d x=%d y=%d dx=%d dy=%d len=%d\n", 
+  fprintf(out_fp, "  Calculated Max Values w=%2d h=%2d x=%2d y=%2d dx=%2d dy=%2d ascent=%2d len=%2d\n", 
     bdf_char_max_width, bdf_char_max_height, bdf_char_max_x, bdf_char_max_y, bdf_delta_max_x, bdf_delta_max_y, 
-    bdf_glyph_data_max_len);
-  fprintf(out_fp, "  Calculated Min Values x=%d y=%d dx=%d dy=%d\n", 
+    bdf_char_max_ascent, bdf_glyph_data_max_len);
+  fprintf(out_fp, "  Font Bounding box     w=%2d h=%2d x=%2d y=%2d\n", 
+    bdf_font_width, bdf_font_height, bdf_font_x, bdf_font_y);
+  fprintf(out_fp, "  Calculated Min Values           x=%2d y=%2d dx=%2d dy=%2d\n", 
     bdf_char_min_x, bdf_char_min_y, bdf_delta_min_x, bdf_delta_min_y);
 
   fprintf(out_fp, "*/\n");
