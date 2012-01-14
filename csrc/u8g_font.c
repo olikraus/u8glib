@@ -60,7 +60,10 @@ typedef void * u8g_glyph_t;
   8             start 'a'
   10            encoding start
   11            encoding end
-  12            descent og 
+  12            descent 'g'                     negative: below baseline
+  13            font max ascent
+  14            font min decent             negative: below baseline 
+  
 */
 
 /* use case: What is the width and the height of the minimal box into which string s fints? */
