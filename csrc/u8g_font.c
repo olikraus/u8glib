@@ -309,6 +309,10 @@ static void u8g_FillEmptyGlyphCache(u8g_t *u8g)
   u8g->glyph_y = 0;
 }
 
+/*
+  Find (with some speed optimization) and return a pointer to the glyph data structure
+  Also uncompress (format 1) and copy the content of the data structure to the u8g structure
+*/
 u8g_glyph_t u8g_GetGlyph(u8g_t *u8g, uint8_t requested_encoding)
 {
   uint8_t *p = (uint8_t *)(u8g->font);
@@ -318,12 +322,12 @@ u8g_glyph_t u8g_GetGlyph(u8g_t *u8g, uint8_t requested_encoding)
   uint16_t pos;
   uint8_t i;
   uint8_t mask = 255;
-  
-  start = u8g_font_GetFontStartEncoding(u8g->font);
-  end = u8g_font_GetFontEndEncoding(u8g->font);
 
   if ( font_format == 1 )
     mask = 15;
+  
+  start = u8g_font_GetFontStartEncoding(u8g->font);
+  end = u8g_font_GetFontEndEncoding(u8g->font);
 
   pos = u8g_font_GetEncoding97Pos(u8g->font);
   if ( requested_encoding >= 97 && pos > 0 )
