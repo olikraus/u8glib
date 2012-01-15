@@ -168,6 +168,22 @@ uint8_t u8g_font_GetFontEndEncoding(const void *font)
   return u8g_font_get_byte(font, 11);
 }
 
+int8_t u8g_font_GetLowerGDescent(const void *font)
+{
+  return u8g_font_get_byte(font, 12);
+}
+
+int8_t u8g_font_GetFontAscent(const void *font)
+{
+  return u8g_font_get_byte(font, 13);
+}
+
+int8_t u8g_font_GetFontDescent(const void *font)
+{
+  return u8g_font_get_byte(font, 14);
+}
+
+
 /* return the data start for a font and the glyph pointer */
 static uint8_t *u8g_font_GetGlyphDataStart(const void *font, u8g_glyph_t g)
 {
@@ -860,6 +876,55 @@ u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t di
   y += u8g_GetFontBBXOffY(u8g);
   return u8g_DrawStrDir(u8g, x, y, dir, s);
 }
+
+
+/*========================================================================*/
+/* set ascent/descent for reference point calculation */
+
+void u8g_SetRefHeightText(u8g_t *u8g)
+{
+  u8g->font_ref_ascent = u8g_font_GetCapitalAHeight(u8g->font);
+  u8g->font_ref_descent = u8g_font_GetLowerGDescent(u8g->font);
+}
+
+void u8g_SetRefHeightAll(u8g_t *u8g)
+{
+  u8g->font_ref_ascent = u8g_font_GetFontAscent(u8g->font);
+  u8g->font_ref_descent = u8g_font_GetFontDescent(u8g->font);
+}
+
+
+/*========================================================================*/
+/* callback procedures to correct the y position */
+
+u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y)
+{
+  return y;
+}
+
+u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g, u8g_uint_t y)
+{
+  y += (u8g_uint16_t)(u8g_int16_t)(u8g->descent);
+  return y;
+}
+
+u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g, u8g_uint_t y)
+{
+  y += (u8g_uint16_t)(u8g_int16_t)(u8g->ascent);
+  return y;
+}
+
+u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g, u8g_uint_t y)
+{
+  int8_t tmp;
+  tmp = u8g->ascent;
+  tmp += u8g->descent;
+  tmp /= 2;
+  tmp += u8g->descent;  
+  y += (u8g_uint16_t)(u8g_int16_t)(tmp);
+  return y;
+}
+
 
 
 /*========================================================================*/

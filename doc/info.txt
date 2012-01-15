@@ -458,7 +458,7 @@
           SetRefHeightFontOrigin(u8g)   <-- eventuell nicht nötig
             u8g->ascent = 0
             u8g->descent = 0
-          SetRefHeightUppercase(u8g)
+          SetRefHeightUpperCase(u8g)
             u8g->ascent = font_ptr[5]
             u8g->descent = font_ptr[12]
           SetRefHeightMax(u8g)

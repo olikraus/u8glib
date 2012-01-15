@@ -86,8 +86,10 @@ typedef struct _u8g_dev_t u8g_dev_t;
 /* generic */
 #if defined(U8G_16BIT)
 typedef uint16_t u8g_uint_t;
+typedef int16_t u8g_int_t;
 #else
 typedef uint8_t u8g_uint_t;
+typedef int8_t u8g_int_t;
 #endif
 
 struct _u8g_box_t
@@ -418,6 +420,9 @@ struct _u8g_t
   uint8_t glyph_width;
   uint8_t glyph_height;
   
+  int8_t font_ref_ascent;
+  int8_t font_ref_descent;
+  
   u8g_dev_arg_pixel_t arg_pixel;
   /* uint8_t color_index; */
 
@@ -500,8 +505,11 @@ u8g_uint_t u8g_DrawStr180P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm
 u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
 
 
+void u8g_SetRefHeightText(u8g_t *u8g);
+void u8g_SetRefHeightAll(u8g_t *u8g);
 
 u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s);
+
 
 
 void u8g_GetStrMinBox(u8g_t *u8g, const char *s, u8g_uint_t *x, u8g_uint_t *y, u8g_uint_t *width, u8g_uint_t *height);
