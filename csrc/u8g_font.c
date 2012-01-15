@@ -870,14 +870,16 @@ u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t di
   Description:
     Calculate parameter for the minimal bounding box on a given string
   Output
-    buf->y_min          extend of the lower left edge if the string below (y_min<0) or above (y_min>0) baseline
-    buf->y_max          extend of the upper left edge if the string below (y_min<0) or above (y_min>0) baseline
+    buf->y_min          extend of the lower left edge if the string below (y_min<0) or above (y_min>0) baseline (descent)
+    buf->y_max          extend of the upper left edge if the string below (y_min<0) or above (y_min>0) baseline (ascent)
     buf->w                 the width of the string
 */
 struct u8g_str_size_struct
 {
-  int8_t y_min, y_max;
-  u8g_uint_t w;
+  int8_t y_min;         /* descent */
+  int8_t y_max;         /* ascent */
+  int8_t x, y;             /* the reference point of the font (negated!) */
+  u8g_uint_t w;         /* width of the overall string */
 };
 typedef struct u8g_str_size_struct u8g_str_size_t;
 
@@ -894,6 +896,8 @@ static void u8g_font_calc_str_min_box(u8g_t *u8g, const char *s, u8g_str_size_t 
   {
     buf->y_min = 0;
     buf->y_max = 0;
+    buf->x = 0;
+    buf->y = 0;
     return;
   }
   
@@ -915,6 +919,10 @@ static void u8g_font_calc_str_min_box(u8g_t *u8g, const char *s, u8g_str_size_t 
   /* for string with size 1, this will be nullified after the loop */
   // buf->w = - u8g_font_GetGlyphBBXOffX(u8g->font, g);
   buf->w = - u8g->glyph_x;
+  
+  /* Also copy the position of the first glyph. This is the reference point of the string (negated) */
+  buf->x = u8g->glyph_x;
+  buf->y = u8g->glyph_y;
   
   for(;;)
   {
@@ -949,61 +957,24 @@ static void u8g_font_calc_str_min_box(u8g_t *u8g, const char *s, u8g_str_size_t 
   buf->w += u8g->glyph_x;
 }
 
-
-/*
-  Description:
-    Calculate the minimal bounding box on a given string
-  Input:
-    x,y         lower left baseline position of the string
-  Output:
-    x,y         upper left corner of the bounding box
-    width, height       size of the bounding box
-*/
-
-void _u8g_font_GetStrMinBox(u8g_t *u8g, const char *s, u8g_uint_t *x, u8g_uint_t *y, u8g_uint_t *width, u8g_uint_t *height)
+/* calculate minimal box */
+void u8g_font_box_min(u8g_t *u8g, const char *s, u8g_str_size_t *buf)
 {
-  u8g_uint_t w;
-  int8_t yg, y_min, y_max;
-  u8g_glyph_t g;
-  
-  if ( *s == '\0' )
-  {
-    *width= 0;
-    *height = 0;
-    return;
-  }
-  
-  y_min = 127;
-  y_max = -128;
-  
-  g = u8g_GetGlyph(u8g, *s);
-  *x += u8g->glyph_x;
-  w = - u8g->glyph_x;
-  for(;;)
-  {
-    yg = u8g->glyph_y;
-    if ( y_min > yg )
-      y_min = yg;
-    yg += u8g->glyph_height;
-    if ( y_max < yg )
-      y_max = yg;
-    s++;
-    if ( *s == '\0' )
-      break;
-    w += u8g->glyph_dx;
-    g = u8g_GetGlyph(u8g, *s);
-  }
-  /* instead correctly calculate the left edge of the char */
-  w += u8g->glyph_width;
-  w += u8g->glyph_x;
-  *width = w;
-  yg = y_max;
-  yg -= y_min;
-  *height = yg;
-  *y -= y_max;
-  *y += 1;
-
+  u8g_font_calc_str_min_box(u8g, s, buf);
 }
+
+/* calculate gA box, but do not calculate the overall width */
+void u8g_font_box_left_gA(u8g_t *u8g, const char *s, u8g_str_size_t *buf)
+{
+  
+}
+
+/* calculate gA box, including overall width */
+void u8g_font_box_all_gA(u8g_t *u8g, const char *s, u8g_str_size_t *buf)
+{
+  
+}
+
 
 static void u8g_font_get_str_box_fill_args(u8g_t *u8g, const char *s, u8g_str_size_t *buf, u8g_uint_t *x, u8g_uint_t *y, u8g_uint_t *width, u8g_uint_t *height)
 {

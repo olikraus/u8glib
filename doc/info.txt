@@ -437,11 +437,40 @@
         
         
       Idee: 
-        * bounding box berechnung festlegen: Keine (default), Manuell, min box, gA Box, max box
+        * bounding box berechnung festlegen: left_gA, left_max, Manuell, min box, gA Box, max box
+            --> wie wäre es nur die höhen festzulegen, die breite könnte man später dazunehmen
+              - min, ga, max, manual
         * referenzpunkt festlegen: Font (default), low left, low center, low right, ....
+            --> wenn nur die höhen berechnet werden, wird das auch mit dem referenzpunkt einfacher. es gibt dann nur vier:
+                - oben, mitte, unten, font (baseline)
         Einschränkungen: Wenn keine bbx berechnung festgelegt ist, dann muss der referenzpunkt immer font sein oder low left, center left, upper left
           (progmem ersparnis!)
-        * alles per callback lösen
-        
-        
+        * alles per callback lösen (hm mal sehen)
+        * Berechnung (x,y) a, d
+          # font - min, ga, max         --> keine transformation nötig
+          # unten - ga                  --> y = y + decent
+          # unten - max                  --> y = y + decent   (korrektur um die enfernung: unten zu baseline)
+          # oben - ga                   --> y = y + ascent (korrektur um die enfernung: oben zu baseline)
+          # oben - max                  -> wie oben
+          # mitte - ga                          --> zunächst y nach unten transformieren (ascent + descent)/2 dann wie unten handlen
+          vielleicht brauchen wir die min box gar nicht... oder bauen das mal als special ein.
+
+          SetRefHeightFontOrigin(u8g)   <-- eventuell nicht nötig
+            u8g->ascent = 0
+            u8g->descent = 0
+          SetRefHeightUppercase(u8g)
+            u8g->ascent = font_ptr[5]
+            u8g->descent = font_ptr[12]
+          SetRefHeightMax(u8g)
+            u8g->ascent = font_ptr[13]
+            u8g->descent = font_ptr[14]
+          SetRefHeightManual(u8g, ascent, descent)
+            u8g->ascent = ascent
+            u8g->descent = descent
+          SetRefHeightMinimal(u8g, char *s)
+            u8g->ascent = ascent(s)
+            u8g->descent = descent(s)
+          
+          SetRef
+          
      
