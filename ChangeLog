@@ -13,3 +13,7 @@ u8glib ChangeLog
   * Cleanup
   * More examples
   * SSD1325 graylevel support
+2012-01-15      v0.06   Oliver Kraus <olikraus@gmail.com>
+  * LM6063 support
+2012-01-17      v0.07   Oliver Kraus <olikraus@gmail.com>
+  * LM6063 support (update)

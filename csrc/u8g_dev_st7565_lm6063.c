@@ -40,7 +40,7 @@
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
-u8g_pgm_uint8_t u8g_dev_st7565_lm6063_init_seq[] = {
+u8g_pgm_uint8_t OLD_u8g_dev_st7565_lm6063_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
@@ -48,7 +48,7 @@ u8g_pgm_uint8_t u8g_dev_st7565_lm6063_init_seq[] = {
   
   0x040,		                /* set display start line */
   0x0a1,		                /* ADC set to reverse */
-  0x0c8,		                /* common output mode: set scan direction normal operation/SHL Select */
+  0x0c8,		                /* common output mode: set scan direction normal operation/SHL Select / 17 Jan: thems to be a bug, must be 0x0c0 */
   0x0a6,                           /* display normal, bit val 0: LCD pixel off. */
   0x0a2,		                /* LCD bias 1/9 */
   0x02f,		                /* all power  control circuits on */
@@ -59,6 +59,48 @@ u8g_pgm_uint8_t u8g_dev_st7565_lm6063_init_seq[] = {
   0x018,		                /* contrast value*/
   0x0ac,		                /* indicator */
   0x000,		                /* disable */
+  0x0af,		                /* display on */
+
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  0x0a5,		                /* display all points, ST7565 */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  0x0a4,		                /* normal display */
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_END                /* end of sequence */
+};
+
+/* init sequence from https://github.com/adafruit/ST7565-LCD/blob/master/ST7565/ST7565.cpp */
+u8g_pgm_uint8_t u8g_dev_st7565_lm6063_init_seq[] = {
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),             /* enable chip */
+  U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
+
+  0x0a3,		                /* 0x0a2: LCD bias 1/9 (suggested for the LM6063), 0x0a3: Used by Adafruit */
+  0x0a0,		                /* 0x0a1: ADC set to reverse (suggested for the LM6063), 0x0a0: Used by Adafruit -> normal mode */
+  0x0c0,                            /* common output mode: set scan direction normal operation/SHL Select */
+  0x040,		                /* set display start line */
+  
+  0x028 | 0x04,                 /* power control: turn on voltage converter */
+  U8G_ESC_DLY(50),         /* delay 50 ms */
+
+  0x028 | 0x06,                 /* power control: turn on voltage regulator */
+  U8G_ESC_DLY(50),         /* delay 50 ms */
+  
+  0x028 | 0x07,                 /* power control: turn on voltage follower */
+  U8G_ESC_DLY(50),         /* delay 50 ms */
+
+  0x026,		                /* set V0 voltage resistor ratio to 6 (Adafruit Value, no info from LM6063 Manual) */
+  
+  0x0a6,                           /* display normal, bit val 0: LCD pixel off. */
+  
+  0x081,		                /* set contrast */
+  0x018,		                /* contrast value*/
+  
+  /*0x0ac,*/		                /* indicator */
+  /*0x000,*/		                /* disable */
+  
   0x0af,		                /* display on */
 
   U8G_ESC_DLY(100),       /* delay 100 ms */

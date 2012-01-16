@@ -904,24 +904,24 @@ u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y)
 
 u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g, u8g_uint_t y)
 {
-  y += (u8g_uint16_t)(u8g_int16_t)(u8g->descent);
+  y += (u8g_uint_t)(u8g_int_t)(u8g->font_ref_descent);
   return y;
 }
 
 u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g, u8g_uint_t y)
 {
-  y += (u8g_uint16_t)(u8g_int16_t)(u8g->ascent);
+  y += (u8g_uint_t)(u8g_int_t)(u8g->font_ref_ascent);
   return y;
 }
 
 u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g, u8g_uint_t y)
 {
   int8_t tmp;
-  tmp = u8g->ascent;
-  tmp += u8g->descent;
+  tmp = u8g->font_ref_ascent;
+  tmp += u8g->font_ref_descent;
   tmp /= 2;
-  tmp += u8g->descent;  
-  y += (u8g_uint16_t)(u8g_int16_t)(tmp);
+  tmp += u8g->font_ref_descent;  
+  y += (u8g_uint_t)(u8g_int_t)(tmp);
   return y;
 }
 
