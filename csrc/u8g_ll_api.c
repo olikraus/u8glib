@@ -131,10 +131,14 @@ static void u8g_init_data(u8g_t *u8g)
   u8g->cursor_encoding = 34;
   u8g->cursor_fn = (u8g_draw_cursor_fn)0;
 
-  u8g_SetColorIndex(u8g, 1);
-
   for( i = 0; i < U8G_PIN_LIST_LEN; i++ )
     u8g->pin_list[i] = U8G_PIN_NONE;
+
+  u8g_SetColorIndex(u8g, 1);
+
+  u8g_SetFontPosBaseline(u8g);
+  u8g->font_ref_ascent = 0;
+  u8g->font_ref_descent = 0;
 }
 
 uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)

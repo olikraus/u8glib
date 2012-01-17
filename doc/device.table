@@ -79,6 +79,25 @@ HW SPI
 <tt>U8GLIB_DOGM128(cs, a0 [, reset])</tt>
 ::
 :Display/Size
+LM6063, 128x64
+:Mode
+BW
+:Page Size
+128 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7565_lm6063_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_LM6063(sck, mosi, cs, a0 [, reset])</tt>
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7565_lm6063_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_LM6063(cs, a0 [, reset])</tt>
+::
+:Display/Size
 DOGM132, 132x32
 :Mode
 BW

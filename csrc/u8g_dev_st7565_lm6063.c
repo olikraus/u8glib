@@ -40,6 +40,7 @@
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
+#ifdef OLD_ADAFRUIT_CODE
 u8g_pgm_uint8_t OLD_u8g_dev_st7565_lm6063_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
@@ -69,6 +70,7 @@ u8g_pgm_uint8_t OLD_u8g_dev_st7565_lm6063_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
 };
+#endif
 
 /* init sequence from https://github.com/adafruit/ST7565-LCD/blob/master/ST7565/ST7565.cpp */
 u8g_pgm_uint8_t u8g_dev_st7565_lm6063_init_seq[] = {
@@ -77,8 +79,8 @@ u8g_pgm_uint8_t u8g_dev_st7565_lm6063_init_seq[] = {
   U8G_ESC_CS(1),             /* enable chip */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
 
-  0x0a3,		                /* 0x0a2: LCD bias 1/9 (suggested for the LM6063), 0x0a3: Used by Adafruit */
-  0x0a0,		                /* 0x0a1: ADC set to reverse (suggested for the LM6063), 0x0a0: Used by Adafruit -> normal mode */
+  0x0a2,		                /* 0x0a2: LCD bias 1/9 (suggested for the LM6063), 0x0a3: Used by Adafruit */
+  0x0a1,		                /* 0x0a1: ADC set to reverse (suggested for the LM6063), 0x0a0: Used by Adafruit -> normal mode */
   0x0c0,                            /* common output mode: set scan direction normal operation/SHL Select */
   0x040,		                /* set display start line */
   

@@ -742,6 +742,9 @@ u8g_uint_t u8g_DrawStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
 {
   u8g_uint_t t = 0;
   int8_t d;
+  
+  y = u8g->font_calc_vref(u8g, y);
+  
   while( *s != '\0' )
   {
     d = u8g_DrawGlyph(u8g, x, y, *s);
@@ -902,29 +905,51 @@ u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y)
   return y;
 }
 
+void u8g_SetFontPosBaseline(u8g_t *u8g)
+{
+  u8g->font_calc_vref = u8g_font_calc_vref_font;
+}
+
+
 u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g, u8g_uint_t y)
 {
   y += (u8g_uint_t)(u8g_int_t)(u8g->font_ref_descent);
   return y;
 }
 
+void u8g_SetFontPosBottom(u8g_t *u8g)
+{
+  u8g->font_calc_vref = u8g_font_calc_vref_bottom;
+}
+
 u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g, u8g_uint_t y)
 {
+  /* reference pos is one pixel above the upper edge of the reference glyph */
   y += (u8g_uint_t)(u8g_int_t)(u8g->font_ref_ascent);
+  y++;
   return y;
+}
+
+void u8g_SetFontPosTop(u8g_t *u8g)
+{
+  u8g->font_calc_vref = u8g_font_calc_vref_top;
 }
 
 u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g, u8g_uint_t y)
 {
   int8_t tmp;
   tmp = u8g->font_ref_ascent;
-  tmp += u8g->font_ref_descent;
+  tmp -= u8g->font_ref_descent;
   tmp /= 2;
   tmp += u8g->font_ref_descent;  
   y += (u8g_uint_t)(u8g_int_t)(tmp);
   return y;
 }
 
+void u8g_SetFontPosCenter(u8g_t *u8g)
+{
+  u8g->font_calc_vref = u8g_font_calc_vref_center;
+}
 
 
 /*========================================================================*/
@@ -1095,5 +1120,8 @@ void u8g_GetStrAMinBox(u8g_t *u8g, const char *s, u8g_uint_t *x, u8g_uint_t *y, 
 void u8g_SetFont(u8g_t *u8g, const u8g_fntpgm_uint8_t  *font)
 {
   u8g->font = font;
+  u8g->font_ref_ascent = 0;
+  u8g->font_ref_descent = 0;
+  u8g_SetFontPosBaseline(u8g);
 }
 

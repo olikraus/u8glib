@@ -250,6 +250,7 @@ typedef uint8_t (*u8g_dev_fnptr)(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
 typedef uint8_t (*u8g_com_fnptr)(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
 
 
+
 struct _u8g_dev_t
 {
   u8g_dev_fnptr dev_fn;         /* device procedure */
@@ -357,7 +358,13 @@ uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 /*===============================================================*/
 /* u8g_ll_api.c */
 
+/* cursor draw callback */
 typedef void (*u8g_draw_cursor_fn)(u8g_t *u8g);
+
+/* vertical reference point calculation callback */
+typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g, u8g_uint_t y);
+
+
 
 /* PI = Pin Index */
 
@@ -420,6 +427,7 @@ struct _u8g_t
   uint8_t glyph_width;
   uint8_t glyph_height;
   
+  u8g_font_calc_vref_fnptr font_calc_vref;
   int8_t font_ref_ascent;
   int8_t font_ref_descent;
   
@@ -507,6 +515,17 @@ u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm
 
 void u8g_SetRefHeightText(u8g_t *u8g);
 void u8g_SetRefHeightAll(u8g_t *u8g);
+
+u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y);
+u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g, u8g_uint_t y);
+u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g, u8g_uint_t y);
+u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g, u8g_uint_t y);
+
+void u8g_SetFontPosBaseline(u8g_t *u8g);
+void u8g_SetFontPosBottom(u8g_t *u8g);
+void u8g_SetFontPosTop(u8g_t *u8g);
+void u8g_SetFontPosCenter(u8g_t *u8g);
+
 
 u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s);
 
