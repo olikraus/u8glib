@@ -46,7 +46,7 @@ void u8g_pb8v1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_
 void u8g_pb8v1_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel) U8G_NOINLINE ;
 void u8g_pb8v1_Set8PixelStd(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel) U8G_NOINLINE;
 
-
+/* Obsolete, usually set by the init of the structure */
 void u8g_pb8v1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
 {
   b->buf = buf;

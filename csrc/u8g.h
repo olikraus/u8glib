@@ -104,6 +104,7 @@ typedef struct _u8g_box_t u8g_box_t;
 
 /* Size: 128x64 SDL, u8g_dev_sdl.c */
 extern u8g_dev_t u8g_dev_sdl_1bit;
+extern u8g_dev_t u8g_dev_sdl_1bit_h;
 extern u8g_dev_t u8g_dev_sdl_2bit;
 int u8g_sdl_get_key(void);
 

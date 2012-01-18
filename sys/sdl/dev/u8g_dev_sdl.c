@@ -193,6 +193,44 @@ uint8_t u8g_dev_sdl_1bit_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
 
+uint8_t u8g_dev_sdl_1bit_h_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_sdl_init();
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_FIRST:
+      u8g_sdl_start();
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        uint8_t i, j;
+        uint8_t page_height;
+        page_height = pb->p.page_y1;
+        page_height -= pb->p.page_y0;
+        page_height++;
+        for( j = 0; j < page_height; j++ )
+        {
+          for( i = 0; i < WIDTH; i++ )
+          {
+            if ( (   ((uint8_t *)(pb->buf))[i/8+j*WIDTH/8] & (1<<(i&7))) != 0 )
+              u8g_sdl_set_pixel(i, j+pb->p.page_y0, 3);
+          }
+        }
+      }
+      /* update all */
+      /* http://www.libsdl.org/cgi/docwiki.cgi/SDL_UpdateRect */
+      SDL_UpdateRect(u8g_sdl_screen, 0,0,0,0);
+      break;    /* continue to base fn */
+  }
+  return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
+}
+
 uint8_t u8g_dev_sdl_2bit_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   
@@ -234,4 +272,5 @@ uint8_t u8g_dev_sdl_2bit_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 }
 
 U8G_PB_DEV(u8g_dev_sdl_1bit, WIDTH, HEIGHT, 8, u8g_dev_sdl_1bit_fn, NULL);
+U8G_PB_DEV(u8g_dev_sdl_1bit_h, WIDTH, HEIGHT, 8, u8g_dev_sdl_1bit_h_fn, NULL);
 U8G_PB_DEV(u8g_dev_sdl_2bit, WIDTH, HEIGHT, 4, u8g_dev_sdl_2bit_fn, NULL);
