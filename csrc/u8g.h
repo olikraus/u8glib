@@ -354,6 +354,9 @@ uint8_t u8g_dev_pb8v1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 /* u8g_pb8v2.c */
 uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
+/* u8g_pb8h1.c */
+uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+
 
 /*===============================================================*/
 /* u8g_ll_api.c */
