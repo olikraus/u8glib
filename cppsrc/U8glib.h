@@ -156,6 +156,17 @@ class U8GLIB_LM6063 : public U8GLIB
       { }
 };
 
+class U8GLIB_ST7920_128X64 : public U8GLIB 
+{
+  public:
+    U8GLIB_ST7920_128X64(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_st7920_128x64_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_ST7920_128X64(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_st7920_128x64_hw_spi, cs, a0, reset)
+      { }
+};
+
 class U8GLIB_DOGXL160_BW : public U8GLIB 
 {
   public:
