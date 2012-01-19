@@ -413,6 +413,9 @@ typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g, u8g_uint_t y);
 
 #define U8G_PIN_NONE 255
 
+#define U8G_FONT_HEIGHT_MODE_TEXT 0
+#define U8G_FONT_HEIGHT_MODE_ALL 1
+
 struct _u8g_t
 {
   u8g_uint_t width;
@@ -436,6 +439,7 @@ struct _u8g_t
   uint8_t glyph_height;
   
   u8g_font_calc_vref_fnptr font_calc_vref;
+  uint8_t font_height_mode;
   int8_t font_ref_ascent;
   int8_t font_ref_descent;
   

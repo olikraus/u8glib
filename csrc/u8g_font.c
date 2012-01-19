@@ -884,17 +884,34 @@ u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t di
 /*========================================================================*/
 /* set ascent/descent for reference point calculation */
 
+void u8g_UpdateRefHeight(u8g_t *u8g)
+{
+  if ( u8g->font == NULL )
+    return;
+  if ( u8g->font_height_mode == U8G_FONT_HEIGHT_MODE_TEXT )
+  {
+    u8g->font_ref_ascent = u8g_font_GetCapitalAHeight(u8g->font);
+    u8g->font_ref_descent = u8g_font_GetLowerGDescent(u8g->font);
+  }
+  else
+  {
+    u8g->font_ref_ascent = u8g_font_GetFontAscent(u8g->font);
+    u8g->font_ref_descent = u8g_font_GetFontDescent(u8g->font);
+  }
+}
+
 void u8g_SetRefHeightText(u8g_t *u8g)
 {
-  u8g->font_ref_ascent = u8g_font_GetCapitalAHeight(u8g->font);
-  u8g->font_ref_descent = u8g_font_GetLowerGDescent(u8g->font);
+  u8g->font_height_mode = U8G_FONT_HEIGHT_MODE_TEXT;
+  u8g_UpdateRefHeight(u8g);
 }
 
 void u8g_SetRefHeightAll(u8g_t *u8g)
 {
-  u8g->font_ref_ascent = u8g_font_GetFontAscent(u8g->font);
-  u8g->font_ref_descent = u8g_font_GetFontDescent(u8g->font);
+  u8g->font_height_mode = U8G_FONT_HEIGHT_MODE_ALL;
+  u8g_UpdateRefHeight(u8g);
 }
+
 
 
 /*========================================================================*/
@@ -1120,8 +1137,7 @@ void u8g_GetStrAMinBox(u8g_t *u8g, const char *s, u8g_uint_t *x, u8g_uint_t *y, 
 void u8g_SetFont(u8g_t *u8g, const u8g_fntpgm_uint8_t  *font)
 {
   u8g->font = font;
-  u8g->font_ref_ascent = 0;
-  u8g->font_ref_descent = 0;
+  u8g_UpdateRefHeight(u8g);
   u8g_SetFontPosBaseline(u8g);
 }
 
