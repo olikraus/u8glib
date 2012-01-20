@@ -449,6 +449,9 @@ struct _u8g_t
   uint8_t pin_list[U8G_PIN_LIST_LEN];
 };
 
+#define u8g_GetFontAscent(u8g) ((u8g)->font_ref_ascent)
+#define u8g_GetFontDescent(u8g) ((u8g)->font_ref_descent)
+
 uint8_t u8g_call_dev_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 uint8_t u8g_InitLL(u8g_t *u8g, u8g_dev_t *dev);

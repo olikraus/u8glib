@@ -70,14 +70,16 @@ void draw_common_simple(u8g_t *u8g, u8g_uint_t ox, u8g_uint_t oy, u8g_uint_t w, 
 
 }
 
-void draw_v_measure(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t h)
+void draw_v_measure(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, int h)
 {
   char buf[20];
+  sprintf(buf, "%d", h);
+  if ( h < 0 )
+    h = -h;
   u8g_SetFont(u8g, u8g_font_6x10);
   u8g_DrawHLine(u8g, x-1, y, 3);
   u8g_DrawHLine(u8g, x-1, y+h-1, 3);
   u8g_DrawVLine(u8g, x, y, h);
-  sprintf(buf, "%d", h);
   u8g_DrawStr(u8g, x+2, y+(h-1)/2+4, buf);
 }
 
@@ -90,6 +92,17 @@ void draw_h_measure(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w)
   u8g_DrawHLine(u8g, x, y, w);
   sprintf(buf, "%d", w);
   u8g_DrawStr(u8g, x+(w-1)/2-5, y+9, buf);
+}
+
+void draw_dotted_hline(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w)
+{
+  u8g_uint_t d = 5;
+  while( w >= d )
+  {
+    u8g_DrawPixel(u8g, x,y);
+    w -= d;
+    x += d;
+  }
 }
 
 
@@ -135,6 +148,53 @@ void draw_text_abc(u8g_t *u8g)
   u8g_DrawStr(u8g, ox+0-51, oy+20+4, "(0,20)");
   u8g_SetCursorStyle(u8g, 144);
   u8g_SetCursorPos(u8g, ox+0, oy+20);
+  u8g_DrawCursor(u8g);
+}
+
+void draw_ascent(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_10x20);
+  u8g_DrawStr(u8g, ox+5, oy+20, "ABCdefg");  
+  
+  draw_v_measure(u8g, ox+80, oy+20-u8g_GetFontAscent(u8g), u8g_GetFontAscent(u8g));
+  draw_dotted_hline(u8g, ox+5, oy+20, 75);
+
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+5-51, oy+20+4, "(5,20)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+5, oy+20);
+  u8g_DrawCursor(u8g);
+}
+
+void draw_descent(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_10x20);
+  u8g_DrawStr(u8g, ox+5, oy+20, "ABCdefg");  
+  
+  draw_v_measure(u8g, ox+80, oy+20, u8g_GetFontDescent(u8g));
+
+  draw_dotted_hline(u8g, ox+5, oy+20, 75);
+
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+5-51, oy+20+4, "(5,20)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+5, oy+20);
   u8g_DrawCursor(u8g);
 }
 
@@ -525,6 +585,10 @@ int main(void)
   create_picture(draw_pixel, "pixel");
   create_picture(draw_bitmap, "bitmap");
   create_picture(draw_clear_pixel, "clear_pixel");  
+  
+  create_picture(draw_ascent, "ascent");  
+  create_picture(draw_descent, "descent");  
+  
   create_picture(draw_minbox_abcdefg, "minbox_abcdefg");
   create_picture(draw_minbox_ace, "minbox_ace");
 
