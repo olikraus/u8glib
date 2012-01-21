@@ -10,3 +10,8 @@ cp rot90.png ../../../wiki/descpic/.
 cp pl_full.png ../../../wiki/descpic/.
 cp pl_upper.png ../../../wiki/descpic/.
 cp pl_lower.png ../../../wiki/descpic/.
+cp ascent.png ../../../wiki/descpic/.
+cp descent.png ../../../wiki/descpic/.
+cp abc_top.png ../../../wiki/descpic/.
+cp height_all.png ../../../wiki/descpic/.
+cp height_text.png ../../../wiki/descpic/.

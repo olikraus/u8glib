@@ -900,13 +900,13 @@ void u8g_UpdateRefHeight(u8g_t *u8g)
   }
 }
 
-void u8g_SetRefHeightText(u8g_t *u8g)
+void u8g_SetFontRefHeightText(u8g_t *u8g)
 {
   u8g->font_height_mode = U8G_FONT_HEIGHT_MODE_TEXT;
   u8g_UpdateRefHeight(u8g);
 }
 
-void u8g_SetRefHeightAll(u8g_t *u8g)
+void u8g_SetFontRefHeightAll(u8g_t *u8g)
 {
   u8g->font_height_mode = U8G_FONT_HEIGHT_MODE_ALL;
   u8g_UpdateRefHeight(u8g);

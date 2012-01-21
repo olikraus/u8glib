@@ -103,11 +103,13 @@ class U8GLIB
     u8g_uint_t drawStr180P(u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s) { return u8g_DrawStr180P(&u8g, x, y, s); }
     u8g_uint_t drawStr270P(u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s) { return u8g_DrawStr270P(&u8g, x, y, s); }
     
-    void setFontPosBaseline(void) { u8g_SetFontPosBaseline(u8g_t *u8g); }
-    void setFontPosBottom(void) { u8g_SetFontPosBottom(u8g_t *u8g); }
-    void setFontPosTop(void) { u8g_SetFontPosTop(u8g_t *u8g); }
-    void setFontPosCenter(void) { u8g_SetFontPosCenter(u8g_t *u8g); }
+    void setFontPosBaseline(void) { u8g_SetFontPosBaseline(&u8g); }
+    void setFontPosBottom(void) { u8g_SetFontPosBottom(&u8g); }
+    void setFontPosCenter(void) { u8g_SetFontPosCenter(&u8g); }
+    void setFontPosTop(void) { u8g_SetFontPosTop(&u8g); }
 
+    void setFontRefHeightText(void) { u8g_SetFontRefHeightText(&u8g); }
+    void setFontRefHeightAll(void) { u8g_SetFontRefHeightAll(&u8g); }
     
     /* cursor handling */
     void setCursorFont(const u8g_pgm_uint8_t *cursor_font) { u8g_SetCursorFont(&u8g, cursor_font); }

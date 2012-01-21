@@ -528,8 +528,8 @@ u8g_uint_t u8g_DrawStr180P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm
 u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
 
 
-void u8g_SetRefHeightText(u8g_t *u8g);
-void u8g_SetRefHeightAll(u8g_t *u8g);
+void u8g_SetFontRefHeightText(u8g_t *u8g);
+void u8g_SetFontRefHeightAll(u8g_t *u8g);
 
 u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y);
 u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g, u8g_uint_t y);
@@ -538,8 +538,8 @@ u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g, u8g_uint_t y);
 
 void u8g_SetFontPosBaseline(u8g_t *u8g);
 void u8g_SetFontPosBottom(u8g_t *u8g);
-void u8g_SetFontPosTop(u8g_t *u8g);
 void u8g_SetFontPosCenter(u8g_t *u8g);
+void u8g_SetFontPosTop(u8g_t *u8g);
 
 
 u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s);

@@ -151,6 +151,30 @@ void draw_text_abc(u8g_t *u8g)
   u8g_DrawCursor(u8g);
 }
 
+void draw_text_abc_top(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_osb18);
+  u8g_SetFontPosTop(u8g);
+  u8g_DrawStr(u8g, ox+0, oy+20, "ABC");  
+  u8g_SetFontPosBaseline(u8g);
+  
+  draw_v_measure(u8g, ox+56, oy+2+18+1, 18);
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+0-51, oy+20+4, "(0,20)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+0, oy+20);
+  u8g_DrawCursor(u8g);
+}
+
 void draw_ascent(u8g_t *u8g)
 {
   u8g_uint_t ox, oy, w, h;
@@ -173,6 +197,56 @@ void draw_ascent(u8g_t *u8g)
   u8g_SetCursorPos(u8g, ox+5, oy+20);
   u8g_DrawCursor(u8g);
 }
+
+void draw_height_text(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_gdr25);
+  u8g_DrawStr(u8g, ox+5, oy+40, "(ABC)");  
+  
+  draw_v_measure(u8g, ox+100, oy+40-u8g_GetFontAscent(u8g), u8g_GetFontAscent(u8g));
+  draw_dotted_hline(u8g, ox+5, oy+40, 95);
+
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+5-51, oy+40+4, "(5,40)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+5, oy+40);
+  u8g_DrawCursor(u8g);
+}
+
+void draw_height_all(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_gdr25);
+  u8g_SetFontRefHeightAll(u8g);
+  u8g_DrawStr(u8g, ox+5, oy+40, "(ABC)");  
+  
+  draw_v_measure(u8g, ox+100, oy+40-u8g_GetFontAscent(u8g), u8g_GetFontAscent(u8g));
+  draw_dotted_hline(u8g, ox+5, oy+40, 95);
+
+  u8g_SetFontRefHeightText(u8g);
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+5-51, oy+40+4, "(5,40)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+5, oy+40);
+  u8g_DrawCursor(u8g);
+}
+
 
 void draw_descent(u8g_t *u8g)
 {
@@ -579,6 +653,12 @@ int main(void)
   create_picture(draw_display, "display");
   create_picture(draw_text_abc, "text_abc");
   create_picture(draw_abc_left, "abc_left");
+  create_picture(draw_text_abc_top, "abc_top");
+  
+  
+  create_picture(draw_height_text, "height_text");
+  create_picture(draw_height_all, "height_all");
+  
   create_picture(draw_rotate_b, "rotate_b");
   create_picture(draw_box, "box");
   create_picture(draw_frame, "frame");
