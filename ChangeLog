@@ -19,3 +19,7 @@ u8glib ChangeLog
   * LM6063 support (update)
 2012-01-19      v0.08   Oliver Kraus <olikraus@gmail.com>
   * ST7920 beta device
+2012-01-21      v0.09   Oliver Kraus <olikraus@gmail.com>
+  * ST7920 fixed (192x32)
+  * fixed bug in com layer if pins are none
+  * str reference position
