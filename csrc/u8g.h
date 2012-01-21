@@ -135,7 +135,7 @@ extern u8g_dev_t u8g_dev_st7565_lm6063_hw_spi;
 /* dfrobot 128x64 Graphic LCD (SKU:FIT0021) */
 extern u8g_dev_t u8g_dev_st7920_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_hw_spi;
-
+extern u8g_dev_t u8g_dev_st7920_128x64_8bit;
 
 /* Display: EA DOGXL160, Size: 160x104 monochrom & gray level */
 extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_sw_spi;

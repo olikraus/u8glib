@@ -30,9 +30,11 @@ int main(void)
   do
   {
     u8g_SetColorIndex(&u8g, 1);
+    u8g_DrawPixel(&u8g,0,0);
+    u8g_DrawPixel(&u8g,0,1);
     u8g_SetFont(&u8g, u8g_font_10x20);
     //u8g_SetFont(&u8g, u8g_font_gdb17);
-    u8g_SetRefHeightText(&u8g);
+    u8g_SetFontRefHeightText(&u8g);
     //u8g_SetRefHeightAll(&u8g);
     
     //u8g_SetFontPosBaseline(&u8g);

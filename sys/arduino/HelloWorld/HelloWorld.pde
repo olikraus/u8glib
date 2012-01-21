@@ -49,6 +49,7 @@
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_ST7920_128X64 u8g(13, 11, 10, 9);                  // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_ST7920_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
 //U8GLIB_LM6063 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGXL160_BW u8g(13, 11, 10, 9);            // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGXL160_GR u8g(13, 11, 10, 9);             // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
@@ -59,6 +60,8 @@
 void draw(void) {
   // graphic commands to redraw the complete screen should be placed here  
   u8g.setFont(u8g_font_unifont);
+  u8g.drawPixel(0,0);
+  u8g.drawPixel(0,0);
   u8g.drawStr( 0, 20, "Hello World!");
 }
 
@@ -75,6 +78,6 @@ void loop(void) {
   } while( u8g.nextPage() );
   
   // rebuild the picture after some delay
-  delay(1000);
+  delay(500);
 }
 

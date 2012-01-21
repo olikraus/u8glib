@@ -38,6 +38,7 @@
 
 #include "u8g.h"
 
+/*
 void u8g_pb_Clear(u8g_pb_t *b)
 {
   uint8_t *ptr = (uint8_t *)b->buf;
@@ -47,6 +48,18 @@ void u8g_pb_Clear(u8g_pb_t *b)
   {
     *ptr++ = 0;
   } while( ptr != end_ptr );
+}
+*/
+
+void u8g_pb_Clear(u8g_pb_t *b)
+{
+  uint8_t *ptr = (uint8_t *)b->buf;
+  uint8_t cnt = b->width;
+  do
+  {
+    *ptr++ = 0;
+    cnt--;
+  } while( cnt != 0 );
 }
 
 /*

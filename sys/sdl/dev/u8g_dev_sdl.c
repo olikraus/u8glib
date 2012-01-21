@@ -218,7 +218,7 @@ uint8_t u8g_dev_sdl_1bit_h_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
         {
           for( i = 0; i < WIDTH; i++ )
           {
-            if ( (   ((uint8_t *)(pb->buf))[i/8+j*WIDTH/8] & (1<<(i&7))) != 0 )
+            if ( (   ((uint8_t *)(pb->buf))[i/8+j*WIDTH/8] & (128>>(i&7))) != 0 )
               u8g_sdl_set_pixel(i, j+pb->p.page_y0, 3);
           }
         }

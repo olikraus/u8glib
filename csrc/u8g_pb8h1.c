@@ -69,8 +69,8 @@ void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_
   tmp *= (uint8_t)y;
   ptr += tmp;
   
-  mask = 1;
-  mask <<= x & 7;
+  mask = 0x080;
+  mask >>= x & 7;
   x >>= 3;
   ptr += x;
   if ( color_index )
@@ -151,7 +151,7 @@ uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
         u8g_pb8h1_Set8PixelOpt2(pb, (u8g_dev_arg_pixel_t *)arg);
       break;
     case U8G_DEV_MSG_SET_PIXEL:
-        u8g_pb8h1_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);
+      u8g_pb8h1_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);
       break;
     case U8G_DEV_MSG_INIT:
       break;
