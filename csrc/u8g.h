@@ -137,6 +137,11 @@ extern u8g_dev_t u8g_dev_st7920_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_8bit;
 
+/* NHD-19232WG */
+extern u8g_dev_t u8g_dev_st7920_192x32_sw_spi;
+extern u8g_dev_t u8g_dev_st7920_192x32_hw_spi;
+extern u8g_dev_t u8g_dev_st7920_192x32_8bit;
+
 /* Display: EA DOGXL160, Size: 160x104 monochrom & gray level */
 extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_sw_spi;
 extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_hw_spi;

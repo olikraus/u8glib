@@ -117,6 +117,58 @@ HW SPI
 <tt>U8GLIB_DOGM132(cs, a0 [, reset])</tt>
 ::
 :Controller
+ST7920
+:Display/Size
+128x64
+:Mode
+BW
+:Page Size
+128 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7920_128x64_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64(sck, mosi, cs, a0 [, reset])</tt>
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7920_128x64_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64(cs, a0 [, reset])</tt>
+:Com
+8 Bit
+:Device
+<tt>u8g_dev_st7920_128x64_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+::
+:Display/Size
+192x32
+:Mode
+BW
+:Page Size
+192 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7920_192x32_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32(sck, mosi, cs, a0 [, reset])</tt>
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7920_192x32_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32(cs, a0 [, reset])</tt>
+:Com
+8 Bit
+:Device
+<tt>u8g_dev_st7920_192x32_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+::
+:Controller
 UC1610
 :Display/Size
 DOGXL160, 160x104
