@@ -1,6 +1,6 @@
 /*
 
-  u8g_dev_st7565_lm6063.c
+  u8g_dev_st7565_lm6059.c (Adafruit display)
 
   Universal 8bit Graphics Library
   
@@ -40,48 +40,17 @@
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
-#ifdef OLD_ADAFRUIT_CODE
-u8g_pgm_uint8_t OLD_u8g_dev_st7565_lm6063_init_seq[] = {
-  U8G_ESC_CS(0),             /* disable chip */
-  U8G_ESC_ADR(0),           /* instruction mode */
-  U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
-  U8G_ESC_CS(1),             /* enable chip */
-  
-  0x040,		                /* set display start line */
-  0x0a1,		                /* ADC set to reverse */
-  0x0c8,		                /* common output mode: set scan direction normal operation/SHL Select / 17 Jan: seems to be a bug, must be 0x0c0 */
-  0x0a6,                           /* display normal, bit val 0: LCD pixel off. */
-  0x0a2,		                /* LCD bias 1/9 */
-  0x02f,		                /* all power  control circuits on */
-  /*0x0f8,*/		                /* set booster ratio to */
-  /*0x000,	*/	                /* 4x */
-  /*0x027,*/		                /* set V0 voltage resistor ratio to large */
-  0x081,		                /* set contrast */
-  0x018,		                /* contrast value*/
-  0x0ac,		                /* indicator */
-  0x000,		                /* disable */
-  0x0af,		                /* display on */
-
-  U8G_ESC_DLY(100),       /* delay 100 ms */
-  0x0a5,		                /* display all points, ST7565 */
-  U8G_ESC_DLY(100),       /* delay 100 ms */
-  U8G_ESC_DLY(100),       /* delay 100 ms */
-  0x0a4,		                /* normal display */
-  U8G_ESC_CS(0),             /* disable chip */
-  U8G_ESC_END                /* end of sequence */
-};
-#endif
-
 /* init sequence from https://github.com/adafruit/ST7565-LCD/blob/master/ST7565/ST7565.cpp */
-u8g_pgm_uint8_t u8g_dev_st7565_lm6063_init_seq[] = {
+u8g_pgm_uint8_t u8g_dev_st7565_lm6059_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
 
   0x0a2,		                /* 0x0a2: LCD bias 1/9 (suggested for the LM6063), 0x0a3: Used by Adafruit */
-  0x0a1,		                /* 0x0a1: ADC set to reverse (suggested for the LM6063), 0x0a0: Used by Adafruit -> normal mode */
-  0x0c0,                            /* common output mode: set scan direction normal operation/SHL Select, 0x0c0 --> SHL = 0, normal, 0x0c8 --> SHL = 1 */
+  /* the LM6059 vs LM6063, ADC and SHL have inverted settings */
+  0x0a0,		                /* 0x0a1: ADC set to normal (suggested for the LM6059), 0x0a0: Used by Adafruit -> normal mode */
+  0x0c8,                            /* common output mode: set scan direction normal operation/SHL Select, 0x0c0 --> SHL = 0, normal, 0x0c8 --> SHL = 1 */
   0x040,		                /* set display start line */
   
   0x028 | 0x04,                 /* power control: turn on voltage converter */
@@ -114,7 +83,7 @@ u8g_pgm_uint8_t u8g_dev_st7565_lm6063_init_seq[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
-u8g_pgm_uint8_t u8g_dev_st7565_lm6063_data_start[] = {
+u8g_pgm_uint8_t u8g_dev_st7565_lm6059_data_start[] = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
   0x010,		/* set upper 4 bit of the col adr to 0 */
@@ -122,20 +91,20 @@ u8g_pgm_uint8_t u8g_dev_st7565_lm6063_data_start[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
-uint8_t u8g_dev_st7565_lm6063_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_st7565_lm6059_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_lm6063_init_seq);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_lm6059_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-        u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_lm6063_data_start);    
+        u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_lm6059_data_start);    
         u8g_WriteByte(u8g, dev, 0x0b0 | pb->p.page); /* select current page (ST7565R) */
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
         if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
@@ -147,7 +116,7 @@ uint8_t u8g_dev_st7565_lm6063_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_st7565_lm6063_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_lm6063_fn, u8g_com_arduino_sw_spi_fn);
-U8G_PB_DEV(u8g_dev_st7565_lm6063_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_lm6063_fn, u8g_com_arduino_hw_spi_fn);
+U8G_PB_DEV(u8g_dev_st7565_lm6059_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_lm6059_fn, u8g_com_arduino_sw_spi_fn);
+U8G_PB_DEV(u8g_dev_st7565_lm6059_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_lm6059_fn, u8g_com_arduino_hw_spi_fn);
 
 

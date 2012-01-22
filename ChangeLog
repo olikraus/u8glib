@@ -23,3 +23,6 @@ u8glib ChangeLog
   * ST7920 fixed (192x32)
   * fixed bug in com layer if pins are none
   * str reference position
+2012-01-22      v0.10   Oliver Kraus <olikraus@gmail.com>
+  * Experimental LM6059 
+  

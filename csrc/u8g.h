@@ -131,6 +131,9 @@ extern u8g_dev_t u8g_dev_st7565_dogm128_hw_spi;
 /* Display: Topway LM6063 128x64 */
 extern u8g_dev_t u8g_dev_st7565_lm6063_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_lm6063_hw_spi;
+/* Display: Topway LM6059 128x64 (Adafruit) */
+extern u8g_dev_t u8g_dev_st7565_lm6059_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_lm6059_hw_spi;
 
 /* dfrobot 128x64 Graphic LCD (SKU:FIT0021) */
 extern u8g_dev_t u8g_dev_st7920_128x64_sw_spi;
