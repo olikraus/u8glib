@@ -25,4 +25,7 @@ u8glib ChangeLog
   * str reference position
 2012-01-22      v0.10   Oliver Kraus <olikraus@gmail.com>
   * Experimental LM6059 
+2012-01-24      v0.11   Oliver Kraus <olikraus@gmail.com>
+  * new st7920 memory layout for 128x64 lcd
+  * experimental st7920 SPI
   
