@@ -137,12 +137,10 @@ extern u8g_dev_t u8g_dev_st7565_lm6059_hw_spi;
 
 /* dfrobot 128x64 Graphic LCD (SKU:FIT0021) */
 extern u8g_dev_t u8g_dev_st7920_128x64_sw_spi;
-extern u8g_dev_t u8g_dev_st7920_128x64_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_8bit;
 
 /* NHD-19232WG */
 extern u8g_dev_t u8g_dev_st7920_192x32_sw_spi;
-extern u8g_dev_t u8g_dev_st7920_192x32_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_192x32_8bit;
 
 /* Display: EA DOGXL160, Size: 160x104 monochrom & gray level */
@@ -250,6 +248,7 @@ uint8_t u8g_com_null_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 uint8_t u8g_com_arduino_std_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);        /* u8g_com_arduino_std_sw_spi.c */
 uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);        /* u8g_com_arduino_sw_spi.c */
 uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);          /* u8g_com_arduino_hw_spi.c */
+uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);  /* u8g_com_arduino_st7920_spi.c */
 uint8_t u8g_com_arduino_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);           /* u8g_com_arduino_parallel.c */
 uint8_t u8g_com_arduino_fast_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_arduino_fast_parallel.c */
 
@@ -407,6 +406,7 @@ typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g, u8g_uint_t y);
 #define U8G_PI_D1 6
 #define U8G_PI_MISO 6
 #define U8G_PI_D2 7
+#define U8G_PI_A0_STATE 7
 #define U8G_PI_D3 8
 #define U8G_PI_D4 9
 #define U8G_PI_D5 10

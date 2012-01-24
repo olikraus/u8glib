@@ -1,6 +1,6 @@
 /*
   
-  u8g_arduino_sw_spi.c
+  u8g_arduino_st7920_spi.c
 
   Universal 8bit Graphics Library
   
@@ -30,7 +30,8 @@
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-  
+
+  A special SPI interface for ST7920 controller
 
 */
 
@@ -91,42 +92,60 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
   } while( cnt != 0 );
 }
 
+static void u8g_com_arduino_st7920_write_byte(uint8_t rs, uint8_t val)
+{
+  if ( rs == 0 )
+  {
+    /* command */
+    u8g_com_arduino_do_shift_out_msb_first(0x0f8);
+  }
+  else
+  {
+    /* data */
+    u8g_com_arduino_do_shift_out_msb_first(0x0fa);
+  }
+  u8g_com_arduino_do_shift_out_msb_first(val & 0x0f0);
+  u8g_com_arduino_do_shift_out_msb_first(val << 4);
+}
 
-uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+
+
+uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   switch(msg)
   {
     case U8G_COM_MSG_INIT:
       u8g_com_arduino_assign_pin_output_high(u8g);
+      u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
       u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
       u8g_com_arduino_digital_write(u8g, U8G_PI_MOSI, LOW);
       u8g_com_arduino_init_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK]);
+      u8g->pin_list[U8G_PI_A0_STATE] = 0;       /* inital RS state: command mode */
       break;
     
     case U8G_COM_MSG_STOP:
       break;
 
     case U8G_COM_MSG_RESET:
-      if ( u8g->pin_list[U8G_PI_RESET] != U8G_PIN_NONE )
-        u8g_com_arduino_digital_write(u8g, U8G_PI_RESET, arg_val);
+      u8g_com_arduino_digital_write(u8g, U8G_PI_RESET, arg_val);
       break;
       
     case U8G_COM_MSG_CHIP_SELECT:
       if ( arg_val == 0 )
       {
-        /* disable */
-        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
+        /* disable, note: the st7920 has an active high chip select */
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
       }
       else
       {
         /* enable */
         u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
-        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
       }
       break;
 
     case U8G_COM_MSG_WRITE_BYTE:
-      u8g_com_arduino_do_shift_out_msb_first( arg_val );
+      u8g_com_arduino_st7920_write_byte( u8g->pin_list[U8G_PI_A0_STATE], arg_val);
       //u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], arg_val);
       break;
     
@@ -135,8 +154,7 @@ uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_arduino_do_shift_out_msb_first(*ptr++);
-          // u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], *ptr++);
+          u8g_com_arduino_st7920_write_byte(u8g->pin_list[U8G_PI_A0_STATE], *ptr++);
           arg_val--;
         }
       }
@@ -147,8 +165,7 @@ uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_arduino_do_shift_out_msb_first( u8g_pgm_read(ptr) );
-          //u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], u8g_pgm_read(ptr));
+          u8g_com_arduino_st7920_write_byte(u8g->pin_list[U8G_PI_A0_STATE], u8g_pgm_read(ptr) );
           ptr++;
           arg_val--;
         }
@@ -156,7 +173,7 @@ uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       break;
       
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      u8g_com_arduino_digital_write(u8g, U8G_PI_A0, arg_val);
+      u8g->pin_list[U8G_PI_A0_STATE] = arg_val;
       break;
   }
   return 1;

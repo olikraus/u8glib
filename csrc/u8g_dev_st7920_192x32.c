@@ -98,8 +98,7 @@ uint8_t u8g_dev_st7920_192x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_st7920_192x32_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, u8g_com_arduino_sw_spi_fn);
-U8G_PB_DEV(u8g_dev_st7920_192x32_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, u8g_com_arduino_hw_spi_fn);
+U8G_PB_DEV(u8g_dev_st7920_192x32_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, u8g_com_arduino_st7920_spi_fn);
 U8G_PB_DEV(u8g_dev_st7920_192x32_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, u8g_com_arduino_parallel_fn);
 
 

@@ -131,12 +131,6 @@ SW SPI
 :C++ Constructor
 <tt>U8GLIB_ST7920_128X64(sck, mosi, cs, a0 [, reset])</tt>
 :Com
-HW SPI
-:Device
-<tt>u8g_dev_st7920_128x64_hw_spi</tt>
-:C++ Constructor
-<tt>U8GLIB_ST7920_128X64(cs, a0 [, reset])</tt>
-:Com
 8 Bit
 :Device
 <tt>u8g_dev_st7920_128x64_8bit</tt>
@@ -155,12 +149,6 @@ SW SPI
 <tt>u8g_dev_st7920_192x32_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_ST7920_192X32(sck, mosi, cs, a0 [, reset])</tt>
-:Com
-HW SPI
-:Device
-<tt>u8g_dev_st7920_192x32_hw_spi</tt>
-:C++ Constructor
-<tt>U8GLIB_ST7920_192X32(cs, a0 [, reset])</tt>
 :Com
 8 Bit
 :Device
