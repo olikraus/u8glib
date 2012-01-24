@@ -968,6 +968,71 @@ void u8g_SetFontPosCenter(u8g_t *u8g)
   u8g->font_calc_vref = u8g_font_calc_vref_center;
 }
 
+/*========================================================================*/
+/* string width calculation */
+
+char u8g_font_get_char(const void *s)
+{
+  return *(const char *)(s);
+}
+
+char u8g_font_get_charP(const void *s)
+{
+  return u8g_pgm_read(s);
+}
+
+typedef char (*u8g_font_get_char_fn)(const void *s);
+
+
+u8g_uint_t u8g_font_calc_str_width(u8g_t *u8g, const char *s, u8g_font_get_char_fn get_char )
+{
+  u8g_uint_t  w;
+  
+  /* reset the total minimal width to zero, this will be expanded during calculation */
+  w = 0;
+    
+  /* check for empty string, width is already 0 */
+  if ( get_char(s) == '\0' )
+  {
+    return w;
+  }
+  
+  /* get the glyph information of the first char. This must be valid, because we already checked for the empty string */
+  /* if *s is not inside the font, then the cached parameters of the glyph are all zero */
+  u8g_GetGlyph(u8g, get_char(s));
+
+  /* strlen(s) == 1:       width = width(s[0]) */
+  /* strlen(s) == 2:       width = - offx(s[0]) + deltax(s[0]) + offx(s[1]) + width(s[1]) */
+  /* strlen(s) == 3:       width = - offx(s[0]) + deltax(s[0]) + deltax(s[1]) + offx(s[2]) + width(s[2]) */
+  
+  /* assume that the string has size 2 or more, than start with negative offset-x */
+  /* for string with size 1, this will be nullified after the loop */
+  w = -u8g->glyph_x;  
+  for(;;)
+  {
+    
+    /* check and stop if the end of the string is reached */
+    s++;
+    if ( *s == '\0' )
+      break;
+    
+    /* if there are still more characters, add the delta to the next glyph */
+    w += u8g->glyph_dx;
+    
+    /* load the next glyph information */
+    u8g_GetGlyph(u8g, get_char(s));
+  }
+  
+  /* finally calculate the width of the last char */
+  /* if g was not updated in the for loop (strlen() == 1), then the initial offset x gets removed */
+  w += u8g->glyph_width;
+  w += u8g->glyph_x;
+  
+  return w;
+}
+
+
+
 
 /*========================================================================*/
 /* calculation of font/glyph/string characteristics */

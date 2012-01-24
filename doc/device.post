@@ -8,5 +8,14 @@
   * SW SPI: Use internal software SPI communication
   * 8Bit: 8 bit parallel communication with {{{digitalWrite}}}
   * 8Bit Fast: 8 bit parallel communication with {{{digitalPinToPort}}} 
-  
+
+ * Pin Names
+  * *sck*: Clock 
+  * *mosi*: Serial data
+  * *cs*, *cs1*, *cs2*: Chip select
+  * *a0*, *di*: Data/instruction  register select
+  * *rw*: Read/write line
+  * *en*: Read/write enable 
+  * *d0* - *d7*: Parallel data
+  * *reset*: Display reset
   
