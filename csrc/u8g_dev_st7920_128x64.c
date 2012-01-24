@@ -93,7 +93,7 @@ uint8_t u8g_dev_st7920_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
           else
           {
                   u8g_WriteByte(u8g, dev, 0x080 | (y-32) );      /* y pos  */
-                  u8g_WriteByte(u8g, dev, 0x080 | 4);      /* set x pos to 64*/
+                  u8g_WriteByte(u8g, dev, 0x080 | 8);      /* set x pos to 64*/
           }
           
           //u8g_WriteByte(u8g, dev, 0x080 | y );      /* y pos  */
