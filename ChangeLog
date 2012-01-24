@@ -28,4 +28,8 @@ u8glib ChangeLog
 2012-01-24      v0.11   Oliver Kraus <olikraus@gmail.com>
   * new st7920 memory layout for 128x64 lcd
   * experimental st7920 SPI
+2012-01-25      v0.12   Oliver Kraus <olikraus@gmail.com>
+  * fixed st7920 memory layout for 128x64 lcd
+  * ST7920 SPI performance improvement
   
+
