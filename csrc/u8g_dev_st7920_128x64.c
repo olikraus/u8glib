@@ -84,8 +84,20 @@ uint8_t u8g_dev_st7920_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
         {
           u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
           u8g_WriteByte(u8g, dev, 0x03e );      /* enable extended mode */
-          u8g_WriteByte(u8g, dev, 0x080 | y );      /* y pos  */
-          u8g_WriteByte(u8g, dev, 0x080  );      /* set x pos to 0*/          
+
+          if ( y < 32 )
+          {
+                  u8g_WriteByte(u8g, dev, 0x080 | y );      /* y pos  */
+                  u8g_WriteByte(u8g, dev, 0x080  );      /* set x pos to 0*/
+          }
+          else
+          {
+                  u8g_WriteByte(u8g, dev, 0x080 | (y-32) );      /* y pos  */
+                  u8g_WriteByte(u8g, dev, 0x080 | 4);      /* set x pos to 64*/
+          }
+          
+          //u8g_WriteByte(u8g, dev, 0x080 | y );      /* y pos  */
+          //u8g_WriteByte(u8g, dev, 0x080  );      /* set x pos to 0*/          
           u8g_SetAddress(u8g, dev, 1);                  /* data mode */
           u8g_WriteSequence(u8g, dev, WIDTH/8, ptr);
           ptr += WIDTH/8;
