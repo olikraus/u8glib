@@ -79,7 +79,7 @@ u8g_pgm_uint8_t u8g_dev_st7565_lm6063_init_seq[] = {
   U8G_ESC_CS(1),             /* enable chip */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
 
-  0x0a2,		                /* 0x0a2: LCD bias 1/9 (suggested for the LM6063), 0x0a3: Used by Adafruit */
+  0x0a3,		                /* 0x0a2: LCD bias 1/9 (suggested for the LM6063), 0x0a3: Used by Adafruit */
   0x0a1,		                /* 0x0a1: ADC set to reverse (suggested for the LM6063), 0x0a0: Used by Adafruit -> normal mode */
   0x0c0,                            /* common output mode: set scan direction normal operation/SHL Select, 0x0c0 --> SHL = 0, normal, 0x0c8 --> SHL = 1 */
   0x040,		                /* set display start line */
