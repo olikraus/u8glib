@@ -1031,7 +1031,10 @@ u8g_uint_t u8g_font_calc_str_width(u8g_t *u8g, const char *s, u8g_font_get_char_
   return w;
 }
 
-
+u8g_uint_t u8g_GetStrPixelWidth(u8g_t *u8g, const char *s)
+{
+  return u8g_font_calc_str_width(u8g, s, u8g_font_get_char);
+}
 
 
 /*========================================================================*/

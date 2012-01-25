@@ -38,7 +38,6 @@
 
 #include "u8g.h"
 
-/*
 void u8g_pb_Clear(u8g_pb_t *b)
 {
   uint8_t *ptr = (uint8_t *)b->buf;
@@ -49,8 +48,9 @@ void u8g_pb_Clear(u8g_pb_t *b)
     *ptr++ = 0;
   } while( ptr != end_ptr );
 }
-*/
 
+/* the following procedure does not work. why? Can be checked with descpic */
+/*
 void u8g_pb_Clear(u8g_pb_t *b)
 {
   uint8_t *ptr = (uint8_t *)b->buf;
@@ -61,6 +61,7 @@ void u8g_pb_Clear(u8g_pb_t *b)
     cnt--;
   } while( cnt != 0 );
 }
+*/
 
 /*
   intersection assumptions:

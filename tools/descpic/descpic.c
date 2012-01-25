@@ -646,6 +646,29 @@ void draw_pl_lower(u8g_t *u8g)
   u8g_DrawBox(u8g, ox, oy+h/2, w, h/2);  
 }
 
+void draw_str_pixel_width(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_osb26);
+  u8g_DrawStr(u8g, ox+3, oy+30, "!AI");
+  
+  draw_h_measure(u8g, ox+3+2, oy+32, u8g_GetStrPixelWidth(u8g, "!AI"));
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+3-51, oy+30+4, "(3,30)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+3, oy+30);
+  u8g_DrawCursor(u8g);
+}
+
+
 int main(void)
 {
   
@@ -677,6 +700,11 @@ int main(void)
   create_picture(draw_pl_upper, "pl_upper");
   
   create_picture(draw_text_abc_rot, "rot0");
+  
+  create_picture(draw_str_pixel_width, "str_pixel_width");
+  
   create_picture_rot90(draw_text_abc_rot90, "rot90");
+  
   return 0;
 }
+
