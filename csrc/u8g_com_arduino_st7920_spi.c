@@ -140,7 +140,7 @@ uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, 
       else
       {
         /* enable */
-        u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
+        //u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
         u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
       }
       break;

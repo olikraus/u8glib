@@ -51,6 +51,7 @@
 #define PIN_CS 10
 
 #else 
+
 #include <Arduino.h> 
 
 /* use Arduino pin definitions */

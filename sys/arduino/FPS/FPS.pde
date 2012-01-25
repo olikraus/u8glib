@@ -1,8 +1,6 @@
 /*
 
-  HelloWorld.pde
-  
-  "Hello World!" example code.
+  FPS.pde
   
   >>> Before compiling: Please remove comment from the constructor of the 
   >>> connected graphics display (see below).
@@ -35,6 +33,11 @@
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+
+  ST7920_192X32, SPI:    FPS: Box=7.6   @=9.8                iFPS: Box=11.4  @=14.7
+  ST7920_192X32, 8Bit:   FPS: Box=6.2   @=7.5                iFPS: Box=9.3 @=11.2
+  DOGM128 SW SPI:         FPS: Box=5.1   @=5.9               iFPS: Box=10.2 @=11.8
+  DOGM128 HW SPI:         FPS: Box=5.5   @=6.3               iFPS: Box=11.0 @=12.6
   
 */
 
@@ -47,7 +50,7 @@
 //U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGM128 u8g(10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_ST7920_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
 //U8GLIB_ST7920_128X64 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
 //U8GLIB_ST7920_192X32 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
@@ -60,10 +63,72 @@
 //U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
 //U8GLIB_KS0108_128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs1=14, cs2=15,di=17,rw=16
 
-void draw(void) {
+#define SECONDS 10
+uint8_t color = 0;
+
+void draw_set_screen(void) {
   // graphic commands to redraw the complete screen should be placed here  
-  u8g.setFont(u8g_font_unifont);
-  u8g.drawStr( 0, 20, "Hello World!");
+  u8g.setColorIndex(color);
+  u8g.drawBox( 0, 0, u8g.getWidth(), u8g.getHeight() );
+}
+
+void draw_char(void) {
+  char buf[2] = "@";
+  u8g_uint_t i, j;
+  // graphic commands to redraw the complete screen should be placed here  
+  u8g.setColorIndex(1);
+  u8g.setFont(u8g_font_6x10);
+  j = 8;
+  for(;;) {
+    i = 0;
+    for(;;) {
+      u8g.drawStr( i, j, buf);
+      i += 8;
+      if ( i > u8g.getWidth() )
+        break;
+    }
+    j += 8;
+    if ( j > u8g.getHeight() )
+      break;
+  }
+}
+
+// returns unadjusted FPS
+uint16_t picture_loop_with_fps(void (*draw_fn)(void)) {
+  uint16_t FPS10 = 0;
+  uint32_t time;
+  
+  time = millis() + SECONDS*1000;
+  
+  // picture loop
+  do {
+    u8g.firstPage();  
+    do {
+      draw_fn();
+    } while( u8g.nextPage() );
+    FPS10++;
+    color = color ^ 1;
+  } while( millis() < time );
+  return FPS10;  
+}
+
+const char *convert_FPS(uint16_t fps) {
+  static char buf[6];
+  strcpy(buf, u8g_u8toa( (uint8_t)(fps/10), 3));
+  buf[3] =  '.';
+  buf[4] = (fps % 10) + '0';
+  buf[5] = '\0';
+  return buf;
+}
+
+void show_result(const char *s, uint16_t fps) {
+  u8g.setColorIndex(1);
+  u8g.setFont(u8g_font_8x13B);
+  u8g.firstPage();  
+  do {
+    u8g.drawStr(0,12, s);
+    u8g.drawStr(0,24, convert_FPS(fps));
+  } while( u8g.nextPage() );
 }
 
 void setup(void) {
@@ -72,13 +137,12 @@ void setup(void) {
 }
 
 void loop(void) {
-  // picture loop
-  u8g.firstPage();  
-  do {
-    draw();
-  } while( u8g.nextPage() );
-  
-  // rebuild the picture after some delay
-  delay(500);
+  uint16_t fps;
+  fps = picture_loop_with_fps(draw_set_screen);
+  show_result("clear screen", fps);
+  delay(5000);
+  fps = picture_loop_with_fps(draw_char);
+  show_result("draw @", fps);
+  delay(5000);
 }
 
