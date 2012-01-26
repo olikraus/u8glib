@@ -36,7 +36,7 @@
 
   ST7920_192X32, SPI:    FPS: Box=7.6   @=9.8                iFPS: Box=11.4  @=14.7
   ST7920_192X32, 8Bit:   FPS: Box=6.2   @=7.5                iFPS: Box=9.3 @=11.2
-  DOGM128 SW SPI:         FPS: Box=5.1   @=5.9               iFPS: Box=10.2 @=11.8
+  DOGM128 SW SPI:         FPS: Box=5.1   @=5.9  Pix=2.6               iFPS: Box=10.2 @=11.8 Pix=5.2
   DOGM128 HW SPI:         FPS: Box=5.5   @=6.3               iFPS: Box=11.0 @=12.6
   DOGXL160 SW SPI:         FPS: Box=1.7   @=1.9               iFPS: Box=6.9 @=7.7
   DOGXL160 HW SPI:         FPS: Box=1.8   @=2.1               
@@ -59,7 +59,7 @@
 //U8GLIB_ST7920_192X32 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
 //U8GLIB_LM6059 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_LM6063 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-U8GLIB_DOGXL160_BW u8g(10, 9);            // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGXL160_BW u8g(10, 9);            // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGXL160_GR u8g(13, 11, 10, 9);             // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_PCD8544 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
 //U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
@@ -92,6 +92,25 @@ void draw_char(void) {
     j += 8;
     if ( j > u8g.getHeight() )
       break;
+  }
+}
+
+void draw_pixel(void) {
+  u8g_uint_t x, y, w2, h2;
+  u8g.setColorIndex(1);
+  w2 = u8g.getWidth();
+  h2 = u8g.getHeight();
+  w2 /= 2;
+  h2 /= 2;
+  for( y = 0; y < h2; y++ ) {
+    for( x = 0; x < w2; x++ ) {
+      if ( (x + y) & 1 ) {
+        u8g.drawPixel(x,y);
+        u8g.drawPixel(x,y+h2);
+        u8g.drawPixel(x+w2,y);
+        u8g.drawPixel(x+w2,y+h2);
+      }
+    }
   }
 }
 
@@ -145,6 +164,9 @@ void loop(void) {
   delay(5000);
   fps = picture_loop_with_fps(draw_char);
   show_result("draw @", fps);
+  delay(5000);
+  fps = picture_loop_with_fps(draw_pixel);
+  show_result("draw pixel", fps);
   delay(5000);
 }
 
