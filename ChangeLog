@@ -31,5 +31,6 @@ u8glib ChangeLog
 2012-01-25      v0.12   Oliver Kraus <olikraus@gmail.com>
   * fixed st7920 memory layout for 128x64 lcd
   * ST7920 SPI performance improvement
-  
+2012-01-xx	v0.13	Oliver Kraus <olikraus@gmail.com>
+  * LM6059 (Adafruit Display) fixed
 
