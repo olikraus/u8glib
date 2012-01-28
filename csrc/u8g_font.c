@@ -969,7 +969,7 @@ void u8g_SetFontPosCenter(u8g_t *u8g)
 }
 
 /*========================================================================*/
-/* string width calculation */
+/* string pixel width calculation */
 
 char u8g_font_get_char(const void *s)
 {
@@ -984,7 +984,7 @@ char u8g_font_get_charP(const void *s)
 typedef char (*u8g_font_get_char_fn)(const void *s);
 
 
-u8g_uint_t u8g_font_calc_str_width(u8g_t *u8g, const char *s, u8g_font_get_char_fn get_char )
+u8g_uint_t u8g_font_calc_str_pixel_width(u8g_t *u8g, const char *s, u8g_font_get_char_fn get_char )
 {
   u8g_uint_t  w;
   
@@ -1033,7 +1033,35 @@ u8g_uint_t u8g_font_calc_str_width(u8g_t *u8g, const char *s, u8g_font_get_char_
 
 u8g_uint_t u8g_GetStrPixelWidth(u8g_t *u8g, const char *s)
 {
-  return u8g_font_calc_str_width(u8g, s, u8g_font_get_char);
+  return u8g_font_calc_str_pixel_width(u8g, s, u8g_font_get_char);
+}
+
+/*========================================================================*/
+/* string width calculation */
+
+u8g_uint_t u8g_GetStrWidth(u8g_t *u8g, const char *s)
+{
+  u8g_uint_t  w;
+  uint8_t encoding;
+  
+  /* reset the total width to zero, this will be expanded during calculation */
+  w = 0;
+  
+  for(;;)
+  {
+    encoding = *s;
+    if ( encoding == 0 )
+      break;
+
+    /* load glyph information */
+    u8g_GetGlyph(u8g, encoding);
+    w += u8g->glyph_dx;    
+    
+    /* goto next char */
+    s++;
+  }
+  
+  return w;  
 }
 
 

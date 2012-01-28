@@ -5,6 +5,9 @@
   Calculated Max Values w=11 h=22 x= 2 y= 8 dx=12 dy= 0 ascent=18 len=44
   Font Bounding box     w=36 h=33 x=-12 y=-8
   Calculated Min Values           x= 0 y=-4 dx= 0 dy= 0
+  Pure Font   ascent =14 descent=10
+  X Font      ascent =14 descent= 0
+  Max Font    ascent =18 descent=-4
 */
 #include "u8g.h"
 const u8g_fntpgm_uint8_t u8g_font_gdb14n[446] U8G_SECTION(".progmem.u8g_font_gdb14n") = {
