@@ -595,41 +595,50 @@ void bdf_PutGlyph(void)
 {
   int len;
   int y, x;
-
-  if ( bdf_encoding == 'A' )
-    bdf_capital_A_height = bdf_char_height;
-  if ( bdf_encoding == '1' )
-    bdf_capital_1_height = bdf_char_height;
   
-  if ( bdf_encoding == 'g' )
-    bdf_lower_g_descent = bdf_char_y;
-
-  if ( bdf_char_xascent < bdf_capital_A_height )
-    bdf_char_xascent = bdf_capital_A_height;
-  if ( bdf_char_xascent < bdf_capital_1_height )
-    bdf_char_xascent = bdf_capital_1_height;
-  if ( bdf_encoding == '(' )
-    if ( bdf_char_xascent < bdf_char_ascent )
-      bdf_char_xascent = bdf_char_ascent;
-  if ( bdf_encoding == '[' )
-    if ( bdf_char_xascent < bdf_char_ascent )
-      bdf_char_xascent = bdf_char_ascent;
-
-  if ( bdf_char_xdescent > bdf_lower_g_descent )
-    bdf_char_xdescent = bdf_lower_g_descent;
-  if ( bdf_encoding == '(' )
-    if ( bdf_char_xdescent > bdf_char_y )
-      bdf_char_xdescent = bdf_char_y;
-  if ( bdf_encoding == '[' )
-    if ( bdf_char_xdescent > bdf_char_y )
-      bdf_char_xdescent = bdf_char_y;
-
-  if ( bdf_requested_encoding != bdf_encoding )
-    return;
   
   if ( bdf_state == BDF_STATE_ENCODING )
   {
-  
+    /*
+    if ( bdf_char_width == 0 && bdf_char_height == 0 )
+      bdf_char_y = 0;
+    */
+
+    bdf_char_ascent = bdf_char_height + bdf_char_y;
+    //printf("h:%d w:%d ascent: %d\n", bdf_char_height, bdf_char_width, bdf_char_ascent);
+
+    if ( bdf_encoding == 'A' )
+      bdf_capital_A_height = bdf_char_height;
+    if ( bdf_encoding == '1' )
+      bdf_capital_1_height = bdf_char_height;
+    
+    if ( bdf_encoding == 'g' )
+      bdf_lower_g_descent = bdf_char_y;
+
+    if ( bdf_char_xascent < bdf_capital_A_height )
+      bdf_char_xascent = bdf_capital_A_height;
+    if ( bdf_char_xascent < bdf_capital_1_height )
+      bdf_char_xascent = bdf_capital_1_height;
+    if ( bdf_encoding == '(' )
+      if ( bdf_char_xascent < bdf_char_ascent )
+        bdf_char_xascent = bdf_char_ascent;
+    if ( bdf_encoding == '[' )
+      if ( bdf_char_xascent < bdf_char_ascent )
+        bdf_char_xascent = bdf_char_ascent;
+
+    if ( bdf_char_xdescent > bdf_lower_g_descent )
+      bdf_char_xdescent = bdf_lower_g_descent;
+    if ( bdf_encoding == '(' )
+      if ( bdf_char_xdescent > bdf_char_y )
+        bdf_char_xdescent = bdf_char_y;
+    if ( bdf_encoding == '[' )
+      if ( bdf_char_xdescent > bdf_char_y )
+        bdf_char_xdescent = bdf_char_y;
+
+    if ( bdf_requested_encoding != bdf_encoding )
+      return;
+
+    
     assert( bdf_line_bm_line == bdf_char_height);
 
     bdf_ShowGlyph();
@@ -725,13 +734,14 @@ format 1
       bdf_is_encoding_successfully_done = 1;
     }
     
-    sprintf(bdf_info+strlen(bdf_info), "/* encoding %d %c, bbx %d %d %d %d */\n", 
+    sprintf(bdf_info+strlen(bdf_info), "/* encoding %d %c, bbx %d %d %d %d  asc %d */\n", 
       bdf_encoding,
       bdf_encoding > 32 && bdf_encoding <= 'z' ? bdf_encoding : ' ',
       bdf_char_width,
       bdf_char_height,
       bdf_char_x,
-      bdf_char_y);
+      bdf_char_y,
+      bdf_char_ascent);
 
     for( y = 0; y < bdf_char_height; y++ )
     {
@@ -886,6 +896,7 @@ void bdf_ReadLine(const char *s)
       bdf_char_x = p_get_val();
       bdf_char_y = p_get_val();
       bdf_char_ascent = bdf_char_height + bdf_char_y;
+      //printf("h:%d w:%d ascent: %d\n", bdf_char_height, bdf_char_width, bdf_char_ascent);
     }
     else if ( strcmp(p_buf, "BITMAP") == 0 )
     {
@@ -988,6 +999,8 @@ void bdf_GenerateFontData(const char *filename, int begin, int end)
   data_Put(0);                  /* lower g descent */
   data_Put(0);                  /* max ascent */
   data_Put(0);                  /* min y = descent */
+  data_Put(0);                  /* x ascent */
+  data_Put(0);                  /* x descent */
 }
 
 void bdf_GenerateGlyph(const char *filename, int encoding)
@@ -1044,6 +1057,8 @@ void bdf_Generate(const char *filename, int begin, int end)
   data_buf[12] = bdf_lower_g_descent;
   data_buf[13] = bdf_char_max_ascent;
   data_buf[14] = bdf_char_min_y;
+  data_buf[15] = bdf_char_xascent;
+  data_buf[16] = bdf_char_xdescent;
   
   // data_buf[11] = last_valid_encoding;
 }

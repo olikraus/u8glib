@@ -682,7 +682,7 @@ void pic_gen_short_desc(const u8g_pgm_uint8_t *font, const char *name, u8g_uint_
   do
   {
     u8g_SetFont(&u8g, font);
-    u8g_DrawStr(&u8g, 0, 100, 0, s);    
+    u8g_DrawStr(&u8g, 0, 100, s);    
   }while( u8g_NextPage(&u8g) );
   
   {

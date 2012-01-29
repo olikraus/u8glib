@@ -44,7 +44,7 @@
 typedef void * u8g_glyph_t;
 
 /* size of the font data structure, there is no struct or class... */
-#define U8G_FONT_DATA_STRUCT_SIZE 15
+#define U8G_FONT_DATA_STRUCT_SIZE 17
 
 /*
   ... instead the fields of the font data structure are accessed directly by offset 
@@ -63,6 +63,8 @@ typedef void * u8g_glyph_t;
   12            descent 'g'                     negative: below baseline
   13            font max ascent
   14            font min decent             negative: below baseline 
+  15            font xascent
+  16            font xdecent             negative: below baseline 
   
 */
 
@@ -181,6 +183,16 @@ int8_t u8g_font_GetFontAscent(const void *font)
 int8_t u8g_font_GetFontDescent(const void *font)
 {
   return u8g_font_get_byte(font, 14);
+}
+
+int8_t u8g_font_GetFontXAscent(const void *font)
+{
+  return u8g_font_get_byte(font, 15);
+}
+
+int8_t u8g_font_GetFontXDescent(const void *font)
+{
+  return u8g_font_get_byte(font, 16);
 }
 
 
@@ -893,6 +905,11 @@ void u8g_UpdateRefHeight(u8g_t *u8g)
     u8g->font_ref_ascent = u8g_font_GetCapitalAHeight(u8g->font);
     u8g->font_ref_descent = u8g_font_GetLowerGDescent(u8g->font);
   }
+  else if ( u8g->font_height_mode == U8G_FONT_HEIGHT_MODE_XTEXT )
+  {
+    u8g->font_ref_ascent = u8g_font_GetFontXAscent(u8g->font);
+    u8g->font_ref_descent = u8g_font_GetFontXDescent(u8g->font);
+  }
   else
   {
     u8g->font_ref_ascent = u8g_font_GetFontAscent(u8g->font);
@@ -905,6 +922,13 @@ void u8g_SetFontRefHeightText(u8g_t *u8g)
   u8g->font_height_mode = U8G_FONT_HEIGHT_MODE_TEXT;
   u8g_UpdateRefHeight(u8g);
 }
+
+void u8g_SetFontRefHeightExtendedText(u8g_t *u8g)
+{
+  u8g->font_height_mode = U8G_FONT_HEIGHT_MODE_XTEXT;
+  u8g_UpdateRefHeight(u8g);
+}
+
 
 void u8g_SetFontRefHeightAll(u8g_t *u8g)
 {

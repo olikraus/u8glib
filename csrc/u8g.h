@@ -422,7 +422,8 @@ typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g, u8g_uint_t y);
 #define U8G_PIN_NONE 255
 
 #define U8G_FONT_HEIGHT_MODE_TEXT 0
-#define U8G_FONT_HEIGHT_MODE_ALL 1
+#define U8G_FONT_HEIGHT_MODE_XTEXT 1
+#define U8G_FONT_HEIGHT_MODE_ALL 2
 
 struct _u8g_t
 {
@@ -537,6 +538,7 @@ u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm
 
 
 void u8g_SetFontRefHeightText(u8g_t *u8g);
+void u8g_SetFontRefHeightExtendedText(u8g_t *u8g);
 void u8g_SetFontRefHeightAll(u8g_t *u8g);
 
 u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y);
