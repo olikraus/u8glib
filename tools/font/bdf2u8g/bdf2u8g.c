@@ -609,11 +609,11 @@ void bdf_PutGlyph(void)
   if ( bdf_char_xascent < bdf_capital_1_height )
     bdf_char_xascent = bdf_capital_1_height;
   if ( bdf_encoding == '(' )
-    if ( bdf_char_xascent < bdf_char_height )
-      bdf_char_xascent = bdf_char_height;
+    if ( bdf_char_xascent < bdf_char_ascent )
+      bdf_char_xascent = bdf_char_ascent;
   if ( bdf_encoding == '[' )
-    if ( bdf_char_xascent < bdf_char_height )
-      bdf_char_xascent = bdf_char_height;
+    if ( bdf_char_xascent < bdf_char_ascent )
+      bdf_char_xascent = bdf_char_ascent;
 
   if ( bdf_char_xdescent > bdf_lower_g_descent )
     bdf_char_xdescent = bdf_lower_g_descent;

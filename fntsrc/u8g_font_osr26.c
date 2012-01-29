@@ -6,7 +6,7 @@
   Font Bounding box     w=94 h=46 x=-29 y=-11
   Calculated Min Values           x=-1 y=-10 dx= 0 dy= 0
   Pure Font   ascent =26 descent=-8
-  X Font      ascent =33 descent=-8
+  X Font      ascent =26 descent=-8
   Max Font    ascent =35 descent=-10
 */
 #include "u8g.h"
