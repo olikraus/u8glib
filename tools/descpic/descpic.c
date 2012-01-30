@@ -685,9 +685,9 @@ void draw_str_pixel_width(u8g_t *u8g)
   draw_common(u8g, ox, oy, w, h);
   
   u8g_SetFont(u8g, u8g_font_osb26);
-  u8g_DrawStr(u8g, ox+3, oy+30, "!AI");
+  u8g_DrawStr(u8g, ox+3, oy+30, "!AgI");
   
-  draw_h_measure(u8g, ox+3+2, oy+32, u8g_GetStrPixelWidth(u8g, "!AI"));
+  draw_h_measure(u8g, ox+3+2, oy+39, u8g_GetStrPixelWidth(u8g, "!AgI"));
   
   u8g_SetFont(u8g, u8g_font_6x10);
   u8g_DrawStr(u8g, ox+3-51, oy+30+4, "(3,30)");
@@ -707,9 +707,34 @@ void draw_str_width(u8g_t *u8g)
   draw_common(u8g, ox, oy, w, h);
   
   u8g_SetFont(u8g, u8g_font_osb26);
-  u8g_DrawStr(u8g, ox+3, oy+30, "!AI");
+  u8g_DrawStr(u8g, ox+3, oy+30, "!AgI");
   
-  draw_h_measure(u8g, ox+3, oy+32, u8g_GetStrWidth(u8g, "!AI"));
+  draw_h_measure(u8g, ox+3, oy+39, u8g_GetStrWidth(u8g, "!AgI"));
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+3-51, oy+30+4, "(3,30)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+3, oy+30);
+  u8g_DrawCursor(u8g);
+}
+
+void draw_str_bbx(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_osb26);
+  u8g_DrawStr(u8g, ox+3, oy+30, "!AgI");
+  /* x-1, because the reference point is one pixel to the left */
+  u8g_DrawFrame(u8g, ox+3-1, oy+30-u8g_GetFontAscent(u8g)-1, u8g_GetStrWidth(u8g, "!AgI")+2, u8g_GetFontAscent(u8g)-u8g_GetFontDescent(u8g)+2) ;
+  
+  draw_h_measure(u8g, ox+3, oy+43, u8g_GetStrWidth(u8g, "!AgI"));
+  //draw_v_measure(u8g, ox+100, oy+30-u8g_GetFontAscent(u8g), u8g_GetFontAscent(u8g)-u8g_GetFontDescent(u8g));
   
   u8g_SetFont(u8g, u8g_font_6x10);
   u8g_DrawStr(u8g, ox+3-51, oy+30+4, "(3,30)");
@@ -754,6 +779,7 @@ int main(void)
   
   create_picture(draw_str_pixel_width, "str_pixel_width");
   create_picture(draw_str_width, "str_width");
+  create_picture(draw_str_bbx, "str_bbx");
   
   create_picture_rot90(draw_text_abc_rot90, "rot90");
   

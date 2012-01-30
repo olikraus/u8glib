@@ -553,7 +553,9 @@ void u8g_SetFontPosTop(u8g_t *u8g);
 
 
 u8g_uint_t u8g_GetStrPixelWidth(u8g_t *u8g, const char *s);
+u8g_uint_t u8g_GetStrPixelWidthP(u8g_t *u8g, const u8g_pgm_uint8_t *s);
 u8g_uint_t u8g_GetStrWidth(u8g_t *u8g, const char *s);
+u8g_uint_t u8g_GetStrWidthP(u8g_t *u8g, const u8g_pgm_uint8_t *s);
 
 
 u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s);

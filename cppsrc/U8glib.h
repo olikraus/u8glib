@@ -109,7 +109,16 @@ class U8GLIB
     void setFontPosTop(void) { u8g_SetFontPosTop(&u8g); }
 
     void setFontRefHeightText(void) { u8g_SetFontRefHeightText(&u8g); }
+    void setFontRefHeightExtendedText(void) { u8g_SetFontRefHeightExtendedText(&u8g); }
     void setFontRefHeightAll(void) { u8g_SetFontRefHeightAll(&u8g); }
+
+    u8g_uint_t getStrPixelWidth(const char *s) { return u8g_GetStrPixelWidth(&u8g, s); }
+    u8g_uint_t getStrPixelWidthP(u8g_pgm_uint8_t *s) { return u8g_GetStrPixelWidthP(&u8g, s); }
+    u8g_uint_t getStrWidth(const char *s) { return u8g_GetStrWidth(&u8g, s); } 
+    u8g_uint_t getStrWidthP(u8g_pgm_uint8_t *s) { return u8g_GetStrWidthP(&u8g, s); }
+    
+
+    
     
     /* cursor handling */
     void setCursorFont(const u8g_pgm_uint8_t *cursor_font) { u8g_SetCursorFont(&u8g, cursor_font); }
