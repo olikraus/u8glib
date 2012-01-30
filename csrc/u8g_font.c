@@ -898,6 +898,7 @@ u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t di
 
 void u8g_UpdateRefHeight(u8g_t *u8g)
 {
+  uint16_t ls;
   if ( u8g->font == NULL )
     return;
   if ( u8g->font_height_mode == U8G_FONT_HEIGHT_MODE_TEXT )
@@ -915,6 +916,12 @@ void u8g_UpdateRefHeight(u8g_t *u8g)
     u8g->font_ref_ascent = u8g_font_GetFontAscent(u8g->font);
     u8g->font_ref_descent = u8g_font_GetFontDescent(u8g->font);
   }
+  
+  ls = u8g->font_ref_ascent - u8g->font_ref_descent;
+  ls &= 255;
+  ls *= u8g->font_line_spacing_factor;
+  ls >>= 6;
+  u8g->line_spacing = ls;
 }
 
 void u8g_SetFontRefHeightText(u8g_t *u8g)
@@ -933,6 +940,13 @@ void u8g_SetFontRefHeightExtendedText(u8g_t *u8g)
 void u8g_SetFontRefHeightAll(u8g_t *u8g)
 {
   u8g->font_height_mode = U8G_FONT_HEIGHT_MODE_ALL;
+  u8g_UpdateRefHeight(u8g);
+}
+
+/* factor = 64: linespaceing == ascent and descent */
+void u8g_SetFontLineSpacingFactor(u8g_t *u8g, uint8_t  factor)
+{
+  u8g->font_line_spacing_factor = factor;
   u8g_UpdateRefHeight(u8g);
 }
 

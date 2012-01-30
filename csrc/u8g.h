@@ -451,6 +451,8 @@ struct _u8g_t
   uint8_t font_height_mode;
   int8_t font_ref_ascent;
   int8_t font_ref_descent;
+  uint8_t font_line_spacing_factor;     /* line_spacing = factor * (ascent - descent) / 64 */
+  uint8_t line_spacing;
   
   u8g_dev_arg_pixel_t arg_pixel;
   /* uint8_t color_index; */
@@ -460,6 +462,7 @@ struct _u8g_t
 
 #define u8g_GetFontAscent(u8g) ((u8g)->font_ref_ascent)
 #define u8g_GetFontDescent(u8g) ((u8g)->font_ref_descent)
+#define u8g_GetFontLineSpacing(u8g) ((u8g)->line_spaceing)
 
 uint8_t u8g_call_dev_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
@@ -540,6 +543,7 @@ u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm
 void u8g_SetFontRefHeightText(u8g_t *u8g);
 void u8g_SetFontRefHeightExtendedText(u8g_t *u8g);
 void u8g_SetFontRefHeightAll(u8g_t *u8g);
+void u8g_SetFontLineSpacingFactor(u8g_t *u8g, uint8_t factor);
 
 u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y);
 u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g, u8g_uint_t y);

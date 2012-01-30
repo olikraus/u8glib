@@ -721,6 +721,7 @@ void draw_str_width(u8g_t *u8g)
 void draw_str_bbx(u8g_t *u8g)
 {
   u8g_uint_t ox, oy, w, h;
+  int m;
   ox = 80;
   oy = 80;
   w = 128;
@@ -734,7 +735,10 @@ void draw_str_bbx(u8g_t *u8g)
   u8g_DrawFrame(u8g, ox+3-1, oy+30-u8g_GetFontAscent(u8g)-1, u8g_GetStrWidth(u8g, "!AgI")+2, u8g_GetFontAscent(u8g)-u8g_GetFontDescent(u8g)+2) ;
   
   draw_h_measure(u8g, ox+3, oy+43, u8g_GetStrWidth(u8g, "!AgI"));
-  //draw_v_measure(u8g, ox+100, oy+30-u8g_GetFontAscent(u8g), u8g_GetFontAscent(u8g)-u8g_GetFontDescent(u8g));
+
+  u8g_SetFont(u8g, u8g_font_osb26);
+  m = u8g_GetFontAscent(u8g)-u8g_GetFontDescent(u8g);
+  draw_v_measure(u8g, ox+77, oy+30-u8g_GetFontAscent(u8g), m);
   
   u8g_SetFont(u8g, u8g_font_6x10);
   u8g_DrawStr(u8g, ox+3-51, oy+30+4, "(3,30)");
