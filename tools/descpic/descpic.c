@@ -747,6 +747,39 @@ void draw_str_bbx(u8g_t *u8g)
   u8g_DrawCursor(u8g);
 }
 
+void draw_str_bbx_top(u8g_t *u8g)
+{
+  char s[] = "AgI";
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  
+
+  draw_common(u8g, ox, oy, w, 64);
+  
+  u8g_SetFont(u8g, u8g_font_osb26);
+  u8g_SetFontRefHeightText(u8g);
+  u8g_SetFontPosTop(u8g);
+  
+  h = u8g_GetFontAscent(u8g)-u8g_GetFontDescent(u8g);
+
+  u8g_DrawStr(u8g, ox+3, oy+10, s);
+  /* x-1, because the reference point is one pixel to the left */
+  u8g_DrawFrame(u8g, ox+3-1, oy+10, u8g_GetStrWidth(u8g, s)+2, h+2) ;
+  
+  draw_h_measure(u8g, ox+3, oy+50, u8g_GetStrWidth(u8g, s));
+
+  u8g_SetFont(u8g, u8g_font_osb26);
+  draw_v_measure(u8g, ox+u8g_GetStrWidth(u8g, s)+8, oy+10+1, h);
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+3-51, oy+10+4, "(3,10)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+3, oy+10);
+  u8g_DrawCursor(u8g);
+}
+
 
 int main(void)
 {
@@ -784,6 +817,7 @@ int main(void)
   create_picture(draw_str_pixel_width, "str_pixel_width");
   create_picture(draw_str_width, "str_width");
   create_picture(draw_str_bbx, "str_bbx");
+  create_picture(draw_str_bbx_top, "str_bbx_top");
   
   create_picture_rot90(draw_text_abc_rot90, "rot90");
   
