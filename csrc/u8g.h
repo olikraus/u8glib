@@ -462,7 +462,7 @@ struct _u8g_t
 
 #define u8g_GetFontAscent(u8g) ((u8g)->font_ref_ascent)
 #define u8g_GetFontDescent(u8g) ((u8g)->font_ref_descent)
-#define u8g_GetFontLineSpacing(u8g) ((u8g)->line_spaceing)
+#define u8g_GetFontLineSpacing(u8g) ((u8g)->line_spacing)
 
 uint8_t u8g_call_dev_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 

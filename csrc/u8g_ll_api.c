@@ -138,10 +138,10 @@ static void u8g_init_data(u8g_t *u8g)
 
   u8g_SetFontPosBaseline(u8g);
   
-  u8g->font_height_mode = U8G_FONT_HEIGHT_MODE_TEXT;
+  u8g->font_height_mode = U8G_FONT_HEIGHT_MODE_XTEXT;
   u8g->font_ref_ascent = 0;
   u8g->font_ref_descent = 0;
-  u8g->font_line_spacing_factor = 77;           /* ca. 1.2 line spacing factor */
+  u8g->font_line_spacing_factor = 64;           /* 64 = 1.0, 77 = 1.2 line spacing factor */
   u8g->line_spacing = 0;
 }
 

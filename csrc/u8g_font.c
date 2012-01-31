@@ -918,9 +918,12 @@ void u8g_UpdateRefHeight(u8g_t *u8g)
   }
   
   ls = u8g->font_ref_ascent - u8g->font_ref_descent;
-  ls &= 255;
-  ls *= u8g->font_line_spacing_factor;
-  ls >>= 6;
+  if ( u8g->font_line_spacing_factor != 64 )
+  {
+    ls &= 255;
+    ls *= u8g->font_line_spacing_factor;
+    ls >>= 6;
+  }
   u8g->line_spacing = ls;
 }
 

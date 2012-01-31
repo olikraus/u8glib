@@ -105,7 +105,7 @@ void draw_dotted_hline(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w)
   }
 }
 
-
+/*======================================================*/
 
 void draw_display(u8g_t *u8g)
 {
@@ -187,6 +187,7 @@ void draw_ascent(u8g_t *u8g)
   
   u8g_SetFont(u8g, u8g_font_10x20);
   u8g_DrawStr(u8g, ox+5, oy+20, "ABCdefg");  
+  u8g_SetFontRefHeightText(u8g);
   
   draw_v_measure(u8g, ox+80, oy+20-u8g_GetFontAscent(u8g), u8g_GetFontAscent(u8g));
   draw_dotted_hline(u8g, ox+5, oy+20, 75);
@@ -210,6 +211,8 @@ void draw_height_text(u8g_t *u8g)
   draw_common(u8g, ox, oy, w, h);
   
   u8g_SetFont(u8g, u8g_font_gdr25);
+  u8g_SetFontRefHeightText(u8g);
+  
   u8g_DrawStr(u8g, ox+5, oy+40, "(ABC)");  
   
   draw_v_measure(u8g, ox+100, oy+40-u8g_GetFontAscent(u8g), u8g_GetFontAscent(u8g));
@@ -274,6 +277,68 @@ void draw_height_all(u8g_t *u8g)
   u8g_DrawCursor(u8g);
 }
 
+void draw_linespacing_text(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  int8_t a, d, ls;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_gdr25);
+  u8g_SetFontRefHeightText(u8g);
+  
+  u8g_DrawStr(u8g, ox+5, oy+40, "(ABg)");  
+  a = u8g_GetFontAscent(u8g);
+  d = u8g_GetFontDescent(u8g);
+  ls = u8g_GetFontLineSpacing(u8g);
+  
+  draw_v_measure(u8g, ox+100, oy+40-a, a);
+  draw_v_measure(u8g, ox+100, oy+40, d);
+  draw_v_measure(u8g, ox+114, oy+40-a, ls);
+  draw_dotted_hline(u8g, ox+5, oy+40, 95);
+
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+5-51, oy+40+4, "(5,40)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+5, oy+40);
+  u8g_DrawCursor(u8g);
+}
+
+void draw_linespacing_xtext(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  int8_t a, d, ls;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_gdr25);
+  u8g_SetFontRefHeightExtendedText(u8g);
+  
+  u8g_DrawStr(u8g, ox+5, oy+40, "(ABg)");  
+  a = u8g_GetFontAscent(u8g);
+  d = u8g_GetFontDescent(u8g);
+  ls = u8g_GetFontLineSpacing(u8g);
+  
+  draw_v_measure(u8g, ox+100, oy+40-a, a);
+  draw_v_measure(u8g, ox+100, oy+40, d);
+  draw_v_measure(u8g, ox+114, oy+40-a, ls);
+  draw_dotted_hline(u8g, ox+5, oy+40, 95);
+  u8g_SetFontRefHeightText(u8g);
+
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+5-51, oy+40+4, "(5,40)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+5, oy+40);
+  u8g_DrawCursor(u8g);
+}
 
 
 void draw_descent(u8g_t *u8g)
@@ -287,6 +352,7 @@ void draw_descent(u8g_t *u8g)
   draw_common(u8g, ox, oy, w, h);
   
   u8g_SetFont(u8g, u8g_font_10x20);
+  u8g_SetFontRefHeightText(u8g);
   u8g_DrawStr(u8g, ox+5, oy+20, "ABCdefg");  
   
   draw_v_measure(u8g, ox+80, oy+20, u8g_GetFontDescent(u8g));
@@ -780,6 +846,40 @@ void draw_str_bbx_top(u8g_t *u8g)
   u8g_DrawCursor(u8g);
 }
 
+void draw_str_bbx_top2(u8g_t *u8g)
+{
+  char s[] = "(AgI)";
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  
+
+  draw_common(u8g, ox, oy, w, 64);
+  
+  u8g_SetFont(u8g, u8g_font_gdr25);
+  u8g_SetFontRefHeightExtendedText(u8g);
+  //u8g_SetFontRefHeightText(u8g);
+  u8g_SetFontPosTop(u8g);
+  
+  h = u8g_GetFontAscent(u8g)-u8g_GetFontDescent(u8g);
+
+  u8g_DrawStr(u8g, ox+3, oy+10, s);
+  /* x-1, because the reference point is one pixel to the left */
+  u8g_DrawFrame(u8g, ox+3-1, oy+10, u8g_GetStrWidth(u8g, s)+2, h+2) ;
+  
+  draw_h_measure(u8g, ox+3, oy+10+h+4, u8g_GetStrWidth(u8g, s));
+
+  u8g_SetFont(u8g, u8g_font_osb26);
+  draw_v_measure(u8g, ox+u8g_GetStrWidth(u8g, s)+6, oy+10+1, h);
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+3-51, oy+10+4, "(3,10)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+3, oy+10);
+  u8g_DrawCursor(u8g);
+}
+
 
 int main(void)
 {
@@ -792,7 +892,10 @@ int main(void)
   
   
   create_picture(draw_height_text, "height_text");
+  create_picture(draw_linespacing_text, "linespacing_text");
+  
   create_picture(draw_height_extended_text, "height_ex_text");
+  create_picture(draw_linespacing_xtext, "linespacing_ex_text");
   create_picture(draw_height_all, "height_all");
   
   create_picture(draw_rotate_b, "rotate_b");
@@ -818,6 +921,7 @@ int main(void)
   create_picture(draw_str_width, "str_width");
   create_picture(draw_str_bbx, "str_bbx");
   create_picture(draw_str_bbx_top, "str_bbx_top");
+  create_picture(draw_str_bbx_top2, "str_bbx_top2");
   
   create_picture_rot90(draw_text_abc_rot90, "rot90");
   
