@@ -38,12 +38,17 @@
 #ifndef _CPP_U8GLIB
 #define _CPP_U8GLIB
 
+#include <Print.h>
 #include "u8g.h"
 
-class U8GLIB 
+
+class U8GLIB : public Print
 {
   private:
     u8g_t u8g;
+    u8g_uint_t tx, ty;          // current position for the Print base class procedures
+
+    void preparePrint(void) { tx = 0; ty = 0; }
     uint8_t initSPI(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE);
     uint8_t initHWSPI(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE);
     uint8_t init8Bit(u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
@@ -52,7 +57,7 @@ class U8GLIB
   
     /* constructor */
     U8GLIB(u8g_dev_t *dev)
-      { u8g_Init(&u8g, dev); }
+      { preparePrint(); u8g_Init(&u8g, dev); }
     U8GLIB(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset) 
       { initSPI(dev, sck, mosi, cs, a0, reset); }
     U8GLIB(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset) 
@@ -61,6 +66,13 @@ class U8GLIB
         uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset) 
       { init8Bit(dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset); }
 
+    /* implementation of the write interface to the print class */
+#if defined(ARDUINO) && ARDUINO >= 100
+    size_t write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); return 1;}
+#else
+    void write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); }
+#endif
+    
      /* screen rotation */
     void undoRotation(void) { u8g_UndoRotation(&u8g); }
     void setRot90(void) { u8g_SetRot90(&u8g); }
