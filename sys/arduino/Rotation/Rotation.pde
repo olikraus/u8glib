@@ -80,9 +80,9 @@ void rotate(void) {
   {
     switch(dir) {
       case 0: u8g.undoRotation(); break;
-      case 1: u8g.undoRotation(); u8g.setRot90(); break;
-      case 2: u8g.undoRotation(); u8g.setRot180(); break;
-      case 3: u8g.undoRotation(); u8g.setRot270(); break;
+      case 1: u8g.setRot90(); break;
+      case 2: u8g.setRot180(); break;
+      case 3: u8g.setRot270(); break;
     }
     
     dir++;

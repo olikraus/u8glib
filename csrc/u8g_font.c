@@ -551,7 +551,7 @@ int8_t u8g_DrawGlyphDir(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uin
 }
 
 
-int8_t u8g_DrawGlyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+int8_t u8g_draw_glyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
 {
   const u8g_pgm_uint8_t *data;
   uint8_t w, h;
@@ -595,6 +595,11 @@ int8_t u8g_DrawGlyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
     iy++;
   }
   return u8g->glyph_dx;
+}
+
+int8_t u8g_DrawGlyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+{
+  return u8g_draw_glyph(u8g, x, u8g->font_calc_vref(u8g, y), encoding);
 }
 
 int8_t u8g_DrawGlyph90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
@@ -759,7 +764,7 @@ u8g_uint_t u8g_DrawStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
   
   while( *s != '\0' )
   {
-    d = u8g_DrawGlyph(u8g, x, y, *s);
+    d = u8g_draw_glyph(u8g, x, y, *s);
     x += d;
     t += d;
     s++;
@@ -835,7 +840,7 @@ u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_ui
     c = u8g_pgm_read(s);
     if ( c == '\0' )
       break;
-    d = u8g_DrawGlyph(u8g, x, y, c);
+    d = u8g_draw_glyph(u8g, x, y, c);
     x += d;
     t += d;
     s++;
