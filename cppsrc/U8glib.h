@@ -62,6 +62,7 @@ class U8GLIB
       { init8Bit(dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset); }
 
      /* screen rotation */
+    void undoRotation(void) { u8g_UndoRotation(&u8g); }
     void setRot90(void) { u8g_SetRot90(&u8g); }
     void setRot180(void) { u8g_SetRot180(&u8g); }
     void setRot270(void) { u8g_SetRot270(&u8g); }
@@ -94,6 +95,7 @@ class U8GLIB
     void setFont(const u8g_fntpgm_uint8_t *font) {u8g_SetFont(&u8g, font); }
     int8_t getFontAscent(void) { return u8g_GetFontAscent(&u8g); }
     int8_t getFontDescent(void) { return u8g_GetFontDescent(&u8g); }
+    int8_t getFontLineSpacing(void) { return u8g_GetFontLineSpacing(&u8g); }
     u8g_uint_t drawStr(u8g_uint_t x, u8g_uint_t y, const char *s) { return u8g_DrawStr(&u8g, x, y, s); }
     u8g_uint_t drawStr90(u8g_uint_t x, u8g_uint_t y, const char *s) { return u8g_DrawStr90(&u8g, x, y, s); }
     u8g_uint_t drawStr180(u8g_uint_t x, u8g_uint_t y, const char *s) { return u8g_DrawStr180(&u8g, x, y, s); }

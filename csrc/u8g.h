@@ -497,6 +497,7 @@ uint8_t u8g_GetColorIndex(u8g_t *u8g);
 
 /* u8g_dev_rot.c */
 
+void u8g_UndoRotation(u8g_t *u8g);
 void u8g_SetRot90(u8g_t *u8g);
 void u8g_SetRot180(u8g_t *u8g);
 void u8g_SetRot270(u8g_t *u8g);

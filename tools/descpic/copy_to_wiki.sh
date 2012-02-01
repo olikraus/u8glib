@@ -16,3 +16,5 @@ cp abc_top.png ../../../wiki/descpic/.
 cp height_all.png ../../../wiki/descpic/.
 cp height_ex_text.png ../../../wiki/descpic/.
 cp height_text.png ../../../wiki/descpic/.
+cp linespacing_ex_text.png ../../../wiki/descpic/.
+cp linespacing_text.png ../../../wiki/descpic/.

@@ -43,6 +43,14 @@ uint8_t u8g_dev_rot270_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 u8g_dev_t u8g_dev_rot = { u8g_dev_rot90_fn, NULL, NULL };
 
 
+void u8g_UndoRotation(u8g_t *u8g)
+{
+  if ( u8g->dev != &u8g_dev_rot )
+    return;
+  u8g->dev = u8g_dev_rot.dev_mem;
+  u8g_UpdateDimension(u8g);
+}
+
 void u8g_SetRot90(u8g_t *u8g)
 {
   if ( u8g->dev == &u8g_dev_rot )

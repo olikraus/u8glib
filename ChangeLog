@@ -33,4 +33,6 @@ u8glib ChangeLog
   * ST7920 SPI performance improvement
 2012-01-27	v0.13	Oliver Kraus <olikraus@gmail.com>
   * LM6059 (Adafruit Display) fixed
+2012-02-01	v0.14	Oliver Kraus <olikraus@gmail.com>
+  * undoRotation()
 
