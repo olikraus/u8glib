@@ -35,4 +35,6 @@ u8glib ChangeLog
   * LM6059 (Adafruit Display) fixed
 2012-02-01	v0.14	Oliver Kraus <olikraus@gmail.com>
   * undoRotation()
+  * setRot..() can be used without restrictions
+  * Class U8GLIB derived from Print class. New function "print" 
 
