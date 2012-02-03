@@ -58,6 +58,7 @@ void u8g_pb8v1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_
 {
   register uint8_t mask;
   uint8_t *ptr = b->buf;
+  
   y -= b->p.page_y0;
   mask = 1;
   y &= 0x07;
@@ -81,7 +82,7 @@ void u8g_pb8v1_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel
     return;
   if ( arg_pixel->y > b->p.page_y1 )
     return;
-  if ( arg_pixel->x > b->width )
+  if ( arg_pixel->x >= b->width )
     return;
   u8g_pb8v1_set_pixel(b, arg_pixel->x, arg_pixel->y, arg_pixel->color);
 }

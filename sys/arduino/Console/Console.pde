@@ -45,7 +45,7 @@
 
 //U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_ST7920_128X64 u8g(13, 11, U8G_PIN_NONE, U8G_PIN_NONE);                  // SPI Com: SCK = 13, MOSI = 11, CS = U8G_PIN_NONE, A0 = U8G_PIN_NONE
@@ -61,13 +61,16 @@
 
 
 // setup input buffer
-#define LINE_MAX 18 
+#define LINE_MAX 30 
 uint8_t line_buf[LINE_MAX] = "U8GLIB Console";
 uint8_t line_pos = 0;
 
 // setup a text screen to support scrolling
-#define ROW_MAX 6
+#define ROW_MAX 12
+
+
 uint8_t screen[ROW_MAX][LINE_MAX];
+uint8_t rows, cols;
 
 // line height, which matches the selected font (5x7)
 #define LINE_PIXEL_HEIGHT 7
@@ -84,20 +87,24 @@ void clear_screen(void) {
 void add_line_to_screen(void) {
   uint8_t i, j;
   for( j = 0; j < LINE_MAX; j++ )
-    for( i = 0; i < ROW_MAX-1; i++ )
+    for( i = 0; i < rows-1; i++ )
       screen[i][j] = screen[i+1][j];
   
   for( j = 0; j < LINE_MAX; j++ )
-    screen[ROW_MAX-1][j] = line_buf[j];
+    screen[rows-1][j] = line_buf[j];
 }
 
 // U8GLIB draw procedure: output the screen
 void draw(void) {
-  uint8_t i;
-  // graphic commands to redraw the complete screen are placed here  
-  u8g.setFont(u8g_font_5x7);
-  for( i = 0; i < ROW_MAX; i++ )
-    u8g.drawStr( 0, (i+1)*LINE_PIXEL_HEIGHT, (char *)(screen[i]));
+  uint8_t i, y;
+  // graphic commands to redraw the complete screen are placed here    
+  y = 0;       // reference is the top left -1 position of the string
+  y--;           // correct the -1 position of the drawStr 
+  for( i = 0; i < rows; i++ )
+  {
+    u8g.drawStr( 0, y, (char *)(screen[i]));
+    y += u8g.getFontLineSpacing();
+  }
 }
 
 void exec_line(void) {
@@ -133,17 +140,17 @@ void read_line(void) {
   {
     uint8_t c;
     c = Serial.read();
-    if ( line_pos >= LINE_MAX-1 ) {
+    if ( line_pos >= cols-1 ) {
       exec_line();
       reset_line();
       char_to_line(c);
     } 
     else if ( c == '\n' ) {
-      exec_line();
-      reset_line();
+      // ignore '\n' 
     }
     else if ( c == '\r' ) {
-      // ignore '\r' 
+      exec_line();
+      reset_line();
     }
     else {
       char_to_line(c);
@@ -153,6 +160,23 @@ void read_line(void) {
 
 // Arduino master setup
 void setup(void) {
+  // set font for the console window
+  u8g.setFont(u8g_font_5x7);
+  //u8g.setFont(u8g_font_9x15);
+  
+  // set upper left position for the string draw procedure
+  u8g.setFontPosTop();
+  
+  // calculate the number of rows for the display
+  rows = u8g.getHeight() / u8g.getFontLineSpacing();
+  if ( rows > ROW_MAX )
+    rows = ROW_MAX; 
+  
+  // estimate the number of columns for the display
+  cols = u8g.getWidth() / u8g.getStrWidth("m");
+  if ( cols > LINE_MAX-1 )
+    cols = LINE_MAX-1; 
+  
   clear_screen();               // clear screen
   delay(1000);                  // do some delay
   Serial.begin(9600);        // init serial

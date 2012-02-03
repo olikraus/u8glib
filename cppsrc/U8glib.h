@@ -110,6 +110,7 @@ class U8GLIB : public Print
     int8_t getFontAscent(void) { return u8g_GetFontAscent(&u8g); }
     int8_t getFontDescent(void) { return u8g_GetFontDescent(&u8g); }
     int8_t getFontLineSpacing(void) { return u8g_GetFontLineSpacing(&u8g); }
+    
     u8g_uint_t drawStr(u8g_uint_t x, u8g_uint_t y, const char *s) { return u8g_DrawStr(&u8g, x, y, s); }
     u8g_uint_t drawStr90(u8g_uint_t x, u8g_uint_t y, const char *s) { return u8g_DrawStr90(&u8g, x, y, s); }
     u8g_uint_t drawStr180(u8g_uint_t x, u8g_uint_t y, const char *s) { return u8g_DrawStr180(&u8g, x, y, s); }
@@ -126,7 +127,9 @@ class U8GLIB : public Print
 
     void setFontRefHeightText(void) { u8g_SetFontRefHeightText(&u8g); }
     void setFontRefHeightExtendedText(void) { u8g_SetFontRefHeightExtendedText(&u8g); }
-    void setFontRefHeightAll(void) { u8g_SetFontRefHeightAll(&u8g); }
+    void setFontRefHeightAll(void) { u8g_SetFontRefHeightAll(&u8g); }  
+    void setFontLineSpacingFactor(uint8_t factor) { u8g_SetFontLineSpacingFactor(&u8g, factor); }
+
 
     u8g_uint_t getStrPixelWidth(const char *s) { return u8g_GetStrPixelWidth(&u8g, s); }
     u8g_uint_t getStrPixelWidthP(u8g_pgm_uint8_t *s) { return u8g_GetStrPixelWidthP(&u8g, s); }

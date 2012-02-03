@@ -71,7 +71,7 @@ void u8g_pb8v2_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel
     return;
   if ( arg_pixel->y > b->p.page_y1 )
     return;
-  if ( arg_pixel->x > b->width )
+  if ( arg_pixel->x >= b->width )
     return;
   u8g_pb8v2_set_pixel(b, arg_pixel->x, arg_pixel->y, arg_pixel->color);
 }

@@ -37,4 +37,5 @@ u8glib ChangeLog
   * undoRotation()
   * setRot..() can be used without restrictions
   * Class U8GLIB derived from Print class. New function "print" 
-
+  * Fixed memory index bug in the page management procedures
+  
