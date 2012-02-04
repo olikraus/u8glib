@@ -7,6 +7,7 @@ mkdir libraries/U8glib/examples/Bitmap
 mkdir libraries/U8glib/examples/Console
 mkdir libraries/U8glib/examples/U8gLogo
 mkdir libraries/U8glib/examples/Rotation
+mkdir libraries/U8glib/examples/PrintTest
 mkdir libraries/U8glib/utility
 cp ../../../ChangeLog ./libraries/U8glib/.
 cp ../../../license.txt ./libraries/U8glib/.
@@ -21,6 +22,7 @@ cp ../../../sys/arduino/Bitmap/*.pde ./libraries/U8glib/examples/Bitmap/.
 cp ../../../sys/arduino/Console/*.pde ./libraries/U8glib/examples/Console/.
 cp ../../../sys/arduino/U8gLogo/*.pde ./libraries/U8glib/examples/U8gLogo/.
 cp ../../../sys/arduino/Rotation/*.pde ./libraries/U8glib/examples/Rotation/.
+cp ../../../sys/arduino/PrintTest/*.pde ./libraries/U8glib/examples/PrintTest/.
 # sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
 
 

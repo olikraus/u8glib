@@ -377,7 +377,7 @@ uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 typedef void (*u8g_draw_cursor_fn)(u8g_t *u8g);
 
 /* vertical reference point calculation callback */
-typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g, u8g_uint_t y);
+typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g);
 
 
 
@@ -546,10 +546,10 @@ void u8g_SetFontRefHeightExtendedText(u8g_t *u8g);
 void u8g_SetFontRefHeightAll(u8g_t *u8g);
 void u8g_SetFontLineSpacingFactor(u8g_t *u8g, uint8_t factor);
 
-u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y);
-u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g, u8g_uint_t y);
-u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g, u8g_uint_t y);
-u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g, u8g_uint_t y);
+u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g);
+u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g);
+u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g);
+u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g);
 
 void u8g_SetFontPosBaseline(u8g_t *u8g);
 void u8g_SetFontPosBottom(u8g_t *u8g);

@@ -599,10 +599,11 @@ int8_t u8g_draw_glyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
 
 int8_t u8g_DrawGlyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
 {
-  return u8g_draw_glyph(u8g, x, u8g->font_calc_vref(u8g, y), encoding);
+  y += u8g->font_calc_vref(u8g);
+  return u8g_draw_glyph(u8g, x, y, encoding);
 }
 
-int8_t u8g_DrawGlyph90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+int8_t u8g_draw_glyph90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
 {
   const u8g_pgm_uint8_t *data;
   uint8_t w, h;
@@ -647,7 +648,14 @@ int8_t u8g_DrawGlyph90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
   return u8g->glyph_dx;
 }
 
-int8_t u8g_DrawGlyph180(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+int8_t u8g_DrawGlyph90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+{
+  x -= u8g->font_calc_vref(u8g);
+  return u8g_draw_glyph90(u8g, x, y, encoding);
+}
+
+
+int8_t u8g_draw_glyph180(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
 {
   const u8g_pgm_uint8_t *data;
   uint8_t w, h;
@@ -692,7 +700,14 @@ int8_t u8g_DrawGlyph180(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding
   return u8g->glyph_dx;
 }
 
-int8_t u8g_DrawGlyph270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+int8_t u8g_DrawGlyph180(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+{
+  y -= u8g->font_calc_vref(u8g);
+  return u8g_draw_glyph180(u8g, x, y, encoding);
+}
+
+
+int8_t u8g_draw_glyph270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
 {
   const u8g_pgm_uint8_t *data;
   uint8_t w, h;
@@ -738,6 +753,13 @@ int8_t u8g_DrawGlyph270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding
   return u8g->glyph_dx;
 }
 
+int8_t u8g_DrawGlyph270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
+{
+  x += u8g->font_calc_vref(u8g);
+  return u8g_draw_glyph270(u8g, x, y, encoding);
+}
+
+
 
 /*
   Draw a glyph
@@ -760,7 +782,7 @@ u8g_uint_t u8g_DrawStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
   u8g_uint_t t = 0;
   int8_t d;
   
-  y = u8g->font_calc_vref(u8g, y);
+  y += u8g->font_calc_vref(u8g);
   
   while( *s != '\0' )
   {
@@ -776,9 +798,12 @@ u8g_uint_t u8g_DrawStr90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
 {
   u8g_uint_t t = 0;
   int8_t d;
+  
+  x -= u8g->font_calc_vref(u8g);
+
   while( *s != '\0' )
   {
-    d = u8g_DrawGlyph90(u8g, x, y, *s);
+    d = u8g_draw_glyph90(u8g, x, y, *s);
     y += d;
     t += d;
     s++;
@@ -790,9 +815,12 @@ u8g_uint_t u8g_DrawStr180(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
 {
   u8g_uint_t t = 0;
   int8_t d;
+
+  y -= u8g->font_calc_vref(u8g);
+  
   while( *s != '\0' )
   {
-    d = u8g_DrawGlyph180(u8g, x, y, *s);
+    d = u8g_draw_glyph180(u8g, x, y, *s);
     x -= d;
     t += d;
     s++;
@@ -804,9 +832,12 @@ u8g_uint_t u8g_DrawStr270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
 {
   u8g_uint_t t = 0;
   int8_t d;
+
+  x += u8g->font_calc_vref(u8g);
+
   while( *s != '\0' )
   {
-    d = u8g_DrawGlyph270(u8g, x, y, *s);
+    d = u8g_draw_glyph270(u8g, x, y, *s);
     y -= d;
     t += d;
     s++;
@@ -835,6 +866,9 @@ u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_ui
   u8g_uint_t t = 0;
   int8_t d;
   uint8_t c;
+  
+  y += u8g->font_calc_vref(u8g);
+  
   for(;;)
   {
     c = u8g_pgm_read(s);
@@ -852,6 +886,9 @@ u8g_uint_t u8g_DrawStr90P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_
 {
   u8g_uint_t t = 0;
   int8_t d;
+  
+  x -= u8g->font_calc_vref(u8g);
+
   while( *s != '\0' )
   {
     d = u8g_DrawGlyph90(u8g, x, y, u8g_pgm_read(s));
@@ -866,6 +903,9 @@ u8g_uint_t u8g_DrawStr180P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm
 {
   u8g_uint_t t = 0;
   int8_t d;
+
+  y -= u8g->font_calc_vref(u8g);
+  
   while( *s != '\0' )
   {
     d = u8g_DrawGlyph180(u8g, x, y, u8g_pgm_read(s));
@@ -880,6 +920,9 @@ u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm
 {
   u8g_uint_t t = 0;
   int8_t d;
+
+  x += u8g->font_calc_vref(u8g);
+
   while( *s != '\0' )
   {
     d = u8g_DrawGlyph270(u8g, x, y, u8g_pgm_read(s));
@@ -963,9 +1006,9 @@ void u8g_SetFontLineSpacingFactor(u8g_t *u8g, uint8_t  factor)
 /*========================================================================*/
 /* callback procedures to correct the y position */
 
-u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y)
+u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g)
 {
-  return y;
+  return 0;
 }
 
 void u8g_SetFontPosBaseline(u8g_t *u8g)
@@ -974,10 +1017,10 @@ void u8g_SetFontPosBaseline(u8g_t *u8g)
 }
 
 
-u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g, u8g_uint_t y)
+u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g)
 {
-  y += (u8g_uint_t)(u8g_int_t)(u8g->font_ref_descent);
-  return y;
+  /* y += (u8g_uint_t)(u8g_int_t)(u8g->font_ref_descent); */
+  return (u8g_uint_t)(u8g_int_t)(u8g->font_ref_descent);
 }
 
 void u8g_SetFontPosBottom(u8g_t *u8g)
@@ -985,12 +1028,18 @@ void u8g_SetFontPosBottom(u8g_t *u8g)
   u8g->font_calc_vref = u8g_font_calc_vref_bottom;
 }
 
-u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g, u8g_uint_t y)
+u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g)
 {
+  u8g_uint_t tmp;
   /* reference pos is one pixel above the upper edge of the reference glyph */
+
+  /*
   y += (u8g_uint_t)(u8g_int_t)(u8g->font_ref_ascent);
   y++;
-  return y;
+  */
+  tmp = (u8g_uint_t)(u8g_int_t)(u8g->font_ref_ascent);
+  tmp++;
+  return tmp;
 }
 
 void u8g_SetFontPosTop(u8g_t *u8g)
@@ -998,15 +1047,15 @@ void u8g_SetFontPosTop(u8g_t *u8g)
   u8g->font_calc_vref = u8g_font_calc_vref_top;
 }
 
-u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g, u8g_uint_t y)
+u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g)
 {
   int8_t tmp;
   tmp = u8g->font_ref_ascent;
   tmp -= u8g->font_ref_descent;
   tmp /= 2;
   tmp += u8g->font_ref_descent;  
-  y += (u8g_uint_t)(u8g_int_t)(tmp);
-  return y;
+  /* y += (u8g_uint_t)(u8g_int_t)(tmp); */
+  return tmp;
 }
 
 void u8g_SetFontPosCenter(u8g_t *u8g)
