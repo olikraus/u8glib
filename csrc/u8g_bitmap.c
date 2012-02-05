@@ -85,3 +85,36 @@ void u8g_DrawBitmapP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t cnt, u8g
   }
 }
 
+/*=========================================================================*/
+
+void u8g_DrawHXBM(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, const uint8_t *bitmap)
+{
+  while( w >= 8 )
+  {
+    u8g_Draw8Pixel(u8g, x, y, 0, *bitmap);
+    bitmap++;
+    w-= 8;
+    x+=8;
+  }
+  //u8g_DrawPixel()
+}
+
+void u8g_DrawXBM(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h, const uint8_t *bitmap)
+{
+  u8g_uint_t b;
+  b = w;
+  b += 7;
+  b >>= 3;
+  
+  if ( u8g_IsBBXIntersection(u8g, x, y, w, h) == 0 )
+    return;
+  while( h > 0 )
+  {
+    u8g_DrawHXBM(u8g, x, y, w, bitmap);
+    bitmap += b;
+    y++;
+    h--;
+  }
+  
+}
+
