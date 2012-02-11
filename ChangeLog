@@ -38,4 +38,7 @@ u8glib ChangeLog
   * setRot..() can be used without restrictions
   * Class U8GLIB derived from Print class. New function "print" 
   * Fixed memory index bug in the page management procedures
-2012-02-xx      v0.15	Oliver Kraus <olikraus@gmail.com>
+2012-02-12      v1.00	Oliver Kraus <olikraus@gmail.com>
+  * XBM support
+  * F() macro support
+  * str-rotation commands support ref-height and ref-position

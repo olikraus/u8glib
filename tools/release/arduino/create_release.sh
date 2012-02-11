@@ -8,9 +8,13 @@ mkdir libraries/U8glib/examples/Console
 mkdir libraries/U8glib/examples/U8gLogo
 mkdir libraries/U8glib/examples/Rotation
 mkdir libraries/U8glib/examples/PrintTest
+mkdir libraries/U8glib/examples/F
+mkdir libraries/U8glib/examples/TextRotX
+mkdir libraries/U8glib/examples/XBM
 mkdir libraries/U8glib/utility
 cp ../../../ChangeLog ./libraries/U8glib/.
 cp ../../../license.txt ./libraries/U8glib/.
+cp INSTALL.TXT ./libraries/U8glib/.
 cp ../../../cppsrc/*.cpp ./libraries/U8glib/.
 cp ../../../cppsrc/*.h ./libraries/U8glib/.
 sed -i 's|u8g.h|utility/u8g.h|g' ./libraries/U8glib/U8glib.h
@@ -23,6 +27,9 @@ cp ../../../sys/arduino/Console/*.pde ./libraries/U8glib/examples/Console/.
 cp ../../../sys/arduino/U8gLogo/*.pde ./libraries/U8glib/examples/U8gLogo/.
 cp ../../../sys/arduino/Rotation/*.pde ./libraries/U8glib/examples/Rotation/.
 cp ../../../sys/arduino/PrintTest/*.pde ./libraries/U8glib/examples/PrintTest/.
+cp ../../../sys/arduino/F/*.pde ./libraries/U8glib/examples/F/.
+cp ../../../sys/arduino/TextRotX/*.pde ./libraries/U8glib/examples/TextRotX/.
+cp ../../../sys/arduino/XBM/*.pde ./libraries/U8glib/examples/XBM/.
 # sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
 
 

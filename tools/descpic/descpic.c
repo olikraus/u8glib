@@ -251,6 +251,34 @@ void draw_height_extended_text(u8g_t *u8g)
   u8g_DrawCursor(u8g);
 }
 
+void draw_top_height_extended_text(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_SetFont(u8g, u8g_font_gdr25);
+  u8g_SetFontRefHeightExtendedText(u8g);
+  u8g_SetFontPosTop(u8g);
+  u8g_DrawStr(u8g, ox+5, oy+20, "(ABC)");  
+  u8g_SetFontPosBaseline(u8g);
+  
+  // draw_v_measure(u8g, ox+100, oy+20, u8g_GetFontAscent(u8g));
+  draw_dotted_hline(u8g, ox+5, oy+20, 95);
+
+  u8g_SetFontRefHeightText(u8g);
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+5-51, oy+20+4, "(5,20)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+5, oy+20);
+  u8g_DrawCursor(u8g);
+}
+
 void draw_height_all(u8g_t *u8g)
 {
   u8g_uint_t ox, oy, w, h;
@@ -923,6 +951,7 @@ int main(void)
   create_picture(draw_linespacing_text, "linespacing_text");
   
   create_picture(draw_height_extended_text, "height_ex_text");
+  create_picture(draw_top_height_extended_text, "top_height_ex_text");
   create_picture(draw_linespacing_xtext, "linespacing_ex_text");
   create_picture(draw_height_all, "height_all");
   

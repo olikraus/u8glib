@@ -1,0 +1,11 @@
+
+U8GLIB
+http://code.google.com/p/u8glib/
+
+
+Install instructions for the Arduino environment.
+
+1. Unzip u8glib_arduino_..._X.XX.zip into the "libraries" folder
+2. Start Arduino IDE
+
+

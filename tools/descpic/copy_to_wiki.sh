@@ -18,4 +18,7 @@ cp height_ex_text.png ../../../wiki/descpic/.
 cp height_text.png ../../../wiki/descpic/.
 cp linespacing_ex_text.png ../../../wiki/descpic/.
 cp linespacing_text.png ../../../wiki/descpic/.
+cp top_height_ex_text.png ../../../wiki/descpic/.
+cp str_bbx_top2.png ../../../wiki/descpic/.
+cp str_width.png ../../../wiki/descpic/.
 cp xbm.png ../../../wiki/descpic/.
