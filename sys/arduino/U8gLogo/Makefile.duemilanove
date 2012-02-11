@@ -38,7 +38,7 @@
 #	mega		Arduino Mega
 #	mini			Arduino Mini
 #	lilypad328	LilyPad Arduino w/ ATmega328  
-BOARD:=uno
+BOARD:=atmega328
 
 # additional definitions
 DEFS:=-DARDUINO=22
@@ -61,7 +61,7 @@ AVRDUDE_PATH:=
 # The unix device where we can reach the arduino board
 # Uno: /dev/ttyACM0
 # Duemilanove: /dev/ttyUSB0
-AVRDUDE_PORT:=/dev/ttyACM1
+AVRDUDE_PORT:=/dev/ttyUSB0
 
 # List of all libaries which should be included.
 EXTRA_DIRS=$(ARDUINO_PATH)libraries/LiquidCrystal/
@@ -153,7 +153,6 @@ COMMON_FLAGS = -DF_CPU=$(F_CPU) -mmcu=$(MCU) $(DEFS)
 # COMMON_FLAGS += -gdwarf-2
 COMMON_FLAGS += -Os
 COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
-#COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections,--print-gc-sections
 COMMON_FLAGS += -Wl,--relax -Wl,-Map=output.map
 COMMON_FLAGS += -mcall-prologues 
 COMMON_FLAGS += -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums

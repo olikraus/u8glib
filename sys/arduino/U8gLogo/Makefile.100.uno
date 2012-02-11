@@ -1,6 +1,6 @@
 
 #
-# Arduino 0022 Makefile 
+# Arduino-1.0 Makefile 
 #
 # written by olikraus@gmail.com
 #
@@ -21,9 +21,8 @@
 # History
 #	001	28 Apr 2010	first  release
 #	002  05 Oct 2010	added 'uno'
-#	003  07 May 2011	m2 version
-#	004  22 Oct 2011	u8g version, added ARDUINO=22 constant
-#      
+#	003  06 Dec 2011    arduino 1.0 
+#	004  11 Feb 2012     u8glib   
 #
 
 #=== user configuration ===
@@ -41,22 +40,23 @@
 BOARD:=uno
 
 # additional definitions
-DEFS:=-DARDUINO=22
+DEFS:=-DARDUINO=100
 
   
 U8G_PATH:=$(shell cd ../../.. && pwd)/csrc/
 U8G_CPP_PATH:=$(shell cd ../../.. && pwd)/cppsrc/
 U8G_FONT_PATH:=$(shell cd ../../.. && pwd)/sfntsrc/
 
+
 # The location where the avr tools (e.g. avr-gcc) are located. Requires a '/' at the end.
 # Can be empty if all tools are accessable through the search path
 AVR_TOOLS_PATH:=/usr/bin/
 
 # Install path of the arduino software. Requires a '/' at the end.
-ARDUINO_PATH:=/home/kraus/prg/arduino-0022/
+ARDUINO_PATH:=/home/kraus/prg/arduino-1.0/
 
 # Install path for avrdude. Requires a '/' at the end. Can be empty if avrdude is in the search path.
-AVRDUDE_PATH:= 
+AVRDUDE_PATH:=$(ARDUINO_PATH)hardware/tools/
 
 # The unix device where we can reach the arduino board
 # Uno: /dev/ttyACM0
@@ -65,10 +65,7 @@ AVRDUDE_PORT:=/dev/ttyACM1
 
 # List of all libaries which should be included.
 EXTRA_DIRS=$(ARDUINO_PATH)libraries/LiquidCrystal/
-#EXTRA_DIRS+=$(ARDUINO_PATH)libraries/Dogm/
-#EXTRA_DIRS+=/home/kraus/src/arduino/dogm128/hg/libraries/Dogm/
-#EXTRA_DIRS+=/home/kraus/src/m2/m2tklib/dev/arduino/
-#EXTRA_DIRS+=/home/kraus/src/m2/m2tklib/cpp/
+#EXTRA_DIRS+=$(ARDUINO_PATH)libraries/.../
 
 #=== fetch parameter from boards.txt processor parameter ===
 # the basic idea is to get most of the information from boards.txt
@@ -79,14 +76,17 @@ BOARDS_TXT:=$(ARDUINO_PATH)hardware/arduino/boards.txt
 MCU:=$(shell sed -n -e "s/$(BOARD).build.mcu=\(.*\)/\1/p" $(BOARDS_TXT))
 # get the F_CPU value from the $(BOARD).build.f_cpu variable. For the atmega328 board this is 16000000
 F_CPU:=$(shell sed -n -e "s/$(BOARD).build.f_cpu=\(.*\)/\1/p" $(BOARDS_TXT))
+# get variant subfolder
+VARIANT:=$(shell sed -n -e "s/$(BOARD).build.variant=\(.*\)/\1/p" $(BOARDS_TXT))
+
 
 # avrdude
 # get the AVRDUDE_UPLOAD_RATE value from the $(BOARD).upload.speed variable. For the atmega328 board this is 57600
 AVRDUDE_UPLOAD_RATE:=$(shell sed -n -e "s/$(BOARD).upload.speed=\(.*\)/\1/p" $(BOARDS_TXT))
 # get the AVRDUDE_PROGRAMMER value from the $(BOARD).upload.protocol variable. For the atmega328 board this is stk500
-# AVRDUDE_PROGRAMMER:=$(shell sed -n -e "s/$(BOARD).upload.protocol=\(.*\)/\1/p" $(BOARDS_TXT))
+AVRDUDE_PROGRAMMER:=$(shell sed -n -e "s/$(BOARD).upload.protocol=\(.*\)/\1/p" $(BOARDS_TXT))
 # use stk500v1, because stk500 will default to stk500v2
-AVRDUDE_PROGRAMMER:=stk500v1
+#AVRDUDE_PROGRAMMER:=stk500v1
 
 #=== identify user files ===
 PDESRC:=$(shell ls *.pde)
@@ -94,7 +94,6 @@ TARGETNAME=$(basename $(PDESRC))
 
 CDIRS:=$(EXTRA_DIRS) $(addsuffix utility/,$(EXTRA_DIRS))
 CDIRS:=*.c utility/*.c $(U8G_PATH)*.c $(U8G_FONT_PATH)*.c $(addsuffix *.c,$(CDIRS)) $(ARDUINO_PATH)hardware/arduino/cores/arduino/*.c
-#CDIRS:=*.c utility/*.c $(addsuffix *.c,$(CDIRS)) $(ARDUINO_PATH)hardware/arduino/cores/arduino/*.c
 CSRC:=$(shell ls $(CDIRS) 2>/dev/null)
 
 CCSRC:=$(shell ls *.cc 2>/dev/null)
@@ -143,23 +142,24 @@ AVRDUDE_FLAGS += -c $(AVRDUDE_PROGRAMMER)
 AVRDUDE_FLAGS += -b $(AVRDUDE_UPLOAD_RATE)
 AVRDUDE_FLAGS += -U flash:w:$(HEXNAME)
 
-AVRDUDE = avrdude
+AVRDUDE = $(AVRDUDE_PATH)avrdude
 
 #=== predefined variable override ===
 # use "make -p -f/dev/null" to see the default rules and definitions
 
 # Build C and C++ flags. Include path information must be placed here
-COMMON_FLAGS = -DF_CPU=$(F_CPU) -mmcu=$(MCU) $(DEFS)
+COMMON_FLAGS = -DF_CPU=$(F_CPU) -mmcu=$(MCU) $(DEFS) -DARDUINO=100
 # COMMON_FLAGS += -gdwarf-2
 COMMON_FLAGS += -Os
-COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
-#COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections,--print-gc-sections
-COMMON_FLAGS += -Wl,--relax -Wl,-Map=output.map
-COMMON_FLAGS += -mcall-prologues 
 COMMON_FLAGS += -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-COMMON_FLAGS += -I. -I$(U8G_PATH) -I$(U8G_CPP_PATH)
+COMMON_FLAGS += -I. 
 COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/cores/arduino
-COMMON_FLAGS += $(addprefix -I,$(EXTRA_DIRS)) $(addprefix -I,$(addsuffix utility/,$(EXTRA_DIRS)))
+COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/variants/$(VARIANT)
+COMMON_FLAGS += -I. -I$(U8G_PATH) -I$(U8G_CPP_PATH)
+COMMON_FLAGS += $(addprefix -I,$(EXTRA_DIRS))
+COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
+COMMON_FLAGS += -Wl,--relax
+COMMON_FLAGS += -mcall-prologues
 
 CFLAGS = $(COMMON_FLAGS) -std=gnu99 -Wstrict-prototypes  
 CXXFLAGS = $(COMMON_FLAGS) 
@@ -207,7 +207,7 @@ $(TMPDIRPATH)%.dis: $(TMPDIRPATH)%.o
 .elf.hex:
 	@$(OBJCOPY) -O ihex -R .eeprom $< $@
 	
-$(TMPDIRPATH)%.cpp: %.pde  
+$(TMPDIRPATH)%.cpp: %.pde
 	@cat $(ARDUINO_PATH)hardware/arduino/cores/arduino/main.cpp > $@
 	@cat $< >> $@
 	@echo >> $@
@@ -269,7 +269,6 @@ $(TMPDIRPATH)%.d: %.c
 
 $(TMPDIRPATH)%.d: %.cc
 	@$(DEPACTION)
-
 
 $(TMPDIRPATH)%.d: %.cpp
 	@$(DEPACTION)

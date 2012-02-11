@@ -76,7 +76,15 @@ void drawLogo(uint8_t d)
 void drawURL(void)
 {
   u8g.setFont(u8g_font_4x6);
-  u8g.drawStr(1,54,"code.google.com/p/u8glib");
+  if ( u8g.getHeight() < 59 )
+  {
+    u8g.drawStr(53,9,"code.google.com");
+    u8g.drawStr(77,18,"/p/u8glib");
+  }
+  else
+  {
+    u8g.drawStr(1,54,"code.google.com/p/u8glib");
+  }
 }
 
 void draw(void)
@@ -95,7 +103,7 @@ void draw(void)
 
 void setup(void) {
   // flip screen, if required
-  // u8g.setRot180();
+  //u8g.setRot180();
 }
 
 void loop(void) {
