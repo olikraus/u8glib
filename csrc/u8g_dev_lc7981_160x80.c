@@ -135,7 +135,7 @@ uint8_t u8g_dev_lc7981_160x80_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
           u8g_SetAddress(u8g, dev, 0);           /* data mode */
           u8g_WriteSequence(u8g, dev, WIDTH/8, ptr);
           ptr += WIDTH/8;
-          disp_ram_adr += WIDTH/8
+          disp_ram_adr += WIDTH/8;
         }
         u8g_SetChipSelect(u8g, dev, 0);
       }
