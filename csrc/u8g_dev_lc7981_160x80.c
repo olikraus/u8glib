@@ -1,6 +1,8 @@
 /*
 
   u8g_dev_lc7981_160x80.c
+  
+  THIS DEVICE HAS NEVER BEEN TESTED
 
   Universal 8bit Graphics Library
   
@@ -49,8 +51,7 @@
   http://www.lcd-module.de/pdf/grafik/w160-6.pdf
 */
 
-/* init sequence from https://github.com/adafruit/ST7565-LCD/blob/master/ST7565/ST7565.cpp */
-static u8g_pgm_uint8_t u8g_dev_st7920_192x32_init_seq[] = {
+static u8g_pgm_uint8_t u8g_dev_lc7981_160x80_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(1),           /* instruction mode */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
@@ -61,15 +62,15 @@ static u8g_pgm_uint8_t u8g_dev_st7920_192x32_init_seq[] = {
   U8G_ESC_ADR(1),               /* instruction mode */
   0x000,                                /* mode register */
   U8G_ESC_ADR(0),               /* data mode */
-  0x01a,                                /* on/off, master/Slave, mode */
+  0x032,                                /* display on (bit 5), master mode on (bit 4), graphics mode on (bit 1)*/
 
   U8G_ESC_ADR(1),               /* instruction mode */
-  0x001,                                /* character pitch */
+  0x001,                                /* character/bits per pixel pitch */
   U8G_ESC_ADR(0),               /* data mode */
   0x007,                                /* 8 bits per pixel */
 
   U8G_ESC_ADR(1),               /* instruction mode */
-  0x002,                                /* number of chars */
+  0x002,                                /* number of chars/byte width of the screen */
   U8G_ESC_ADR(0),               /* data mode */
   WIDTH/8-1,                         /* 8 bits per pixel */
 
@@ -94,13 +95,13 @@ static u8g_pgm_uint8_t u8g_dev_st7920_192x32_init_seq[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
-uint8_t u8g_dev_st7920_192x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_lc7981_160x80_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7920_192x32_init_seq);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_lc7981_160x80_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
@@ -135,7 +136,6 @@ uint8_t u8g_dev_st7920_192x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
           u8g_WriteSequence(u8g, dev, WIDTH/8, ptr);
           ptr += WIDTH/8;
           disp_ram_adr += WIDTH/8
-          y++;
         }
         u8g_SetChipSelect(u8g, dev, 0);
       }
@@ -144,7 +144,6 @@ uint8_t u8g_dev_st7920_192x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_st7920_192x32_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, u8g_com_arduino_st7920_spi_fn);
-U8G_PB_DEV(u8g_dev_st7920_192x32_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, u8g_com_arduino_parallel_fn);
+U8G_PB_DEV(u8g_dev_lc7981_160x80_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_lc7981_160x80_fn, u8g_com_arduino_parallel_fn);
 
 
