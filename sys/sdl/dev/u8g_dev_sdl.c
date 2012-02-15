@@ -15,7 +15,7 @@
 
 SDL_Surface *u8g_sdl_screen;
 int u8g_sdl_multiple = 2;
-Uint32 u8g_sdl_color[4];
+Uint32 u8g_sdl_color[256];
 
 void u8g_sdl_set_pixel(int x, int y, int idx)
 {
@@ -44,6 +44,7 @@ void u8g_sdl_set_pixel(int x, int y, int idx)
     }
 }
 
+#define W(x,w) (((x)*(w))/100)
 
 void u8g_sdl_init(void)
 {
@@ -62,8 +63,6 @@ void u8g_sdl_init(void)
   }
   printf("At %d bits-per-pixel mode\n", u8g_sdl_screen->format->BitsPerPixel);
   
-  #define W(x,w) (((x)*(w))/100)
-  
   u8g_sdl_color[0] = SDL_MapRGB( u8g_sdl_screen->format, 0, 0, 0 );
   u8g_sdl_color[1] = SDL_MapRGB( u8g_sdl_screen->format, W(100, 50), W(255,50), 0 );
   u8g_sdl_color[2] = SDL_MapRGB( u8g_sdl_screen->format, W(100, 80), W(255,80), 0 );
@@ -78,6 +77,54 @@ void u8g_sdl_init(void)
   /* update all */
   /* http://www.libsdl.org/cgi/docwiki.cgi/SDL_UpdateRect */
   SDL_UpdateRect(u8g_sdl_screen, 0,0,0,0);
+
+  atexit(SDL_Quit);
+  return;
+}
+
+void u8g_sdl_init_R3G3B2(void)
+{
+  int r, g, b, idx;
+  if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+  {
+    printf("Unable to initialize SDL:  %s\n", SDL_GetError());
+    exit(1);
+  }
+  
+  /* http://www.libsdl.org/cgi/docwiki.cgi/SDL_SetVideoMode */
+  u8g_sdl_screen = SDL_SetVideoMode(WIDTH*u8g_sdl_multiple,HEIGHT*u8g_sdl_multiple,32,SDL_SWSURFACE|SDL_ANYFORMAT);
+  if ( u8g_sdl_screen == NULL ) 
+  {
+    printf("Couldn't set video mode: %s\n", SDL_GetError());
+    exit(1);
+  }
+  printf("At %d bits-per-pixel mode\n", u8g_sdl_screen->format->BitsPerPixel);
+  
+
+  idx = 0;
+  for( r = 0; r < 8; r++ )
+    for( g = 0; g < 8; g++ )
+      for( b = 0; b < 4; b++ )
+        u8g_sdl_color[idx++] = SDL_MapRGB( u8g_sdl_screen->format, (r*255)/7, (g*255)/7, (b*255)/3 );
+
+  /*
+  u8g_sdl_set_pixel(0,0);
+  u8g_sdl_set_pixel(1,1);
+  u8g_sdl_set_pixel(2,2);
+  */
+
+  
+  {
+    int x, y;
+    for ( x = 0; x < 128; x++ )
+      for ( y = 0; y < 64; y++ )
+        u8g_sdl_set_pixel(x, y, (x+y)&255);
+  }
+
+  /* update all */
+  /* http://www.libsdl.org/cgi/docwiki.cgi/SDL_UpdateRect */
+  SDL_UpdateRect(u8g_sdl_screen, 0,0,0,0);
+  
 
   atexit(SDL_Quit);
   return;
@@ -271,6 +318,53 @@ uint8_t u8g_dev_sdl_2bit_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
   return u8g_dev_pb8v2_base_fn(u8g, dev, msg, arg);
 }
 
+
+uint8_t u8g_dev_sdl_8bit_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_sdl_init_R3G3B2();
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_FIRST:
+      u8g_sdl_start();
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        uint8_t i, j, v;
+        uint8_t page_height;
+        page_height = pb->p.page_y1;
+        page_height -= pb->p.page_y0;
+        page_height++;
+        for( j = 0; j < page_height; j++ )
+        {
+          for( i = 0; i < WIDTH; i++ )
+          {
+            u8g_sdl_set_pixel(i, j+pb->p.page_y0, ((uint8_t *)(pb->buf))[i+j*WIDTH]);
+          }
+        }
+      }
+      /* update all */
+      /* http://www.libsdl.org/cgi/docwiki.cgi/SDL_UpdateRect */
+      SDL_UpdateRect(u8g_sdl_screen, 0,0,0,0);
+      break;    /* continue to base fn */
+  }
+  return u8g_dev_pb8h8_base_fn(u8g, dev, msg, arg);
+}
+
+
+
 U8G_PB_DEV(u8g_dev_sdl_1bit, WIDTH, HEIGHT, 8, u8g_dev_sdl_1bit_fn, NULL);
 U8G_PB_DEV(u8g_dev_sdl_1bit_h, WIDTH, HEIGHT, 8, u8g_dev_sdl_1bit_h_fn, NULL);
 U8G_PB_DEV(u8g_dev_sdl_2bit, WIDTH, HEIGHT, 4, u8g_dev_sdl_2bit_fn, NULL);
+
+
+
+uint8_t u8g_index_color_8h8_buf[WIDTH*8] U8G_NOCOMMON ; 
+u8g_pb_t u8g_index_color_8h8_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_index_color_8h8_buf}; 
+u8g_dev_t u8g_dev_sdl_8bit = { u8g_dev_sdl_8bit_fn, &u8g_index_color_8h8_pb, NULL };
+

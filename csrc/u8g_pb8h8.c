@@ -49,10 +49,12 @@ u8g_dev_t name = { dev_fn, &u8g_index_color_8h8_pb, com_fn }
 
 */
 
+#include "u8g.h"
+
 #define WIDTH_BITS 7
 #define WIDTH (1<<WIDTH_BITS)
 #define PAGE_HEIGHT_BITS 3
-#define PAGE_HEIGHT (1<<)
+#define PAGE_HEIGHT (1<<PAGE_HEIGHT_BITS)
 #define HEIGHT 128
 
 void u8g_pb8h8_Clear(u8g_pb_t *b)
@@ -79,7 +81,7 @@ void u8g_pb8h8_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
   u8g_pb8h8_Clear(b);
 }
 
-void u8g_pb8v2_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
+static void u8g_pb8h8_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
 {
   register uint8_t mask;
   uint16_t tmp;
@@ -92,5 +94,83 @@ void u8g_pb8v2_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_
   *ptr = color_index;
 }
 
+void u8g_pb8h8_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel)
+{
+  if ( arg_pixel->y < b->p.page_y0 )
+    return;
+  if ( arg_pixel->y > b->p.page_y1 )
+    return;
+  if ( arg_pixel->x >= b->width )
+    return;
+  u8g_pb8h8_set_pixel(b, arg_pixel->x, arg_pixel->y, arg_pixel->color);
+}
 
+
+void u8g_pb8h8_Set8Pixel(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
+{
+  register uint8_t pixel = arg_pixel->pixel;
+  u8g_uint_t dx = 0;
+  u8g_uint_t dy = 0;
+  
+  switch( arg_pixel->dir )
+  {
+    case 0: dx++; break;
+    case 1: dy++; break;
+    case 2: dx--; break;
+    case 3: dy--; break;
+  }
+  
+  do
+  {
+    if ( pixel & 128 )
+      u8g_pb8h8_SetPixel(b, arg_pixel);
+    arg_pixel->x += dx;
+    arg_pixel->y += dy;
+    pixel <<= 1;
+  } while( pixel != 0  );  
+}
+
+
+uint8_t u8g_dev_pb8h8_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+  switch(msg)
+  {
+    case U8G_DEV_MSG_SET_8PIXEL:
+      if ( u8g_pb_Is8PixelVisible(pb, (u8g_dev_arg_pixel_t *)arg) )
+        u8g_pb8h8_Set8Pixel(pb, (u8g_dev_arg_pixel_t *)arg);
+      break;
+    case U8G_DEV_MSG_SET_PIXEL:
+      u8g_pb8h8_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);
+      break;
+    case U8G_DEV_MSG_INIT:
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_FIRST:
+      u8g_pb8h8_Clear(pb);
+      u8g_page_First(&(pb->p));
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      if ( u8g_page_Next(&(pb->p)) == 0 )
+        return 0;
+      u8g_pb8h8_Clear(pb);
+      break;
+    case U8G_DEV_MSG_IS_BBX_INTERSECTION:
+      return u8g_pb_IsIntersection(pb, (u8g_dev_arg_bbx_t *)arg);
+    case U8G_DEV_MSG_GET_WIDTH:
+      *((u8g_uint_t *)arg) = pb->width;
+      break;
+    case U8G_DEV_MSG_GET_HEIGHT:
+      *((u8g_uint_t *)arg) = pb->p.total_height;
+      break;
+    case U8G_DEV_MSG_SET_COLOR_INDEX:
+      break;
+    case U8G_DEV_MSG_SET_XY_CB:
+      break;
+    case U8G_DEV_MSG_GET_MODE:
+      return U8G_MODE_R3G3B2;
+  }
+  return 1;
+}
 

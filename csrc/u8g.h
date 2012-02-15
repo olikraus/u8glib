@@ -108,6 +108,7 @@ typedef struct _u8g_box_t u8g_box_t;
 extern u8g_dev_t u8g_dev_sdl_1bit;
 extern u8g_dev_t u8g_dev_sdl_1bit_h;
 extern u8g_dev_t u8g_dev_sdl_2bit;
+extern u8g_dev_t u8g_dev_sdl_8bit;
 int u8g_sdl_get_key(void);
 
 /* Size: 70x30 monochrom, stdout */
@@ -222,6 +223,7 @@ typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 #define U8G_MODE_UNKNOWN     0
 #define U8G_MODE_BW     U8G_MODE(0, 1)
 #define U8G_MODE_GRAY2BIT     U8G_MODE(0, 2)
+#define U8G_MODE_R3G3B2  U8G_MODE(1, 8)
 
 #define U8G_MODE_GET_BITS_PER_PIXEL(mode) ((mode)&15)
 #define U8G_MODE_IS_COLOR(mode) (((mode)&16)==0?0:1)
@@ -373,6 +375,9 @@ uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 
 /* u8g_pb8h1.c */
 uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+
+/* u8g_pb8h8.c */
+uint8_t u8g_dev_pb8h8_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 
 /*===============================================================*/
