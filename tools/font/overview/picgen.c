@@ -1478,9 +1478,9 @@ int main(void)
   pic_gen_font(u8g_font_fur25n, "u8g_font_fur25n", 32, "FreeUniversal-Regular");
   pic_gen_font(u8g_font_fur30n, "u8g_font_fur30n", 32, "FreeUniversal-Regular");
   
-  pic_gen_font(u8g_font_fur35n, "u8g_font_fur35n", 32, "FreeUniversal-Bold");
-  pic_gen_font(u8g_font_fur42n, "u8g_font_fur42n", 32, "FreeUniversal-Bold");
-  pic_gen_font(u8g_font_fur49n, "u8g_font_fur49n", 36, "FreeUniversal-Bold");
+  pic_gen_font(u8g_font_fur35n, "u8g_font_fur35n", 32, "FreeUniversal-Regular");
+  pic_gen_font(u8g_font_fur42n, "u8g_font_fur42n", 32, "FreeUniversal-Regular");
+  pic_gen_font(u8g_font_fur49n, "u8g_font_fur49n", 36, "FreeUniversal-Regular");
 
   pic_gen_font(u8g_font_gdb11, "u8g_font_gdb11", 32, "Gentium Bold");
   pic_gen_font(u8g_font_gdb12, "u8g_font_gdb12", 32, "Gentium Bold");

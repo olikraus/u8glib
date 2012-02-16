@@ -1,6 +1,8 @@
 /*
 
   u8g_dev_st7687_c144mvgd.c (1.44" TFT)
+  
+  Status: Started, but not finished
 
   Universal 8bit Graphics Library
   
@@ -40,7 +42,10 @@
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
-/* init sequence from https://github.com/adafruit/ST7565-LCD/blob/master/ST7565/ST7565.cpp */
+/* 
+see also: read.pudn.com/downloads115/sourcecode/app/484503/LCM_Display.c__.htm 
+http://en.pudn.com/downloads115/sourcecode/app/detail484503_en.html
+*/
 u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
@@ -86,9 +91,74 @@ u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
   0x001,                             /*  3.6 + 256*0.04 = 13.84 Volt */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_DLY(100),         /* delay 100 ms */
-}
+  
+  0x0c3,                                /* Bias selection, 8.1.45 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x003,
+  U8G_ESC_ADR(0),           /* instruction mode */
+  
+  0x0c4,                                /* Booster setting 8.1.46 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x007,
+  U8G_ESC_ADR(0),           /* instruction mode */
+  
+  0x0c5,                                /* ??? */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x001,
+  U8G_ESC_ADR(0),           /* instruction mode */
+  
+  0x0cb,                                /* FV3 with Booster x2 control, 8.1.47 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x001,
+  U8G_ESC_ADR(0),           /* instruction mode */
+  
+  0x036,                                /* Memory data access control, 8.1.28 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x080,
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x0b5,                                /* N-line control, 8.1.37 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x089,
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+
+  0x0d0,                                /* Analog circuit setting, 8.1.49 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x01d,
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x0b7,                                /* Com/Seg Scan Direction, 8.1.38 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x040,
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x025,                                /* Write contrast, 8.1.17 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x03f,
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x03a,                                /* Interface pixel format, 8.1.32 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x005,                                /* 3: 12 bit per pixel Type A, 4: 12 bit Type B, 5: 16bit per pixel */
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x0b0,                                /* Display Duty setting, 8.1.34 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x07f,
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x0f0,                                /* Frame Freq. in Temp range A,B,C and D, 8.1.59 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x007,
+  0x00c,
+  0x00c,
+  0x015,
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+};
 
 
 uint8_t u8g_st7687_c144mvgd_8h8_buf[WIDTH*8] U8G_NOCOMMON ; 
 u8g_pb_t u8g_st7687_c144mvgd_8h8_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_st7687_c144mvgd_8h8_buf}; 
-u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi = { u8g_dev_sdl_8bit_fn, &u8g_st7687_c144mvgd_8h8_pb, u8g_com_arduino_sw_spi_fn };
+//u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi = { aaabbbccc, &u8g_st7687_c144mvgd_8h8_pb, u8g_com_arduino_sw_spi_fn };
