@@ -51,11 +51,11 @@ int main(void)
     w = u8g_GetFontBBXWidth(&u8g);
     h = u8g_GetFontBBXHeight(&u8g);
     u8g_SetColorIndex(&u8g, 1);
-    u8g_DrawStr(&u8g, 30, 35, "gabc");
+    u8g_DrawStr(&u8g, 20, 40, "U8glib");
     u8g_SetColorIndex(&u8g, 2);
-    u8g_DrawStr(&u8g, 30+1, 35+1, "gabc");
+    u8g_DrawStr(&u8g, 20+1, 40+1, "U8glib");
     u8g_SetColorIndex(&u8g, 3);
-    u8g_DrawStr(&u8g, 30+2, 35+2, "gabc");
+    u8g_DrawStr(&u8g, 20+2, 40+2, "U8glib");
     
   }while( u8g_NextPage(&u8g) );
   

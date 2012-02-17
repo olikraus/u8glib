@@ -140,7 +140,7 @@ u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
 
   0x03a,                                /* Interface pixel format, 8.1.32 */
   U8G_ESC_ADR(1),           /* data mode */
-  0x005,                                /* 3: 12 bit per pixel Type A, 4: 12 bit Type B, 5: 16bit per pixel */
+  0x004,                                /* 3: 12 bit per pixel Type A, 4: 12 bit Type B, 5: 16bit per pixel */
   U8G_ESC_ADR(0),           /* instruction mode */
 
   0x0b0,                                /* Display Duty setting, 8.1.34 */
@@ -156,9 +156,119 @@ u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
   0x015,
   U8G_ESC_ADR(0),           /* instruction mode */
 
+  0x0f9,                                /* Frame RGB Value, 8.1.65 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x000,
+  0x005,
+  0x008,
+  0x00a,
+  0x00c,
+  0x00e,
+  0x010,
+  0x011,
+  0x012,
+  0x013,
+  0x014,
+  0x015,
+  0x016,
+  0x018,
+  0x01a,
+  0x01b,
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x0f9,                                /* Frame RGB Value, 8.1.65 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x000,
+  0x000,
+  0x000,
+  0x000,
+  0x033,
+  0x055,
+  0x055,
+  0x055,
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x029,                        /* display on */
+
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_END                /* end of sequence */
+
 };
+
+/* calculate bytes for Type B 4096 color display */
+static uint8_t get_byte_1(uint8_t v)
+{
+  v >>= 4;
+  v &= 0x0e;
+  return v;
+}
+
+static uint8_t get_byte_2(uint8_t v)
+{
+  uint8_t w;
+  w = v;
+  w &= 3;
+  w = (w<<2) | w;
+  v <<= 3;
+  v &= 0x0e0;
+  w |= v;
+  return w;
+}
+
+uint8_t u8g_dev_st7687_c144mvgd_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_InitCom(u8g, dev);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7687_c144mvgd_init_seq);
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        uint8_t y, i, j;
+        uint8_t *ptr;
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        
+        u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
+        u8g_SetChipSelect(u8g, dev, 1);
+        y = pb->p.page_y0;
+        ptr = pb->buf;
+        
+        u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
+        u8g_WriteByte(u8g, dev, 0x02a );      /* Column address set 8.1.20 */
+        u8g_SetAddress(u8g, dev, 1);           /* data mode */
+        u8g_WriteByte(u8g, dev, 0x000 );      /* x0 */
+        u8g_WriteByte(u8g, dev, WIDTH-1 );      /* x1 */
+        u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
+        u8g_WriteByte(u8g, dev, 0x02b );      /* Row address set 8.1.21 */
+        u8g_SetAddress(u8g, dev, 1);           /* data mode */
+        u8g_WriteByte(u8g, dev, y );      /* y0 */
+        u8g_WriteByte(u8g, dev, y+PAGE_HEIGHT-1 );      /* y1 */
+        u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
+        u8g_WriteByte(u8g, dev, 0x02c );      /* Memory write 8.1.22 */
+        u8g_SetAddress(u8g, dev, 1);           /* data mode */
+        
+        for( i = 0; i < PAGE_HEIGHT; i ++ )
+        {
+          
+          for( j = 0; j < WIDTH; j ++ )
+          {
+            u8g_WriteByte(u8g, dev, get_byte_1(*ptr) );     
+            u8g_WriteByte(u8g, dev, get_byte_2(*ptr) );                 
+            ptr++;
+          }
+        }
+        u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
+        u8g_SetChipSelect(u8g, dev, 0);
+      }
+      break;
+  }
+  return u8g_dev_pb8h8_base_fn(u8g, dev, msg, arg);
+}
 
 
 uint8_t u8g_st7687_c144mvgd_8h8_buf[WIDTH*8] U8G_NOCOMMON ; 
 u8g_pb_t u8g_st7687_c144mvgd_8h8_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_st7687_c144mvgd_8h8_buf}; 
-//u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi = { aaabbbccc, &u8g_st7687_c144mvgd_8h8_pb, u8g_com_arduino_sw_spi_fn };
+u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi = { u8g_dev_st7687_c144mvgd_fn, &u8g_st7687_c144mvgd_8h8_pb, u8g_com_arduino_sw_spi_fn };
