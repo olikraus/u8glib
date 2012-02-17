@@ -4,27 +4,34 @@
   
   Port to the dogm128 API of the u8g library
 
-  
-  A game, which runs on the DOGM132 (and all other displays).
-  < 512 Bytes RAM
-  < 8K Bytes FlashROM
+  A game, which should runs on all displays.
 
-  (c) 2010 Oliver Kraus (olikraus@gmail.com)
-  
-  This file is part of the u8glib software.
+  Copyright (c) 2012, olikraus@gmail.com
+  All rights reserved.
 
-  The u8glib software is free software: you can redistribute it and/or modify
-  it under the terms of the Lesser GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
 
-  The u8glib software is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  Lesser GNU General Public License for more details.
+  * Redistributions of source code must retain the above copyright notice, this list 
+    of conditions and the following disclaimer.
+    
+  * Redistributions in binary form must reproduce the above copyright notice, this 
+    list of conditions and the following disclaimer in the documentation and/or other 
+    materials provided with the distribution.
 
-  You should have received a copy of the Lesser GNU General Public License
-  along with dogm128.  If not, see <http://www.gnu.org/licenses/>.
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
 
 */
 
@@ -619,7 +626,10 @@ void st_DrawBitmap(uint8_t objnr, DOG_PGM_P bm, uint8_t w, uint8_t h)
   /* st_obj *o = st_GetObj(objnr); */
   st_CalcBBOX(objnr);
   /* result is here: int16_t st_bbox_x0, st_bbox_y0, st_bbox_x1, st_bbox_y1 */
-  dog_SetBitmapP(st_bbox_x0,st_bbox_y1,bm,w,h);
+  //dog_SetBitmapP(st_bbox_x0,st_bbox_y1,bm,w,h);
+  
+  u8g_DrawBitmapP(&u8g_dogm128_obj, st_bbox_x0, dog_height_minus_one - st_bbox_y1, (w+7)/8, h, bm);
+  
  }
 
 void st_DrawObj(uint8_t objnr)

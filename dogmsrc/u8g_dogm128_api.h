@@ -67,6 +67,7 @@ typedef u8g_pgm_uint8_t dog_pgm_uint8_t;
 
 
 extern u8g_t u8g_dogm128_obj;
+extern uint8_t dog_height_minus_one;
 
 #define DOG_WIDTH (u8g_dogm128_obj.width)
 #define DOG_HEIGHT (u8g_dogm128_obj.height)
