@@ -39,7 +39,7 @@
 #include "u8g.h"
 
 #define WIDTH 128
-#define HEIGHT 64
+#define HEIGHT 128
 #define PAGE_HEIGHT 8
 
 /* 
