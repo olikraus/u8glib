@@ -588,16 +588,30 @@ void st_Move(uint8_t objnr)
 
 void st_DrawBBOX(uint8_t objnr)
 {
+  uint8_t y0, y1;
   /*st_obj *o = st_GetObj(objnr);*/
   st_CalcBBOX(objnr);
   if ( st_ClipBBOX() == 0 )
     return;
   /* st_cbbox_x0, st_cbbox_y0, st_cbbox_x1, st_cbbox_y1; */
 
-  dog_SetVLine(st_cbbox_x0, st_cbbox_y0, st_cbbox_y1);
-  dog_SetVLine(st_cbbox_x1, st_cbbox_y0, st_cbbox_y1);
-  dog_SetHLine(st_cbbox_x0, st_cbbox_x1, st_cbbox_y0);
-  dog_SetHLine(st_cbbox_x0, st_cbbox_x1, st_cbbox_y1);
+  
+  // w = st_cbbox_x1-st_cbbox_x0;
+  // w++;
+  // h = st_cbbox_y1-st_cbbox_y0;
+  // h++;
+  
+  
+  //dog_SetVLine(st_cbbox_x0, st_cbbox_y0, st_cbbox_y1);
+  //dog_SetVLine(st_cbbox_x1, st_cbbox_y0, st_cbbox_y1);
+  //dog_SetHLine(st_cbbox_x0, st_cbbox_x1, st_cbbox_y0);
+  //dog_SetHLine(st_cbbox_x0, st_cbbox_x1, st_cbbox_y1);
+
+  u8g_SetColorIndex(&u8g_dogm128_obj, 1);
+  y0 = dog_height_minus_one - st_cbbox_y0;
+  y1 = dog_height_minus_one - st_cbbox_y1;
+  
+  u8g_DrawFrame(&u8g_dogm128_obj, st_cbbox_x0, y1, st_cbbox_x1-st_cbbox_x0+1, y0-y1+1);
   
   //dog_SetBox(st_cbbox_x0, st_cbbox_y0, st_cbbox_x1, st_cbbox_y1);
 
