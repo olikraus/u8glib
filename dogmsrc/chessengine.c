@@ -1880,7 +1880,7 @@ uint8_t mnu_max = 4;
 
 void mnu_DrawHome(uint8_t is_highlight)
 {
-  uint8_t x = u8g_dogm128_obj.width - 35;  
+  uint8_t x = lrc_u8g->width - 35;  
   uint8_t y = dog_height_minus_one;
   uint8_t t;
   
@@ -1897,7 +1897,7 @@ void mnu_DrawEntry(uint8_t y, char *str, uint8_t is_clr_background, uint8_t is_h
   uint8_t t, x;
   u8g_SetFont(&u8g_dogm128_obj, MNU_FONT);
   t = u8g_GetStrWidth(&u8g_dogm128_obj, str);
-  x = DOG_WIDTH;
+  x = u8g_GetWidth(lrc_u8g);
   x -= t;
   x >>= 1;
   
@@ -1927,12 +1927,12 @@ void mnu_Draw(void)
   y *= MNU_ENTRY_HEIGHT;
   
   /* calculate how much space will be left */
-  t = DOG_HEIGHT;			
+  t = u8g_GetHeight(lrc_u8g);			
   t -= y;
   
   /* topmost pos start half of that empty space from the top */
   t >>= 1;
-  y = DOG_HEIGHT;
+  y = u8g_GetHeight(lrc_u8g);
   y -= t;
   
   y -= MNU_ENTRY_HEIGHT;
@@ -2204,9 +2204,9 @@ void chess_Draw(void)
       {
         
 #if defined(DOGXL160_HW_GR) || defined(DOGXL160_HW_BW)
-	dog_DrawStr(DOG_WIDTH-35, DOG_HEIGHT-8*(i+1), font_5x7, cu_GetHalfMoveStr(lrc_obj.chm_pos-entries+i));
+	dog_DrawStr(u8g_GetWidth(lrc_u8g)-35, u8g_GetHeight(lrc_u8g)-8*(i+1), font_5x7, cu_GetHalfMoveStr(lrc_obj.chm_pos-entries+i));
 #else
-        u8g_DrawStr(&u8g_dogm128_obj, DOG_WIDTH-35, 8*(i+1), cu_GetHalfMoveStr(lrc_obj.chm_pos-entries+i));
+        u8g_DrawStr(&u8g_dogm128_obj, u8g_GetWidth(lrc_u8g)-35, 8*(i+1), cu_GetHalfMoveStr(lrc_obj.chm_pos-entries+i));
 #endif
 
       }
@@ -2225,13 +2225,13 @@ void chess_Draw(void)
       switch( lrc_obj.lost_side_color )
       {
 	case COLOR_WHITE:
-	  mnu_DrawEntry(DOG_HEIGHT / 2-2, "Black wins", 1, 1);
+	  mnu_DrawEntry(u8g_GetHeight(lrc_u8g) / 2-2, "Black wins", 1, 1);
 	  break;
 	case COLOR_BLACK:
-	  mnu_DrawEntry(DOG_HEIGHT / 2-2, "White wins", 1, 1);
+	  mnu_DrawEntry(u8g_GetHeight(lrc_u8g) / 2-2, "White wins", 1, 1);
 	  break;
 	default:
-	  mnu_DrawEntry(DOG_HEIGHT / 2-2, "Stalemate", 1, 1);
+	  mnu_DrawEntry(u8g_GetHeight(lrc_u8g) / 2-2, "Stalemate", 1, 1);
 	  break;
       }  
     }
@@ -2368,9 +2368,6 @@ void chess_Step(uint8_t keycode)
       break;
   }
   
-  /* TODO: remove this line */
-  /*ce_CalculatePositionWeight(chess_source_pos);*/
-    
 }
 
 #endif
