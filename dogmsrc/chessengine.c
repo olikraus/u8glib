@@ -603,7 +603,7 @@ void chess_SetupBoard(void)
   lrc_obj.board[6+7*8] = cp_Construct(COLOR_BLACK, PIECE_KNIGHT);
   lrc_obj.board[7+7*8] = cp_Construct(COLOR_BLACK, PIECE_ROOK);
 
-  /*chess_SetupBoardTest01();*/
+  chess_SetupBoardTest01();
 
 }
 
@@ -1893,19 +1893,24 @@ void mnu_DrawHome(uint8_t is_highlight)
 void mnu_DrawEntry(uint8_t y, char *str, uint8_t is_clr_background, uint8_t is_highlight)
 {
   uint8_t t, x;
-  t = dog_GetStrWidth(MNU_FONT, str);
+  u8g_SetFont(&u8g_dogm128_obj, MNU_FONT);
+  t = u8g_GetStrWidth(&u8g_dogm128_obj, str);
   x = DOG_WIDTH;
   x -= t;
   x >>= 1;
-  if ( is_clr_background )
-    dog_ClrBox(x-1-2, y-2, x+t-1+2, y+MNU_ENTRY_HEIGHT-1+2);
   
-  dog_DrawStr(x, y, MNU_FONT, str);
+  if ( is_clr_background )
+  {
+    u8g_SetColorIndex(&u8g_dogm128_obj, 0);
+    u8g_DrawBox(&u8g_dogm128_obj, x-3, dog_height_minus_one - (y+MNU_ENTRY_HEIGHT-1+2), t+5, MNU_ENTRY_HEIGHT+4);
+  }
+  
+  u8g_SetColorIndex(&u8g_dogm128_obj, 1);
+  u8g_DrawStr(&u8g_dogm128_obj, x, dog_height_minus_one - y, str);
   
   if ( is_highlight )
   {
     u8g_DrawFrame(&u8g_dogm128_obj, x-1, dog_height_minus_one - y -MNU_ENTRY_HEIGHT +1, t, MNU_ENTRY_HEIGHT);
-    //dog_XorBox(x-1, y, x+t-1, y+MNU_ENTRY_HEIGHT-1);
   }
 }
 
