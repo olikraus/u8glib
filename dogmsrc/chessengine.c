@@ -1878,19 +1878,16 @@ uint8_t mnu_max = 4;
 
 void mnu_DrawHome(uint8_t is_highlight)
 {
-#if defined(DOGXL160_HW_GR) || defined(DOGXL160_HW_BW)
-  uint8_t x = DOG_WIDTH-35;
-#else
-  uint8_t x = 67;
-#endif
-  uint8_t y = 0;
+  uint8_t x = u8g_dogm128_obj.width - 35;  
+  uint8_t y = dog_height_minus_one;
   uint8_t t;
-  t = dog_DrawStrP(x, y, font_5x7, DOG_PSTR("Options"));
-  if ( is_highlight )
-    u8g_DrawFrame(&u8g_dogm128_obj, x-1, dog_height_minus_one - y -MNU_ENTRY_HEIGHT +1, t, MNU_ENTRY_HEIGHT);
   
-  //  dog_XorBox(x-1, y, x+t-1, y+MNU_ENTRY_HEIGHT-1);  
-  //dog_SetBox(x-1-1, y-1, x+t-1+1, y+MNU_ENTRY_HEIGHT-1+1);
+  u8g_SetFont(&u8g_dogm128_obj, u8g_font_5x7r);
+  u8g_SetColorIndex(&u8g_dogm128_obj, 1);
+  t = u8g_DrawStrP(&u8g_dogm128_obj, x, y -1, DOG_PSTR("Options"));
+    
+  if ( is_highlight )
+    u8g_DrawFrame(&u8g_dogm128_obj, x-1, y - MNU_ENTRY_HEIGHT +1, t, MNU_ENTRY_HEIGHT);  
 }
 
 void mnu_DrawEntry(uint8_t y, char *str, uint8_t is_clr_background, uint8_t is_highlight)
@@ -1902,7 +1899,9 @@ void mnu_DrawEntry(uint8_t y, char *str, uint8_t is_clr_background, uint8_t is_h
   x >>= 1;
   if ( is_clr_background )
     dog_ClrBox(x-1-2, y-2, x+t-1+2, y+MNU_ENTRY_HEIGHT-1+2);
+  
   dog_DrawStr(x, y, MNU_FONT, str);
+  
   if ( is_highlight )
   {
     u8g_DrawFrame(&u8g_dogm128_obj, x-1, dog_height_minus_one - y -MNU_ENTRY_HEIGHT +1, t, MNU_ENTRY_HEIGHT);
