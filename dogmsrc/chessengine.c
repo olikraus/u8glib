@@ -288,6 +288,8 @@ typedef struct _lrc_struct lrc_t;
 /* global variables */
 /*==============================================================*/
 
+u8g_t *lrc_u8g;
+
 lrc_t lrc_obj;
 
 
@@ -603,7 +605,7 @@ void chess_SetupBoard(void)
   lrc_obj.board[6+7*8] = cp_Construct(COLOR_BLACK, PIECE_KNIGHT);
   lrc_obj.board[7+7*8] = cp_Construct(COLOR_BLACK, PIECE_ROOK);
 
-  chess_SetupBoardTest01();
+  //chess_SetupBoardTest01();
 
 }
 
@@ -2054,10 +2056,10 @@ void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
   y1 += 8-2;
 #endif
   
-  dog_SetVLine(x0, y0, y1);
-  dog_SetVLine(x1, y0, y1);
-  dog_SetHLine(x0, x1, y0);
-  dog_SetHLine(x0, x1, y1);
+  
+  u8g_SetColorIndex(&u8g_dogm128_obj, 1);
+  u8g_DrawFrame(&u8g_dogm128_obj, x0, dog_height_minus_one - y1, x1-x0+1, y1-y0+1);
+  
   
   if ( is_bold )
   {
@@ -2068,10 +2070,7 @@ void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
       y0--;
     y1++;
   
-    dog_SetVLine(x0, y0, y1);
-    dog_SetVLine(x1, y0, y1);
-    dog_SetHLine(x0, x1, y0);
-    dog_SetHLine(x0, x1, y1);
+    u8g_DrawFrame(&u8g_dogm128_obj, x0, dog_height_minus_one - y1, x1-x0+1, y1-y0+1);
   }
 }
 
@@ -2099,24 +2098,25 @@ void chess_DrawBoard(void)
     }
   dog_SetPixelValue(3);    
 #else
+  u8g_SetColorIndex(&u8g_dogm128_obj, 1);  
   for( i = 0; i < 8*8; i+=8 )
   {
     for( j = 0; j < 8*8; j+=8 )
     {
       if ( ((i^j) & 8)  == 0 )
       {
-	dog_SetPixel(j+1, i+0);
-	dog_SetPixel(j+1, i+2);
-	dog_SetPixel(j+1, i+4);
-	dog_SetPixel(j+1, i+6);
-	dog_SetPixel(j+3, i+0);
-	dog_SetPixel(j+3, i+6);
-	dog_SetPixel(j+5, i+0);
-	dog_SetPixel(j+5, i+6);
-	dog_SetPixel(j+7, i+0);
-	dog_SetPixel(j+7, i+2);
-	dog_SetPixel(j+7, i+4);
-	dog_SetPixel(j+7, i+6);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+1, dog_height_minus_one - i-0);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+1, dog_height_minus_one - i-2);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+1, dog_height_minus_one - i-4);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+1, dog_height_minus_one - i-6);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+3, dog_height_minus_one - i-0);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+3, dog_height_minus_one - i-6);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+5, dog_height_minus_one - i-0);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+5, dog_height_minus_one - i-6);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+7, dog_height_minus_one - i-0);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+7, dog_height_minus_one - i-2);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+7, dog_height_minus_one - i-4);
+	u8g_DrawPixel(&u8g_dogm128_obj, j+7, dog_height_minus_one - i-6);
       }
     }
   }
@@ -2139,12 +2139,15 @@ void chess_DrawBoard(void)
       {
 	ptr = chess_black_pieces_bm;
 	ptr += (cp_GetPiece(cp)-1)*8;
-	dog_SetBitmapP(j*BOXSIZE+BOXOFFSET-1,i*BOXSIZE+BOXSIZE-BOXOFFSET,ptr, 8, 8);
+        u8g_SetColorIndex(&u8g_dogm128_obj, 1);
+        u8g_DrawBitmapP(&u8g_dogm128_obj, j*BOXSIZE+BOXOFFSET-1, dog_height_minus_one - (i*BOXSIZE+BOXSIZE-BOXOFFSET), 1, 8, ptr);
+
 	if ( cp_GetColor(cp) == 0 ) 
 	{
 	  ptr = chess_pieces_body_bm;
 	  ptr += (cp_GetPiece(cp)-1)*8;
-	  dog_ClrBitmapP(j*BOXSIZE+BOXOFFSET-1,i*BOXSIZE+BOXSIZE-BOXOFFSET,ptr, 8, 8);
+          u8g_SetColorIndex(&u8g_dogm128_obj, 0);
+          u8g_DrawBitmapP(&u8g_dogm128_obj, j*BOXSIZE+BOXOFFSET-1, dog_height_minus_one - (i*BOXSIZE+BOXSIZE-BOXOFFSET), 1, 8, ptr);
 	}
       }
     }
@@ -2167,8 +2170,9 @@ void chess_Thinking(void)
 {
 }
 
-void chess_Init(void)
+void chess_Init(u8g_t *u8g)
 {
+  lrc_u8g = u8g;
   chess_SetupBoard();
 }
 
@@ -2193,27 +2197,21 @@ void chess_Draw(void)
       uint8_t entries = lrc_obj.chm_pos;
       if ( entries > 4 )
 	entries = 4;
+      
+      u8g_SetFont(&u8g_dogm128_obj, u8g_font_5x7);
+      u8g_SetColorIndex(&u8g_dogm128_obj, 1);
       for( i = 0; i < entries; i++ )
       {
+        
 #if defined(DOGXL160_HW_GR) || defined(DOGXL160_HW_BW)
 	dog_DrawStr(DOG_WIDTH-35, DOG_HEIGHT-8*(i+1), font_5x7, cu_GetHalfMoveStr(lrc_obj.chm_pos-entries+i));
 #else
-	dog_DrawStr(70, DOG_HEIGHT-8*(i+1), font_5x7, cu_GetHalfMoveStr(lrc_obj.chm_pos-entries+i));
+        u8g_DrawStr(&u8g_dogm128_obj, DOG_WIDTH-35, 8*(i+1), cu_GetHalfMoveStr(lrc_obj.chm_pos-entries+i));
 #endif
 
       }
       
-      /*
-      if ( chm_pos >= 2 )
-      {
-	dog_DrawStr(70, DOG_HEIGHT-8, font_5x7, cu_GetHalfMoveStr(chm_pos-2));
-	dog_DrawStr(70, DOG_HEIGHT-16, font_5x7, cu_GetHalfMoveStr(chm_pos-1));
-      }
-      */
     }
-    
-    // dog_DrawStr(70, 10+8, font_5x7, dog_itoa(stack_GetCurrElement()->best_eval));
-    // dog_DrawStr(70, 10+8, font_5x7, dog_itoa(lrc_obj.castling_possible));
     
     if ( chess_state == CHESS_STATE_SELECT_PIECE )
       mnu_DrawHome(chess_source_pos == 255);
@@ -2265,13 +2263,13 @@ void chess_Step(uint8_t keycode)
       {
 	if ( mnu_pos == 0 )
 	{
-	  chess_Init();
+          chess_SetupBoard();
 	  lrc_obj.orientation = 0;
 	  chess_state = CHESS_STATE_SELECT_START;
 	}
 	else if ( mnu_pos == 1 )
 	{
-	  chess_Init();
+          chess_SetupBoard();
 	  lrc_obj.orientation = 1;
 	  chess_state = CHESS_STATE_THINKING;
 	}

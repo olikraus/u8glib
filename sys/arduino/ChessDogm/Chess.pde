@@ -104,7 +104,7 @@ void setup() {
 
   //u8g_SetDogmRot180();
   uiSetup();
-  chess_Init();
+  chess_Init(&u8g_dogm128_obj);
 }
 
 void loop() {  
