@@ -94,6 +94,7 @@ void dog_ClrVLine(uint8_t x, uint8_t y1, uint8_t y2);
 void dog_SetBitmapP(uint8_t x, uint8_t y, DOG_PGM_P bitmap, uint8_t w, uint8_t h);
 void dog_SetBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
 void dog_ClrBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
+uint8_t dog_GetStrWidth(DOG_PGM_P font, const char *s);
 uint8_t dog_DrawStr(uint8_t x, uint8_t y, DOG_PGM_P font, const char *s);
 uint8_t dog_DrawStrP(uint8_t x, uint8_t y, DOG_PGM_P font, const u8g_pgm_uint8_t  *s);
 char *dog_itoa(unsigned long v);

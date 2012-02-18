@@ -169,6 +169,15 @@ void dog_XorVLine(uint8_t x, uint8_t y1, uint8_t y2)
 
 void dog_SetBitmapP(uint8_t x, uint8_t y, DOG_PGM_P bitmap, uint8_t w, uint8_t h)
 {
+  u8g_SetColorIndex(&u8g_dogm128_obj, 1);
+  y = dog_height_minus_one - y;
+  /*  not fully compatible, it is assumed, that the "not used" bits are set to zero */
+  u8g_DrawBitmapP(&u8g_dogm128_obj, x, y, (w+7)/8, h, bitmap);
+}
+
+void dog_ClrBitmapP(uint8_t x, uint8_t y, DOG_PGM_P bitmap, uint8_t w, uint8_t h)
+{
+  u8g_SetColorIndex(&u8g_dogm128_obj, 0);
   y = dog_height_minus_one - y;
   /*  not fully compatible, it is assumed, that the "not used" bits are set to zero */
   u8g_DrawBitmapP(&u8g_dogm128_obj, x, y, (w+7)/8, h, bitmap);
@@ -199,10 +208,18 @@ void dog_XorBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
   /* not yet implemented */
 }
 
+uint8_t dog_GetStrWidth(DOG_PGM_P font, const char *s)
+{
+  u8g_SetFont(&u8g_dogm128_obj, font);
+  return u8g_GetStrWidth(&u8g_dogm128_obj, s);
+}
+
+
 uint8_t dog_DrawStr(uint8_t x, uint8_t y, DOG_PGM_P font, const char *s)
 {
   y = dog_height_minus_one - y;
   u8g_SetFont(&u8g_dogm128_obj, font);
+  u8g_SetColorIndex(&u8g_dogm128_obj, 1);
   return u8g_DrawStr(&u8g_dogm128_obj, x, y, s);
 }
 
@@ -210,6 +227,7 @@ uint8_t dog_DrawStrP(uint8_t x, uint8_t y, DOG_PGM_P font, const u8g_pgm_uint8_t
 {
   y = dog_height_minus_one - y;
   u8g_SetFont(&u8g_dogm128_obj, font);
+  u8g_SetColorIndex(&u8g_dogm128_obj, 1);
   return u8g_DrawStrP(&u8g_dogm128_obj, x, y, s);
 }
 

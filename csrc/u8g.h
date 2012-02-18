@@ -621,14 +621,23 @@ void st_Step(uint8_t player_pos, uint8_t is_auto_fire, uint8_t is_fire);
 /* v = value, d = number of digits */
 const char *u8g_u8toa(uint8_t v, uint8_t d);
 
-
-
-
 /*===============================================================*/
 /* u8g_delay.c */
 
 /* delay by the specified number of milliseconds */
 void u8g_Delay(uint16_t val);
+
+/*===============================================================*/
+/* chessengine.c */
+#define CHESS_KEY_NONE 0
+#define CHESS_KEY_NEXT 1
+#define CHESS_KEY_PREV 2
+#define CHESS_KEY_SELECT 3
+#define CHESS_KEY_BACK 4
+
+void chess_Init(void);
+void chess_Draw(void);
+void chess_Step(uint8_t keycode);
 
 /*===============================================================*/
 /* font definitions */
