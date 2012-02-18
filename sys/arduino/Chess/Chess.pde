@@ -40,7 +40,26 @@
 */
 
 
-#include "u8g_dogm128_api.h"
+#include "U8glib.h"
+
+// setup u8g object, please remove comment from one of the following constructor calls
+
+//U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_ST7920_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_128X64 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_192X32 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_192X32 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_LM6059 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_LM6063 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGXL160_BW u8g(13, 11, 10, 9);            // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGXL160_GR u8g(13, 11, 10, 9);             // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_PCD8544 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
+//U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
+//U8GLIB_KS0108_128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs1=14, cs2=15,di=17,rw=16
 
 
 // DOGS102 shield configuration values
@@ -103,23 +122,23 @@ void setup() {
   //u8g_InitSPIDogm128API(&u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
   //u8g_InitSPIDogm128API(&u8g_dev_st7920_192x32_sw_spi, 18, 16, 17, U8G_PIN_NONE, U8G_PIN_NONE);
   //u8g_InitSPIDogm128API(&u8g_dev_st7920_128x64_sw_spi, 18, 16, 17, U8G_PIN_NONE, U8G_PIN_NONE);
-  u8g_InitSPIDogm128API(&u8g_dev_st7565_dogm128_hw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
+  //u8g_InitSPIDogm128API(&u8g_dev_st7565_dogm128_hw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
 
   //u8g_SetDogmRot180();
   uiSetup();
-  chess_Init(&u8g_dogm128_obj);
+  chess_Init(u8g.getU8g());
 }
 
 void loop() {  
   uint8_t keyCode = CHESS_KEY_NONE;
   
-  dog_StartPage();
+  u8g.firstPage();
   do {
     chess_Draw();
     uiStep();
     if ( uiKeyCode != CHESS_KEY_NONE )
       keyCode = uiKeyCode;
-  } while( dog_NextPage() );
+  } while( u8g.nextPage() );
   
   u8g_Delay(10);
   chess_Step(keyCode);

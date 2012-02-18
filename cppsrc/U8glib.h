@@ -66,8 +66,10 @@ class U8GLIB : public Print
         uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset) 
       { init8Bit(dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset); }
 
-    void setPrintPos(u8g_uint_t x, u8g_uint_t y) 
-      { tx = x; ty = y; }
+    void setPrintPos(u8g_uint_t x, u8g_uint_t y) { tx = x; ty = y; }
+    u8g_t *getU8g(void) { return &u8g; }
+    
+    
     /* implementation of the write interface to the print class */
 #if defined(ARDUINO) && ARDUINO >= 100
     size_t write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); return 1;}
