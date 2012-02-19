@@ -173,7 +173,7 @@ extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_gr_hw_spi;
 
 /* experimental 65K TFT with st7687 controller */
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi;
-
+extern u8g_dev_t u8g_dev_st7687_c144mvgd_8bit;
 
 /*===============================================================*/
 /* device messages */

@@ -42,10 +42,13 @@
 #define HEIGHT 128
 #define PAGE_HEIGHT 8
 
+
+#ifdef FIRST_VERSION
 /* 
 see also: read.pudn.com/downloads115/sourcecode/app/484503/LCM_Display.c__.htm 
 http://en.pudn.com/downloads115/sourcecode/app/detail484503_en.html
 */
+
 u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
@@ -195,6 +198,146 @@ u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
 
 };
 
+#else
+
+/*
+http://www.waitingforfriday.com/images/e/e3/FTM144D01N_test.zip
+*/
+
+u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),             /* enable chip */
+  U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
+
+  0x011,                                /* Sleep out & booster on */
+  U8G_ESC_DLY(5),         /* delay 5 ms */
+    
+  0x03a,                                /* Interface pixel format, 8.1.32 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x004,                                /* 3: 12 bit per pixel Type A, 4: 12 bit Type B, 5: 16bit per pixel */
+  U8G_ESC_ADR(0),           /* instruction mode */
+  
+  
+  0x026,                                /* SET_GAMMA_CURVE */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x004,                                
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x0f2,                                /* GAM_R_SEL */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x001,                                /* enable gamma adj */                                
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+
+  0x0e0,                                /* POSITIVE_GAMMA_CORRECT */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x3f,
+    0x25,
+    0x1c,
+    0x1e,
+    0x20,
+    0x12,
+    0x2a,
+    0x90,
+    0x24,
+    0x11,
+    0x00,
+    0x00,
+    0x00,
+    0x00,
+    0x00,    
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x0e1,                                /* NEGATIVE_GAMMA_CORRECT */
+  U8G_ESC_ADR(1),           /* data mode */
+    0x20,
+    0x20,
+    0x20,
+    0x20,
+    0x05,
+    0x00,
+    0x15,
+    0xa7,
+    0x3d,
+    0x18,
+    0x25,
+    0x2a,
+    0x2b,
+    0x2b,
+    0x3a,
+  U8G_ESC_ADR(0),           /* instruction mode */
+     
+  0x0b1,                                /* FRAME_RATE_CONTROL1 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x008,                                /* DIVA = 8 */
+  0x008,                                /* VPA = 8 */
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+
+  0x0b4,                                /* DISPLAY_INVERSION */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x007,                                /* NLA = 1, NLB = 1, NLC = 1 (all on Frame Inversion) */
+  U8G_ESC_ADR(0),           /* instruction mode */
+    
+  0x0c0,                                /* POWER_CONTROL1 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x00a,                                /* VRH = 10:  GVDD = 4.30 */
+  0x002,                                /* VC = 2: VCI1 = 2.65 */
+  U8G_ESC_ADR(0),           /* instruction mode */
+   
+  0x0c1,                                /* POWER_CONTROL2 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x002,                                /* BT = 2: AVDD = 2xVCI1, VCL = -1xVCI1, VGH = 5xVCI1, VGL = -2xVCI1 */
+  U8G_ESC_ADR(0),           /* instruction mode */
+      
+  0x0c5,                                /* VCOM_CONTROL1 */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x050,                                /* VMH = 80: VCOMH voltage = 4.5 */
+  0x05b,                                /* VML = 91: VCOML voltage = -0.225 */
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x0c7,                                /* VCOM_OFFSET_CONTROL */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x040,                                /* nVM = 0, VMF = 64: VCOMH output = VMH, VCOML output = VML */
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x02a,                                /* SET_COLUMN_ADDRESS */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x000,                                /*  */
+  0x000,                                /*  */
+  0x000,                                /*  */
+  0x07f,                                /*  */
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x02b,                                /* SET_PAGE_ADDRESS */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x000,                                /*  */
+  0x000,                                /*  */
+  0x000,                                /*  */
+  0x07f,                                /*  */
+  U8G_ESC_ADR(0),           /* instruction mode */
+
+  0x036,                                /* SET_ADDRESS_MODE */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x000,                                /* Select display orientation */
+  U8G_ESC_ADR(0),           /* instruction mode */
+	
+
+  0x029,                        /* display on */
+  
+  0x02c,                         /* write start */
+  
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_END                /* end of sequence */
+
+};
+
+#endif
+
+
+
+
 /* calculate bytes for Type B 4096 color display */
 static uint8_t get_byte_1(uint8_t v)
 {
@@ -271,4 +414,7 @@ uint8_t u8g_dev_st7687_c144mvgd_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void
 
 uint8_t u8g_st7687_c144mvgd_8h8_buf[WIDTH*8] U8G_NOCOMMON ; 
 u8g_pb_t u8g_st7687_c144mvgd_8h8_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_st7687_c144mvgd_8h8_buf}; 
+
 u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi = { u8g_dev_st7687_c144mvgd_fn, &u8g_st7687_c144mvgd_8h8_pb, u8g_com_arduino_sw_spi_fn };
+
+u8g_dev_t u8g_dev_st7687_c144mvgd_8bit = { u8g_dev_st7687_c144mvgd_fn, &u8g_st7687_c144mvgd_8h8_pb, u8g_com_arduino_parallel_fn };

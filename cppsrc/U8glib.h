@@ -331,6 +331,10 @@ class U8GLIB_ST7687_C144MVGD: public U8GLIB
     U8GLIB_ST7687_C144MVGD(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
       : U8GLIB(&u8g_dev_st7687_c144mvgd_sw_spi, sck, mosi, cs, a0, reset)
       { }
+    U8GLIB_ST7687_C144MVGD(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+        uint8_t en, uint8_t cs, uint8_t a0, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ks0108_128x64_fast, d0, d1, d2, d3, d4, d5, d6, d7, en, cs, U8G_PIN_NONE, a0, rw, reset)
+      { }
 };
 
 #endif /* _CPP_U8GLIB */
