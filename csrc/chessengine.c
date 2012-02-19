@@ -35,12 +35,7 @@
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
 
   Note:
-    Hardware support:
-      DOGXL160_HW_GR		ok
-      DOGXL160_HW_BW		will work
-      DOGM128_HW			ok
-      DOGM132_HW			not supported
-      DOGS102_HW			ok
+    UNIX_MAIN --> unix console executable
 
   Current Rule Limitation
     - no minor promotion, only "Queening" of the pawn
@@ -106,13 +101,14 @@
 */
 
 #include <stdint.h>
-
-#ifndef __unix__
 #include "u8g.h"
-#else
-#include <assert.h>
-#define U8G_NOINLINE
-#endif
+
+//#ifndef __unix__
+//#else
+//#include <assert.h>
+//#define U8G_NOINLINE
+//#endif
+
 /*
 SAN identifies each piece by a single upper case letter.  The standard English
 values: pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q", and
@@ -1742,7 +1738,7 @@ void chess_ComputerMove(uint8_t depth)
 /* unix code */
 /*==============================================================*/
 
-#ifdef __unix__
+#ifdef UNIX_MAIN
 
 #include <stdio.h>
 #include <string.h>
