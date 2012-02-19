@@ -61,7 +61,8 @@ void u8g_sdl_init(void)
     printf("Couldn't set video mode: %s\n", SDL_GetError());
     exit(1);
   }
-  printf("At %d bits-per-pixel mode\n", u8g_sdl_screen->format->BitsPerPixel);
+  printf("%d bits-per-pixel mode\n", u8g_sdl_screen->format->BitsPerPixel);
+  printf("%d bytes-per-pixel mode\n", u8g_sdl_screen->format->BytesPerPixel);
   
   u8g_sdl_color[0] = SDL_MapRGB( u8g_sdl_screen->format, 0, 0, 0 );
   u8g_sdl_color[1] = SDL_MapRGB( u8g_sdl_screen->format, W(100, 50), W(255,50), 0 );
@@ -98,7 +99,8 @@ void u8g_sdl_init_R3G3B2(void)
     printf("Couldn't set video mode: %s\n", SDL_GetError());
     exit(1);
   }
-  printf("At %d bits-per-pixel mode\n", u8g_sdl_screen->format->BitsPerPixel);
+  printf("%d bits-per-pixel mode\n", u8g_sdl_screen->format->BitsPerPixel);
+  printf("%d bytes-per-pixel mode\n", u8g_sdl_screen->format->BytesPerPixel);
   
 
   idx = 0;
