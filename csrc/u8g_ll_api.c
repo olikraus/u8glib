@@ -61,6 +61,11 @@ uint8_t u8g_NextPageLL(u8g_t *u8g, u8g_dev_t *dev)
   return u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_PAGE_NEXT, NULL);
 }
 
+uint8_t u8g_SetContrastLL(u8g_t *u8g, u8g_dev_t *dev, uint8_t contrast)
+{  
+  return u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_CONTRAST, &contrast);
+}
+
 void u8g_DrawPixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y)
 {
   u8g_dev_arg_pixel_t *arg = &(u8g->arg_pixel);
@@ -246,6 +251,12 @@ uint8_t u8g_NextPage(u8g_t *u8g)
   }
   return u8g_NextPageLL(u8g, u8g->dev);
 }
+
+uint8_t u8g_SetContrast(u8g_t *u8g, uint8_t contrast)
+{
+  return u8g_SetContrastLL(u8g, u8g->dev, contrast);
+}
+
 
 void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y)
 {

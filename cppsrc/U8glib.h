@@ -87,6 +87,9 @@ class U8GLIB : public Print
     void firstPage(void) { u8g_FirstPage(&u8g); }
     uint8_t nextPage(void) { return u8g_NextPage(&u8g); }
     
+    /* system commands */
+    uint8_t setContrast(uint8_t contrast) { return u8g_SetContrast(&u8g, contrast); }
+    
     /* graphic primitives */
     void setColorIndex(uint8_t color_index) { u8g_SetColorIndex(&u8g, color_index); }
     uint8_t getColorIndex(void) { return u8g_GetColorIndex(&u8g); }

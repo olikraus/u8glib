@@ -44,7 +44,7 @@
 // setup u8g object, please remove comment from one of the following constructor calls
 
 //U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
@@ -87,6 +87,7 @@ void drawURL(void)
   }
 }
 
+
 void draw(void)
 {
   u8g.setColorIndex(1);
@@ -106,7 +107,12 @@ void setup(void) {
   //u8g.setRot180();
 }
 
+uint8_t contrast = 0;
+
 void loop(void) {
+  
+  u8g.setContrast(contrast);
+  
   // picture loop
   u8g.firstPage();  
   do {
@@ -114,6 +120,9 @@ void loop(void) {
   } while( u8g.nextPage() );
   
   // rebuild the picture after some delay
-  delay(1000);
+  delay(30);
+  
+  // contrast manipulation
+  contrast+=8;
 }
 

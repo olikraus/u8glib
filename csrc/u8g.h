@@ -196,6 +196,9 @@ typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 #define U8G_DEV_MSG_INIT                10
 #define U8G_DEV_MSG_STOP                  11
 
+/* arg: pointer to uint8_t, contranst value between 0 and 255 */
+#define U8G_DEV_MSG_CONTRAST            15
+
 #define U8G_DEV_MSG_PAGE_FIRST                  20
 #define U8G_DEV_MSG_PAGE_NEXT                    21
 
@@ -482,6 +485,7 @@ uint8_t u8g_call_dev_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 uint8_t u8g_InitLL(u8g_t *u8g, u8g_dev_t *dev);
 void u8g_FirstPageLL(u8g_t *u8g, u8g_dev_t *dev);
 uint8_t u8g_NextPageLL(u8g_t *u8g, u8g_dev_t *dev);
+uint8_t u8g_SetContrastLL(u8g_t *u8g, u8g_dev_t *dev, uint8_t contrast);
 void u8g_DrawPixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y);
 void u8g_Draw8PixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel);
 uint8_t u8g_IsBBXIntersectionLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
@@ -496,6 +500,7 @@ uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t
   uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset);
 void u8g_FirstPage(u8g_t *u8g);
 uint8_t u8g_NextPage(u8g_t *u8g);
+uint8_t u8g_SetContrast(u8g_t *u8g, uint8_t contrast);
 void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y);
 void u8g_Draw8Pixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel);
 uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
