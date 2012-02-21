@@ -200,7 +200,7 @@ DOGXL160, 160x104
 :Mode
 BW
 :Set Contrast
-no
+yes
 :Page Size
 160 Bytes
 :Com

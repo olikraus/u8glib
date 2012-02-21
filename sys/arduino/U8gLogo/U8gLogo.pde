@@ -120,7 +120,7 @@ void loop(void) {
   } while( u8g.nextPage() );
   
   // rebuild the picture after some delay
-  delay(30);
+  delay(20);
   
   // contrast manipulation
   contrast+=8;
