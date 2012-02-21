@@ -4,6 +4,8 @@ SSD1325
 NHD-27-12864, 128x64
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 128 Bytes
 :Com
@@ -21,6 +23,8 @@ HW SPI
 ::
 :Mode
 4L
+:Set Contrast
+yes
 :Page Size
 128 Bytes
 :Com
@@ -42,6 +46,8 @@ UC1701
 DOGS102, 102x64
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 102 Bytes
 :Com
@@ -63,6 +69,8 @@ ST7565
 DOGM128, 128x64
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 128 Bytes
 :Com
@@ -82,6 +90,8 @@ HW SPI
 LM6059, 128x64, Adafruit
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 128 Bytes
 :Com
@@ -97,11 +107,12 @@ HW SPI
 :C++ Constructor
 <tt>U8GLIB_LM6059(cs, a0 [, reset])</tt>
 ::
-::
 :Display/Size
 LM6063, 128x64
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 128 Bytes
 :Com
@@ -121,6 +132,8 @@ HW SPI
 DOGM132, 132x32
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 132 Bytes
 :Com
@@ -142,6 +155,8 @@ ST7920
 128x64
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 128 Bytes
 :Com
@@ -161,6 +176,8 @@ SW SPI
 192x32
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 192 Bytes
 :Com
@@ -182,6 +199,8 @@ UC1610
 DOGXL160, 160x104
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 160 Bytes
 :Com
@@ -199,6 +218,8 @@ HW SPI
 ::
 :Mode
 4L
+:Set Contrast
+yes
 :Page Size
 160 Bytes
 :Com
@@ -220,6 +241,8 @@ PCD8544
 84x48
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 84 Bytes
 :Com
@@ -235,6 +258,8 @@ PCF8812
 96x65
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 96 Bytes
 :Com
@@ -250,6 +275,8 @@ KS0108
 128x64
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 128 Bytes
 :Com
@@ -270,6 +297,8 @@ stdout
 Console, 70x30
 :Mode
 BW
+:Set Contrast
+n.a.
 :Page Size
 70 Bytes
 :Com
@@ -284,6 +313,8 @@ SDL
 Desktop, 128x64
 :Mode
 BW
+:Set Contrast
+no
 :Page Size
 128 Bytes
 :Com
@@ -294,6 +325,8 @@ BW
 
 :Mode
 4L
+:Set Contrast
+no
 :Page Size
 128 Bytes
 :Com

@@ -19,3 +19,6 @@
   * *d0* - *d7*: Parallel data
   * *reset*: Display reset
   
+ * setContrast: For some devices, the contrast value can be assigned with the {{{setContrast}}} procedure.
+ 
+ 
