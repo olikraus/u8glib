@@ -1975,7 +1975,7 @@ uint8_t chess_target_pos = 255;
 
 const u8g_pgm_uint8_t chess_pieces_body_bm[] = 
 {
-  /* PAWN */ 		0x00, 0x00, 0x00, 0x0c, 0x0c, 0x00, 0x00, 0x00, 
+  /* PAWN */ 		0x00, 0x00, 0x00, 0x18, 0x18, 0x00, 0x00, 0x00, /* 0x00, 0x00, 0x00, 0x0c, 0x0c, 0x00, 0x00, 0x00, */ 
   /* KNIGHT */		0x00, 0x00, 0x1c, 0x2c, 0x04, 0x04, 0x0e, 0x00,
   /* BISHOP */		0x00, 0x00, 0x1c, 0x1c, 0x1c, 0x08, 0x00, 0x00, /* 0x00, 0x00, 0x08, 0x1c, 0x1c, 0x08, 0x00, 0x00, */
   /* ROOK */		0x00, 0x00, 0x00, 0x1c, 0x1c, 0x1c, 0x1c, 0x00,
@@ -1998,7 +1998,7 @@ const u8g_pgm_uint8_t chess_white_pieces_bm[] =
 
 const u8g_pgm_uint8_t chess_black_pieces_bm[] = 
 {
-  /* PAWN */ 		0x00, 0x00, 0x0c, 0x1e, 0x1e, 0x0c, 0x1e, 0x00, 
+  /* PAWN */ 		0x00, 0x00, 0x18, 0x3c, 0x3c, 0x18, 0x3c, 0x00, /* 0x00, 0x00, 0x0c, 0x1e, 0x1e, 0x0c, 0x1e, 0x00, */ 
   /* KNIGHT */		0x00, 0x1c, 0x3e, 0x7e, 0x6e, 0x0e, 0x1f, 0x1f,
   /* BISHOP */		0x00, 0x1c, 0x2e, 0x3e, 0x3e, 0x1c, 0x08, 0x7f,  /*0x00, 0x08, 0x1c, 0x3e, 0x3e, 0x1c, 0x08, 0x7f,*/
   /* ROOK */		0x00, 0x55, 0x7f, 0x3e, 0x3e, 0x3e, 0x3e, 0x7f,
@@ -2016,6 +2016,7 @@ const u8g_pgm_uint8_t chess_black_pieces_bm[] =
 #endif
 
 u8g_uint_t chess_low_edge;
+uint8_t  chess_boxsize = 8;
 
 
 void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
@@ -2033,18 +2034,17 @@ void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
     y0 ^= 7;
   
 #if defined(DOGXL160_HW_GR) 
-  x0 *= BOXSIZE;
+  x0 *= chess_boxsize;
   x0++;
   x1 = x0;
-  x1 += BOXSIZE-3;
+  x1 += chess_boxsize-3;
   
-  y0 *= BOXSIZE;
+  y0 *= chess_boxsize;
   y0++;
   y1 = y0;
-  y1 += BOXSIZE-3;
+  y1 += chess_boxsize-3;
 #else
   x0 *= 8;
-  x0++;
   x1 = x0;
   x1 += 8-2;
   
@@ -2055,19 +2055,15 @@ void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
   
   
   u8g_SetDefaultForegroundColor(lrc_u8g);
-  u8g_DrawFrame(lrc_u8g, x0, chess_low_edge - y1, x1-x0+1, y1-y0+1);
+  u8g_DrawFrame(lrc_u8g, x0, chess_low_edge - y0 - chess_boxsize+1, chess_boxsize, chess_boxsize);
   
   
   if ( is_bold )
   {
-    if ( x0 > 0 )
       x0--;
-    x1++;
-    if ( y0 > 0 )
-      y0--;
-    y1++;
+      y0++;
   
-    u8g_DrawFrame(lrc_u8g, x0, chess_low_edge - y1, x1-x0+1, y1-y0+1);
+    u8g_DrawFrame(lrc_u8g, x0, chess_low_edge - y0 - chess_boxsize +1, chess_boxsize+2, chess_boxsize+2);
   }
 }
 
@@ -2081,20 +2077,19 @@ void chess_DrawBoard(void)
   
   if ( U8G_MODE_GET_BITS_PER_PIXEL(u8g_GetMode(lrc_u8g)) > 1 )
   {
-    uint8_t  boxsize = 8;
     for( i = 0; i < 8; i++ )
       for( j = 0; j < 8; j++ )
       {
         uint8_t x,y;
         x = i;
-        x*=boxsize;
+        x*=chess_boxsize;
         y = j;
-        y*=boxsize;
+        y*=chess_boxsize;
         if ( ((i^j) & 1)  == 0 )
           u8g_SetDefaultMidColor(lrc_u8g);  
         else
           u8g_SetDefaultBackgroundColor(lrc_u8g);  
-        u8g_DrawBox(lrc_u8g, x,chess_low_edge-y-boxsize+1,boxsize,boxsize);
+        u8g_DrawBox(lrc_u8g, x,chess_low_edge-y-chess_boxsize+1,chess_boxsize,chess_boxsize);
       }
     //u8g_SetDefaultForegroundColor(lrc_u8g);  
   }
@@ -2180,6 +2175,8 @@ void chess_Init(u8g_t *u8g)
   chess_low_edge--;
   if ( chess_low_edge > 64 )
     chess_low_edge -= (u8g_GetHeight(lrc_u8g)-64) / 2;
+  
+  chess_boxsize = 8;
   
   
   chess_SetupBoard();
