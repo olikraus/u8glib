@@ -2044,13 +2044,8 @@ void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
   y1 = y0;
   y1 += chess_boxsize-3;
 #else
-  x0 *= 8;
-  x1 = x0;
-  x1 += 8-2;
-  
-  y0 *= 8;
-  y1 = y0;
-  y1 += 8-2;
+  x0 *= chess_boxsize;
+  y0 *= chess_boxsize;
 #endif
   
   
@@ -2095,6 +2090,7 @@ void chess_DrawBoard(void)
   }
   else
   {
+    uint8_t x_offset = 1;
     u8g_SetDefaultForegroundColor(lrc_u8g);  
     for( i = 0; i < 8*8; i+=8 )
     {
@@ -2102,18 +2098,18 @@ void chess_DrawBoard(void)
       {
         if ( ((i^j) & 8)  == 0 )
         {
-          u8g_DrawPixel(lrc_u8g, j+1, chess_low_edge - i-0);
-          u8g_DrawPixel(lrc_u8g, j+1, chess_low_edge - i-2);
-          u8g_DrawPixel(lrc_u8g, j+1, chess_low_edge - i-4);
-          u8g_DrawPixel(lrc_u8g, j+1, chess_low_edge - i-6);
-          u8g_DrawPixel(lrc_u8g, j+3, chess_low_edge - i-0);
-          u8g_DrawPixel(lrc_u8g, j+3, chess_low_edge - i-6);
-          u8g_DrawPixel(lrc_u8g, j+5, chess_low_edge - i-0);
-          u8g_DrawPixel(lrc_u8g, j+5, chess_low_edge - i-6);
-          u8g_DrawPixel(lrc_u8g, j+7, chess_low_edge - i-0);
-          u8g_DrawPixel(lrc_u8g, j+7, chess_low_edge - i-2);
-          u8g_DrawPixel(lrc_u8g, j+7, chess_low_edge - i-4);
-          u8g_DrawPixel(lrc_u8g, j+7, chess_low_edge - i-6);
+          u8g_DrawPixel(lrc_u8g, j+0+x_offset, chess_low_edge - i-0);
+          u8g_DrawPixel(lrc_u8g, j+0+x_offset, chess_low_edge - i-2);
+          u8g_DrawPixel(lrc_u8g, j+0+x_offset, chess_low_edge - i-4);
+          u8g_DrawPixel(lrc_u8g, j+0+x_offset, chess_low_edge - i-6);
+          u8g_DrawPixel(lrc_u8g, j+2+x_offset, chess_low_edge - i-0);
+          u8g_DrawPixel(lrc_u8g, j+2+x_offset, chess_low_edge - i-6);
+          u8g_DrawPixel(lrc_u8g, j+4+x_offset, chess_low_edge - i-0);
+          u8g_DrawPixel(lrc_u8g, j+4+x_offset, chess_low_edge - i-6);
+          u8g_DrawPixel(lrc_u8g, j+6+x_offset, chess_low_edge - i-0);
+          u8g_DrawPixel(lrc_u8g, j+6+x_offset, chess_low_edge - i-2);
+          u8g_DrawPixel(lrc_u8g, j+6+x_offset, chess_low_edge - i-4);
+          u8g_DrawPixel(lrc_u8g, j+6+x_offset, chess_low_edge - i-6);
         }
       }
     }
