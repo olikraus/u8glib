@@ -1881,7 +1881,7 @@ void mnu_DrawHome(uint8_t is_highlight)
   uint8_t t;
   
   u8g_SetFont(lrc_u8g, u8g_font_5x7r);
-  u8g_SetColorIndex(lrc_u8g, 1);
+  u8g_SetDefaultForegroundColor(lrc_u8g);
   t = u8g_DrawStrP(lrc_u8g, x, y -1, U8G_PSTR("Options"));
     
   if ( is_highlight )
@@ -1899,11 +1899,11 @@ void mnu_DrawEntry(uint8_t y, char *str, uint8_t is_clr_background, uint8_t is_h
   
   if ( is_clr_background )
   {
-    u8g_SetColorIndex(lrc_u8g, 0);
+    u8g_SetDefaultBackgroundColor(lrc_u8g);
     u8g_DrawBox(lrc_u8g, x-3, (lrc_u8g->height-1) - (y+MNU_ENTRY_HEIGHT-1+2), t+5, MNU_ENTRY_HEIGHT+4);
   }
   
-  u8g_SetColorIndex(lrc_u8g, 1);
+  u8g_SetDefaultForegroundColor(lrc_u8g);
   u8g_DrawStr(lrc_u8g, x, (lrc_u8g->height-1) - y, str);
   
   if ( is_highlight )
@@ -2053,7 +2053,7 @@ void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
 #endif
   
   
-  u8g_SetColorIndex(lrc_u8g, 1);
+  u8g_SetDefaultForegroundColor(lrc_u8g);
   u8g_DrawFrame(lrc_u8g, x0, (lrc_u8g->height-1) - y1, x1-x0+1, y1-y0+1);
   
   
@@ -2074,7 +2074,10 @@ void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
 void chess_DrawBoard(void)
 {
   uint8_t i, j, cp;
+  u8g_uint_t low_left_edge;
   const u8g_pgm_uint8_t *ptr;
+  
+  low_left_edge = u8g_GetHeight(lrc_u8g);
   
 #if defined(DOGXL160_HW_GR)
   for( i = 0; i < 8; i++ )
@@ -2094,7 +2097,8 @@ void chess_DrawBoard(void)
     }
   dog_SetPixelValue(3);    
 #else
-  u8g_SetColorIndex(lrc_u8g, 1);  
+  //low_left_edge 
+  u8g_SetDefaultForegroundColor(lrc_u8g);  
   for( i = 0; i < 8*8; i+=8 )
   {
     for( j = 0; j < 8*8; j+=8 )
@@ -2135,14 +2139,14 @@ void chess_DrawBoard(void)
       {
 	ptr = chess_black_pieces_bm;
 	ptr += (cp_GetPiece(cp)-1)*8;
-        u8g_SetColorIndex(lrc_u8g, 1);
+        u8g_SetDefaultForegroundColor(lrc_u8g);
         u8g_DrawBitmapP(lrc_u8g, j*BOXSIZE+BOXOFFSET-1, (lrc_u8g->height-1) - (i*BOXSIZE+BOXSIZE-BOXOFFSET), 1, 8, ptr);
 
 	if ( cp_GetColor(cp) == 0 ) 
 	{
 	  ptr = chess_pieces_body_bm;
 	  ptr += (cp_GetPiece(cp)-1)*8;
-          u8g_SetColorIndex(lrc_u8g, 0);
+          u8g_SetDefaultBackgroundColor(lrc_u8g);
           u8g_DrawBitmapP(lrc_u8g, j*BOXSIZE+BOXOFFSET-1, (lrc_u8g->height-1) - (i*BOXSIZE+BOXSIZE-BOXOFFSET), 1, 8, ptr);
 	}
       }
@@ -2195,7 +2199,7 @@ void chess_Draw(void)
 	entries = 4;
       
       u8g_SetFont(lrc_u8g, u8g_font_5x7);
-      u8g_SetColorIndex(lrc_u8g, 1);
+      u8g_SetDefaultForegroundColor(lrc_u8g);
       for( i = 0; i < entries; i++ )
       {
         

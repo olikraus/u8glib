@@ -283,3 +283,32 @@ uint8_t u8g_GetColorIndex(u8g_t *u8g)
 {
   return u8g->arg_pixel.color;
 }
+
+void u8g_SetDefaultForegroundColor(u8g_t *u8g)
+{
+  uint8_t mode;
+  mode = u8g_GetMode(u8g);
+  if ( mode == U8G_MODE_R3G3B2 ) 
+    u8g_SetColorIndex(u8g, 255);     /* white */
+  else if ( u8g_GetMode(u8g) == U8G_MODE_GRAY2BIT )
+    u8g_SetColorIndex(u8g, 3);         /* max intensity */
+  else /* if ( u8g.getMode() == U8G_MODE_BW ) */
+    u8g_SetColorIndex(u8g, 1);         /* pixel on */
+}
+
+void u8g_SetDefaultBackgroundColor(u8g_t *u8g)
+{
+  u8g_SetColorIndex(u8g, 0);         /* pixel on / black */
+}
+
+void u8g_SetDefaultMidColor(u8g_t *u8g)
+{
+  uint8_t mode;
+  mode = u8g_GetMode(u8g);
+  if ( mode == U8G_MODE_R3G3B2 ) 
+    u8g_SetColorIndex(u8g, 0x06d  );     /* gray: 01101101 */
+  else if ( u8g_GetMode(u8g) == U8G_MODE_GRAY2BIT )
+    u8g_SetColorIndex(u8g, 1);         /* low mid intensity */
+  else /* if ( u8g.getMode() == U8G_MODE_BW ) */
+    u8g_SetColorIndex(u8g, 1);         /* pixel on */
+}
