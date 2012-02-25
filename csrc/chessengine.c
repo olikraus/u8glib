@@ -2022,7 +2022,7 @@ uint8_t chess_boxoffset = 1;
 
 void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
 {
-  uint8_t x0, x1, y0, y1;
+  u8g_uint_t x0, x1, y0, y1;
 
   x0 = pos;
   x0 &= 15;

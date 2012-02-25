@@ -107,7 +107,9 @@ uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
   {
     case U8G_DEV_MSG_SET_8PIXEL:
       if ( u8g_pb_Is8PixelVisible(pb, (u8g_dev_arg_pixel_t *)arg) )
+      {
         u8g_pb8v2_Set8PixelStd(pb, (u8g_dev_arg_pixel_t *)arg);
+      }
       break;
     case U8G_DEV_MSG_SET_PIXEL:
       u8g_pb8v2_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);
