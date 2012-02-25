@@ -41,6 +41,13 @@ int main(void)
   u8g_FirstPage(&u8g);
   chess_Init(&u8g);
 
+  chess_Step(CHESS_KEY_SELECT);
+  chess_Step(CHESS_KEY_NONE);
+  chess_Step(CHESS_KEY_NEXT);
+  chess_Step(CHESS_KEY_NONE);
+  chess_Step(CHESS_KEY_NEXT);
+  chess_Step(CHESS_KEY_NONE);
+  
   for(;;)
   {
 
