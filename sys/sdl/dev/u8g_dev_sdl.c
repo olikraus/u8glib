@@ -320,6 +320,59 @@ uint8_t u8g_dev_sdl_2bit_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
   return u8g_dev_pb8v2_base_fn(u8g, dev, msg, arg);
 }
 
+uint8_t u8g_dev_sdl_2bit_double_mem_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_sdl_init();
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_FIRST:
+      u8g_sdl_start();
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        uint8_t i, j, v;
+        uint8_t page_height;
+        page_height = pb->p.page_y1;
+        page_height -= pb->p.page_y0;
+        page_height++;
+        for( j = 0; j < page_height; j++ )
+        {
+          if ( j <= 3 )
+          {
+            for( i = 0; i < WIDTH; i++ )
+            {
+              v = ((uint8_t *)(pb->buf))[i];
+              v >>= j*2;
+              v &= 3;
+              u8g_sdl_set_pixel(i, j+pb->p.page_y0, v);
+            }
+          }
+          else
+          {
+            for( i = 0; i < WIDTH; i++ )
+            {
+              v = (((uint8_t *)(pb->buf))+pb->width)[i];
+              v >>= (j&3)*2;
+              v &= 3;
+              u8g_sdl_set_pixel(i, j+pb->p.page_y0, v);
+            }
+          }
+        }
+      }
+      /* update all */
+      /* http://www.libsdl.org/cgi/docwiki.cgi/SDL_UpdateRect */
+      SDL_UpdateRect(u8g_sdl_screen, 0,0,0,0);
+      break;    /* continue to base fn */
+  }
+  return u8g_dev_pb16v2_base_fn(u8g, dev, msg, arg);
+}
+
 
 uint8_t u8g_dev_sdl_8bit_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -370,3 +423,6 @@ uint8_t u8g_index_color_8h8_buf[WIDTH*8] U8G_NOCOMMON ;
 u8g_pb_t u8g_index_color_8h8_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_index_color_8h8_buf}; 
 u8g_dev_t u8g_dev_sdl_8bit = { u8g_dev_sdl_8bit_fn, &u8g_index_color_8h8_pb, NULL };
 
+uint8_t u8g_dev_sdl_16v2_buf[WIDTH*2] U8G_NOCOMMON ; 
+u8g_pb_t u8g_dev_sdl_16v2_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_sdl_16v2_buf}; 
+u8g_dev_t u8g_dev_sdl_2bit_double_mem = { u8g_dev_sdl_2bit_double_mem_fn, &u8g_dev_sdl_16v2_pb, NULL };

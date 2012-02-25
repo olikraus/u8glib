@@ -37,7 +37,7 @@ int main(void)
   
   u8g_t u8g;
   
-  u8g_Init(&u8g, &u8g_dev_sdl_2bit);
+  u8g_Init(&u8g, &u8g_dev_sdl_2bit_double_mem);
   u8g_FirstPage(&u8g);
   chess_Init(&u8g);
 
@@ -51,14 +51,20 @@ int main(void)
   for(;;)
   {
 
+    
     if ( is_redraw != 0 )
     {
-      u8g_FirstPage(&u8g);
-      do {
-        chess_Draw();
-      } while( u8g_NextPage(&u8g) );
+      int i;
+      for( i = 0; i < 500; i++ )
+      {
+        u8g_FirstPage(&u8g);
+        do {
+          chess_Draw();
+        } while( u8g_NextPage(&u8g) );
+      }
       is_redraw--;
     }
+    exit(0);
     
     keyCode = get_key_code();
     if ( keyCode != CHESS_KEY_NONE )

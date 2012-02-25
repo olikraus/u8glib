@@ -91,6 +91,10 @@ void u8g_DrawFrame(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uin
 {
   u8g_uint_t xtmp = x;
   
+  if ( u8g_IsBBXIntersection(u8g, x, y, w, h) == 0 )
+    return;
+
+  
   u8g_draw_hline(u8g, x, y, w);
   u8g_draw_vline(u8g, x, y, h);
   x+=w;
@@ -104,6 +108,9 @@ void u8g_DrawFrame(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uin
 /* restrictions: h > 0 */
 void u8g_DrawBox(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h)
 {
+  if ( u8g_IsBBXIntersection(u8g, x, y, w, h) == 0 )
+    return;
+  
   do
   { 
     u8g_draw_hline(u8g, x, y, w);

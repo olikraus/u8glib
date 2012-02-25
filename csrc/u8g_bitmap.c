@@ -122,6 +122,7 @@ void u8g_DrawXBM(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_
   
   if ( u8g_IsBBXIntersection(u8g, x, y, w, h) == 0 )
     return;
+  
   while( h > 0 )
   {
     u8g_DrawHXBM(u8g, x, y, w, bitmap);

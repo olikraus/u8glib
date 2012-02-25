@@ -108,6 +108,7 @@ typedef struct _u8g_box_t u8g_box_t;
 extern u8g_dev_t u8g_dev_sdl_1bit;
 extern u8g_dev_t u8g_dev_sdl_1bit_h;
 extern u8g_dev_t u8g_dev_sdl_2bit;
+extern u8g_dev_t u8g_dev_sdl_2bit_double_mem;
 extern u8g_dev_t u8g_dev_sdl_8bit;
 int u8g_sdl_get_key(void);
 
@@ -378,6 +379,10 @@ uint8_t u8g_dev_pb8v1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 
 /* u8g_pb8v2.c */
 uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+
+/* u8g_pb16v2.c (double memory of pb8v2) */
+uint8_t u8g_dev_pb16v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+
 
 /* u8g_pb8h1.c */
 uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
