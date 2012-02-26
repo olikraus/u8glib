@@ -1360,8 +1360,11 @@ void u8g_GetStrAMinBox(u8g_t *u8g, const char *s, u8g_uint_t *x, u8g_uint_t *y, 
 
 void u8g_SetFont(u8g_t *u8g, const u8g_fntpgm_uint8_t  *font)
 {
-  u8g->font = font;
-  u8g_UpdateRefHeight(u8g);
-  u8g_SetFontPosBaseline(u8g);
+  if ( u8g->font != font )
+  {
+    u8g->font = font;
+    u8g_UpdateRefHeight(u8g);
+    u8g_SetFontPosBaseline(u8g);
+  }
 }
 
