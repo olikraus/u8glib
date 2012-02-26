@@ -45,5 +45,6 @@ u8glib ChangeLog
 2012-02-12      v1.02	Oliver Kraus <olikraus@gmail.com>
   * U8GLIB_ST7687_C144MVGD spi experimental
   * U8GLIB_LC7981_160X80 8bit experimental
-  
+  * Intersection test for frame and box procedures
+  * 4L double memory architecture  
   
