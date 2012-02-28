@@ -734,14 +734,15 @@ format 1
       bdf_is_encoding_successfully_done = 1;
     }
     
-    sprintf(bdf_info+strlen(bdf_info), "/* encoding %d %c, bbx %d %d %d %d  asc %d */\n", 
+    sprintf(bdf_info+strlen(bdf_info), "/* encoding %d %c, bbx %d %d %d %d  asc %d dx %d*/\n", 
       bdf_encoding,
       bdf_encoding > 32 && bdf_encoding <= 'z' ? bdf_encoding : ' ',
       bdf_char_width,
       bdf_char_height,
       bdf_char_x,
       bdf_char_y,
-      bdf_char_ascent);
+      bdf_char_ascent,
+      bdf_delta_x);
 
     for( y = 0; y < bdf_char_height; y++ )
     {

@@ -22,3 +22,4 @@ cp top_height_ex_text.png ../../../wiki/descpic/.
 cp str_bbx_top2.png ../../../wiki/descpic/.
 cp str_width.png ../../../wiki/descpic/.
 cp xbm.png ../../../wiki/descpic/.
+cp circle.png ../../../wiki/descpic/.
