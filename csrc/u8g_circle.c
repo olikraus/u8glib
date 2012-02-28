@@ -42,6 +42,9 @@
 
 void u8g_DrawEmpCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad)
 {
+  if ( u8g_IsBBXIntersection(u8g, x0-rad-1, y0-rad-1, 2*rad+1, 2*rad+1) == 0)
+    return;
+
   int f = 1 - rad;
   int ddF_x = 1;
   int ddF_y = -2*rad;
@@ -78,6 +81,9 @@ void u8g_DrawEmpCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad)
 
 void u8g_DrawFillCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad)
 {
+  if ( u8g_IsBBXIntersection(u8g, x0-rad-1, y0-rad-1, 2*rad+1, 2*rad+1) == 0)
+    return;
+
   int f = 1 - rad;
   int ddF_x = 1;
   int ddF_y = -2*rad;
