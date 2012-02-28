@@ -84,7 +84,7 @@ void u8g_DrawFillCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad)
   uint8_t x = 0;
   uint8_t y = rad;
   
-  // Draw horiz. diameter at the vertical center (draws L to R)
+  // Draw vertical diameter at the horiz. center
   u8g_DrawVLine(u8g, x0, y0 - rad, 2*rad+1);
 
   while( x < y )
@@ -99,9 +99,9 @@ void u8g_DrawFillCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad)
     ddF_x += 2;
     f += ddF_x;
 	//Draw vertical lines from one point to another
-    u8g_draw_vline(u8g, x0+x, y0-y, 2*y+1);
-	u8g_draw_vline(u8g, x0-x, y0-y, 2*y+1);
-	u8g_draw_vline(u8g, x0+y, y0-x, 2*x+1);
-	u8g_draw_vline(u8g, x0-y, y0-x, 2*x+1);
+    u8g_DrawVLline(u8g, x0+x, y0-y, 2*y+1);
+	u8g_DrawVLine(u8g, x0-x, y0-y, 2*y+1);
+	u8g_DrawVLine(u8g, x0+y, y0-x, 2*x+1);
+	u8g_DrawVLine(u8g, x0-y, y0-x, 2*x+1);
   }
 }
