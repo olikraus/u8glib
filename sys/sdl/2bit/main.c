@@ -1,6 +1,13 @@
 /*
 
   2 bit example
+  
+  Includes Wu Line Draw algorithm
+  
+  References to the circle draw algorithm:
+  http://www.landkey.net/d/antialiased/wu4_RF/
+  http://www.landkey.net/d/antialiased/wu4_RF/Content/WU/src/NoSqrt.java.htm
+  http://yellowsplash.wordpress.com/2009/10/23/fast-antialiased-circles-and-ellipses-from-xiaolin-wus-concepts/
 
 */
 
