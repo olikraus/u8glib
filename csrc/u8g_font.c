@@ -1216,7 +1216,7 @@ typedef struct u8g_str_size_struct u8g_str_size_t;
 
 static void u8g_font_calc_str_min_box(u8g_t *u8g, const char *s, u8g_str_size_t *buf)
 {
-  u8g_glyph_t g;
+  /* u8g_glyph_t g; */
   int8_t tmp;
   
   /* reset the total minimal width to zero, this will be expanded during calculation */
@@ -1240,7 +1240,7 @@ static void u8g_font_calc_str_min_box(u8g_t *u8g, const char *s, u8g_str_size_t 
   buf->y_max = -128;
 
   /* get the glyph information of the first char. This must be valid, because we already checked for the empty string */
-  g = u8g_GetGlyph(u8g, *s);
+  u8g_GetGlyph(u8g, *s);
 
   /* strlen(s) == 1:       width = width(s[0]) */
   /* strlen(s) == 2:       width = - offx(s[0]) + deltax(s[0]) + offx(s[1]) + width(s[1]) */
@@ -1278,7 +1278,7 @@ static void u8g_font_calc_str_min_box(u8g_t *u8g, const char *s, u8g_str_size_t 
     buf->w += u8g->glyph_dx;
     
     /* load the next glyph information */
-    g = u8g_GetGlyph(u8g, *s);
+    u8g_GetGlyph(u8g, *s);
   }
   
   /* finally calculate the width of the last char */
@@ -1309,8 +1309,11 @@ void u8g_font_box_all_gA(u8g_t *u8g, const char *s, u8g_str_size_t *buf)
 
 static void u8g_font_get_str_box_fill_args(u8g_t *u8g, const char *s, u8g_str_size_t *buf, u8g_uint_t *x, u8g_uint_t *y, u8g_uint_t *width, u8g_uint_t *height)
 {
+  /*
   u8g_glyph_t g;
-  g = u8g_GetGlyph(u8g, *s);
+  g =
+  */  
+  u8g_GetGlyph(u8g, *s);
   *x += u8g->glyph_x;
   *width = buf->w;
   *y -= buf->y_max;

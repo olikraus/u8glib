@@ -2022,7 +2022,7 @@ uint8_t chess_boxoffset = 1;
 
 void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
 {
-  u8g_uint_t x0, x1, y0, y1;
+  u8g_uint_t x0, y0;
 
   x0 = pos;
   x0 &= 15;
@@ -2034,21 +2034,8 @@ void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
   if ( lrc_obj.orientation != COLOR_WHITE )
     y0 ^= 7;
   
-#if defined(DOGXL160_HW_GR) 
-  x0 *= chess_boxsize;
-  x0++;
-  x1 = x0;
-  x1 += chess_boxsize-3;
-  
-  y0 *= chess_boxsize;
-  y0++;
-  y1 = y0;
-  y1 += chess_boxsize-3;
-#else
   x0 *= chess_boxsize;
   y0 *= chess_boxsize;
-#endif
-  
   
   u8g_SetDefaultForegroundColor(lrc_u8g);
   u8g_DrawFrame(lrc_u8g, x0, chess_low_edge - y0 - chess_boxsize+1, chess_boxsize, chess_boxsize);
