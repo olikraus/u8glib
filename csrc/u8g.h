@@ -65,13 +65,11 @@ extern "C" {
 /* flash memory access */
 
 #if defined(__AVR__)
-#define U8G_PROGMEM U8G_SECTION(".progmem.data")
 typedef uint8_t PROGMEM u8g_pgm_uint8_t;
 typedef uint8_t u8g_fntpgm_uint8_t;
 #define u8g_pgm_read(adr) pgm_read_byte_near(adr)
-#define U8G_PSTR(s) ((u8g_pgm_uint8_t *)PSTR(s))
+#define U8G_PSTR(s) PSTR(s)
 #else
-#define U8G_PROGMEM
 typedef uint8_t u8g_pgm_uint8_t;
 typedef uint8_t u8g_fntpgm_uint8_t;
 #define u8g_pgm_read(adr) (*(const u8g_pgm_uint8_t *)(adr)) 
@@ -108,8 +106,6 @@ typedef struct _u8g_box_t u8g_box_t;
 extern u8g_dev_t u8g_dev_sdl_1bit;
 extern u8g_dev_t u8g_dev_sdl_1bit_h;
 extern u8g_dev_t u8g_dev_sdl_2bit;
-extern u8g_dev_t u8g_dev_sdl_2bit_double_mem;
-extern u8g_dev_t u8g_dev_sdl_8bit;
 int u8g_sdl_get_key(void);
 
 /* Size: 70x30 monochrom, stdout */
@@ -147,9 +143,6 @@ extern u8g_dev_t u8g_dev_st7920_128x64_8bit;
 extern u8g_dev_t u8g_dev_st7920_192x32_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_192x32_8bit;
 
-/* Experimental: LC7981 */
-extern u8g_dev_t u8g_dev_lc7981_160x80_8bit;
-
 /* Display: EA DOGXL160, Size: 160x104 monochrom & gray level */
 extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_sw_spi;
 extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_hw_spi;
@@ -172,9 +165,6 @@ extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_gr_hw_spi;
 
-/* experimental 65K TFT with st7687 controller */
-extern u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi;
-extern u8g_dev_t u8g_dev_st7687_c144mvgd_8bit;
 
 /*===============================================================*/
 /* device messages */
@@ -196,9 +186,6 @@ typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 
 #define U8G_DEV_MSG_INIT                10
 #define U8G_DEV_MSG_STOP                  11
-
-/* arg: pointer to uint8_t, contranst value between 0 and 255 */
-#define U8G_DEV_MSG_CONTRAST            15
 
 #define U8G_DEV_MSG_PAGE_FIRST                  20
 #define U8G_DEV_MSG_PAGE_NEXT                    21
@@ -230,7 +217,6 @@ typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 #define U8G_MODE_UNKNOWN     0
 #define U8G_MODE_BW     U8G_MODE(0, 1)
 #define U8G_MODE_GRAY2BIT     U8G_MODE(0, 2)
-#define U8G_MODE_R3G3B2  U8G_MODE(1, 8)
 
 #define U8G_MODE_GET_BITS_PER_PIXEL(mode) ((mode)&15)
 #define U8G_MODE_IS_COLOR(mode) (((mode)&16)==0?0:1)
@@ -380,15 +366,8 @@ uint8_t u8g_dev_pb8v1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 /* u8g_pb8v2.c */
 uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
-/* u8g_pb16v2.c (double memory of pb8v2) */
-uint8_t u8g_dev_pb16v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
-
-
 /* u8g_pb8h1.c */
 uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
-
-/* u8g_pb8h8.c */
-uint8_t u8g_dev_pb8h8_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 
 /*===============================================================*/
@@ -398,7 +377,7 @@ uint8_t u8g_dev_pb8h8_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 typedef void (*u8g_draw_cursor_fn)(u8g_t *u8g);
 
 /* vertical reference point calculation callback */
-typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g);
+typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g, u8g_uint_t y);
 
 
 
@@ -443,8 +422,7 @@ typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g);
 #define U8G_PIN_NONE 255
 
 #define U8G_FONT_HEIGHT_MODE_TEXT 0
-#define U8G_FONT_HEIGHT_MODE_XTEXT 1
-#define U8G_FONT_HEIGHT_MODE_ALL 2
+#define U8G_FONT_HEIGHT_MODE_ALL 1
 
 struct _u8g_t
 {
@@ -472,8 +450,6 @@ struct _u8g_t
   uint8_t font_height_mode;
   int8_t font_ref_ascent;
   int8_t font_ref_descent;
-  uint8_t font_line_spacing_factor;     /* line_spacing = factor * (ascent - descent) / 64 */
-  uint8_t line_spacing;
   
   u8g_dev_arg_pixel_t arg_pixel;
   /* uint8_t color_index; */
@@ -483,14 +459,12 @@ struct _u8g_t
 
 #define u8g_GetFontAscent(u8g) ((u8g)->font_ref_ascent)
 #define u8g_GetFontDescent(u8g) ((u8g)->font_ref_descent)
-#define u8g_GetFontLineSpacing(u8g) ((u8g)->line_spacing)
 
 uint8_t u8g_call_dev_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 uint8_t u8g_InitLL(u8g_t *u8g, u8g_dev_t *dev);
 void u8g_FirstPageLL(u8g_t *u8g, u8g_dev_t *dev);
 uint8_t u8g_NextPageLL(u8g_t *u8g, u8g_dev_t *dev);
-uint8_t u8g_SetContrastLL(u8g_t *u8g, u8g_dev_t *dev, uint8_t contrast);
 void u8g_DrawPixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y);
 void u8g_Draw8PixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel);
 uint8_t u8g_IsBBXIntersectionLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
@@ -505,7 +479,6 @@ uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t
   uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset);
 void u8g_FirstPage(u8g_t *u8g);
 uint8_t u8g_NextPage(u8g_t *u8g);
-uint8_t u8g_SetContrast(u8g_t *u8g, uint8_t contrast);
 void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y);
 void u8g_Draw8Pixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel);
 uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
@@ -513,22 +486,13 @@ uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t
 uint8_t u8g_Stop(u8g_t *u8g);
 void u8g_SetColorIndex(u8g_t *u8g, uint8_t idx);
 uint8_t u8g_GetColorIndex(u8g_t *u8g);
-void u8g_SetDefaultForegroundColor(u8g_t *u8g);
-void u8g_SetDefaultBackgroundColor(u8g_t *u8g);
-void u8g_SetDefaultMidColor(u8g_t *u8g);
 
 #define u8g_GetWidth(u8g) ((u8g)->width)
 #define u8g_GetHeight(u8g) ((u8g)->height)
 #define u8g_GetMode(u8g) ((u8g)->mode)
-/*
-  U8G_MODE_GET_BITS_PER_PIXEL(u8g_GetMode(u8g))
-  U8G_MODE_IS_COLOR(u8g_GetMode(u8g)) 
-*/
-
 
 /* u8g_dev_rot.c */
 
-void u8g_UndoRotation(u8g_t *u8g);
 void u8g_SetRot90(u8g_t *u8g);
 void u8g_SetRot180(u8g_t *u8g);
 void u8g_SetRot270(u8g_t *u8g);
@@ -573,14 +537,12 @@ u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm
 
 
 void u8g_SetFontRefHeightText(u8g_t *u8g);
-void u8g_SetFontRefHeightExtendedText(u8g_t *u8g);
 void u8g_SetFontRefHeightAll(u8g_t *u8g);
-void u8g_SetFontLineSpacingFactor(u8g_t *u8g, uint8_t factor);
 
-u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g);
-u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g);
-u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g);
-u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g);
+u8g_uint_t u8g_font_calc_vref_font(u8g_t *u8g, u8g_uint_t y);
+u8g_uint_t u8g_font_calc_vref_bottom(u8g_t *u8g, u8g_uint_t y);
+u8g_uint_t u8g_font_calc_vref_top(u8g_t *u8g, u8g_uint_t y);
+u8g_uint_t u8g_font_calc_vref_center(u8g_t *u8g, u8g_uint_t y);
 
 void u8g_SetFontPosBaseline(u8g_t *u8g);
 void u8g_SetFontPosBottom(u8g_t *u8g);
@@ -589,9 +551,6 @@ void u8g_SetFontPosTop(u8g_t *u8g);
 
 
 u8g_uint_t u8g_GetStrPixelWidth(u8g_t *u8g, const char *s);
-u8g_uint_t u8g_GetStrPixelWidthP(u8g_t *u8g, const u8g_pgm_uint8_t *s);
-u8g_uint_t u8g_GetStrWidth(u8g_t *u8g, const char *s);
-u8g_uint_t u8g_GetStrWidthP(u8g_t *u8g, const u8g_pgm_uint8_t *s);
 
 
 u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s);
@@ -615,12 +574,18 @@ void u8g_DrawHBitmapP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t cnt, co
 void u8g_DrawBitmap(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t cnt, u8g_uint_t h, const uint8_t *bitmap);
 void u8g_DrawBitmapP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t cnt, u8g_uint_t h, const u8g_pgm_uint8_t *bitmap);
 
-void u8g_DrawXBM(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h, const uint8_t *bitmap);
-void u8g_DrawXBMP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h, const u8g_pgm_uint8_t *bitmap);
-
 /* u8g_circle.c */
-void u8g_DrawEmpCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad);
-void u8g_DrawFillCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad);
+
+#define U8G_CIRC_UPPER_RIGHT 0x01
+#define U8G_CIRC_UPPER_LEFT  0x02
+#define U8G_CIRC_LOWER_LEFT 0x04
+#define U8G_CIRC_LOWER_RIGHT  0x08
+#define U8G_CIRC_ALL (U8G_CIRC_UPPER_RIGHT|U8G_CIRC_UPPER_LEFT|U8G_CIRC_LOWER_RIGHT|U8G_CIRC_LOWER_LEFT)
+
+void u8g_DrawEmpCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option);
+void u8g_DrawFillCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option);
+
+void u8g_DrawEllipseRect(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t x1, u8g_uint_t y1);
 
 /* u8g_cursor.c */
 void u8g_SetCursorFont(u8g_t *u8g, const u8g_pgm_uint8_t *cursor_font);
@@ -643,23 +608,14 @@ void st_Step(uint8_t player_pos, uint8_t is_auto_fire, uint8_t is_fire);
 /* v = value, d = number of digits */
 const char *u8g_u8toa(uint8_t v, uint8_t d);
 
+
+
+
 /*===============================================================*/
 /* u8g_delay.c */
 
 /* delay by the specified number of milliseconds */
 void u8g_Delay(uint16_t val);
-
-/*===============================================================*/
-/* chessengine.c */
-#define CHESS_KEY_NONE 0
-#define CHESS_KEY_NEXT 1
-#define CHESS_KEY_PREV 2
-#define CHESS_KEY_SELECT 3
-#define CHESS_KEY_BACK 4
-
-void chess_Init(u8g_t *u8g);
-void chess_Draw(void);
-void chess_Step(uint8_t keycode);
 
 /*===============================================================*/
 /* font definitions */
