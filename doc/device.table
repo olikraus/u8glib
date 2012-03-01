@@ -152,7 +152,7 @@ HW SPI
 :Controller
 ST7920
 :Display/Size
-128x64
+128x64, DFRobot 
 :Mode
 BW
 :Set Contrast
@@ -290,6 +290,23 @@ no
 <tt>u8g_dev_ks0108_128x64_fast</tt>
 :C++ Constructor
 <tt>U8GLIB_KS0108_128(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+::
+:Controller
+LC7981
+:Display/Size
+160x80
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+160 Bytes
+:Com
+8Bit
+:Device
+<tt>u8g_dev_lc7981_160x80_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_LC7981_160X80(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, di [, rw [, reset]])</tt>
 ::
 :Controller
 stdout
