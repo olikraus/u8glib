@@ -50,30 +50,37 @@ void u8g_DrawEmpCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, u
   int ddF_y = -2*rad;
   uint8_t x = 0;
   uint8_t y = rad;
+
+  void ( *circ_util )(u8g_t, u8g_uint_t, u8g_uint_t, u8g_uint_t, u8g_uint_t);
   
   switch (option)
   {
 	case U8G_CIRC_UPPER_RIGHT:
 		u8g_DrawPixel(u8g, x0, y0 - rad);
 		u8g_DrawPixel(u8g, x0 + rad, y0);
+		circ_util = &circ_upperRight;
 		break;
 	case U8G_CIRC_UPPER_LEFT:
 		u8g_DrawPixel(u8g, x0, y0 - rad);
 		u8g_DrawPixel(u8g, x0 - rad, y0);
+		circ_util = &circ_upperLeft;
 		break;
 	case U8G_CIRC_LOWER_RIGHT:
 		u8g_DrawPixel(u8g, x0, y0 + rad);
 		u8g_DrawPixel(u8g, x0 + rad, y0);
+		circ_util = &circ_lowerRight;
 		break;
 	case U8G_CIRC_LOWER_LEFT:
 		u8g_DrawPixel(u8g, x0, y0 + rad);
 		u8g_DrawPixel(u8g, x0 - rad, y0);
+		circ_util = &circ_lowerLeft;
 		break;
 	case U8G_CIRC_ALL:
 		u8g_DrawPixel(u8g, x0, y0 + rad);
 		u8g_DrawPixel(u8g, x0, y0 - rad);
 		u8g_DrawPixel(u8g, x0 + rad, y0);
 		u8g_DrawPixel(u8g, x0 - rad, y0);
+		circ_util = &circ_all;
 		break;
   }
   
@@ -89,43 +96,35 @@ void u8g_DrawEmpCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, u
     ddF_x += 2;
     f += ddF_x;
     
-	switch (option)
-	{
-		case U8G_CIRC_UPPER_RIGHT: 
-			u8g_DrawPixel(u8g, x0 + x, y0 - y);
-			u8g_DrawPixel(u8g, x0 + y, y0 - x);
-			break;
-		
-		case U8G_CIRC_UPPER_LEFT:
-			u8g_DrawPixel(u8g, x0 - x, y0 - y);
-			u8g_DrawPixel(u8g, x0 - y, y0 - x);
-			break;
-		
-		case U8G_CIRC_LOWER_RIGHT:
-			u8g_DrawPixel(u8g, x0 + x, y0 + y);
-			u8g_DrawPixel(u8g, x0 + y, y0 + x);
-			break;
-		
-		case U8G_CIRC_LOWER_LEFT:
-			u8g_DrawPixel(u8g, x0 - x, y0 + y);
-			u8g_DrawPixel(u8g, x0 - y, y0 + x);
-			break;
-			
-		case U8G_CIRC_ALL:
-			u8g_DrawPixel(u8g, x0 + x, y0 + y);
-			u8g_DrawPixel(u8g, x0 - x, y0 + y);
-			
-			u8g_DrawPixel(u8g, x0 + x, y0 - y);
-			u8g_DrawPixel(u8g, x0 - x, y0 - y);
-			
-			u8g_DrawPixel(u8g, x0 + y, y0 + x);
-			u8g_DrawPixel(u8g, x0 - y, y0 + x);
-			
-			u8g_DrawPixel(u8g, x0 + y, y0 - x);
-			u8g_DrawPixel(u8g, x0 - y, y0 - x);
-			break;
-	}
+    circ_util(&u8g, x, y, x0, y0);
   }
+}
+
+void circ_upperRight(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0) {
+  u8g_DrawPixel(u8g, x0 + x, y0 - y);
+  u8g_DrawPixel(u8g, x0 + y, y0 - x);
+}
+		
+void circ_upperLeft(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0) {
+  u8g_DrawPixel(u8g, x0 - x, y0 - y);
+  u8g_DrawPixel(u8g, x0 - y, y0 - x);
+}
+		
+void circ_lowerRight(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0) {
+  u8g_DrawPixel(u8g, x0 + x, y0 + y);
+  u8g_DrawPixel(u8g, x0 + y, y0 + x);
+}
+		
+void circ_lowerLeft(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0) {
+  u8g_DrawPixel(u8g, x0 - x, y0 + y);
+  u8g_DrawPixel(u8g, x0 - y, y0 + x);
+}
+			
+void circ_all(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0) {
+  circ_upperRight(u8g, x, y, x0, y0);
+  circ_upperLeft(u8g, x, y, x0, y0);
+  circ_lowerRight(u8g, x, y, x0, y0);
+  circ_lowerLeft(u8g, x, y, x0, y0);
 }
 
 void u8g_DrawFillCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option)
