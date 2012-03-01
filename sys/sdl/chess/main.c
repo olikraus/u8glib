@@ -41,12 +41,14 @@ int main(void)
   u8g_FirstPage(&u8g);
   chess_Init(&u8g);
 
+#ifdef PERFTEST
   chess_Step(CHESS_KEY_SELECT);
   chess_Step(CHESS_KEY_NONE);
   chess_Step(CHESS_KEY_NEXT);
   chess_Step(CHESS_KEY_NONE);
   chess_Step(CHESS_KEY_NEXT);
   chess_Step(CHESS_KEY_NONE);
+#endif
   
   for(;;)
   {
@@ -54,17 +56,23 @@ int main(void)
     
     if ( is_redraw != 0 )
     {
+#ifdef PERFTEST
       int i;
       for( i = 0; i < 500; i++ )
       {
+#endif
         u8g_FirstPage(&u8g);
         do {
           chess_Draw();
         } while( u8g_NextPage(&u8g) );
+#ifdef PERFTEST
       }
+#endif
       is_redraw--;
     }
+#ifdef PERFTEST
     exit(0);
+#endif
     
     keyCode = get_key_code();
     if ( keyCode != CHESS_KEY_NONE )
