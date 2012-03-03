@@ -95,7 +95,9 @@ uint8_t u8g_dev_pcf8812_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
-        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        u8g_pb_t *pb = (u8g_pb  0x006,		                /* temp. control: b10 = 2 */
+  0x013,		                /* bias system 1:48 */
+_t *)(dev->dev_mem);
         u8g_SetAddress(u8g, dev, 0);           /* command mode */
         u8g_SetChipSelect(u8g, dev, 1);
         u8g_WriteByte(u8g, dev, 0x020 );		/* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
@@ -107,6 +109,13 @@ uint8_t u8g_dev_pcf8812_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         u8g_SetChipSelect(u8g, dev, 0);
       }
       break;
+    case U8G_DEV_MSG_CONTRAST:
+      u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
+      u8g_SetChipSelect(u8g, dev, 1);
+      u8g_WriteByte(u8g, dev, 0x021);        /* command mode, extended function set */
+      u8g_WriteByte(u8g, dev, 0x080 | ( (*(uint8_t *)arg) >> 1 ) );
+      u8g_SetChipSelect(u8g, dev, 0);
+      return 1;
   }
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
