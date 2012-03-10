@@ -422,6 +422,13 @@ uint8_t u8g_IsGlyph(u8g_t *u8g, uint8_t requested_encoding)
   return 0;
 }
 
+int8_t u8g_GetGlyphDeltaX(u8g_t *u8g, uint8_t requested_encoding)
+{
+  if ( u8g_GetGlyph(u8g, requested_encoding) == NULL )
+    return 0;  /* should never happen, so return something */
+  return u8g->glyph_dx;
+}
+
 
 /*========================================================================*/
 /* glyph drawing procedures */
