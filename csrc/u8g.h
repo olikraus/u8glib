@@ -516,8 +516,14 @@ uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t
 uint8_t u8g_Stop(u8g_t *u8g);
 void u8g_SetColorIndex(u8g_t *u8g, uint8_t idx);
 uint8_t u8g_GetColorIndex(u8g_t *u8g);
+
+uint8_t u8g_GetDefaultForegroundColor(u8g_t *u8g);
 void u8g_SetDefaultForegroundColor(u8g_t *u8g);
+
+uint8_t u8g_GetDefaultBackgroundColor(u8g_t *u8g);
 void u8g_SetDefaultBackgroundColor(u8g_t *u8g);
+
+uint8_t u8g_GetDefaultMidColor(u8g_t *u8g);
 void u8g_SetDefaultMidColor(u8g_t *u8g);
 
 #define u8g_GetWidth(u8g) ((u8g)->width)
