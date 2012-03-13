@@ -370,7 +370,6 @@ uint8_t u8g_dev_sdl_2bit_double_mem_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
       SDL_UpdateRect(u8g_sdl_screen, 0,0,0,0);
       break;    /* continue to base fn */
   }
-  /* this is unsolved at the moment */
   return u8g_dev_pb16v2_base_fn(u8g, dev, msg, arg);
 }
 
