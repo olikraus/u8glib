@@ -40,6 +40,8 @@
   
 */
 
+#ifdef WORK_IN_PROGRESS
+
 #include "u8g.h"
 
 void u8g_DrawEllipseRect(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t x1, u8g_uint_t y1)
@@ -87,36 +89,11 @@ void u8g_DrawEllipseRect(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t x1
 
 void u8g_DrawEllipse(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t xr, u8g_uint_t yr)
 {
-	
-
 	u8g_DrawPixel(u8g, x0, y0+yr);
 	u8g_DrawPixel(u8g, x0, y0-yr);
 	u8g_DrawPixel(u8g, x0+xr, y0);
 	u8g_DrawPixel(u8g, x0-xr, y0);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
+
+#endif
+
