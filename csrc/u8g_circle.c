@@ -128,7 +128,7 @@ void u8g_DrawEmpCirc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, u
   }
 }
 
-void u8g_draw_section(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0, uint8_t option)
+void u8g_draw_circle_section(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0, uint8_t option)
 {
     /* upper right */
     if ( option & U8G_CIRC_UPPER_RIGHT )
@@ -191,7 +191,7 @@ void u8g_DrawCircle(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, ui
     x = 0;
     y = rad;
 
-    u8g_draw_section(u8g, x, y, x0, y0, option);
+    u8g_draw_circle_section(u8g, x, y, x0, y0, option);
     
     while ( x < y )
     {
@@ -205,7 +205,7 @@ void u8g_DrawCircle(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, ui
       ddF_x += 2;
       f += ddF_x;
 
-      u8g_draw_section(u8g, x, y, x0, y0, option);    
+      u8g_draw_circle_section(u8g, x, y, x0, y0, option);    
     }
   }
 }
