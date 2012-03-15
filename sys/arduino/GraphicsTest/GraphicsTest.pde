@@ -1,10 +1,13 @@
 /*
 
-  HelloWorld.pde
+  GraphicsTest.pde
   
-  Universal 8bit Graphics Library
+  >>> Before compiling: Please remove comment from the constructor of the 
+  >>> connected graphics display (see below).
   
-  Copyright (c) 2011, olikraus@gmail.com
+  Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
+  
+  Copyright (c) 2012, olikraus@gmail.com
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
@@ -30,84 +33,62 @@
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-  
 
 
 */
 
 
-#include "u8g.h"
+#include "U8glib.h"
 
-u8g_t u8g;
+// setup u8g object, please remove comment from one of the following constructor calls
 
+//U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_ST7920_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_128X64 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_192X32 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_192X32 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_LM6059 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_LM6063 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGXL160_BW u8g(13, 11, 10, 9);            // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGXL160_GR u8g(13, 11, 10, 9);             // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_PCD8544 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
+//U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
+//U8GLIB_KS0108_128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs1=14, cs2=15,di=17,rw=16
+//U8GLIB_ST7687_C144MVGD u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 17, 16, 15);  // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs=14 ,a0=17,rw=16, reset = 15
+//U8GLIB_LC7981_160X80 u8g(8, 9, 10, 11, 4, 5, 6, 7,  18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs=14 ,di=15,rw=17, reset = 16
 
-void setup(void)
-{
-  pinMode(13, OUTPUT);
-
-  
-  //u8g_Init8Bit(&u8g, &u8g_dev_ks0108_128x64_fast,  8,  9, 10, 11,   4,   5,   6,   7, 18, 14, 15, 17, 16, U8G_PIN_NONE);
-  /*
-#define PIN_SCK 13
-#define PIN_MISO  12
-#define PIN_MOSI 11
-#define PIN_CS 10
-#define PIN_A0 9
-#define PIN_RST 8
-  */
-  
-  //u8g_InitSPI(&u8g, &u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
-  u8g_InitSPI(&u8g, &u8g_dev_pcf8812_96x65_sw_spi, 13, 11, 10, 9, 8);
-  //u8g_InitSPI(&u8g, &u8g_dev_pcd8544_84x48_sw_spi, 13, 11, 10, 9, 8);
-  
-  //u8g_SetRot180(&u8g);
+void draw(void) {
+  // graphic commands to redraw the complete screen should be placed here  
+  u8g.setFont(u8g_font_unifont);
+  u8g.drawStr( 0, 20, "Hello World!");
 }
 
-void loop(void)
-{
-  u8g_uint_t w,h;
-  static u8g_uint_t o = 0;
+void setup(void) {
+  // flip screen, if required
+  // u8g.setRot180();
 
-  u8g_FirstPage(&u8g);
-  
-  do
-  {
-    u8g_SetFont(&u8g, u8g_font_osb18r);
-    w = u8g_GetFontBBXWidth(&u8g);
-    h = u8g_GetFontBBXHeight(&u8g);
-    
-    u8g_DrawStr(&u8g, 20+2+o, h, "A");
-    u8g_DrawStr90(&u8g, 20+2+o, h+2, "B");
-    u8g_DrawStr180(&u8g, 20+o, h+2, "C");
-    u8g_DrawStr270(&u8g, 20+o, h, "D");
-    
-    u8g_SetFont(&u8g, u8g_font_6x10);
-    
-    u8g_DrawStr(&u8g, 80, 10, u8g_u8toa(u8g.pin_list[U8G_PI_RW], 3)   );
-
-    u8g_DrawPixel(&u8g, 10,0);
-    u8g_DrawPixel(&u8g, 20,0);
-    u8g_DrawPixel(&u8g, 30,0);
-    
-    u8g_DrawPixel(&u8g, 60,0);
-    u8g_DrawPixel(&u8g, 70,0);
-    u8g_DrawPixel(&u8g, 80,0);
-
-    
-    u8g_DrawFrame(&u8g, 2, 2+3, 9, 3+3);
-    u8g_DrawFrame(&u8g, 0, 0+3, 13, 7+3);
-    
-    u8g_DrawFrame(&u8g, 60, 40, 1+o, 1+o);
-    
-    /*
-    u8g_DrawFrame(&u8g, 0, 0, 2, 64);
-    
-    u8g_SetPixel(&u8g, 20, 5);
-    */
-  } while( u8g_NextPage(&u8g) );
-  o++;
-  o = o & 15;
-  
-  u8g_Delay(100);
+  // assign default color value
+  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) 
+    u8g.setColorIndex(255);     // white
+  else if ( u8g.getMode() == U8G_MODE_GRAY2BIT )
+    u8g.setColorIndex(3);         // max intensity
+  else if ( u8g.getMode() == U8G_MODE_BW )
+    u8g.setColorIndex(1);         // pixel on
 }
+
+void loop(void) {
+  // picture loop
+  u8g.firstPage();  
+  do {
+    draw();
+  } while( u8g.nextPage() );
+  
+  // rebuild the picture after some delay
+  delay(500);
+}
+
 

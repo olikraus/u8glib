@@ -208,28 +208,28 @@ static void u8g_draw_circle_section(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_
 static void u8g_draw_circle_section(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0, uint8_t option)
 {
     /* upper right */
-    if ( option & U8G_CIRC_UPPER_RIGHT )
+    if ( option & U8G_DRAW_UPPER_RIGHT )
     {
       u8g_DrawPixel(u8g, x0 + x, y0 - y);
       u8g_DrawPixel(u8g, x0 + y, y0 - x);
     }
     
     /* upper left */
-    if ( option & U8G_CIRC_UPPER_LEFT )
+    if ( option & U8G_DRAW_UPPER_LEFT )
     {
       u8g_DrawPixel(u8g, x0 - x, y0 - y);
       u8g_DrawPixel(u8g, x0 - y, y0 - x);
     }
     
     /* lower right */
-    if ( option & U8G_CIRC_LOWER_RIGHT )
+    if ( option & U8G_DRAW_LOWER_RIGHT )
     {
       u8g_DrawPixel(u8g, x0 + x, y0 + y);
       u8g_DrawPixel(u8g, x0 + y, y0 + x);
     }
     
     /* lower left */
-    if ( option & U8G_CIRC_LOWER_LEFT )
+    if ( option & U8G_DRAW_LOWER_LEFT )
     {
       u8g_DrawPixel(u8g, x0 - x, y0 + y);
       u8g_DrawPixel(u8g, x0 - y, y0 + x);
@@ -292,28 +292,28 @@ static void u8g_draw_disc_section(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_ui
 static void u8g_draw_disc_section(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0, uint8_t option)
 {
     /* upper right */
-    if ( option & U8G_CIRC_UPPER_RIGHT )
+    if ( option & U8G_DRAW_UPPER_RIGHT )
     {
       u8g_DrawVLine(u8g, x0+x, y0-y, y+1);
       u8g_DrawVLine(u8g, x0+y, y0-x, x+1);
     }
     
     /* upper left */
-    if ( option & U8G_CIRC_UPPER_LEFT )
+    if ( option & U8G_DRAW_UPPER_LEFT )
     {
       u8g_DrawVLine(u8g, x0-x, y0-y, y+1);
       u8g_DrawVLine(u8g, x0-y, y0-x, x+1);
     }
     
     /* lower right */
-    if ( option & U8G_CIRC_LOWER_RIGHT )
+    if ( option & U8G_DRAW_LOWER_RIGHT )
     {
       u8g_DrawVLine(u8g, x0+x, y0, y+1);
       u8g_DrawVLine(u8g, x0+y, y0, x+1);
     }
     
     /* lower left */
-    if ( option & U8G_CIRC_LOWER_LEFT )
+    if ( option & U8G_DRAW_LOWER_LEFT )
     {
       u8g_DrawVLine(u8g, x0-x, y0, y+1);
       u8g_DrawVLine(u8g, x0-y, y0, x+1);
