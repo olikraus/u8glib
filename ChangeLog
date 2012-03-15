@@ -48,4 +48,4 @@ u8glib ChangeLog
   * Intersection test for frame and box procedures
   * 4L double memory architecture  
   * setContrast infrastructure implemented, but not available for all devices
-  
+  * drawCircle, drawDisc

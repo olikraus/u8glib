@@ -161,7 +161,7 @@ void draw_circle(u8g_t *u8g)
 
   draw_common(u8g, ox, oy, w, h);
   
-  u8g_DrawEmpCirc(u8g, ox+20, oy+20, 14);  
+  u8g_DrawCircle(u8g, ox+20, oy+20, 14, U8G_DRAW_ALL);  
   
   draw_dotted_hline(u8g, ox+20-16, oy+20-14, 70);
   draw_dotted_hline(u8g, ox+20-16, oy+20, 50);
@@ -173,7 +173,35 @@ void draw_circle(u8g_t *u8g)
   //draw_h_measure(u8g, ox+20, oy+20+4, 14);
   
   u8g_SetFont(u8g, u8g_font_6x10);
-  u8g_DrawStr(u8g, ox+20-57, oy+20+4, "(20,20)");
+  u8g_DrawStr(u8g, ox+20-62, oy+20+4, "(20,20)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+20, oy+20);
+  u8g_DrawCursor(u8g);
+}
+
+void draw_circle_ur(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  draw_common(u8g, ox, oy, w, h);
+  
+  u8g_DrawCircle(u8g, ox+20, oy+20, 14, U8G_DRAW_UPPER_RIGHT);  
+  
+  draw_dotted_hline(u8g, ox+20-16, oy+20-14, 70);
+  draw_dotted_hline(u8g, ox+20-16, oy+20, 50);
+  //draw_dotted_hline(u8g, ox+20-16, oy+20+14, 70);
+  
+  draw_v_measure(u8g, ox+41, oy+20-14, 14);
+  //draw_v_measure(u8g, ox+60, oy+20-14, 15);
+  //draw_v_measure(u8g, ox+41, oy+20+1, 14);
+  draw_h_measure(u8g, ox+20+1, oy+20+4, 14);
+  
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+20-62, oy+20+4, "(20,20)");
   u8g_SetCursorStyle(u8g, 144);
   u8g_SetCursorPos(u8g, ox+20, oy+20);
   u8g_DrawCursor(u8g);
@@ -972,6 +1000,7 @@ int main(void)
   create_picture(draw_display, "display");
   create_picture(draw_text_abc, "text_abc");
   create_picture(draw_circle, "circle");
+  create_picture(draw_circle_ur, "circle_ur");
   
   create_picture(draw_abc_left, "abc_left");
   create_picture(draw_text_abc_top, "abc_top");
