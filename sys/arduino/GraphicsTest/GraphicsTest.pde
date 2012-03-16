@@ -61,10 +61,49 @@ U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI
 //U8GLIB_ST7687_C144MVGD u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 17, 16, 15);  // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs=14 ,a0=17,rw=16, reset = 15
 //U8GLIB_LC7981_160X80 u8g(8, 9, 10, 11, 4, 5, 6, 7,  18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs=14 ,di=15,rw=17, reset = 16
 
+void u8g_prepare(void)
+{
+  u8g.setFont(u8g_font_6x10);
+  u8g.setFontRefHeightExtendedText();
+  u8g.setDefaultForegroundColor();
+  u8g.setFontPosTop();
+}
+
+void u8g_box_frame(void)
+{
+  u8g.drawStr( 0, 0, "drawBox");
+  u8g.drawBox(5,10,20,10);
+  u8g.drawBox(10,15,30,7);
+  u8g.drawStr( 0, 30, "drawFrame");
+  u8g.drawFrame(5,10+30,20,10);
+  u8g.drawFrame(10,15+30,30,7);
+}
+
+void u8g_disc_circle(void)
+{
+  u8g.drawStr( 0, 0, "drawDisc");
+  u8g.drawDisc(10,18,9);
+  u8g.drawDisc(24,16,7);
+  u8g.drawStr( 0, 30, "drawCircle");
+  u8g.drawCircle(10,18+30,9);
+  u8g.drawCircle(24,16+30,7);
+}
+
+void u8g_string(void)
+{
+  u8g.drawStr(30,31, " 0");
+  u8g.drawStr90(30,31, " 90");
+  u8g.drawStr180(30,31, " 180");
+  u8g.drawStr270(30,31, " 270");
+}
+
+
 void draw(void) {
   // graphic commands to redraw the complete screen should be placed here  
-  u8g.setFont(u8g_font_unifont);
-  u8g.drawStr( 0, 20, "Hello World!");
+  u8g_prepare();
+  //u8g_box_frame();
+  //u8g_disc_circle();
+  u8g_string();
 }
 
 void setup(void) {

@@ -683,7 +683,7 @@ int8_t u8g_draw_glyph180(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encodin
   y += u8g->glyph_y;
   y++;
   
-  if ( u8g_IsBBXIntersection(u8g, x-w-1, y, w, h) == 0 )
+  if ( u8g_IsBBXIntersection(u8g, x-(w-1), y, w, h) == 0 )
     return u8g->glyph_dx;
 
   /* now, w is reused as bytes per line */
@@ -735,8 +735,9 @@ int8_t u8g_draw_glyph270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encodin
   x--;
   y -= u8g->glyph_x;
   
-  if ( u8g_IsBBXIntersection(u8g, x-h-1, y-w-1, h, w) == 0 )
+  if ( u8g_IsBBXIntersection(u8g, x-(h-1), y-(w-1), h, w) == 0 )
     return u8g->glyph_dx;
+  
 
   /* now, w is reused as bytes per line */
   w += 7;

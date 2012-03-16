@@ -93,6 +93,11 @@ class U8GLIB : public Print
     /* graphic primitives */
     void setColorIndex(uint8_t color_index) { u8g_SetColorIndex(&u8g, color_index); }
     uint8_t getColorIndex(void) { return u8g_GetColorIndex(&u8g); }
+    
+    void setDefaultForegroundColor(void) { u8g_SetDefaultForegroundColor(&u8g);  }
+    void setDefaultBackgroundColor(void) { u8g_SetDefaultBackgroundColor(&u8g);  }
+    void setDefaultMidColor(void) { u8g_SetDefaultMidColor(&u8g);  }
+    
     u8g_uint_t getWidth(void) { return u8g_GetWidth(&u8g); }
     u8g_uint_t getHeight(void) { return u8g_GetHeight(&u8g); }
     uint8_t getMode(void) { return u8g_GetMode(&u8g); }
