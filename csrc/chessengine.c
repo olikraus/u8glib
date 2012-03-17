@@ -235,6 +235,11 @@ struct _lrc_struct
   /* bascially, this can be used as a color */
   uint8_t orientation;
   
+  /* exchange colors of the pieces */
+  /* 0: white has an empty body, use this for bright background color */
+  /* 1: black has an empty body, use this for dark backround color */
+  uint8_t strike_out_color;
+  
   /* 0, when the game is ongoing */
   /* 1, when the game is stopped (lost or draw) */
   uint8_t is_game_end;
@@ -2120,8 +2125,8 @@ void chess_DrawBoard(void)
 	ptr += (cp_GetPiece(cp)-1)*8;
         u8g_SetDefaultForegroundColor(lrc_u8g);
         u8g_DrawBitmapP(lrc_u8g, j*chess_boxsize+chess_boxoffset-1, chess_low_edge - (i*chess_boxsize+chess_boxsize-chess_boxoffset), 1, 8, ptr);
-
-	if ( cp_GetColor(cp) == 0 ) 
+        
+	if ( cp_GetColor(cp) == lrc_obj.strike_out_color ) 
 	{
 	  ptr = chess_pieces_body_bm;
 	  ptr += (cp_GetPiece(cp)-1)*8;
@@ -2149,7 +2154,7 @@ void chess_Thinking(void)
 {
 }
 
-void chess_Init(u8g_t *u8g)
+void chess_Init(u8g_t *u8g, uint8_t body_color)
 {
   lrc_u8g = u8g;
 
@@ -2188,7 +2193,7 @@ void chess_Init(u8g_t *u8g)
     
   }
     
-  
+  lrc_obj.strike_out_color = body_color;
   chess_SetupBoard();
 }
 

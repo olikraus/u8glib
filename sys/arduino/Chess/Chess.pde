@@ -119,13 +119,6 @@ void uiStep(void)
 
 
 void setup() {
-  //u8g_InitHWSPIDogm128API(&u8g_dev_uc1701_dogs102_hw_spi, 10, 9, U8G_PIN_NONE);
-  //u8g_InitSPIDogm128API(&u8g_dev_uc1701_dogs102_sw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
-  //u8g_InitSPIDogm128API(&u8g_dev_st7920_192x32_sw_spi, 18, 16, 17, U8G_PIN_NONE, U8G_PIN_NONE);
-  //u8g_InitSPIDogm128API(&u8g_dev_st7920_128x64_sw_spi, 18, 16, 17, U8G_PIN_NONE, U8G_PIN_NONE);
-  //u8g_InitSPIDogm128API(&u8g_dev_st7565_dogm128_hw_spi, 13, 11, 10, 9, U8G_PIN_NONE);
-
-  //u8g_SetDogmRot180();
   uiSetup();
   chess_Init(u8g.getU8g());
 }
