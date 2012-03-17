@@ -119,8 +119,11 @@ void uiStep(void)
 
 
 void setup() {
+  // rotate screen, if required
+  // u8g.setRot180();
+  
   uiSetup();
-  chess_Init(u8g.getU8g());
+  chess_Init(u8g.getU8g(), 0);
 }
 
 void loop() {  

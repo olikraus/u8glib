@@ -42,7 +42,7 @@ u8glib ChangeLog
   * XBM support
   * F() macro support
   * str-rotation commands support ref-height and ref-position
-2012-02-12      v1.02	Oliver Kraus <olikraus@gmail.com>
+2012-03-17      v1.02	Oliver Kraus <olikraus@gmail.com>
   * U8GLIB_ST7687_C144MVGD spi experimental
   * U8GLIB_LC7981_160X80 8bit
   * Intersection test for frame and box procedures

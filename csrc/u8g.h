@@ -687,7 +687,7 @@ void u8g_Delay(uint16_t val);
 #define CHESS_KEY_SELECT 3
 #define CHESS_KEY_BACK 4
 
-void chess_Init(u8g_t *u8g);
+void chess_Init(u8g_t *u8g, uint8_t empty_body_color);
 void chess_Draw(void);
 void chess_Step(uint8_t keycode);
 
