@@ -94,6 +94,7 @@ uint8_t u8g_dev_pcd8544_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       }
       break;
     case U8G_DEV_MSG_CONTRAST:
+      /* the contrast adjustment does not work, needs to be analysed */
       u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
       u8g_SetChipSelect(u8g, dev, 1);
       u8g_WriteByte(u8g, dev, 0x021);        /* command mode, extended function set */

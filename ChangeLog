@@ -49,3 +49,6 @@ u8glib ChangeLog
   * 4L double memory architecture  
   * setContrast infrastructure implemented, but not available for all devices
   * drawCircle, drawDisc
+  * Bugfix for drawStr270
+  * New examples: Chess (ported from dogm128 lib) and GraphicsTest
+  
