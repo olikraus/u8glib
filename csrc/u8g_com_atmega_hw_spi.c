@@ -1,10 +1,10 @@
 /*
   
-  u8g_com_arduino_hw_spi.c
+  u8g_com_atmega_hw_spi.c
 
   Universal 8bit Graphics Library
   
-  Copyright (c) 2011, olikraus@gmail.com
+  Copyright (c) 2012, olikraus@gmail.com
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
@@ -36,36 +36,14 @@
 
 #include "u8g.h"
 
-#if defined(ARDUINO)
+
+#if defined(__AVR__)
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
-#if ARDUINO < 100 
-#include <WProgram.h> 
 
-/* fixed pins */
-#define PIN_SCK 13
-#define PIN_MISO  12
-#define PIN_MOSI 11
-#define PIN_CS 10
-
-#else 
-
-#include <Arduino.h> 
-
-/* use Arduino pin definitions */
-#define PIN_SCK SCK
-#define PIN_MISO  MISO
-#define PIN_MOSI MOSI
-#define PIN_CS SS
-
-#endif
-
-
-
-//static uint8_t u8g_spi_out(uint8_t data) U8G_NOINLINE;
-static uint8_t u8g_spi_out(uint8_t data)
+static uint8_t u8g_atmega_spi_out(uint8_t data)
 {
   /* unsigned char x = 100; */
   /* send data */
@@ -78,7 +56,7 @@ static uint8_t u8g_spi_out(uint8_t data)
 }
 
 
-uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   switch(msg)
   {
@@ -86,17 +64,16 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       break;
     
     case U8G_COM_MSG_INIT:
-      u8g_com_arduino_assign_pin_output_high(u8g);
-      pinMode(PIN_SCK, OUTPUT);
-      digitalWrite(PIN_SCK, LOW);
-      pinMode(PIN_MOSI, OUTPUT);
-      digitalWrite(PIN_MOSI, LOW);
-      /* pinMode(PIN_MISO, INPUT); */
 
-      pinMode(PIN_CS, OUTPUT);			/* system chip select for the atmega board */
-      digitalWrite(PIN_CS, HIGH);
+      
+      DDRB |= _BV(2);          /* CS */
+      DDRB |= _BV(3);          /* D0, MOSI */
+      DDRB |= _BV(1);          /* A0 */
+      DDRB |= _BV(5);          /* SCK */
     
-
+      PORTB &= ~_BV(3);        /* D0, MOSI = 0 */
+      PORTB &= ~_BV(5);        /* SCK = 0 */
+      PORTB |= _BV(2);            /* CS = 1 */
 
       /*
         SPR1 SPR0
@@ -111,30 +88,37 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       break;
     
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      u8g_com_arduino_digital_write(u8g, U8G_PI_A0, arg_val);
+      if ( arg_val == 0 )
+        PORTB &= ~_BV(1);        /* A0 = 0 */
+      else
+        PORTB |= _BV(1);        /* A0 = 1 */
       break;
 
     case U8G_COM_MSG_CHIP_SELECT:
+      
       if ( arg_val == 0 )
       {
         /* disable */
-        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
+        PORTB |= _BV(2);        /* CS = 1 */
       }
       else
       {
+        PORTB &= ~_BV(5);        /* SCK = 0 */
         /* enable */
-        u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
-        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
+        PORTB &= ~_BV(2);        /* CS = 0 (low active) */
       }
+      
       break;
       
     case U8G_COM_MSG_RESET:
+      /* 
       if ( u8g->pin_list[U8G_PI_RESET] != U8G_PIN_NONE )
         u8g_com_arduino_digital_write(u8g, U8G_PI_RESET, arg_val);
+      */
       break;
     
     case U8G_COM_MSG_WRITE_BYTE:
-      u8g_spi_out(arg_val);
+      u8g_atmega_spi_out(arg_val);
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
@@ -142,7 +126,7 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_spi_out(*ptr++);
+          u8g_atmega_spi_out(*ptr++);
           arg_val--;
         }
       }
@@ -152,7 +136,7 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_spi_out(u8g_pgm_read(ptr));
+          u8g_atmega_spi_out(u8g_pgm_read(ptr));
           ptr++;
           arg_val--;
         }
@@ -162,12 +146,11 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
   return 1;
 }
 
-#else /* ARDUINO */
+#else
 
-uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   return 1;
 }
 
-#endif /* ARDUINO */
-
+#endif

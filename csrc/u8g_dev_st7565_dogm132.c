@@ -120,6 +120,9 @@ uint8_t u8g_dev_st7565_dogm132_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
 }
 
 U8G_PB_DEV(u8g_dev_st7565_dogm132_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_dogm132_fn, u8g_com_arduino_sw_spi_fn);
+#if defined(ARDUINO)
 U8G_PB_DEV(u8g_dev_st7565_dogm132_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_dogm132_fn, u8g_com_arduino_hw_spi_fn);
-
-
+#elseif defined(__AVR__)
+U8G_PB_DEV(u8g_dev_st7565_dogm132_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_dogm132_fn, u8g_com_atmega_hw_spi_fn);
+#else
+#endif
