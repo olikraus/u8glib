@@ -1,0 +1,14 @@
+
+Install instructions for u8glib, AVR distribution
+
+Project home: http://code.google.com/p/u8glib/
+U8glib AVR page: http://code.google.com/p/u8glib/wiki/avr
+
+1. Download u8glib_avr_vX.XX.zip
+2. Extract content to a local directory
+3. Add all files (.c files and u8g.h) of the u8glib/src directory to your project 
+4. Update search path for the include file (if required)
+
+Note: AVR Studio 4 needs additional options, please see the web page:
+http://code.google.com/p/u8glib/wiki/avr
+

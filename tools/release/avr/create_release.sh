@@ -6,6 +6,7 @@ mkdir u8glib/examples/hello_world
 
 cp ../../../ChangeLog ./u8glib/.
 cp ../../../license.txt ./u8glib/.
+cp INSTALL.TXT ./u8glib/.
 
 cp ../../../csrc/*.c ./u8glib/src/.
 cp ../../../csrc/*.h ./u8glib/src/.
