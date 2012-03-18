@@ -100,7 +100,7 @@ uint8_t u8g_dev_dogs102_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_uc1701_dogs102_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_dogs102_fn, u8g_com_arduino_sw_spi_fn);
-U8G_PB_DEV(u8g_dev_uc1701_dogs102_hw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_dogs102_fn, u8g_com_arduino_hw_spi_fn);
+U8G_PB_DEV(u8g_dev_uc1701_dogs102_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_dogs102_fn, U8G_COM_SW_SPI);
+U8G_PB_DEV(u8g_dev_uc1701_dogs102_hw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_dogs102_fn, U8G_COM_HW_SPI);
 
 

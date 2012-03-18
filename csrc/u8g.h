@@ -254,9 +254,6 @@ typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 #define U8G_COM_MSG_WRITE_SEQ_P 7
 
 
-
-
-
 /* com driver */
 uint8_t u8g_com_null_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);               /* u8g_com_null.c */
 uint8_t u8g_com_arduino_std_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);        /* u8g_com_arduino_std_sw_spi.c */
@@ -268,6 +265,38 @@ uint8_t u8g_com_arduino_fast_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_va
 
 
 uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_hw_spi.c */
+uint8_t u8g_com_atmega_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_sw_spi.c */
+
+
+/* 
+  Translation of system specific com drives to generic com names
+  At the moment, the following generic com drives are available
+  U8G_COM_HW_SPI
+  U8G_COM_SW_SPI
+*/
+#if defined(ARDUINO)
+#define U8G_COM_HW_SPI u8g_com_arduino_hw_spi_fn
+#endif
+#ifndef U8G_COM_HW_SPI
+#if defined(__AVR__)
+#define U8G_COM_HW_SPI u8g_com_atmega_hw_spi_fn
+#endif
+#endif
+#ifndef U8G_COM_HW_SPI
+#define U8G_COM_HW_SPI u8g_com_null_fn
+#endif
+
+#if defined(ARDUINO)
+#define U8G_COM_SW_SPI u8g_com_arduino_sw_spi_fn
+#endif
+#ifndef U8G_COM_SW_SPI
+#if defined(__AVR__)
+#define U8G_COM_SW_SPI u8g_com_atmega_sw_spi_fn
+#endif
+#endif
+#ifndef U8G_COM_SW_SPI
+#define U8G_COM_SW_SPI u8g_com_null_fn
+#endif
 
 
 /*===============================================================*/
@@ -315,6 +344,16 @@ uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq);
 /* u8g_arduino_common.c */
 void u8g_com_arduino_digital_write(u8g_t *u8g, uint8_t pin_index, uint8_t value);
 void u8g_com_arduino_assign_pin_output_high(u8g_t *u8g);
+
+/*===============================================================*/
+/* u8g_com_io.c */
+uint8_t u8g_Pin(uint8_t port, uint8_t bit);
+#define PN(port,bit) u8g_Pin(port,bit)
+void u8g_SetPinOutput(uint8_t internal_pin_number);
+void u8g_SetPinLevel(uint8_t internal_pin_number, uint8_t level);
+
+void u8g_SetPIOutput(u8g_t *u8g, uint8_t pi);
+void u8g_SetPILevel(u8g_t *u8g, uint8_t pi, uint8_t level);
 
 
 /*===============================================================*/

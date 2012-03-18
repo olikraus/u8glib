@@ -120,4 +120,4 @@ uint8_t u8g_dev_pcf8812_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 }
 
 /* u8g_com_arduino_sw_spi_fn does not work, too fast??? */
-U8G_PB_DEV(u8g_dev_pcf8812_96x65_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_pcf8812_fn, u8g_com_arduino_std_sw_spi_fn);
+U8G_PB_DEV(u8g_dev_pcf8812_96x65_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_pcf8812_fn, U8G_COM_SW_SPI);

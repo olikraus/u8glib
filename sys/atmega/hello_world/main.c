@@ -55,14 +55,23 @@ u8g_t u8g;
 void draw(void)
 {
   u8g_SetFont(&u8g, u8g_font_6x10);
-  u8g_DrawStr(&u8g, 0, 15, "Hello World");
+  u8g_DrawStr(&u8g, 0, 15, "Hello World!");
 }
 
 int main(void)
 {
   sys_init();
 
-  u8g_Init(&u8g, &u8g_dev_st7565_dogm132_hw_spi);
+  /*
+    CS: PORTB, Bit 2
+    A0: PORTB, Bit 1
+    SCK: PORTB, Bit 5
+    MOSI: PORTB, Bit 3
+  */
+  /* u8g_InitHWSPI(&u8g, &u8g_dev_st7565_dogm132_hw_spi, PN(1, 2), PN(1, 1), U8G_PIN_NONE);  */
+
+  //uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset);
+  u8g_InitSPI(&u8g, &u8g_dev_st7565_dogm132_sw_spi, PN(1, 5), PN(1, 3), PN(1, 2), PN(1, 1), U8G_PIN_NONE);
 
   for(;;)
   {  

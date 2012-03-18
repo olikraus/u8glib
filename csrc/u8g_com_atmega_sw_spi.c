@@ -1,6 +1,6 @@
 /*
   
-  u8g_com_atmega_hw_spi.c
+  u8g_com_atmega_sw_spi.c
 
   Universal 8bit Graphics Library
   
@@ -31,67 +31,47 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
   
-  
-  Assumes, that 
-    MOSI is at PORTB, Pin 3
-  and
-   SCK is at PORTB, Pin 5
 
 */
 
 #include "u8g.h"
 
-
 #if defined(__AVR__)
 
-#include <avr/interrupt.h>
-#include <avr/io.h>
-
-
-static uint8_t u8g_atmega_spi_out(uint8_t data)
+static void u8g_atmega_sw_spi_shift_out(u8g_t *u8g, uint8_t val) U8G_NOINLINE;
+static void u8g_atmega_sw_spi_shift_out(u8g_t *u8g, uint8_t val)
 {
-  /* unsigned char x = 100; */
-  /* send data */
-  SPDR = data;
-  /* wait for transmission */
-  while (!(SPSR & (1<<SPIF))) 
-    ;
-  /* clear the SPIF flag by reading SPDR */
-  return  SPDR;
+  uint8_t i = 8;
+  do
+  {
+    u8g_SetPILevel(u8g, U8G_PI_MOSI, val & 128 );
+    val <<= 1;
+    u8g_SetPILevel(u8g, U8G_PI_SCK, 1 );
+    u8g_SetPILevel(u8g, U8G_PI_SCK, 0 );
+    i--;
+  } while( i != 0 );
 }
 
-
-uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_atmega_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   switch(msg)
   {
+    case U8G_COM_MSG_INIT:
+      u8g_SetPIOutput(u8g, U8G_PI_SCK);
+      u8g_SetPIOutput(u8g, U8G_PI_MOSI);
+      u8g_SetPIOutput(u8g, U8G_PI_A0);
+      u8g_SetPIOutput(u8g, U8G_PI_CS);
+      u8g_SetPIOutput(u8g, U8G_PI_RESET);
+      
+      u8g_SetPILevel(u8g, U8G_PI_SCK, 0 );
+      u8g_SetPILevel(u8g, U8G_PI_MOSI, 0 );
+      u8g_SetPILevel(u8g, U8G_PI_CS, 1 );
+      u8g_SetPILevel(u8g, U8G_PI_A0, 0);
+      break;
+    
     case U8G_COM_MSG_STOP:
       break;
-    
-    case U8G_COM_MSG_INIT:
 
-      u8g_SetPIOutput(u8g, U8G_PI_CS);
-      u8g_SetPIOutput(u8g, U8G_PI_A0);
-      
-      DDRB |= _BV(3);          /* D0, MOSI */
-      DDRB |= _BV(5);          /* SCK */
-    
-      PORTB &= ~_BV(3);        /* D0, MOSI = 0 */
-      PORTB &= ~_BV(5);        /* SCK = 0 */
-      u8g_SetPILevel(u8g, U8G_PI_CS, 1);
-
-      /*
-        SPR1 SPR0
-            0	0		fclk/4
-            0	1		fclk/16
-            1	0		fclk/64
-            1	1		fclk/128
-      */
-      SPCR = 0;
-      SPCR =  (1<<SPE) | (1<<MSTR)|(0<<SPR1)|(0<<SPR0)|(0<<CPOL)|(0<<CPHA);
-      
-      break;
-    
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
       u8g_SetPILevel(u8g, U8G_PI_A0, arg_val);
       break;
@@ -105,19 +85,19 @@ uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
       }
       else
       {
-        PORTB &= ~_BV(5);        /* SCK = 0 */
+        u8g_SetPILevel(u8g, U8G_PI_SCK, 0 );
         /* enable */
         u8g_SetPILevel(u8g, U8G_PI_CS, 0); /* CS = 0 (low active) */
       }
-      
       break;
       
     case U8G_COM_MSG_RESET:
       u8g_SetPILevel(u8g, U8G_PI_RESET, arg_val);
       break;
     
+
     case U8G_COM_MSG_WRITE_BYTE:
-      u8g_atmega_spi_out(arg_val);
+      u8g_atmega_sw_spi_shift_out(u8g, arg_val);
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
@@ -125,17 +105,18 @@ uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_atmega_spi_out(*ptr++);
+          u8g_atmega_sw_spi_shift_out(u8g, *ptr++);
           arg_val--;
         }
       }
       break;
-    case U8G_COM_MSG_WRITE_SEQ_P:
+
+      case U8G_COM_MSG_WRITE_SEQ_P:
       {
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_atmega_spi_out(u8g_pgm_read(ptr));
+          u8g_atmega_sw_spi_shift_out(u8g, u8g_pgm_read(ptr));
           ptr++;
           arg_val--;
         }
@@ -147,9 +128,12 @@ uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
 
 #else
 
-uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+
+uint8_t u8g_com_atmega_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   return 1;
 }
 
+
 #endif
+
