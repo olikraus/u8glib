@@ -58,19 +58,21 @@ void draw(void)
   u8g_DrawStr(&u8g, 0, 15, "Hello World");
 }
 
-int main()
+int main(void)
 {
   sys_init();
 
   u8g_Init(&u8g, &u8g_dev_st7565_dogm132_hw_spi);
-  
-  u8g_FirstPage(&u8g);
-  do
-  {
-    draw();
-  } while ( u8g_NextPage(&u8g) );
-  
+
   for(;;)
-    ;
+  {  
+    u8g_FirstPage(&u8g);
+    do
+    {
+      draw();
+    } while ( u8g_NextPage(&u8g) );
+    u8g_Delay(100);
+  }
+  
 }
 

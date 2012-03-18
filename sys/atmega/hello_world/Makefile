@@ -59,6 +59,7 @@ MCU:=atmega88
 F_CPU:=8000000
 SRC = main.c
 U8GDIR = ../../../csrc/
+FONTDIR = ../../../sfntsrc/
 
 
 #================================================
@@ -72,8 +73,10 @@ AVRDUDE_PORT := usb
 #================================================
 # Main part of the Makefile starts here. Usually no changes are needed.
 
-# Append DOG Library
-SRC += $(addprefix $(U8GDIR), $(shell ls $(U8GDIR) 2>/dev/null))
+# Append U(G Library
+# SRC += $(addprefix $(U8GDIR), $(shell ls $(U8GDIR)*.c 2>/dev/null))
+SRC += $(shell ls $(U8GDIR)*.c)
+SRC += $(shell ls $(FONTDIR)*.c)
 
 # Internal Variable Names
 AVRDUDE_FLASH = -U flash:w:$(TARGETNAME).hex
@@ -120,7 +123,7 @@ clean:
 
 # implicit rules
 .elf.hex:
-	@$(OBJCOPY) -O ihex -R .eeprom $< $@
+	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
 # explicit rules
 $(ELFNAME): $(LIBNAME)($(OBJ)) 

@@ -37,10 +37,30 @@
 
 #include "u8g.h"
 
-#if defined(__AVR__)
-/*==== Generic AVR delay ====*/
+/*==== Part 1: Derive suitable delay procedure ====*/
+
+#if defined(ARDUINO)
+#  if defined(__AVR__)
+#    define USE_AVR_DELAY
+#  else
+#    define USE_ARDUINO_DELAY
+#  endif
+#elif defined(__AVR__)
+#  define USE_AVR_DELAY
+#elif defined(__18CXX)
+#  define USE_PIC18_DELAY
+#else
+#  define USE_DUMMY_DELAY
+#endif
 
 
+
+
+/*==== Part 2: Definition of the delay procedures ====*/
+
+/*== AVR Delay ==*/
+
+#if defined(USE_AVR_DELAY)
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
@@ -61,24 +81,24 @@
   - subwi 2x2
   - bne i 2
   ==> 7 cycles
+  ==> must be devided by 4, rounded up 7/4 = 2
 */
-
 void u8g_Delay(uint16_t val)
 {
   /* old version did a call to the arduino lib: delay(val); */
   while( val != 0 )
   {
-    _delay_loop_2( (F_CPU / 4000 ) -7);
+    _delay_loop_2( (F_CPU / 4000 ) -2);
     val--;
   }
 }
+#endif 
 
-#elif defined(__18CXX)
 
-/*==== Delay for PIC18 (not tested) ====*/
+/*== Delay for PIC18 (not tested) ==*/
 
+#if defined(USE_PIC18_DELAY)
 #include <delays.h>
-
 #define GetSystemClock()		(64000000ul)      // Hz
 #define GetInstructionClock()	(GetSystemClock()/4)
 
@@ -88,17 +108,20 @@ void u8g_Delay(uint16_t val)
 	while(_iTemp--)		
 		Delay1KTCYx((GetInstructionClock()+999999)/1000000);
 }
+#endif
 
-#elif defined(__PIC32MX)
-/*==== Delay for PIC32 (assumes chipkit arduino environment ) ====*/
+
+/*== Arduino Delay ==*/
+#if defined(USE_ARDUINO_DELAY)
 void u8g_Delay(uint16_t val)
 {
 	delay(val);
 }
+#endif
 
-#else
 
-/*==== Any other systems ====*/
+/*== Any other systems: Dummy Delay ==*/
+#if defined(USE_DUMMY_DELAY)
 void u8g_Delay(uint16_t val)
 {
 	/* do not know how to delay... */
