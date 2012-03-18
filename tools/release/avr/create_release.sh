@@ -14,6 +14,7 @@ cp ../../../sys/atmega/hello_world/*.c ./u8glib/examples/hello_world/.
 
 
 chmod -R og=u u8glib
-cd u8glib 
-zip -r ../u8glib_avr_`../../print_release.sh`.zip *
-cd ..
+zip -r u8glib_avr_`../print_release.sh`.zip u8glib
+#cd u8glib 
+#zip -r ../u8glib_avr_`../../print_release.sh`.zip *
+#cd ..
