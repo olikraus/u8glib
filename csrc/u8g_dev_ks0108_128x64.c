@@ -104,7 +104,7 @@ uint8_t u8g_dev_ks0108_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_ks0108_128x64, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ks0108_128x64_fn, u8g_com_arduino_parallel_fn);
+U8G_PB_DEV(u8g_dev_ks0108_128x64, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ks0108_128x64_fn, U8G_COM_PARALLEL);
 U8G_PB_DEV(u8g_dev_ks0108_128x64_fast, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ks0108_128x64_fn, u8g_com_arduino_fast_parallel_fn);
 
 

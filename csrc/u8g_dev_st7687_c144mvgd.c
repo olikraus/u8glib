@@ -417,4 +417,4 @@ u8g_pb_t u8g_st7687_c144mvgd_8h8_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_st7687
 
 u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi = { u8g_dev_st7687_c144mvgd_fn, &u8g_st7687_c144mvgd_8h8_pb, u8g_com_arduino_sw_spi_fn };
 
-u8g_dev_t u8g_dev_st7687_c144mvgd_8bit = { u8g_dev_st7687_c144mvgd_fn, &u8g_st7687_c144mvgd_8h8_pb, u8g_com_arduino_parallel_fn };
+u8g_dev_t u8g_dev_st7687_c144mvgd_8bit = { u8g_dev_st7687_c144mvgd_fn, &u8g_st7687_c144mvgd_8h8_pb, U8G_COM_PARALLEL };

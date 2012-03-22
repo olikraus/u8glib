@@ -266,6 +266,7 @@ uint8_t u8g_com_arduino_fast_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_va
 
 uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_hw_spi.c */
 uint8_t u8g_com_atmega_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_sw_spi.c */
+uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);    /* u8g_com_atmega_parallel.c */
 
 
 /* 
@@ -273,6 +274,7 @@ uint8_t u8g_com_atmega_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
   At the moment, the following generic com drives are available
   U8G_COM_HW_SPI
   U8G_COM_SW_SPI
+  U8G_COM_PARALLEL
 */
 #if defined(ARDUINO)
 #define U8G_COM_HW_SPI u8g_com_arduino_hw_spi_fn
@@ -296,6 +298,18 @@ uint8_t u8g_com_atmega_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
 #endif
 #ifndef U8G_COM_SW_SPI
 #define U8G_COM_SW_SPI u8g_com_null_fn
+#endif
+
+#if defined(ARDUINO)
+#define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
+#endif
+#ifndef U8G_COM_PARALLEL
+#if defined(__AVR__)
+#define U8G_COM_PARALLEL u8g_com_atmega_parallel_fn
+#endif
+#endif
+#ifndef U8G_COM_PARALLEL
+#define U8G_COM_PARALLEL u8g_com_null_fn
 #endif
 
 
