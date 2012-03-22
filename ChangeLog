@@ -51,4 +51,5 @@ u8glib ChangeLog
   * drawCircle, drawDisc
   * Bugfix for drawStr270
   * New examples: Chess (ported from dogm128 lib) and GraphicsTest
-  
+2012-xx-xx      v1.03	Oliver Kraus <olikraus@gmail.com>
+  * parallel mode atmega
