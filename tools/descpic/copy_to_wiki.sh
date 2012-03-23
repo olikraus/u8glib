@@ -24,3 +24,4 @@ cp str_width.png ../../../wiki/descpic/.
 cp xbm.png ../../../wiki/descpic/.
 cp circle.png ../../../wiki/descpic/.
 cp circle_ur.png ../../../wiki/descpic/.
+cp menu.png ../../../wiki/descpic/.

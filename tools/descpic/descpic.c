@@ -992,6 +992,41 @@ void draw_xbm(u8g_t *u8g)
   
 }
 
+void draw_menu(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  uint8_t i;
+  u8g_uint_t d;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  char *menu_strings[4] = { "First Line", "Second Item", "3333333", "abcdefg" };
+
+  u8g_SetDefaultForegroundColor(u8g);
+  draw_common(u8g, ox, oy, w, h);
+  
+  
+
+  u8g_SetFont(u8g, u8g_font_6x13);
+  u8g_SetFontRefHeightText(u8g);
+  u8g_SetFontPosTop(u8g);
+  
+  h = u8g_GetFontAscent(u8g)-u8g_GetFontDescent(u8g);
+  for( i = 0; i < 4; i++ )
+  {
+    d = (w-u8g_GetStrWidth(u8g, menu_strings[i]))/2;
+    u8g_SetDefaultForegroundColor(u8g);
+    if ( i == 3 )
+    {
+      u8g_DrawBox(u8g, 0+ox, i*h+1+oy, w, h);
+      u8g_SetDefaultBackgroundColor(u8g);
+    }
+    u8g_DrawStr(u8g, d+ox, i*h+oy, menu_strings[i]);
+  }
+  
+}
 
 int main(void)
 {
@@ -1040,6 +1075,7 @@ int main(void)
   create_picture(draw_str_bbx_top2, "str_bbx_top2");
   
   create_picture(draw_xbm, "xbm");
+  create_picture(draw_menu, "menu");
   
   create_picture_rot90(draw_text_abc_rot90, "rot90");
   

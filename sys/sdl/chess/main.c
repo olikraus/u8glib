@@ -37,7 +37,7 @@ int main(void)
   
   u8g_t u8g;
   
-  u8g_Init(&u8g, &u8g_dev_sdl_2bit_double_mem);
+  u8g_Init(&u8g, &u8g_dev_sdl_2bit);
   u8g_FirstPage(&u8g);
   chess_Init(&u8g, 0);
 
