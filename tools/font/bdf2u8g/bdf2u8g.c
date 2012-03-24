@@ -338,7 +338,7 @@ void map_Init(void)
     map_u8g_to_unicode[i] = i;
 }
 
-void map_UpperLowerPage(int lower_page, int upper_page, int shift)
+void map_UpperLowerPage(int lower_page, int upper_page, int shift, int upper_shift)
 {
   int i;
   int encoding;
@@ -353,7 +353,8 @@ void map_UpperLowerPage(int lower_page, int upper_page, int shift)
   for( i = 128; i < 256; i++ )
   {
     encoding = i - 128 + upper_page * 128;
-    map_u8g_to_unicode[i] = encoding;
+    if ( i+upper_shift < 256 )
+      map_u8g_to_unicode[i+upper_shift] = encoding;
   }
 
   for( i = 0; i < 256; i++ )
@@ -1140,12 +1141,13 @@ int main(int argc, char **argv)
   int lower_page = 0;
   int upper_page = 1;
   int mapping_shift = 0;
+  int upper_mapping_shift = 0;
   int begin = 32;
   int end = 255;
   
   if ( argc < 4 )
   {
-    printf("%s [-l page] [-u page] [-s shift] [-b begin] [-e end] [-f format] fontfile fontname outputfile\n", argv[0]);
+    printf("%s [-l page] [-u page] [-s shift] [-S upper-shift] [-b begin] [-e end] [-f format] fontfile fontname outputfile\n", argv[0]);
     return 1;
   }
   
@@ -1170,6 +1172,11 @@ int main(int argc, char **argv)
       mapping_shift = atoi(ga_argv[0]);
       ga_remove_arg();      
     }
+    else if ( ga_is_arg('S') )
+    {
+      upper_mapping_shift = atoi(ga_argv[0]);
+      ga_remove_arg();      
+    }
     else if ( ga_is_arg('b') )
     {
       begin = atoi(ga_argv[0]);
@@ -1191,7 +1198,7 @@ int main(int argc, char **argv)
   
   data_Init();
   map_Init();
-  map_UpperLowerPage(lower_page, upper_page, mapping_shift);
+  map_UpperLowerPage(lower_page, upper_page, mapping_shift, upper_mapping_shift);
   
   /*
   puts(bdf_font);

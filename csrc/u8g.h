@@ -1010,6 +1010,10 @@ extern const u8g_fntpgm_uint8_t u8g_font_unifont_78_79[] U8G_SECTION(".progmem.u
 extern const u8g_fntpgm_uint8_t u8g_font_unifont_86[] U8G_SECTION(".progmem.u8g_font_unifont_86");
 extern const u8g_fntpgm_uint8_t u8g_font_unifont[] U8G_SECTION(".progmem.u8g_font_unifont");
 extern const u8g_fntpgm_uint8_t u8g_font_unifontr[] U8G_SECTION(".progmem.u8g_font_unifontr");
+extern const u8g_fntpgm_uint8_t u8g_font_unifont_0_8[] U8G_SECTION(".progmem.u8g_font_unifont_0_8");
+extern const u8g_fntpgm_uint8_t u8g_font_unifont_2_3[] U8G_SECTION(".progmem.u8g_font_unifont_2_3");
+extern const u8g_fntpgm_uint8_t u8g_font_unifont_4_5[] U8G_SECTION(".progmem.u8g_font_unifont_4_5");
+extern const u8g_fntpgm_uint8_t u8g_font_unifont_8_9[] U8G_SECTION(".progmem.u8g_font_unifont_8_9");
 
 /* 04b fonts */
 

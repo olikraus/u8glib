@@ -1566,7 +1566,6 @@ int main(void)
   pic_gen_font(u8g_font_osr29n, "u8g_font_osr29n", 32, "OldStandard-Regular");
   pic_gen_font(u8g_font_osr35n, "u8g_font_osr35n", 32, "OldStandard-Regular");
 
-  pic_gen_font(u8g_font_unifont_18_19, "u8g_font_unifont_18_19", 17, "Unifont");
   pic_gen_font(u8g_font_unifont_72_73, "u8g_font_unifont_72_73", 17, "Unifont");
   pic_gen_font(u8g_font_unifont_67_75, "u8g_font_unifont_67_75", 17, "Unifont");
   pic_gen_font(u8g_font_unifont_76, "u8g_font_unifont_76", 17, "Unifont");
@@ -1575,6 +1574,10 @@ int main(void)
   pic_gen_font(u8g_font_unifont_86, "u8g_font_unifont_86", 17, "Unifont");
   pic_gen_font(u8g_font_unifont, "u8g_font_unifont", 17, "Unifont");
   pic_gen_font(u8g_font_unifontr, "u8g_font_unifontr", 17, "Unifont");
+  pic_gen_font(u8g_font_unifont_0_8, "u8g_font_unifont_0_8", 17, "Unifont");
+  pic_gen_font(u8g_font_unifont_2_3, "u8g_font_unifont_2_3", 17, "Unifont");
+  pic_gen_font(u8g_font_unifont_4_5, "u8g_font_unifont_4_5", 17, "Unifont");
+  pic_gen_font(u8g_font_unifont_8_9, "u8g_font_unifont_8_9", 17, "Unifont");
  
   pic_gen_font(u8g_font_04b_03b, "u8g_font_04b_03b", 8, "04b_03b");
   pic_gen_font(u8g_font_04b_03br, "u8g_font_04b_03br", 8, "04b_03b");
