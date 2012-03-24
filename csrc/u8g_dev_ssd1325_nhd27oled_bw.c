@@ -107,7 +107,8 @@ static void u8g_dev_ssd1325_1bit_prepare_page(u8g_t *u8g, u8g_dev_t *dev)
 }
 
 /* assumes row autoincrement and activated nibble remap */
-static  void u8g_dev_ssd1325_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
+#ifdef OLD
+static  void _OLD_u8g_dev_ssd1325_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
 {
   uint8_t d, cnt;
   cnt = 8;
@@ -123,6 +124,27 @@ static  void u8g_dev_ssd1325_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uin
     right >>= 1;
     cnt--;
   }while ( cnt > 0 );
+}
+#endif
+
+static  void u8g_dev_ssd1325_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
+{
+  uint8_t d, cnt;
+  cnt = 8;
+  static uint8_t buf[8];
+  do
+  {
+    d = 0;
+    if ( left & 128 )
+      d |= 0x0f0;
+    if ( right & 128 )
+      d |= 0x00f;
+    cnt--;
+    buf[cnt] = d;
+    left <<= 1;
+    right <<= 1;
+  }while ( cnt > 0 );
+  u8g_WriteSequence(u8g, dev, 8, buf);
 }
 
 static void u8g_dev_ssd1325_1bit_write_buffer(u8g_t *u8g, u8g_dev_t *dev)
