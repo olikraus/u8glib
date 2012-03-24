@@ -172,6 +172,8 @@ extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_gr_hw_spi;
 
+extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_bw_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_bw_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi;
 
@@ -436,6 +438,9 @@ uint8_t u8g_pb8v1_IsXIntersection(u8g_pb_t *b, u8g_uint_t v0, u8g_uint_t v1);
 uint8_t u8g_pb8v1_WriteBuffer(u8g_pb_t *b, u8g_t *u8g, u8g_dev_t *dev);
 
 uint8_t u8g_dev_pb8v1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+
+/* u8g_pb16v1.c */
+uint8_t u8g_dev_pb16v1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 /* u8g_pb8v2.c */
 uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);

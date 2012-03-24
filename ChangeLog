@@ -53,3 +53,6 @@ u8glib ChangeLog
   * New examples: Chess (ported from dogm128 lib) and GraphicsTest
 2012-xx-xx      v1.03	Oliver Kraus <olikraus@gmail.com>
   * parallel mode atmega
+  * more unifont code pages
+  * double memory
+  
