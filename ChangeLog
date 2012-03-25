@@ -55,4 +55,5 @@ u8glib ChangeLog
   * parallel mode atmega
   * more unifont code pages
   * double memory
+  * "Menu" example
   

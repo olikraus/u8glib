@@ -13,6 +13,7 @@ mkdir libraries/U8glib/examples/TextRotX
 mkdir libraries/U8glib/examples/XBM
 mkdir libraries/U8glib/examples/Chess
 mkdir libraries/U8glib/examples/GraphicsTest
+mkdir libraries/U8glib/examples/Menu
 mkdir libraries/U8glib/utility
 cp ../../../ChangeLog ./libraries/U8glib/.
 cp ../../../license.txt ./libraries/U8glib/.
@@ -34,6 +35,7 @@ cp ../../../sys/arduino/TextRotX/*.pde ./libraries/U8glib/examples/TextRotX/.
 cp ../../../sys/arduino/XBM/*.pde ./libraries/U8glib/examples/XBM/.
 cp ../../../sys/arduino/Chess/*.pde ./libraries/U8glib/examples/Chess/.
 cp ../../../sys/arduino/GraphicsTest/*.pde ./libraries/U8glib/examples/GraphicsTest/.
+cp ../../../sys/arduino/Menu/*.pde ./libraries/U8glib/examples/Menu/.
 # sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
 
 
