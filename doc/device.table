@@ -21,6 +21,23 @@ HW SPI
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_BW(cs, a0 [, reset])</tt>
 ::
+:Page Size
+256 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1325_nhd27oled_2x_bw_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD27OLED_2X_BW(sck, mosi, cs, a0 [, reset])</tt>
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1325_nhd27oled_2x_bw_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD27OLED_2X_BW(cs, a0 [, reset])</tt>
+
+
+::
 :Mode
 4L
 :Set Contrast
@@ -39,6 +56,23 @@ HW SPI
 <tt>u8g_dev_ssd1325_nhd27oled_gr_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_GR(cs, a0 [, reset])</tt>
+::
+:Page Size
+256 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1325_nhd27oled_2x_gr_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD27OLED_2X_GR(sck, mosi, cs, a0 [, reset])</tt>
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD27OLED_2X_GR(cs, a0 [, reset])</tt>
+
+
 ::
 :Controller
 UC1701

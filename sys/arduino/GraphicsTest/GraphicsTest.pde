@@ -93,6 +93,15 @@ void u8g_string(uint8_t a) {
   u8g.drawStr270(30,31-a, " 270");
 }
 
+void u8g_line(uint8_t a) {
+  u8g.drawStr( 0, 0, "drawLine");
+  u8g.DrawLine(7+a, 10, 40, 55);
+  u8g.DrawLine(7+a*2, 10, 60, 55);
+  u8g.DrawLine(7+a*3, 10, 80, 55);
+  u8g.DrawLine(7+a*4, 10, 100, 55);
+}
+
+
 uint8_t draw_state = 0;
 
 void draw(void) {
@@ -101,6 +110,7 @@ void draw(void) {
     case 0: u8g_box_frame(draw_state&7); break;
     case 1: u8g_disc_circle(draw_state&7); break;
     case 2: u8g_string(draw_state&7); break;
+    case 3: u8g_line(draw_state&7); break;
   }
 }
 
@@ -126,7 +136,7 @@ void loop(void) {
   
   // increase the state
   draw_state++;
-  if ( draw_state >= 3*8 )
+  if ( draw_state >= 4*8 )
     draw_state = 0;
   
   // rebuild the picture after some delay

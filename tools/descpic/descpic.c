@@ -1025,7 +1025,34 @@ void draw_menu(u8g_t *u8g)
     }
     u8g_DrawStr(u8g, d+ox, i*h+oy, menu_strings[i]);
   }
+}
+
+void draw_line(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  u8g_SetDefaultForegroundColor(u8g);
+  draw_common(u8g, ox, oy, w, h);
   
+  u8g_DrawLine(u8g, ox+7,oy+10, ox+40, oy+55);
+  
+  u8g_SetFont(u8g, u8g_font_6x13);
+  u8g_SetFontRefHeightText(u8g);
+  u8g_SetFontPosTop(u8g);
+
+  u8g_SetFont(u8g, u8g_font_6x10);
+  u8g_DrawStr(u8g, ox+7-51, oy+10+4, "(7,10)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+7, oy+10);
+  u8g_DrawCursor(u8g);
+  
+  u8g_DrawStr(u8g, ox+40-57, oy+55+4, "(40,55)");
+  u8g_SetCursorPos(u8g, ox+40, oy+55);
+  u8g_DrawCursor(u8g);
 }
 
 int main(void)
@@ -1076,6 +1103,7 @@ int main(void)
   
   create_picture(draw_xbm, "xbm");
   create_picture(draw_menu, "menu");
+  create_picture(draw_line, "line");
   
   create_picture_rot90(draw_text_abc_rot90, "rot90");
   

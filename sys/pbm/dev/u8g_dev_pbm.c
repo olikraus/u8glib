@@ -14,8 +14,8 @@
 #define WIDTH 1024
 #define HEIGHT 768
 #else
-#define WIDTH 240
-#define HEIGHT 240
+#define WIDTH 128
+#define HEIGHT 64
 #endif
 #define PAGE_HEIGHT 8
 

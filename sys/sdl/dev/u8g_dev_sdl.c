@@ -10,7 +10,7 @@
 #include "SDL_video.h"
 #include <assert.h>
 
-#define HEIGHT (64*2)
+#define HEIGHT (64)
 #define WIDTH 128
 
 SDL_Surface *u8g_sdl_screen;
