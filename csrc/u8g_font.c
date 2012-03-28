@@ -1090,6 +1090,7 @@ typedef char (*u8g_font_get_char_fn)(const void *s);
 u8g_uint_t u8g_font_calc_str_pixel_width(u8g_t *u8g, const char *s, u8g_font_get_char_fn get_char )
 {
   u8g_uint_t  w;
+  uint8_t enc;
   
   /* reset the total minimal width to zero, this will be expanded during calculation */
   w = 0;
@@ -1116,20 +1117,32 @@ u8g_uint_t u8g_font_calc_str_pixel_width(u8g_t *u8g, const char *s, u8g_font_get
     
     /* check and stop if the end of the string is reached */
     s++;
-    if ( *s == '\0' )
+    if ( get_char(s) == '\0' )
       break;
     
     /* if there are still more characters, add the delta to the next glyph */
     w += u8g->glyph_dx;
     
+    /* store the encoding in a local variable, used also after the for(;;) loop */
+    enc = get_char(s);
+    
     /* load the next glyph information */
-    u8g_GetGlyph(u8g, get_char(s));
+    u8g_GetGlyph(u8g, enc);
   }
   
   /* finally calculate the width of the last char */
-  /* if g was not updated in the for loop (strlen() == 1), then the initial offset x gets removed */
-  w += u8g->glyph_width;
-  w += u8g->glyph_x;
+  /* here is another exception, if the last char is a black, use the dx value instead */
+  if ( enc != ' ' )
+  {
+    /* if g was not updated in the for loop (strlen() == 1), then the initial offset x gets removed */
+    w += u8g->glyph_width;
+    w += u8g->glyph_x;
+  }
+  else
+  {
+    w += u8g->glyph_dx;
+  }
+  
   
   return w;
 }
@@ -1144,7 +1157,17 @@ u8g_uint_t u8g_GetStrPixelWidthP(u8g_t *u8g, const u8g_pgm_uint8_t *s)
   return u8g_font_calc_str_pixel_width(u8g, (const char *)s, u8g_font_get_charP);
 }
 
+int8_t u8g_GetStrX(u8g_t *u8g, const char *s)
+{
+  u8g_GetGlyph(u8g, *s);
+  return u8g->glyph_x;  
+}
 
+int8_t u8g_GetStrXP(u8g_t *u8g, const u8g_pgm_uint8_t *s)
+{
+  u8g_GetGlyph(u8g, u8g_pgm_read(s));
+  return u8g->glyph_x;  
+}
 
 /*========================================================================*/
 /* string width calculation */
@@ -1293,6 +1316,7 @@ static void u8g_font_calc_str_min_box(u8g_t *u8g, const char *s, u8g_str_size_t 
   /* if g was not updated in the for loop (strlen() == 1), then the initial offset x gets removed */
   buf->w += u8g->glyph_width;
   // buf->w += u8g_font_GetGlyphBBXOffX(u8g->font, g);
+  
   buf->w += u8g->glyph_x;
 }
 
