@@ -1095,15 +1095,17 @@ u8g_uint_t u8g_font_calc_str_pixel_width(u8g_t *u8g, const char *s, u8g_font_get
   /* reset the total minimal width to zero, this will be expanded during calculation */
   w = 0;
     
+  enc = get_char(s);
+  
   /* check for empty string, width is already 0 */
-  if ( get_char(s) == '\0' )
+  if ( enc == '\0' )
   {
     return w;
   }
   
   /* get the glyph information of the first char. This must be valid, because we already checked for the empty string */
   /* if *s is not inside the font, then the cached parameters of the glyph are all zero */
-  u8g_GetGlyph(u8g, get_char(s));
+  u8g_GetGlyph(u8g, enc);
 
   /* strlen(s) == 1:       width = width(s[0]) */
   /* strlen(s) == 2:       width = - offx(s[0]) + deltax(s[0]) + offx(s[1]) + width(s[1]) */

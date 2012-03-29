@@ -156,6 +156,11 @@ extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_hw_spi;
 extern u8g_dev_t u8g_dev_uc1610_dogxl160_gr_sw_spi;
 extern u8g_dev_t u8g_dev_uc1610_dogxl160_gr_hw_spi;
 
+extern u8g_dev_t u8g_dev_uc1610_dogxl160_2x_bw_sw_spi;
+extern u8g_dev_t u8g_dev_uc1610_dogxl160_2x_bw_hw_spi;
+extern u8g_dev_t u8g_dev_uc1610_dogxl160_2x_gr_sw_spi;
+extern u8g_dev_t u8g_dev_uc1610_dogxl160_2x_gr_hw_spi;
+
 /* Display: Generic KS0108b, Size: 128x64 monochrom */
 extern u8g_dev_t u8g_dev_ks0108_128x64;         /* official Arduino Library interface */
 extern u8g_dev_t u8g_dev_ks0108_128x64_fast;    /* faster, but uses private tables from the Arduino Library */

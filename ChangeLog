@@ -54,6 +54,6 @@ u8glib ChangeLog
 2012-xx-xx      v1.03	Oliver Kraus <olikraus@gmail.com>
   * parallel mode atmega
   * more unifont code pages
-  * double memory
+  * double memory, for NHD OLED and DOGXL160
   * "Menu" example
   
