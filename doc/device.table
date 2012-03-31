@@ -226,6 +226,8 @@ SW SPI
 <tt>u8g_dev_st7920_192x32_8bit</tt>
 :C++ Constructor
 <tt>U8GLIB_ST7920_192X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+
+
 ::
 :Controller
 UC1610
@@ -250,6 +252,23 @@ HW SPI
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_BW(cs, a0 [, reset])</tt>
 ::
+:Page Size
+320 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_uc1610_dogxl160_2x_bw_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_DOGXL160_2X_BW(sck, mosi, cs, a0 [, reset])</tt>
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_uc1610_dogxl160_2x_bw_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_DOGXL160_2X_BW(cs, a0 [, reset])</tt>
+
+
+::
 :Mode
 4L
 :Set Contrast
@@ -268,6 +287,23 @@ HW SPI
 <tt>u8g_dev_uc1610_dogxl160_gr_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_GR(cs, a0 [, reset])</tt>
+::
+:Page Size
+320 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_uc1610_dogxl160_2x_gr_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_DOGXL160_2X_GR(sck, mosi, cs, a0 [, reset])</tt>
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_uc1610_dogxl160_2x_gr_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_DOGXL160_2X_GR(cs, a0 [, reset])</tt>
+
+
 ::
 :Controller
 PCD8544

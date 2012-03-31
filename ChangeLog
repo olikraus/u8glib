@@ -51,9 +51,10 @@ u8glib ChangeLog
   * drawCircle, drawDisc
   * Bugfix for drawStr270
   * New examples: Chess (ported from dogm128 lib) and GraphicsTest
-2012-xx-xx      v1.03	Oliver Kraus <olikraus@gmail.com>
-  * parallel mode atmega
+2012-03-31      v1.03	Oliver Kraus <olikraus@gmail.com>
+  * experimental parallel mode atmega
   * more unifont code pages
   * double memory, for NHD OLED and DOGXL160
   * "Menu" example
+  * drawLine
   
