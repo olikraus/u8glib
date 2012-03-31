@@ -1,10 +1,9 @@
 
 The U8glib code (http://code.google.com/p/u8glib/) is licensed under the terms of 
-the new-bsd license (two-clause bsd license)
-
+the new-bsd license (two-clause bsd license).
 See also: http://www.opensource.org/licenses/bsd-license.php
 
-Fonts might be licensed under different conditions.
+Fonts are licensed under different conditions.
 See http://code.google.com/p/u8glib/wiki/fontgroup for
 detailed information on the licensing conditions for each font.
 

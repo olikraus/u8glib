@@ -98,10 +98,10 @@ void u8g_string(uint8_t a) {
 
 void u8g_line(uint8_t a) {
   u8g.drawStr( 0, 0, "drawLine");
-  u8g.DrawLine(7+a, 10, 40, 55);
-  u8g.DrawLine(7+a*2, 10, 60, 55);
-  u8g.DrawLine(7+a*3, 10, 80, 55);
-  u8g.DrawLine(7+a*4, 10, 100, 55);
+  u8g.drawLine(7+a, 10, 40, 55);
+  u8g.drawLine(7+a*2, 10, 60, 55);
+  u8g.drawLine(7+a*3, 10, 80, 55);
+  u8g.drawLine(7+a*4, 10, 100, 55);
 }
 
 
