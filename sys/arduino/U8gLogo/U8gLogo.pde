@@ -64,6 +64,24 @@
 //U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
 //U8GLIB_KS0108_128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs1=14, cs2=15,di=17,rw=16
 //U8GLIB_LC7981_160X80 u8g(8, 9, 10, 11, 4, 5, 6, 7,  18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs=14 ,di=15,rw=17, reset = 16
+// RS=19, WR=18, CS=17, RST=16
+U8GLIB_ILI9325D_320x240 u8g(0,1,2,3,4,5,6,7,  18,17,19,U8G_PIN_NONE,16 );  // 8Bit Com: D0..D7: 0,1,2,3,4,5,6,7 en=wr=18, cs=17, rs=19, rd=U8G_PIN_NONE, reset = 16
+
+void drawColorBox(void)
+{
+  u8g_uint_t w,h;
+  u8g_uint_t r, g, b;
+  
+  w = u8g.getWidth()/32;
+  h = u8g.getHeight()/8;
+  for( b = 0; b < 4; b++ )
+    for( g = 0; g < 8; g++ )
+      for( r = 0; r < 8; r++ )
+      {
+        u8g.setColorIndex((r<<5) |  (g<<2) | b );
+        u8g.drawBox(g*w + b*w*8, r*h, w, h);
+      }
+}
 
 void drawLogo(uint8_t d)
 {
@@ -95,6 +113,10 @@ void drawURL(void)
 
 void draw(void)
 {
+  if ( u8g.getMode() == U8G_MODE_R3G3B2 )
+  {
+    drawColorBox();
+  }
   u8g.setColorIndex(1);
   if ( U8G_MODE_GET_BITS_PER_PIXEL(u8g.getMode()) > 1 )
   {

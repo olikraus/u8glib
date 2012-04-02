@@ -30,8 +30,13 @@
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+
+  Color format
+    Red: 5 Bit
+    Green: 6 Bit
+    Blue: 5 Bit
   
-  
+    
 */
 
 #include "u8g.h"
@@ -219,86 +224,88 @@ static u8g_pgm_uint8_t u8g_dev_ili9325d_320x240_init_seq[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
+
+static u8g_pgm_uint8_t u8g_dev_ili9325d_320x240_page_seq[] = {
+  U8G_ESC_CS(1),             /* enable chip */
+  U8G_ESC_ADR(0),  0x000, 0x020,               /* Horizontal GRAM Address Set */
+  U8G_ESC_ADR(1),  0x000, 0x000,
+  U8G_ESC_ADR(0),  0x000, 0x021,               /* Vertical GRAM Address Set */
+  U8G_ESC_ADR(1), 
+  U8G_ESC_END                /* end of sequence */
+};
+
+/* convert the internal RGB 332 to 65K high byte */
+static uint8_t u8g_dev_ili9325d_get_65K_high_byte(uint8_t color)
+{
+  uint8_t h;
+  h = color;
+  h &= 0x0e0;
+  h |= h>>3;
+  h &= 0x0f8;
+  color>>=2;
+  color &= 7;
+  h |= color;
+  return h;  
+}
+
+/* convert the internal RGB 332 to 65K high byte */
+static uint8_t u8g_dev_ili9325d_get_65K_low_byte(uint8_t color)
+{
+  uint8_t l;
+  l = color;
+  l <<= 3;
+  color &= 3;
+  color <<= 1;
+  l |= color;
+  return l;  
+}
+
+
 uint8_t u8g_dev_ili9325d_320x240_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
-  /*
-      pinMode(13,OUTPUT);
-      digitalWrite(13,0);
-      delay(1000);
-      digitalWrite(13,1);
-      delay(1000);
-      digitalWrite(13,0);
-      delay(1000);
-      digitalWrite(13,1);
-      delay(1000);
-      digitalWrite(13,0);
-    
-      for(;;)
-        ;
-  */
   
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
-  /*
-            pinMode(13,OUTPUT);
-      digitalWrite(13,0);
-      delay(1000);
-      digitalWrite(13,1);
-      delay(1000);
-      digitalWrite(13,0);
-      delay(1000);
-      digitalWrite(13,1);
-      delay(1000);
-      digitalWrite(13,0);
-    
-      for(;;)
-        ;
-      */
-
       u8g_InitCom(u8g, dev);
-      for(;;)
+      //for(;;)
         u8g_WriteEscSeqP(u8g, dev, u8g_dev_ili9325d_320x240_init_seq);
     
       break;
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
-#ifdef DISABLED
       {
-        uint8_t y, i;
-        uint16_t disp_ram_adr;
+        uint8_t i;
+        uint16_t disp_ram_adr, y, j;
         uint8_t *ptr;
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
         
-        u8g_SetAddress(u8g, dev, 1);           /* cmd mode */
-        u8g_SetChipSelect(u8g, dev, 1);
         y = pb->p.page_y0;
         ptr = pb->buf;
-        disp_ram_adr = WIDTH/8;
-        disp_ram_adr *= y;
-        for( i = 0; i < 8; i ++ )
+        for( i = 0; i < pb->p.page_height; i ++ )
         {
-          u8g_SetAddress(u8g, dev, 1);           /* cmd mode */
-          u8g_WriteByte(u8g, dev, 0x00a );      /* display ram (cursor) address low byte */
-          u8g_SetAddress(u8g, dev, 0);           /* data mode */
-          u8g_WriteByte(u8g, dev, disp_ram_adr & 0x0ff );  
+          u8g_WriteEscSeqP(u8g, dev, u8g_dev_ili9325d_320x240_page_seq);
+          u8g_WriteByte(u8g, dev, y >> 8 );      /* display ram (cursor) address high byte */
+          u8g_WriteByte(u8g, dev, y & 255 );      /* display ram (cursor) address low byte */
 
-          u8g_SetAddress(u8g, dev, 1);           /* cmd mode */
-          u8g_WriteByte(u8g, dev, 0x00b );      /* display ram (cursor) address hight byte */
-          u8g_SetAddress(u8g, dev, 0);           /* data mode */
-          u8g_WriteByte(u8g, dev, disp_ram_adr >> 8 );  
+          u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
+          u8g_WriteByte(u8g, dev, 0 );  
+          u8g_WriteByte(u8g, dev, 0x022 );      /* start gram data */  
           
-          u8g_SetAddress(u8g, dev, 1);           /* cmd mode */
-          u8g_WriteByte(u8g, dev, 0x00c );      /* write data */
-          u8g_SetAddress(u8g, dev, 0);           /* data mode */
-          u8g_WriteSequence(u8g, dev, WIDTH/8, ptr);
-          ptr += WIDTH/8;
-          disp_ram_adr += WIDTH/8;
+          u8g_SetAddress(u8g, dev, 1);           /* data mode */
+          
+          for( j = 0; j < pb->width; j++ )
+          {
+            u8g_WriteByte(u8g, dev, u8g_dev_ili9325d_get_65K_high_byte(*ptr) );  
+            u8g_WriteByte(u8g, dev, u8g_dev_ili9325d_get_65K_low_byte(*ptr) );  
+              
+            ptr++;
+          }
+          y++;
         }
         u8g_SetChipSelect(u8g, dev, 0);
       }
-#endif
       break;
   }
   return u8g_dev_pb8h8_base_fn(u8g, dev, msg, arg);
