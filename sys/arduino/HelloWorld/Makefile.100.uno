@@ -158,6 +158,7 @@ COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/variants/$(VARIANT)
 COMMON_FLAGS += -I. -I$(U8G_PATH) -I$(U8G_CPP_PATH)
 COMMON_FLAGS += $(addprefix -I,$(EXTRA_DIRS))
 COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
+COMMON_FLAGS += -Wl,--Map=output.map
 COMMON_FLAGS += -Wl,--relax
 COMMON_FLAGS += -mcall-prologues
 

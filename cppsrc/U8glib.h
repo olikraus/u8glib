@@ -394,4 +394,14 @@ class U8GLIB_ST7687_C144MVGD: public U8GLIB
       { }
 };
 
+class U8GLIB_ILI9325D_320x240 : public U8GLIB 
+{
+  public:
+    U8GLIB_ILI9325D_320x240(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+        uint8_t en, uint8_t cs1, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ili9325d_320x240_8bit, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, U8G_PIN_NONE, di, rw, reset)
+      { }
+};
+
+
 #endif /* _CPP_U8GLIB */

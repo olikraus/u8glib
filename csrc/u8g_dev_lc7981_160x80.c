@@ -2,8 +2,6 @@
 
   u8g_dev_lc7981_160x80.c
   
-  THIS DEVICE HAS NEVER BEEN TESTED
-
   Universal 8bit Graphics Library
   
   Copyright (c) 2011, olikraus@gmail.com

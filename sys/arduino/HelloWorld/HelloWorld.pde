@@ -64,6 +64,8 @@
 //U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
 //U8GLIB_KS0108_128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs1=14, cs2=15,di=17,rw=16
 //U8GLIB_LC7981_160X80 u8g(8, 9, 10, 11, 4, 5, 6, 7,  18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs=14 ,di=15,rw=17, reset = 16
+// RS=19, WR=18, CS=17, RST=16
+U8GLIB_ILI9325D_320x240 u8g(0,1,2,3,4,5,6,7,  18,17,19,U8G_PIN_NONE,16 );  // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=wr=18, cs=17, rs=19, rd=U8G_PIN_NONE, reset = 16
 
 void draw(void) {
   // graphic commands to redraw the complete screen should be placed here  
@@ -72,6 +74,7 @@ void draw(void) {
 }
 
 void setup(void) {
+  
   // flip screen, if required
   // u8g.setRot180();
 

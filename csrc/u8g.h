@@ -186,6 +186,9 @@ extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi;
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi;
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_8bit;
 
+/* ILI9325D based TFT */
+extern u8g_dev_t u8g_dev_ili9325d_320x240_8bit;
+
 /*===============================================================*/
 /* device messages */
 
@@ -272,6 +275,7 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
 uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);  /* u8g_com_arduino_st7920_spi.c */
 uint8_t u8g_com_arduino_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);           /* u8g_com_arduino_parallel.c */
 uint8_t u8g_com_arduino_fast_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_arduino_fast_parallel.c */
+uint8_t u8g_com_arduino_8bit_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);            /* u8g_com_arduino_8bit_wr.c */
 
 
 uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_hw_spi.c */

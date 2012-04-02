@@ -55,13 +55,12 @@ u8g_dev_t name = { dev_fn, &u8g_index_color_8h8_pb, com_fn }
 #define WIDTH (1<<WIDTH_BITS)
 #define PAGE_HEIGHT_BITS 3
 #define PAGE_HEIGHT (1<<PAGE_HEIGHT_BITS)
-#define HEIGHT 128
 
 void u8g_pb8h8_Clear(u8g_pb_t *b)
 {
   uint8_t *ptr = (uint8_t *)b->buf;
   uint8_t *end_ptr = ptr;
-  uint8_t cnt = PAGE_HEIGHT;
+  uint8_t cnt = pb->p.page_height;
   do
   {
     end_ptr += b->width;
@@ -87,7 +86,7 @@ static void u8g_pb8h8_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t
   uint8_t *ptr = b->buf;
   y -= b->p.page_y0;
   tmp = y;
-  tmp <<= WIDTH_BITS;
+  tmp *= b->width;
   tmp += x;
   ptr += tmp;
   *ptr = color_index;
