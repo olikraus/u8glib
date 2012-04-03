@@ -313,7 +313,7 @@ uint8_t u8g_dev_ili9325d_320x240_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, voi
 
 uint8_t u8g_ili9325d_320x240_8h8_buf[WIDTH*PAGE_HEIGHT] U8G_NOCOMMON ; 
 u8g_pb_t u8g_ili9325d_320x240_8h8_pb U8G_NOCOMMON = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_ili9325d_320x240_8h8_buf}; 
-u8g_dev_t u8g_dev_ili9325d_320x240_8bit U8G_NOCOMMON = { u8g_dev_ili9325d_320x240_fn, &u8g_ili9325d_320x240_8h8_pb, u8g_com_arduino_8bit_wr_fn };
+u8g_dev_t u8g_dev_ili9325d_320x240_8bit U8G_NOCOMMON = { u8g_dev_ili9325d_320x240_fn, &u8g_ili9325d_320x240_8h8_pb, u8g_com_arduino_port_d_wr_fn };
 //u8g_dev_t u8g_dev_ili9325d_320x240_8bit = { u8g_dev_ili9325d_320x240_fn, &u8g_ili9325d_320x240_8h8_pb, u8g_com_arduino_parallel_fn };
 
 //U8G_PB_DEV(u8g_dev_ili9325d_320x240_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ili9325d_320x240_fn, U8G_COM_PARALLEL);

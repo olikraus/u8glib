@@ -1,6 +1,6 @@
 /*
   
-  u8g_arduino_8bit_wr.c
+  u8g_arduino_port_d_wr.c
 
   Universal 8bit Graphics Library
   
@@ -32,20 +32,12 @@
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
   
 
-  PIN_D0 8
-  PIN_D1 9
-  PIN_D2 10
-  PIN_D3 11
-  PIN_D4 4
-  PIN_D5 5
-  PIN_D6 6
-  PIN_D7 7
+  Assumes PORTD for 8 bit data transfer.
+  EN is assumed to be a low active write signal (WR)
 
-  PIN_CS1 14
-  PIN_CS2 15
-  PIN_RW 16
-  PIN_DI 17
-  PIN_EN 18             used as WR, signal inverted = low activ
+  ILI9325D_320x240 from iteadstudio.com
+  RS=19, WR=18, CS=17, RST=16
+
   
   u8g_Init8Bit(u8g, dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset)
   u8g_Init8Bit(u8g, dev,  8,    9, 10, 11,   4,   5,   6,   7, 18, 14, 15, 17, 16, U8G_PIN_NONE)
@@ -68,33 +60,17 @@
 
 
 
-static void u8g_com_arduino_ll_8bit_wr(u8g_t *u8g, uint8_t val)
+static void u8g_com_arduino_port_d_8bit_wr(u8g_t *u8g, uint8_t val)
 {
   PORTD = val;
-  /*
-  u8g_com_arduino_digital_write(u8g, U8G_PI_D0, val&1);
-  val >>= 1;
-  u8g_com_arduino_digital_write(u8g, U8G_PI_D1, val&1);
-  val >>= 1;
-  u8g_com_arduino_digital_write(u8g, U8G_PI_D2, val&1);
-  val >>= 1;
-  u8g_com_arduino_digital_write(u8g, U8G_PI_D3, val&1);
-  val >>= 1;
-  u8g_com_arduino_digital_write(u8g, U8G_PI_D4, val&1);
-  val >>= 1;
-  u8g_com_arduino_digital_write(u8g, U8G_PI_D5, val&1);
-  val >>= 1;
-  u8g_com_arduino_digital_write(u8g, U8G_PI_D6, val&1);
-  val >>= 1;
-  u8g_com_arduino_digital_write(u8g, U8G_PI_D7, val&1);
-  */
+  
   /* WR cycle time must be 1 micro second, digitalWrite is slow enough to do this */
   u8g_com_arduino_digital_write(u8g, U8G_PI_EN, LOW);
   u8g_com_arduino_digital_write(u8g, U8G_PI_EN, HIGH);
 }
 
 
-uint8_t u8g_com_arduino_8bit_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_arduino_port_d_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
 
   switch(msg)
@@ -103,6 +79,7 @@ uint8_t u8g_com_arduino_8bit_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
     
       UCSR0B = 0;  // disable USART 0
       DDRD = 0x0ff;
+      PORTD = 0x0ff;
 
       /* setup the RW pin as output and force it to low */
       if ( u8g->pin_list[U8G_PI_RW] != U8G_PIN_NONE )
@@ -143,14 +120,14 @@ uint8_t u8g_com_arduino_8bit_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       }
       break;
     case U8G_COM_MSG_WRITE_BYTE:
-      u8g_com_arduino_ll_8bit_wr(u8g, arg_val);
+      u8g_com_arduino_port_d_8bit_wr(u8g, arg_val);
       break;
     case U8G_COM_MSG_WRITE_SEQ:
       {
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_arduino_ll_8bit_wr(u8g, *ptr++);
+          u8g_com_arduino_port_d_8bit_wr(u8g, *ptr++);
           arg_val--;
         }
       }
@@ -160,7 +137,7 @@ uint8_t u8g_com_arduino_8bit_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_arduino_ll_8bit_wr(u8g, u8g_pgm_read(ptr));
+          u8g_com_arduino_port_d_8bit_wr(u8g, u8g_pgm_read(ptr));
           ptr++;
           arg_val--;
         }
@@ -176,7 +153,7 @@ uint8_t u8g_com_arduino_8bit_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 #else
 
 
-uint8_t u8g_com_arduino_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_arduino_port_d_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   return 1;
 }
