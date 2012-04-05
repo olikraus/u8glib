@@ -40,10 +40,15 @@
 */
 
 #include "u8g.h"
-#include "Arduino.h"
 
 #define WIDTH 240
+
+#if defined(U8G_16BIT)
 #define HEIGHT 320
+#else
+/* if the user tries to compile the 8Bit version of the lib, then restrict the height to something which fits to 8Bit */
+#define HEIGHT 240
+#endif
 #define PAGE_HEIGHT 4
 
 
@@ -277,7 +282,7 @@ uint8_t u8g_dev_ili9325d_320x240_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, voi
     case U8G_DEV_MSG_PAGE_NEXT:
       {
         uint8_t i;
-        uint16_t disp_ram_adr, y, j;
+        uint16_t y, j;
         uint8_t *ptr;
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
         
