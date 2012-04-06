@@ -6,6 +6,7 @@ echo cursor
 echo cu12
 ../bdf2u8g/bdf2u8g ../bdf/cu12.bdf u8g_font_cu12 u8g_font_cu12.c  > /dev/null
 ../bdf2u8g/bdf2u8g -l 67 -u 75 ../bdf/cu12.bdf u8g_font_cu12_67_75 u8g_font_cu12_67_75.c  > /dev/null
+../bdf2u8g/bdf2u8g -l 75 -b 32 -e 79 ../bdf/cu12.bdf u8g_font_cu12_75r u8g_font_cu12_75r.c  > /dev/null
 #../bdf2u8g/bdf2u8g -l 78 -u 79 ../bdf/cu12.bdf u8g_font_cu12_78_79 u8g_font_cu12_78_79.c
 echo micro
 ../bdf2u8g/bdf2u8g -f 1 ../bdf/micro.bdf u8g_font_micro u8g_font_micro.c  > /dev/null
@@ -27,11 +28,13 @@ echo "6x12"
 ../bdf2u8g/bdf2u8g -f 1 ../bdf/6x12.bdf u8g_font_6x12 u8g_font_6x12.c  > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 32 -e 127 ../bdf/6x12.bdf u8g_font_6x12r u8g_font_6x12r.c  > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -l 67 -u 75 -b 0 -e 255 ../bdf/6x12.bdf u8g_font_6x12_67_75 u8g_font_6x12_67_75.c  > /dev/null
+../bdf2u8g/bdf2u8g -f 1 -l 75 -b 32 -e 79 ../bdf/6x12.bdf u8g_font_6x12_75r u8g_font_6x12_75r.c  > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -l 78 -u 79 -b 0 -e 255 ../bdf/6x12.bdf u8g_font_6x12_78_79 u8g_font_6x12_78_79.c  > /dev/null
 echo "6x13"
 ../bdf2u8g/bdf2u8g -f 1 ../bdf/6x13.bdf u8g_font_6x13 u8g_font_6x13.c  > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 32 -e 127 ../bdf/6x13.bdf u8g_font_6x13r u8g_font_6x13r.c  > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -l 67 -u 75 ../bdf/6x13.bdf u8g_font_6x13_67_75 u8g_font_6x13_67_75.c  > /dev/null
+../bdf2u8g/bdf2u8g -f 1 -l 75 -b 32 -e 79 ../bdf/6x13.bdf u8g_font_6x13_75r u8g_font_6x13_75r.c  > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -l 78 -u 79 ../bdf/6x13.bdf u8g_font_6x13_78_79 u8g_font_6x13_78_79.c  > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 ../bdf/6x13B.bdf u8g_font_6x13B u8g_font_6x13B.c  > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 32 -e 127 ../bdf/6x13B.bdf u8g_font_6x13Br u8g_font_6x13Br.c  > /dev/null
@@ -41,6 +44,7 @@ echo "7x13"
 ../bdf2u8g/bdf2u8g -f 1 ../bdf/7x13.bdf u8g_font_7x13 u8g_font_7x13.c > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 32 -e 127 ../bdf/7x13.bdf u8g_font_7x13r u8g_font_7x13r.c > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -l 67 -u 75 ../bdf/7x13.bdf u8g_font_7x13_67_75 u8g_font_7x13_67_75.c > /dev/null
+../bdf2u8g/bdf2u8g -f 1 -l 75 -b 32 -e 79 ../bdf/7x13.bdf u8g_font_7x13_75r u8g_font_7x13_75r.c > /dev/null
 #../bdf2u8g/bdf2u8g -l 78 -u 79 ../bdf/7x13.bdf u8g_font_7x13_78_79 u8g_font_7x13_78_79.c
 ../bdf2u8g/bdf2u8g -f 1 ../bdf/7x13B.bdf u8g_font_7x13B u8g_font_7x13B.c > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 32 -e 127 ../bdf/7x13B.bdf u8g_font_7x13Br u8g_font_7x13Br.c > /dev/null
@@ -55,6 +59,7 @@ echo "8x13"
 ../bdf2u8g/bdf2u8g -f 1 ../bdf/8x13.bdf u8g_font_8x13 u8g_font_8x13.c > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 32 -e 127 ../bdf/8x13.bdf u8g_font_8x13r u8g_font_8x13r.c > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -l 67 -u 75 ../bdf/8x13.bdf u8g_font_8x13_67_75 u8g_font_8x13_67_75.c > /dev/null
+../bdf2u8g/bdf2u8g -f 1 -l 75 -b 32 -e 79 ../bdf/8x13.bdf u8g_font_8x13_75r u8g_font_8x13_75r.c > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 ../bdf/8x13B.bdf u8g_font_8x13B u8g_font_8x13B.c > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 32 -e 127 ../bdf/8x13B.bdf u8g_font_8x13Br u8g_font_8x13Br.c > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 ../bdf/8x13O.bdf u8g_font_8x13O u8g_font_8x13O.c > /dev/null
@@ -63,6 +68,7 @@ echo "9x15"
 ../bdf2u8g/bdf2u8g ../bdf/9x15.bdf u8g_font_9x15 u8g_font_9x15.c > /dev/null
 ../bdf2u8g/bdf2u8g -b 32 -e 127 ../bdf/9x15.bdf u8g_font_9x15r u8g_font_9x15r.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 67 -u 75 ../bdf/9x15.bdf u8g_font_9x15_67_75 u8g_font_9x15_67_75.c > /dev/null
+../bdf2u8g/bdf2u8g -l 75 -b 32 -e 79 ../bdf/9x15.bdf u8g_font_9x15_75r u8g_font_9x15_75r.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 78 -u 79 ../bdf/9x15.bdf u8g_font_9x15_78_79 u8g_font_9x15_78_79.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/9x15B.bdf u8g_font_9x15B u8g_font_9x15B.c > /dev/null
 ../bdf2u8g/bdf2u8g -b 32 -e 127 ../bdf/9x15B.bdf u8g_font_9x15Br u8g_font_9x15Br.c > /dev/null
@@ -70,6 +76,7 @@ echo "9x18"
 ../bdf2u8g/bdf2u8g ../bdf/9x18.bdf u8g_font_9x18 u8g_font_9x18.c > /dev/null
 ../bdf2u8g/bdf2u8g -b 32 -e 127 ../bdf/9x18.bdf u8g_font_9x18r u8g_font_9x18r.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 67 -u 75 ../bdf/9x18.bdf u8g_font_9x18_67_75 u8g_font_9x18_67_75.c > /dev/null
+../bdf2u8g/bdf2u8g -l 75 -b 32 -e 79  ../bdf/9x18.bdf u8g_font_9x18_75r u8g_font_9x18_75r.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 78 -u 79 ../bdf/9x18.bdf u8g_font_9x18_78_79 u8g_font_9x18_78_79.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/9x18B.bdf u8g_font_9x18B u8g_font_9x18B.c > /dev/null
 ../bdf2u8g/bdf2u8g -b 32 -e 127 ../bdf/9x18B.bdf u8g_font_9x18Br u8g_font_9x18Br.c > /dev/null
@@ -77,6 +84,7 @@ echo "10x20"
 ../bdf2u8g/bdf2u8g ../bdf/10x20.bdf u8g_font_10x20 u8g_font_10x20.c > /dev/null
 ../bdf2u8g/bdf2u8g -b 32 -e 127 ../bdf/10x20.bdf u8g_font_10x20r u8g_font_10x20r.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 67 -u 75 ../bdf/10x20.bdf u8g_font_10x20_67_75 u8g_font_10x20_67_75.c > /dev/null
+../bdf2u8g/bdf2u8g -l 75  -b 32 -e 79 ../bdf/10x20.bdf u8g_font_10x20_75r u8g_font_10x20_75r.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 78 -u 79 ../bdf/10x20.bdf u8g_font_10x20_78_79 u8g_font_10x20_78_79.c > /dev/null
 
 echo "unifont"
@@ -87,6 +95,7 @@ echo "unifont"
 ../bdf2u8g/bdf2u8g -l 18 -u 19 -b 0 -e 255 ../bdf/unifont.bdf u8g_font_unifont_18_19 u8g_font_unifont_18_19.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 72 -u 73 -b 0 -e 255 ../bdf/unifont.bdf u8g_font_unifont_72_73 u8g_font_unifont_72_73.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 67 -u 75 -b 16 -e 255 ../bdf/unifont.bdf u8g_font_unifont_67_75 u8g_font_unifont_67_75.c > /dev/null
+../bdf2u8g/bdf2u8g -l 75 -b 32 -e 79 ../bdf/unifont.bdf u8g_font_unifont_75r u8g_font_unifont_75r.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 78 -u 79 -b 1 -e 255 ../bdf/unifont.bdf u8g_font_unifont_78_79 u8g_font_unifont_78_79.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 86 -u 87 -s 32 -b 32 -e 116 ../bdf/unifont.bdf u8g_font_unifont_86 u8g_font_unifont_86.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 77 -u 87 -s 32 -b 32 -e 99 ../bdf/unifont.bdf u8g_font_unifont_77 u8g_font_unifont_77.c > /dev/null

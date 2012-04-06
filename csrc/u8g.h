@@ -776,6 +776,16 @@ void chess_Step(uint8_t keycode);
 /*===============================================================*/
 /* font definitions */
 
+extern const u8g_fntpgm_uint8_t u8g_font_6x12_75r[] U8G_SECTION(".progmem.u8g_font_6x12_75r");
+extern const u8g_fntpgm_uint8_t u8g_font_6x13_75r[] U8G_SECTION(".progmem.u8g_font_6x13_75r");
+extern const u8g_fntpgm_uint8_t u8g_font_7x13_75r[] U8G_SECTION(".progmem.u8g_font_7x13_75r");
+extern const u8g_fntpgm_uint8_t u8g_font_8x13_75r[] U8G_SECTION(".progmem.u8g_font_8x13_75r");
+extern const u8g_fntpgm_uint8_t u8g_font_9x15_75r[] U8G_SECTION(".progmem.u8g_font_9x15_75r");
+extern const u8g_fntpgm_uint8_t u8g_font_9x18_75r[] U8G_SECTION(".progmem.u8g_font_9x18_75r");
+extern const u8g_fntpgm_uint8_t u8g_font_cu12_75r[] U8G_SECTION(".progmem.u8g_font_cu12_75r");
+extern const u8g_fntpgm_uint8_t u8g_font_unifont_75r[] U8G_SECTION(".progmem.u8g_font_unifont_75r");
+extern const u8g_fntpgm_uint8_t u8g_font_10x20_75r[] U8G_SECTION(".progmem.u8g_font_10x20_75r");
+
 extern const u8g_fntpgm_uint8_t u8g_font_10x20_67_75[] U8G_SECTION(".progmem.u8g_font_10x20_67_75");
 extern const u8g_fntpgm_uint8_t u8g_font_10x20_78_79[] U8G_SECTION(".progmem.u8g_font_10x20_78_79");
 extern const u8g_fntpgm_uint8_t u8g_font_10x20[] U8G_SECTION(".progmem.u8g_font_10x20");
