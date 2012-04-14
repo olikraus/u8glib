@@ -55,7 +55,7 @@
 #================================================
 # Project Information
 TARGETNAME = u8g_avr
-MCU:=atmega88
+MCU:=atmega328p
 F_CPU:=8000000
 SRC = main.c
 U8GDIR = ../../../csrc/
@@ -80,7 +80,7 @@ SRC += $(shell ls $(FONTDIR)*.c)
 
 # Internal Variable Names
 AVRDUDE_FLASH = -U flash:w:$(TARGETNAME).hex
-AVRDUDE_FLAGS = -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER) -v -v
+AVRDUDE_FLAGS = -F -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER) -v -v
 LIBNAME:=$(TARGETNAME).a
 ELFNAME:=$(TARGETNAME).elf
 HEXNAME:=$(TARGETNAME).hex
