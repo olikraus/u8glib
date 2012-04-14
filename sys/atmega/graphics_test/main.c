@@ -2,7 +2,7 @@
 
   main.c 
   
-  Hello World for ATMEGA Controller
+  Graphics Test for ATMEGA Controller
 
   Universal 8bit Graphics Library
   
@@ -75,6 +75,17 @@ void u8g_setup(void)
     MOSI: PORTB, Bit 3
   */
   u8g_InitSPI(&u8g, &u8g_dev_st7565_dogm132_sw_spi, PN(1, 5), PN(1, 3), PN(1, 2), PN(1, 1), U8G_PIN_NONE);
+
+  /* flip screen, if required */
+  u8g_SetRot180(&u8g);
+
+  /* assign default color value */
+  if ( u8g_GetMode(&u8g) == U8G_MODE_R3G3B2 ) 
+    u8g_SetColorIndex(&u8g, 255);     /* white */
+  else if ( u8g_GetMode(&u8g) == U8G_MODE_GRAY2BIT )
+    u8g_SetColorIndex(&u8g, 3);         /* max intensity */
+  else if ( u8g_GetMode(&u8g) == U8G_MODE_BW )
+    u8g_SetColorIndex(&u8g, 1);         /* pixel on */
 }
 
 void sys_init(void)
@@ -86,10 +97,73 @@ void sys_init(void)
 #endif
 }
 
-void draw(void)
-{
+void u8g_prepare(void) {
   u8g_SetFont(&u8g, u8g_font_6x10);
-  u8g_DrawStr(&u8g, 0, 15, "Hello World!");
+  u8g_SetFontRefHeightExtendedText(&u8g);
+  u8g_SetDefaultForegroundColor(&u8g);
+  u8g_SetFontPosTop(&u8g);
+}
+
+void u8g_box_frame(uint8_t a) {
+  u8g_DrawStr(&u8g, 0, 0, "drawBox");
+  u8g_DrawBox(&u8g, 5,10,20,10);
+  u8g_DrawBox(&u8g, 10+a,15,30,7);
+  u8g_DrawStr(&u8g, 0, 30, "drawFrame");
+  u8g_DrawFrame(&u8g, 5,10+30,20,10);
+  u8g_DrawFrame(&u8g, 10+a,15+30,30,7);
+}
+
+void u8g_string(uint8_t a) {
+  u8g_DrawStr(&u8g, 30+a,31, " 0");
+  u8g_DrawStr90(&u8g, 30,31+a, " 90");
+  u8g_DrawStr180(&u8g, 30-a,31, " 180");
+  u8g_DrawStr270(&u8g, 30,31-a, " 270");
+}
+
+void u8g_line(uint8_t a) {
+  u8g_DrawStr(&u8g, 0, 0, "drawLine");
+  u8g_DrawLine(&u8g, 7+a, 10, 40, 55);
+  u8g_DrawLine(&u8g, 7+a*2, 10, 60, 55);
+  u8g_DrawLine(&u8g, 7+a*3, 10, 80, 55);
+  u8g_DrawLine(&u8g, 7+a*4, 10, 100, 55);
+}
+
+void u8g_ascii_1(void) {
+  char s[2] = " ";
+  uint8_t x, y;
+  u8g_DrawStr(&u8g, 0, 0, "ASCII page 1");
+  for( y = 0; y < 6; y++ ) {
+    for( x = 0; x < 16; x++ ) {
+      s[0] = y*16 + x + 32;
+      u8g_DrawStr(&u8g, x*7, y*10+10, s);
+    }
+  }
+}
+
+void u8g_ascii_2(void) {
+  char s[2] = " ";
+  uint8_t x, y;
+  u8g_DrawStr(&u8g, 0, 0, "ASCII page 2");
+  for( y = 0; y < 6; y++ ) {
+    for( x = 0; x < 16; x++ ) {
+      s[0] = y*16 + x + 160;
+      u8g_DrawStr(&u8g, x*7, y*10+10, s);
+    }
+  }
+}
+
+
+uint8_t draw_state = 0;
+
+void draw(void) {
+  u8g_prepare();
+  switch(draw_state >> 3) {
+    case 0: u8g_box_frame(draw_state&7); break;
+    case 1: u8g_string(draw_state&7); break;
+    case 2: u8g_line(draw_state&7); break;
+    case 3: u8g_ascii_1(); break;
+    case 4: u8g_ascii_2(); break;
+  }
 }
 
 int main(void)
@@ -104,7 +178,12 @@ int main(void)
     {
       draw();
     } while ( u8g_NextPage(&u8g) );
-    u8g_Delay(100);
+    
+    draw_state++;
+    if ( draw_state >= 5*8 )
+      draw_state = 0;
+    
+    u8g_Delay(150);
   }
 }
 

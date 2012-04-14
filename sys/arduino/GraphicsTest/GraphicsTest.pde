@@ -104,6 +104,30 @@ void u8g_line(uint8_t a) {
   u8g.drawLine(7+a*4, 10, 100, 55);
 }
 
+void u8g_ascii_1() {
+  char s[2] = " ";
+  uint8_t x, y;
+  u8g.drawStr( 0, 0, "ASCII page 1");
+  for( y = 0; y < 6; y++ ) {
+    for( x = 0; x < 16; x++ ) {
+      s[0] = y*16 + x + 32;
+      u8g.drawStr(x*7, y*10+10, s);
+    }
+  }
+}
+
+void u8g_ascii_2() {
+  char s[2] = " ";
+  uint8_t x, y;
+  u8g.drawStr( 0, 0, "ASCII page 2");
+  for( y = 0; y < 6; y++ ) {
+    for( x = 0; x < 16; x++ ) {
+      s[0] = y*16 + x + 160;
+      u8g.drawStr(x*7, y*10+10, s);
+    }
+  }
+}
+
 
 uint8_t draw_state = 0;
 
@@ -114,6 +138,8 @@ void draw(void) {
     case 1: u8g_disc_circle(draw_state&7); break;
     case 2: u8g_string(draw_state&7); break;
     case 3: u8g_line(draw_state&7); break;
+    case 4: u8g_ascii_1(); break;
+    case 5: u8g_ascii_2(); break;
   }
 }
 
@@ -139,7 +165,7 @@ void loop(void) {
   
   // increase the state
   draw_state++;
-  if ( draw_state >= 4*8 )
+  if ( draw_state >= 6*8 )
     draw_state = 0;
   
   // rebuild the picture after some delay
