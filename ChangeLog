@@ -57,4 +57,5 @@ u8glib ChangeLog
   * double memory, for NHD OLED and DOGXL160
   * "Menu" example
   * drawLine
-  
+2012-04-13      v1.04	Oliver Kraus <olikraus@gmail.com>
+  * Adjust U8grelease: Same version number with AVR and Arduino variant
