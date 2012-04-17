@@ -34838,6 +34838,55 @@ const u8g_fntpgm_uint8_t u8g_font_gdr9r[1544] U8G_SECTION(".progmem.u8g_font_gdr
   128,64,64,64,128,128,192,96,128,128,64,64,64,128,7,3,
   3,7,0,4,50,220,128,255};
 /*
+  Fontname: m2icon5
+  Copyright: public domain
+  Capital A Height: 5, '1' Height: 0
+  Calculated Max Values w= 7 h= 5 x= 0 y= 0 dx= 9 dy= 0 ascent= 5 len= 5
+  Font Bounding box     w= 8 h= 5 x= 0 y= 0
+  Calculated Min Values           x= 0 y= 0 dx= 0 dy= 0
+  Pure Font   ascent = 5 descent= 0
+  X Font      ascent = 5 descent= 0
+  Max Font    ascent = 5 descent= 0
+*/
+#include "u8g.h"
+const u8g_fntpgm_uint8_t u8g_font_m2icon_5[33] U8G_SECTION(".progmem.u8g_font_m2icon_5") = {
+  1,8,5,0,0,5,0,17,0,0,65,66,0,5,0,5,
+  0,2,117,149,28,254,130,130,254,2,69,133,112,208,144,144,
+  240};
+/*
+  Fontname: m2icon_7
+  Copyright: public domain
+  Capital A Height: 7, '1' Height: 0
+  Calculated Max Values w= 9 h= 7 x= 0 y= 0 dx=10 dy= 0 ascent= 7 len=14
+  Font Bounding box     w= 9 h= 7 x= 0 y= 0
+  Calculated Min Values           x= 0 y= 0 dx= 0 dy= 0
+  Pure Font   ascent = 7 descent= 0
+  X Font      ascent = 7 descent= 0
+  Max Font    ascent = 7 descent= 0
+*/
+#include "u8g.h"
+const u8g_fntpgm_uint8_t u8g_font_m2icon_7[44] U8G_SECTION(".progmem.u8g_font_m2icon_7") = {
+  1,9,7,0,0,7,0,17,0,0,65,66,0,7,0,7,
+  0,2,151,174,15,0,255,128,128,128,128,128,128,128,128,128,
+  255,128,2,87,103,56,104,232,136,136,136,248};
+/*
+  Fontname: m2icon_9
+  Copyright: public domain
+  Capital A Height: 9, '1' Height: 0
+  Calculated Max Values w=10 h= 9 x= 0 y= 0 dx=12 dy= 0 ascent= 9 len=18
+  Font Bounding box     w=11 h= 9 x= 0 y= 0
+  Calculated Min Values           x= 0 y= 0 dx= 0 dy= 0
+  Pure Font   ascent = 9 descent= 0
+  X Font      ascent = 9 descent= 0
+  Max Font    ascent = 9 descent= 0
+*/
+#include "u8g.h"
+const u8g_fntpgm_uint8_t u8g_font_m2icon_9[56] U8G_SECTION(".progmem.u8g_font_m2icon_9") = {
+  0,11,9,0,0,9,0,17,0,0,65,66,0,9,0,9,
+  0,10,9,18,12,0,0,15,128,255,192,128,64,128,64,128,
+  64,128,64,128,64,128,64,255,192,6,9,9,7,0,0,60,
+  84,148,244,132,132,132,132,252};
+/*
   Fontname: micro
   Copyright: Public domain font.  Share and enjoy.
   Capital A Height: 5, '1' Height: 5

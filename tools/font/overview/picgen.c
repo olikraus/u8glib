@@ -1619,6 +1619,10 @@ int main(void)
   pic_gen_font(u8g_font_tpssr, "u8g_font_tpssr", 12, "orgdot: Teacher's Pet Sans Serif");
   pic_gen_font(u8g_font_tpssn, "u8g_font_tpssn", 12, "orgdot: Teacher's Pet Sans Serif");
 
+  pic_gen_font(u8g_font_m2icon_5, "u8g_font_m2icon_5", 12, "u8glib m2icon");
+  pic_gen_font(u8g_font_m2icon_7, "u8g_font_m2icon_7", 12, "u8glib m2icon");
+  pic_gen_font(u8g_font_m2icon_9, "u8g_font_m2icon_9", 12, "u8glib m2icon");
+
 #endif
 
 return 0;

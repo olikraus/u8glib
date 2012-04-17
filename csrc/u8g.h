@@ -776,6 +776,11 @@ void chess_Step(uint8_t keycode);
 /*===============================================================*/
 /* font definitions */
 
+extern const u8g_fntpgm_uint8_t u8g_font_m2icon_5[] U8G_SECTION(".progmem.u8g_font_m2icon_5");
+extern const u8g_fntpgm_uint8_t u8g_font_m2icon_7[] U8G_SECTION(".progmem.u8g_font_m2icon_7");
+extern const u8g_fntpgm_uint8_t u8g_font_m2icon_9[] U8G_SECTION(".progmem.u8g_font_m2icon_9");
+
+
 extern const u8g_fntpgm_uint8_t u8g_font_6x12_75r[] U8G_SECTION(".progmem.u8g_font_6x12_75r");
 extern const u8g_fntpgm_uint8_t u8g_font_6x13_75r[] U8G_SECTION(".progmem.u8g_font_6x13_75r");
 extern const u8g_fntpgm_uint8_t u8g_font_7x13_75r[] U8G_SECTION(".progmem.u8g_font_7x13_75r");
