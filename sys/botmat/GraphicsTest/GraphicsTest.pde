@@ -2,6 +2,8 @@
 
   GraphicsTest.pde
   
+  Example for "botmat" module
+  
   Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
   
   Copyright (c) 2012, olikraus@gmail.com

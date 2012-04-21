@@ -3,10 +3,8 @@
   Chess.pde
   
   Little Rook Chess
+  Example for "botmat" module
 
-  >>> Before compiling: Please remove comment from the constructor of the 
-  >>> connected graphics display (see below).
-  
   Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
   
   Copyright (c) 2012, olikraus@gmail.com
@@ -42,43 +40,13 @@
 
 #include "U8glib.h"
 
-// setup u8g object, please remove comment from one of the following constructor calls
+//U8GLIB_DOGM128 u8g(7, 5, 1, 2);                    // SPI Com: SCK = 7, MOSI = 5, CS = 1, A0 = 2
+U8GLIB_DOGM128 u8g(1, 2);                    // HW SPI CS = 1, A0 = 2
 
-//U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_NHD27OLED_2X_BW u8g(13, 11, 10, 9); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_NHD27OLED_2X_GR u8g(13, 11, 10, 9);  // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_ST7920_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
-//U8GLIB_ST7920_128X64 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
-//U8GLIB_ST7920_192X32 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
-//U8GLIB_ST7920_192X32 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
-//U8GLIB_LM6059 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_LM6063 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGXL160_BW u8g(10, 9);            // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGXL160_GR u8g(13, 11, 10, 9);             // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGXL160_2X_BW u8g(13, 11, 10, 9);            // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGXL160_2X_GR u8g(13, 11, 10, 9);             // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_PCD8544 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
-//U8GLIB_PCF8812 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, Reset = 8
-//U8GLIB_KS0108_128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs1=14, cs2=15,di=17,rw=16
-//U8GLIB_LC7981_160X80 u8g(8, 9, 10, 11, 4, 5, 6, 7,  18, 14, 15, 17, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs=14 ,di=15,rw=17, reset = 16
-
-
-// DOGS102 shield configuration values
-//uint8_t uiKeyPrev = 2;
-//uint8_t uiKeyNext = 4;
-//uint8_t uiKeySelect = 5;
-//uint8_t uiKeyBack = 3;
-
-// DOGM128-Shield	 configuration values
-// DOGXL60-Shield configuration values
-uint8_t uiKeyPrev = 7;
-uint8_t uiKeyNext = 3;
-uint8_t uiKeySelect = 2;
-uint8_t uiKeyBack = 8;
+uint8_t uiKeyPrev = 20;
+uint8_t uiKeyNext = 21;
+uint8_t uiKeySelect = 18;
+uint8_t uiKeyBack = 22;
 
 uint8_t uiKeyCodeFirst = CHESS_KEY_NONE;
 uint8_t uiKeyCodeSecond = CHESS_KEY_NONE;
@@ -120,10 +88,14 @@ void uiStep(void)
 
 
 void setup() {
-  // rotate screen, if required
-  // u8g.setRot180();
-  
+  // activate backlight
+  pinMode(3, OUTPUT);
+  digitalWrite(3, HIGH);
+
+  // key setup  
   uiSetup();
+  
+  // game setup
   chess_Init(u8g.getU8g(), 0);
 }
 
