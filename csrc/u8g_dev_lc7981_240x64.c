@@ -44,14 +44,10 @@
 
 
 /*
-
   http://www.mark-products.com/graphics.htm#240x64%20Pixel%20Format
-  data sheets:
-  http://www.lcd-module.de/eng/pdf/zubehoer/lc7981.pdf
-  http://www.lcd-module.de/pdf/grafik/w160-6.pdf
 */
 
-static u8g_pgm_uint8_t u8g_dev_lc7981_160x80_init_seq[] = {
+static u8g_pgm_uint8_t u8g_dev_lc7981_240x64_init_seq[] = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(1),           /* instruction mode */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
@@ -101,7 +97,7 @@ uint8_t u8g_dev_lc7981_240x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_lc7981_160x80_init_seq);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_lc7981_240x64_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
