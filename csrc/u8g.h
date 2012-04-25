@@ -149,6 +149,8 @@ extern u8g_dev_t u8g_dev_st7920_192x32_8bit;
 
 /* LC7981 160x80 display*/
 extern u8g_dev_t u8g_dev_lc7981_160x80_8bit;
+/* LC7981 240x64 display*/
+extern u8g_dev_t u8g_dev_lc7981_240x64_8bit;
 
 /* Display: EA DOGXL160, Size: 160x104 monochrom & gray level */
 extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_sw_spi;
