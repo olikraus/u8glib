@@ -1,0 +1,71 @@
+selectable number of page buffers
+
+Dear Oliver,
+
+I've revently had some experiment with u8glib v1.04 double buffer mode. I wanted to create a device for uc1610 that i can  choose the number of pages ti store in buffer. I had to make changes in u8g_dev_uc1610_dogxl160.c and created an u8g_pb8xv1.c. I also had to add the devices to u8g.h Find my first working example attached.
+In the u8g_dev_uc1610_dogxl160.c I have defined the PAGEGROUP constant to declare the number of pages stored at once.
+<---------------------------------- CODE ----------------------------------------->
+#define PAGEGROUP 7
+<---------------------------------- /CODE ----------------------------------------->
+I have also created a driver definition for this device:
+<---------------------------------- CODE ----------------------------------------->
+uint8_t u8g_dev_uc1610_dogxl160_gx_bw_buf[WIDTH*PAGEGROUP] U8G_NOCOMMON ;
+u8g_pb_t u8g_dev_uc1610_dogxl160_gx_bw_pb = { {8*PAGEGROUP, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_uc1610_dogxl160_gx_bw_buf};
+u8g_dev_t u8g_dev_uc1610_dogxl160_gx_bw_sw_spi = { u8g_dev_uc1610_dogxl160_gx_bw_fn, &u8g_dev_uc1610_dogxl160_gx_bw_pb, U8G_COM_SW_SPI };
+u8g_dev_t u8g_dev_uc1610_dogxl160_gx_bw_hw_spi = { u8g_dev_uc1610_dogxl160_gx_bw_fn, &u8g_dev_uc1610_dogxl160_gx_bw_pb, U8G_COM_HW_SPI };
+<---------------------------------- /CODE ----------------------------------------->
+When calling MSG_PAGE_NEXT I have a for cycle inside the case:
+<---------------------------------- CODE ----------------------------------------->
+case U8G_DEV_MSG_PAGE_NEXT:
+     {
+       int i, g;
+       u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+
+       for(g=0;(g<PAGEGROUP)&&(g<(HEIGHT/8));g++){
+           u8g_WriteEscSeqP(u8g, dev, u8g_dev_uc1610_dogxl160_data_start);
+           u8g_WriteByte(u8g, dev, 0x060 | (pb->p.page*2*PAGEGROUP+g*2) ); /* select current page 1/2 (UC1610) */
+           u8g_SetAddress(u8g, dev, 1);           /* data mode */
+           for( i = 0; i < WIDTH; i++ )
+           {
+             u8g_WriteByte(u8g, dev, u8g_dev_1to2( ((uint8_t *)(pb->buf+WIDTH*g))[i] ) );
+           }
+           u8g_WriteEscSeqP(u8g, dev, u8g_dev_uc1610_dogxl160_data_start);
+           u8g_WriteByte(u8g, dev, 0x060 | (pb->p.page*2*PAGEGROUP+1+g*2) ); /* select current page 2/2 (UC1610) */
+           u8g_SetAddress(u8g, dev, 1);           /* data mode */
+           for( i = 0; i < WIDTH; i++ )
+           {
+             u8g_WriteByte(u8g, dev, u8g_dev_1to2( ((uint8_t *)(pb->buf+WIDTH*g))[i] >> 4 ) );
+           }
+       }
+
+       u8g_SetChipSelect(u8g, dev, 0);
+     }
+     break;
+<---------------------------------- /CODE ----------------------------------------->
+In the end instead of calling the pb16v1_fn function, i am calling the modified pb8xv1 function.
+<---------------------------------- CODE ----------------------------------------->
+ return u8g_dev_pb8xv1_base_fn(u8g, dev, msg, arg);
+<---------------------------------- /CODE ----------------------------------------->
+The pb8xv1.c file differs in 2 functions from pb16v1.c file.
+The first difference is when setting a pixel:
+<---------------------------------- CODE ----------------------------------------->
+void u8g_pb8xv1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
+...
+ y -= b->p.page_y0;
+ ptr += (b->width*(y/8)); // changed line, i think Y can't be greater then page_height
+ y &= 0x07; // notice the missing condition.
+ mask = 1;
+ mask <<= y;
+ ptr += x;
+ ...
+<---------------------------------- /CODE ----------------------------------------->
+And the other one is at the clearing of the pages.
+<---------------------------------- CODE ----------------------------------------->
+void u8g_pb8xv1_Clear(u8g_pb_t *b)
+...
+ uint8_t *end_ptr = ptr;
+ end_ptr += b->width*(b->p.page_height/8); // Instead of PAGEGROUP
+ do
+ ...
+<---------------------------------- /CODE ----------------------------------------->
+I hope you can find this code useful to improve your library.
