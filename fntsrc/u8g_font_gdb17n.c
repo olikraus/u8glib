@@ -3,7 +3,7 @@
   Copyright: Copyright (c) SIL International, 2003-2008.
   Capital A Height: 0, '1' Height: 16
   Calculated Max Values w=12 h=25 x= 2 y= 9 dx=14 dy= 0 ascent=21 len=50
-  Font Bounding box     w=42 h=40 x=-14 y=-10
+  Font Bounding box     w=42 h=39 x=-14 y=-10
   Calculated Min Values           x= 0 y=-5 dx= 0 dy= 0
   Pure Font   ascent =16 descent= 0
   X Font      ascent =16 descent= 0
@@ -11,7 +11,7 @@
 */
 #include "u8g.h"
 const u8g_fntpgm_uint8_t u8g_font_gdb17n[542] U8G_SECTION(".progmem.u8g_font_gdb17n") = {
-  0,42,40,242,246,16,0,0,0,0,42,57,0,21,251,16,
+  0,42,39,242,246,16,0,0,0,0,42,57,0,21,251,16,
   0,10,12,24,12,1,9,12,0,12,0,204,128,237,192,255,
   192,63,0,63,0,255,192,237,192,76,128,12,0,12,0,10,
   10,20,11,1,2,12,0,12,0,12,0,12,0,255,192,12,

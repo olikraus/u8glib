@@ -2,8 +2,8 @@
   Fontname: -FreeType-FreeUniversal-Bold-R-Normal--34-340-72-72-P-170-ISO10646-1
   Copyright: FreeUniveral (c) Stephen Wilson 2009    Original Font Sil-Sophia  Copyright (c) SIL International, 1994-2008.
   Capital A Height: 0, '1' Height: 25
-  Calculated Max Values w=20 h=28 x= 7 y=12 dx=34 dy= 0 ascent=26 len=78
-  Font Bounding box     w=50 h=47 x=-2 y=-9
+  Calculated Max Values w=20 h=28 x= 7 y=13 dx=34 dy= 0 ascent=26 len=78
+  Font Bounding box     w=50 h=46 x=-2 y=-9
   Calculated Min Values           x= 0 y=-5 dx= 0 dy= 0
   Pure Font   ascent =25 descent= 0
   X Font      ascent =25 descent= 0
@@ -11,8 +11,8 @@
 */
 #include "u8g.h"
 const u8g_fntpgm_uint8_t u8g_font_fub25n[963] U8G_SECTION(".progmem.u8g_font_fub25n") = {
-  0,50,47,254,247,25,0,0,0,0,42,57,0,26,251,25,
-  0,14,13,26,22,4,12,28,224,60,240,28,224,15,192,135,
+  0,50,46,254,247,25,0,0,0,0,42,57,0,26,251,25,
+  0,14,13,26,22,4,13,28,224,60,240,28,224,15,192,135,
   132,255,252,255,252,231,156,15,192,30,224,28,224,60,240,8,
   64,20,21,63,34,7,0,0,96,0,0,96,0,0,96,0,
   0,96,0,0,96,0,0,96,0,0,96,0,0,96,0,0,
