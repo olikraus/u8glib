@@ -381,11 +381,17 @@ void u8g_com_arduino_assign_pin_output_high(u8g_t *u8g);
 
 /*===============================================================*/
 /* u8g_com_io.c */
+
+/* create internal number from port and pin */
 uint8_t u8g_Pin(uint8_t port, uint8_t bit);
 #define PN(port,bit) u8g_Pin(port,bit)
+
+/* low level procedures */
 void u8g_SetPinOutput(uint8_t internal_pin_number);
 void u8g_SetPinLevel(uint8_t internal_pin_number, uint8_t level);
+uint8_t u8g_GetPinLevel(uint8_t internal_pin_number);
 
+/* u8g level procedures, expect U8G_PI_xxx macro */
 void u8g_SetPIOutput(u8g_t *u8g, uint8_t pi);
 void u8g_SetPILevel(u8g_t *u8g, uint8_t pi, uint8_t level);
 
