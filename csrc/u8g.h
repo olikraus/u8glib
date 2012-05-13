@@ -184,6 +184,10 @@ extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_bw_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi;
 
+/* OLED 128x32 Display with SSD1306 Controller */
+extern u8g_dev_t u8g_dev_ssd1306_128x32_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1306_128x32_hw_spi;
+
 /* experimental 65K TFT with st7687 controller */
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi;
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_8bit;
