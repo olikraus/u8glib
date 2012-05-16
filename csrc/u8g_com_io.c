@@ -108,6 +108,33 @@ const IO_PTR u8g_avr_port_P[] PROGMEM = {
 #endif
 };
 
+const IO_PTR u8g_avr_pin_P[] PROGMEM = {
+#ifdef PINA
+  &PINA,
+#else
+  0,
+#endif
+  &PINB,
+#ifdef PINC
+  &PINC,
+#ifdef PIND
+  &PIND,
+#ifdef PINE
+  &PINE,
+#ifdef PINF
+  &PINF,
+#ifdef PING
+  &PING,
+#ifdef PINH
+  &PINH,
+#endif
+#endif
+#endif
+#endif
+#endif
+#endif
+};
+
 static volatile uint8_t *u8g_get_avr_io_ptr(const IO_PTR *base, uint8_t offset)
 {
   volatile uint8_t * tmp;
@@ -139,7 +166,7 @@ void u8g_SetPinLevel(uint8_t internal_pin_number, uint8_t level)
 
 uint8_t u8g_GetPinLevel(uint8_t internal_pin_number)
 {
-  volatile uint8_t * tmp = u8g_get_avr_io_ptr(u8g_avr_port_P, internal_pin_number>>3);
+  volatile uint8_t * tmp = u8g_get_avr_io_ptr(u8g_avr_pin_P, internal_pin_number>>3);
   if ( ((*tmp) & _BV(internal_pin_number&7))  != 0 )
     return 1;
   return 0;
