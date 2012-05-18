@@ -57,7 +57,7 @@
 TARGETNAME = u8g_avr
 MCU:=atmega328p
 F_CPU:=8000000
-SRC = graphics_test.c
+SRC = u8g_logo.c
 U8GDIR = ../../../csrc/
 FONTDIR = ../../../sfntsrc/
 
