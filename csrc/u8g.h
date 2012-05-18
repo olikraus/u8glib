@@ -66,7 +66,7 @@ extern "C" {
 
 #if defined(__AVR__)
 #define U8G_PROGMEM U8G_SECTION(".progmem.data")
-typedef const uint8_t PROGMEM u8g_pgm_uint8_t;
+typedef uint8_t PROGMEM u8g_pgm_uint8_t;
 typedef uint8_t u8g_fntpgm_uint8_t;
 #define u8g_pgm_read(adr) pgm_read_byte_near(adr)
 #define U8G_PSTR(s) ((u8g_pgm_uint8_t *)PSTR(s))
