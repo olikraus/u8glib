@@ -40,7 +40,6 @@
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
-/* u8g_pgm_uint8_t u8g_dev_st7565_dogm128_init_seq[] = { */
 const uint8_t u8g_dev_st7565_dogm128_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */

@@ -41,7 +41,7 @@
 #define PAGE_HEIGHT 8
 
 #ifdef OLD_ADAFRUIT_CODE
-u8g_pgm_uint8_t OLD_u8g_dev_st7565_lm6063_init_seq[] = {
+static const uint8_t OLD_u8g_dev_st7565_lm6063_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */

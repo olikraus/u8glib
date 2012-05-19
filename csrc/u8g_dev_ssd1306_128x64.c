@@ -42,7 +42,7 @@
 
 #ifdef NOT_TESTED
 /* init sequence adafruit 128x64 OLED (NOT TESTED) */
-u8g_pgm_uint8_t u8g_dev_ssd1306_128x64_init_seq[] = {
+static const uint8_t u8g_dev_ssd1306_128x64_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
