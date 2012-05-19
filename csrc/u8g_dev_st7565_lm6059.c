@@ -41,7 +41,7 @@
 #define PAGE_HEIGHT 8
 
 /* init sequence from https://github.com/adafruit/ST7565-LCD/blob/master/ST7565/ST7565.cpp */
-u8g_pgm_uint8_t u8g_dev_st7565_lm6059_init_seq[] = {
+static const uint8_t u8g_dev_st7565_lm6059_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
@@ -83,7 +83,7 @@ u8g_pgm_uint8_t u8g_dev_st7565_lm6059_init_seq[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
-u8g_pgm_uint8_t u8g_dev_st7565_lm6059_data_start[] = {
+static const uint8_t u8g_dev_st7565_lm6059_data_start[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
   0x010,		/* set upper 4 bit of the col adr to 0 */

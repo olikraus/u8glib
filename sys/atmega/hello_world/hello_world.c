@@ -92,8 +92,6 @@ void draw(void)
   u8g_DrawStr(&u8g, 0, 15, "Hello World!");
 }
 
-u8g_pgm_uint8_t x[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-
 int main(void)
 {
   sys_init();

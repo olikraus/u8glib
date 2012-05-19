@@ -39,7 +39,7 @@
 #define WIDTH 160
 #define HEIGHT 104
 
-u8g_pgm_uint8_t u8g_dev_uc1610_dogxl160_init_seq[] = {
+static const uint8_t u8g_dev_uc1610_dogxl160_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
@@ -66,7 +66,7 @@ u8g_pgm_uint8_t u8g_dev_uc1610_dogxl160_init_seq[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
-u8g_pgm_uint8_t u8g_dev_uc1610_dogxl160_data_start[] = {
+static const uint8_t u8g_dev_uc1610_dogxl160_data_start[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
   0x010,		/* set upper 4 bit of the col adr to 0 */

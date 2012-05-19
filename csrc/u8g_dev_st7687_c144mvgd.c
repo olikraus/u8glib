@@ -49,7 +49,7 @@ see also: read.pudn.com/downloads115/sourcecode/app/484503/LCM_Display.c__.htm
 http://en.pudn.com/downloads115/sourcecode/app/detail484503_en.html
 */
 
-u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
+static const uint8_t u8g_dev_st7687_c144mvgd_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
@@ -204,7 +204,7 @@ u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
 http://www.waitingforfriday.com/images/e/e3/FTM144D01N_test.zip
 */
 
-u8g_pgm_uint8_t u8g_dev_st7687_c144mvgd_init_seq[] = {
+static const uint8_t u8g_dev_st7687_c144mvgd_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */

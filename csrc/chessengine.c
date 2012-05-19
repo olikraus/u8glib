@@ -1105,12 +1105,12 @@ uint8_t ce_LoopRecur(uint8_t pos)
     d: a list of potential directions
     is_multi_step: if the piece can only do one step (zero for KING and KNIGHT)
 */
-u8g_pgm_uint8_t ce_dir_offset_rook[] = { 1, 16, -16, -1, 0 };
-u8g_pgm_uint8_t ce_dir_offset_bishop[] = { 15, 17, -17, -15, 0 };
-u8g_pgm_uint8_t ce_dir_offset_queen[] = { 1, 16, -16, -1, 15, 17, -17, -15, 0 };
-u8g_pgm_uint8_t ce_dir_offset_knight[] = {14, -14, 18, -18, 31, -31, 33, -33, 0};
+static const uint8_t ce_dir_offset_rook[] PROGMEM = { 1, 16, -16, -1, 0 };
+static const uint8_t ce_dir_offset_bishop[] PROGMEM = { 15, 17, -17, -15, 0 };
+static const uint8_t ce_dir_offset_queen[] PROGMEM = { 1, 16, -16, -1, 15, 17, -17, -15, 0 };
+static const uint8_t ce_dir_offset_knight[] PROGMEM = {14, -14, 18, -18, 31, -31, 33, -33, 0};
 
-void ce_LoopDirsSingleMultiStep(u8g_pgm_uint8_t *d, uint8_t is_multi_step)
+void ce_LoopDirsSingleMultiStep(const uint8_t *d, uint8_t is_multi_step)
 {
   uint8_t loop_pos;
   
@@ -1389,7 +1389,7 @@ void ce_LoopPawn(void)
   this function.
 */
 
-void ce_FindPieceByStep(uint8_t start_pos, uint8_t piece, u8g_pgm_uint8_t *d, uint8_t is_multi_step)
+void ce_FindPieceByStep(uint8_t start_pos, uint8_t piece, const uint8_t *d, uint8_t is_multi_step)
 {
   uint8_t loop_pos, cp;
   
@@ -1978,7 +1978,7 @@ uint8_t chess_state = CHESS_STATE_MENU;
 uint8_t chess_source_pos = 255;
 uint8_t chess_target_pos = 255;
 
-const u8g_pgm_uint8_t chess_pieces_body_bm[] = 
+const uint8_t chess_pieces_body_bm[] PROGMEM = 
 {
   /* PAWN */ 		0x00, 0x00, 0x00, 0x18, 0x18, 0x00, 0x00, 0x00, /* 0x00, 0x00, 0x00, 0x0c, 0x0c, 0x00, 0x00, 0x00, */ 
   /* KNIGHT */		0x00, 0x00, 0x1c, 0x2c, 0x04, 0x04, 0x0e, 0x00,
@@ -1990,7 +1990,7 @@ const u8g_pgm_uint8_t chess_pieces_body_bm[] =
 
 #ifdef NOT_REQUIRED
 /* white pieces are constructed by painting black pieces and cutting out the white area */
-const u8g_pgm_uint8_t chess_white_pieces_bm[] = 
+const uint8_t chess_white_pieces_bm[] PROGMEM = 
 {
   /* PAWN */ 		0x00, 0x00, 0x0c, 0x12, 0x12, 0x0c, 0x1e, 0x00, 
   /* KNIGHT */		0x00, 0x1c, 0x22, 0x52, 0x6a, 0x0a, 0x11, 0x1f,
@@ -2001,7 +2001,7 @@ const u8g_pgm_uint8_t chess_white_pieces_bm[] =
 };
 #endif
 
-const u8g_pgm_uint8_t chess_black_pieces_bm[] = 
+const uint8_t chess_black_pieces_bm[] PROGMEM = 
 {
   /* PAWN */ 		0x00, 0x00, 0x18, 0x3c, 0x3c, 0x18, 0x3c, 0x00, /* 0x00, 0x00, 0x0c, 0x1e, 0x1e, 0x0c, 0x1e, 0x00, */ 
   /* KNIGHT */		0x00, 0x1c, 0x3e, 0x7e, 0x6e, 0x0e, 0x1f, 0x1f,
@@ -2059,7 +2059,7 @@ void chess_DrawFrame(uint8_t pos, uint8_t is_bold)
 void chess_DrawBoard(void)
 {
   uint8_t i, j, cp;
-  const u8g_pgm_uint8_t *ptr;
+  const uint8_t *ptr;  /* pointer into PROGMEM */
   
   if ( U8G_MODE_GET_BITS_PER_PIXEL(u8g_GetMode(lrc_u8g)) > 1 )
   {

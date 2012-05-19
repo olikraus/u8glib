@@ -65,7 +65,7 @@
     http://code.google.com/p/itdb02/, ITDB02.cpp, iteadstudio.com
 */
 
-static u8g_pgm_uint8_t u8g_dev_ili9325d_320x240_init_seq[] = {
+static const uint8_t u8g_dev_ili9325d_320x240_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_DLY(50),         /* delay 50 ms */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
@@ -230,7 +230,7 @@ static u8g_pgm_uint8_t u8g_dev_ili9325d_320x240_init_seq[] = {
 };
 
 
-static u8g_pgm_uint8_t u8g_dev_ili9325d_320x240_page_seq[] = {
+static const uint8_t u8g_dev_ili9325d_320x240_page_seq[] PROGMEM = {
   U8G_ESC_CS(1),             /* enable chip */
   U8G_ESC_ADR(0),  0x000, 0x020,               /* Horizontal GRAM Address Set */
   U8G_ESC_ADR(1),  0x000, 0x000,

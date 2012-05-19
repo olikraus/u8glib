@@ -47,7 +47,7 @@
   http://www.mark-products.com/graphics.htm#240x64%20Pixel%20Format
 */
 
-static u8g_pgm_uint8_t u8g_dev_lc7981_240x64_init_seq[] = {
+static const uint8_t u8g_dev_lc7981_240x64_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(1),           /* instruction mode */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/

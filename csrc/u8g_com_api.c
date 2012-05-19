@@ -78,9 +78,9 @@ uint8_t u8g_WriteSequence(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, uint8_t *seq)
   return dev->com_fn(u8g, U8G_COM_MSG_WRITE_SEQ, cnt, seq);
 }
 
-uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, u8g_pgm_uint8_t *seq)
+uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, const uint8_t *seq)
 {
-  return dev->com_fn(u8g, U8G_COM_MSG_WRITE_SEQ_P, cnt, seq);
+  return dev->com_fn(u8g, U8G_COM_MSG_WRITE_SEQ_P, cnt, (void *)seq);
 }
 
 /*
@@ -102,7 +102,7 @@ uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, u8g_pgm_uint
 #define U8G_ESC_RST(x) 255, (0xc0 | ((x)&0x0f))
 
 */
-uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq)
+uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, const uint8_t *esc_seq)
 {
   uint8_t is_escape = 0;
   uint8_t value;

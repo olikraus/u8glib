@@ -48,7 +48,7 @@
 #define PAGE_HEIGHT 8
 
 /* http://www.newhavendisplay.com/app_notes/OLED_2_7_12864.txt */
-u8g_pgm_uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_init_seq[] = {
+static const uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_init_seq[] PROGMEM = {
   U8G_ESC_DLY(10),              /* delay 10 ms */
   U8G_ESC_CS(0),                 /* disable chip */
   U8G_ESC_ADR(0),               /* instruction mode */
@@ -81,7 +81,7 @@ u8g_pgm_uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_init_seq[] = {
   U8G_ESC_END                /* end of sequence */
 };
 
-u8g_pgm_uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_prepare_page_seq[] = {
+static const uint8_t u8g_dev_ssd1325_1bit_nhd_27_12864ucy3_prepare_page_seq[] PROGMEM = {
   U8G_ESC_ADR(0),               /* instruction mode */
   U8G_ESC_CS(1),                /* enable chip */
   0x015,       /* column address... */
