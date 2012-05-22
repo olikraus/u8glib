@@ -80,7 +80,7 @@ uint8_t u8g_WriteSequence(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, uint8_t *seq)
 
 uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, const uint8_t *seq)
 {
-  return dev->com_fn(u8g, U8G_COM_MSG_WRITE_SEQ_P, cnt, (void *)seq);
+  return dev->com_fn(u8g, U8G_COM_MSG_WRITE_SEQ_P, cnt, (const void *)seq);
 }
 
 /*

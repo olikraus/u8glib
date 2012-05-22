@@ -53,7 +53,7 @@ uint8_t u8g_Pin(uint8_t port, uint8_t bit)
   return port;
 }
 
-IO_PTR u8g_avr_ddr_P[] PROGMEM = {
+const IO_PTR u8g_avr_ddr_P[] PROGMEM = {
 #ifdef DDRA
   &DDRA,
 #else
