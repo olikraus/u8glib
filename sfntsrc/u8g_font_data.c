@@ -34814,16 +34814,16 @@ const u8g_fntpgm_uint8_t u8g_font_gdr9r[1553] U8G_SECTION(".progmem.u8g_font_gdr
   Fontname: m2icon5
   Copyright: public domain
   Capital A Height: 5, '1' Height: 0
-  Calculated Max Values w= 7 h= 6 x= 0 y= 0 dx= 9 dy= 0 ascent= 5 len= 5
-  Font Bounding box     w= 8 h= 6 x= 0 y=-1
+  Calculated Max Values w= 9 h= 6 x= 0 y= 0 dx=10 dy= 0 ascent= 5 len=10
+  Font Bounding box     w= 9 h= 6 x= 0 y=-1
   Calculated Min Values           x= 0 y=-1 dx= 0 dy= 0
   Pure Font   ascent = 5 descent=-1
   X Font      ascent = 5 descent=-1
   Max Font    ascent = 5 descent=-1
 */
 #include "u8g.h"
-const u8g_fntpgm_uint8_t u8g_font_m2icon_5[201] U8G_SECTION(".progmem.u8g_font_m2icon_5") = {
-  1,8,6,0,255,5,0,17,0,172,65,103,255,5,255,5,
+const u8g_fntpgm_uint8_t u8g_font_m2icon_5[213] U8G_SECTION(".progmem.u8g_font_m2icon_5") = {
+  1,9,6,0,255,5,0,17,0,172,65,103,255,5,255,5,
   255,2,117,149,28,254,130,130,254,2,69,133,112,208,144,144,
   240,2,84,100,216,112,112,216,2,117,133,6,12,216,112,32,
   2,68,84,240,144,144,240,2,68,84,240,144,208,240,2,68,
@@ -34834,27 +34834,28 @@ const u8g_fntpgm_uint8_t u8g_font_m2icon_5[201] U8G_SECTION(".progmem.u8g_font_m
   248,120,2,85,101,240,248,248,248,120,2,68,84,96,144,144,
   96,2,68,84,96,144,208,96,2,68,84,96,240,240,96,255,
   255,255,255,255,255,255,255,255,255,255,255,255,2,117,133,32,
-  64,254,64,32,2,85,101,32,112,168,32,32,255,255,255,255,
-  1,22,38,128,128,128,128,128,128};
+  64,254,64,32,2,85,101,32,112,168,32,32,255,255,255,2,
+  149,170,28,0,254,0,130,0,191,128,255,0,1,22,38,128,
+  128,128,128,128,128};
 /*
   Fontname: m2icon_7
   Copyright: public domain
   Capital A Height: 7, '1' Height: 0
-  Calculated Max Values w= 9 h= 8 x= 0 y= 1 dx=10 dy= 0 ascent= 7 len=14
-  Font Bounding box     w= 9 h= 8 x= 0 y=-1
-  Calculated Min Values           x= 0 y=-1 dx= 0 dy= 0
-  Pure Font   ascent = 7 descent=-1
-  X Font      ascent = 7 descent=-1
-  Max Font    ascent = 7 descent=-1
+  Calculated Max Values w=12 h= 7 x= 0 y= 1 dx=13 dy= 0 ascent= 7 len=14
+  Font Bounding box     w=12 h= 8 x= 0 y=-1
+  Calculated Min Values           x= 0 y= 0 dx= 0 dy= 0
+  Pure Font   ascent = 7 descent= 0
+  X Font      ascent = 7 descent= 0
+  Max Font    ascent = 7 descent= 0
 */
 #include "u8g.h"
-const u8g_fntpgm_uint8_t u8g_font_m2icon_7[249] U8G_SECTION(".progmem.u8g_font_m2icon_7") = {
-  1,9,8,0,255,7,0,17,0,214,65,103,255,7,255,7,
-  255,2,151,174,15,0,255,128,128,128,128,128,128,128,128,128,
+const u8g_fntpgm_uint8_t u8g_font_m2icon_7[264] U8G_SECTION(".progmem.u8g_font_m2icon_7") = {
+  1,12,8,0,255,7,0,17,0,214,65,103,0,7,0,7,
+  0,2,151,174,15,0,255,128,128,128,128,128,128,128,128,128,
   255,128,2,87,103,56,104,232,136,136,136,248,3,84,100,216,
-  112,112,216,2,134,150,3,6,12,216,112,32,2,102,150,252,
-  132,132,132,132,252,2,102,150,252,132,180,180,132,252,2,102,
-  150,252,252,252,252,252,252,2,119,151,254,130,130,130,130,130,
+  112,112,216,2,134,150,3,6,12,216,112,32,2,102,118,252,
+  132,132,132,132,252,2,102,118,252,132,180,180,132,252,2,102,
+  118,252,252,252,252,252,252,2,119,151,254,130,130,130,130,130,
   254,2,119,151,254,130,186,186,186,130,254,2,119,151,254,254,
   254,254,254,254,254,2,102,118,248,140,140,140,252,124,2,102,
   118,248,140,172,140,252,124,2,102,134,248,252,252,252,252,124,
@@ -34863,22 +34864,23 @@ const u8g_fntpgm_uint8_t u8g_font_m2icon_7[249] U8G_SECTION(".progmem.u8g_font_m
   118,120,204,132,132,204,120,2,102,118,120,204,180,180,204,120,
   2,102,118,120,252,252,252,252,120,255,255,255,255,255,255,255,
   255,255,255,255,255,255,2,135,151,16,48,95,129,95,48,16,
-  2,119,135,16,40,68,238,40,40,56,255,255,255,255,1,24,
-  40,128,128,128,128,128,128,128,128};
+  2,119,135,16,40,68,238,40,40,56,255,255,255,2,199,222,
+  15,0,255,128,128,128,159,240,160,32,192,64,255,128,2,23,
+  39,128,128,128,128,128,128,128};
 /*
   Fontname: m2icon_9
   Copyright: public domain
   Capital A Height: 8, '1' Height: 0
-  Calculated Max Values w=10 h=11 x= 0 y= 1 dx=12 dy= 0 ascent= 9 len=18
-  Font Bounding box     w=11 h=11 x= 0 y=-2
+  Calculated Max Values w=13 h=11 x= 0 y= 1 dx=12 dy= 0 ascent= 9 len=18
+  Font Bounding box     w=13 h=11 x= 0 y=-2
   Calculated Min Values           x= 0 y=-2 dx= 0 dy= 0
   Pure Font   ascent = 8 descent=-2
   X Font      ascent = 8 descent=-2
   Max Font    ascent = 9 descent=-2
 */
 #include "u8g.h"
-const u8g_fntpgm_uint8_t u8g_font_m2icon_9[425] U8G_SECTION(".progmem.u8g_font_m2icon_9") = {
-  0,11,11,0,254,8,0,17,1,111,65,103,254,9,254,8,
+const u8g_fntpgm_uint8_t u8g_font_m2icon_9[446] U8G_SECTION(".progmem.u8g_font_m2icon_9") = {
+  0,13,11,0,254,8,0,17,1,111,65,103,254,9,254,8,
   254,10,8,16,11,0,0,15,128,255,192,128,64,128,64,128,
   64,128,64,128,64,255,192,6,8,8,7,0,0,60,84,148,
   244,132,132,132,252,6,5,5,7,0,1,204,120,48,120,204,
@@ -34903,8 +34905,9 @@ const u8g_fntpgm_uint8_t u8g_font_m2icon_9[425] U8G_SECTION(".progmem.u8g_font_m
   126,60,255,255,255,255,255,255,255,255,255,255,255,255,255,10,
   8,16,11,0,0,24,0,40,0,79,192,128,64,128,64,79,
   192,40,0,24,0,8,9,9,9,0,0,24,36,66,129,231,
-  36,36,36,60,255,255,255,255,1,11,11,2,0,254,128,128,
-  128,128,128,128,128,128,128,128,128};
+  36,36,36,60,255,255,255,13,8,16,11,0,0,15,128,255,
+  192,128,64,128,64,159,248,160,16,192,32,255,192,1,11,11,
+  2,0,254,128,128,128,128,128,128,128,128,128,128,128};
 /*
   Fontname: micro
   Copyright: Public domain font.  Share and enjoy.
