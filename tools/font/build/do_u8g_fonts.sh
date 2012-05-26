@@ -1,9 +1,9 @@
 #!/bin/bash
 
 echo m2icon
-../bdf2u8g/bdf2u8g -f 1 -b 65 -e 103 ../bdf/m2icon_5.bdf u8g_font_m2icon_5 u8g_font_m2icon_5.c > /dev/null
-../bdf2u8g/bdf2u8g -f 1 -b 65 -e 103  ../bdf/m2icon_7.bdf u8g_font_m2icon_7 u8g_font_m2icon_7.c > /dev/null
-../bdf2u8g/bdf2u8g  -b 65 -e 103  ../bdf/m2icon_9.bdf u8g_font_m2icon_9 u8g_font_m2icon_9.c > /dev/null
+../bdf2u8g/bdf2u8g -f 1 -b 65 -e 104 ../bdf/m2icon_5.bdf u8g_font_m2icon_5 u8g_font_m2icon_5.c > /dev/null
+../bdf2u8g/bdf2u8g -f 1 -b 65 -e 104  ../bdf/m2icon_7.bdf u8g_font_m2icon_7 u8g_font_m2icon_7.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 65 -e 105  ../bdf/m2icon_9.bdf u8g_font_m2icon_9 u8g_font_m2icon_9.c > /dev/null
 
 echo cursor
 ../bdf2u8g/bdf2u8g -s 32 ../bdf/cursor.bdf u8g_font_cursor u8g_font_cursor.c > /dev/null
