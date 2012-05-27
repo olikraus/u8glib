@@ -65,6 +65,7 @@ static const uint8_t u8g_dev_ssd1306_128x64_adafruit1_init_seq[] PROGMEM = {
   0x0d9, 0x022,		/* [1] pre-charge period 0x022/f1*/
   0x0db, 0x040,		/* vcomh deselect level */
   
+  0x02e,				/* 2012-05-27: Deactivate scroll */ 
   0x0a4,				/* output ram to display */
   0x0a6,				/* none inverted normal display mode */
   0x0af,				/* display on */
@@ -98,6 +99,41 @@ static const uint8_t u8g_dev_ssd1306_128x64_adafruit2_init_seq[] PROGMEM = {
   0x0d9, 0x0f1,		/* [2] pre-charge period 0x022/f1*/
   0x0db, 0x040,		/* vcomh deselect level */
   
+  0x02e,				/* 2012-05-27: Deactivate scroll */ 
+  0x0a4,				/* output ram to display */
+  0x0a6,				/* none inverted normal display mode */
+  0x0af,				/* display on */
+
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_END                /* end of sequence */
+};
+
+/* init sequence adafruit 128x64 OLED (NOT TESTED), like adafruit3, but with page addressing mode */
+static const uint8_t u8g_dev_ssd1306_128x64_adafruit3_init_seq[] PROGMEM = {
+  U8G_ESC_CS(0),             /* disable chip */
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
+  U8G_ESC_CS(1),             /* enable chip */
+
+  0x0ae,				/* display off, sleep mode */
+  0x0d5, 0x080,		/* clock divide ratio (0x00=1) and oscillator frequency (0x8) */
+  0x0a8, 0x03f,		/* */
+
+  0x0d3, 0x000,		/*  */
+
+  0x040,				/* start line */
+  
+  0x08d, 0x014,		/* [2] charge pump setting (p62): 0x014 enable, 0x010 disable */
+
+  0x020, 0x002,		/* 2012-05-27: page addressing mode */
+  0x0a1,				/* segment remap a0/a1*/
+  0x0c8,				/* c0: scan dir normal, c8: reverse */
+  0x0da, 0x012,		/* com pin HW config, sequential com pin config (bit 4), disable left/right remap (bit 5) */
+  0x081, 0x0cf,		/* [2] set contrast control */
+  0x0d9, 0x0f1,		/* [2] pre-charge period 0x022/f1*/
+  0x0db, 0x040,		/* vcomh deselect level */
+  
+  0x02e,				/* 2012-05-27: Deactivate scroll */ 
   0x0a4,				/* output ram to display */
   0x0a6,				/* none inverted normal display mode */
   0x0af,				/* display on */
@@ -125,7 +161,7 @@ static const uint8_t u8g_dev_ssd1306_128x64_univision_init_seq[] PROGMEM = {
   0x081, 0x09f,		/* set contrast control */
   0x0d9, 0x022,		/* pre-charge period */
   0x0db, 0x040,		/* vcomh deselect level */
-  0x022, 0x000,		/* page addressing mode */
+  0x022, 0x000,		/* page addressing mode WRONG: 3 byte cmd! */
   0x0a4,				/* output ram to display */
   0x0a6,				/* none inverted normal display mode */
   0x0af,				/* display on */
@@ -135,8 +171,9 @@ static const uint8_t u8g_dev_ssd1306_128x64_univision_init_seq[] PROGMEM = {
 
 /* select one init sequence here */
 //#define u8g_dev_ssd1306_128x64_init_seq u8g_dev_ssd1306_128x64_univision_init_seq
-#define u8g_dev_ssd1306_128x64_init_seq u8g_dev_ssd1306_128x64_adafruit1_init_seq
+//#define u8g_dev_ssd1306_128x64_init_seq u8g_dev_ssd1306_128x64_adafruit1_init_seq
 //#define u8g_dev_ssd1306_128x64_init_seq u8g_dev_ssd1306_128x64_adafruit2_init_seq
+#define u8g_dev_ssd1306_128x64_init_seq u8g_dev_ssd1306_128x64_adafruit3_init_seq
 
 
 static const uint8_t u8g_dev_ssd1306_128x64_data_start[] PROGMEM = {
@@ -161,7 +198,7 @@ uint8_t u8g_dev_ssd1306_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
       {
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
         u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1306_128x64_data_start);    
-        u8g_WriteByte(u8g, dev, 0x040 | pb->p.page); /* select current page (SSD1306) */
+        u8g_WriteByte(u8g, dev, 0x0b0 | pb->p.page); /* select current page (SSD1306) */
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
         if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
           return 0;
