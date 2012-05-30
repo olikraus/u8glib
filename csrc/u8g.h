@@ -185,6 +185,12 @@ extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_bw_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi;
 
+/* NHD-3.12-25664 OLED Display with SSD1322 Controller */
+extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_bw_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_bw_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_2x_bw_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_2x_bw_hw_spi;
+
 /* OLED 128x64 Display with SSD1306 Controller */
 extern u8g_dev_t u8g_dev_ssd1306_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x64_hw_spi;
