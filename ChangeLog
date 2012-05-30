@@ -61,5 +61,6 @@ u8glib ChangeLog
   * Adjust U8grelease: Same version number with AVR and Arduino variant
 2012-04-21	v1.05	Oliver Kraus <olikraus@gmail.com>
   * m2icon font
-  * lc7981_240x64 device
-
+  * experimental lc7981_240x64 device
+  * experimental ssd1306
+  * experimental ssd1322
