@@ -81,6 +81,9 @@ void setup(void) {
   
   // flip screen, if required
   // u8g.setRot180();
+  
+  // set SPI backup if required
+  //u8g.setHardwareBackup(u8g_backup_avr_spi);
 
   // assign default color value
   if ( u8g.getMode() == U8G_MODE_R3G3B2 ) 

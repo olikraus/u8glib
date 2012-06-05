@@ -498,6 +498,8 @@ typedef void (*u8g_draw_cursor_fn)(u8g_t *u8g);
 /* vertical reference point calculation callback */
 typedef u8g_uint_t (*u8g_font_calc_vref_fnptr)(u8g_t *u8g);
 
+/* state backup and restore procedure */
+typedef void (*u8g_state_cb)(uint8_t msg);
 
 
 /* PI = Pin Index */
@@ -577,6 +579,8 @@ struct _u8g_t
   /* uint8_t color_index; */
 
   uint8_t pin_list[U8G_PIN_LIST_LEN];
+  
+  u8g_state_cb state_cb;
 };
 
 #define u8g_GetFontAscent(u8g) ((u8g)->font_ref_ascent)
@@ -629,6 +633,28 @@ void u8g_SetDefaultMidColor(u8g_t *u8g);
   U8G_MODE_GET_BITS_PER_PIXEL(u8g_GetMode(u8g))
   U8G_MODE_IS_COLOR(u8g_GetMode(u8g)) 
 */
+
+/* u8g_state.c */
+#define U8G_STATE_ENV_IDX 0
+#define U8G_STATE_U8G_IDX 1
+#define U8G_STATE_RESTORE 0
+#define U8G_STATE_BACKUP 1
+#define U8G_STATE_MSG_COMPOSE(cmd,idx) (((cmd)<<1) | (idx))
+
+#define U8G_STATE_MSG_RESTORE_ENV U8G_STATE_MSG_COMPOSE(U8G_STATE_RESTORE,U8G_STATE_ENV_IDX)
+#define U8G_STATE_MSG_BACKUP_ENV U8G_STATE_MSG_COMPOSE(U8G_STATE_BACKUP,U8G_STATE_ENV_IDX)
+#define U8G_STATE_MSG_RESTORE_U8G U8G_STATE_MSG_COMPOSE(U8G_STATE_RESTORE,U8G_STATE_U8G_IDX)
+#define U8G_STATE_MSG_BACKUP_U8G U8G_STATE_MSG_COMPOSE(U8G_STATE_BACKUP,U8G_STATE_U8G_IDX)
+
+#define U8G_STATE_MSG_GET_IDX(msg) ((msg)&1)
+#define U8G_STATE_MSG_IS_BACKUP(msg) ((msg)&2)
+
+
+
+void u8g_state_dummy_cb(uint8_t msg);
+void u8g_backup_avr_spi(uint8_t msg);		/* backup SPI state on atmel avr controller */
+
+void u8g_SetHardwareBackup(u8g_t *u8g, u8g_state_cb backup_cb);
 
 
 /* u8g_dev_rot.c */

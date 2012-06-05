@@ -161,6 +161,8 @@ class U8GLIB : public Print
     u8g_uint_t getStrWidth(const char *s) { return u8g_GetStrWidth(&u8g, s); } 
     u8g_uint_t getStrWidthP(u8g_pgm_uint8_t *s) { return u8g_GetStrWidthP(&u8g, s); }
     
+    void setHardwareBackup(u8g_state_cb backup_cb) { u8g_SetHardwareBackup(&u8g, backup_cb); }
+    
 #if defined(ARDUINO) && ARDUINO >= 100
     // support for the F() macro
     

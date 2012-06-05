@@ -48,17 +48,30 @@ uint8_t u8g_call_dev_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 
 uint8_t u8g_InitLL(u8g_t *u8g, u8g_dev_t *dev)
 {
-  return u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_INIT, NULL);
+  uint8_t r;
+  u8g->state_cb(U8G_STATE_MSG_BACKUP_ENV);
+  r =  u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_INIT, NULL);
+  u8g->state_cb(U8G_STATE_MSG_BACKUP_U8G);
+  u8g->state_cb(U8G_STATE_MSG_RESTORE_ENV);
+  return r;
 }
 
 void u8g_FirstPageLL(u8g_t *u8g, u8g_dev_t *dev)
 {  
+  u8g->state_cb(U8G_STATE_MSG_BACKUP_ENV);
+  u8g->state_cb(U8G_STATE_MSG_RESTORE_U8G);
   u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_PAGE_FIRST, NULL);
+  u8g->state_cb(U8G_STATE_MSG_RESTORE_ENV);
 }
 
 uint8_t u8g_NextPageLL(u8g_t *u8g, u8g_dev_t *dev)
 {  
-  return u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_PAGE_NEXT, NULL);
+  uint8_t r;
+  u8g->state_cb(U8G_STATE_MSG_BACKUP_ENV);
+  u8g->state_cb(U8G_STATE_MSG_RESTORE_U8G);
+  r = u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_PAGE_NEXT, NULL);
+  u8g->state_cb(U8G_STATE_MSG_RESTORE_ENV);
+  return r;
 }
 
 uint8_t u8g_SetContrastLL(u8g_t *u8g, u8g_dev_t *dev, uint8_t contrast)
@@ -148,6 +161,8 @@ static void u8g_init_data(u8g_t *u8g)
   u8g->font_ref_descent = 0;
   u8g->font_line_spacing_factor = 64;           /* 64 = 1.0, 77 = 1.2 line spacing factor */
   u8g->line_spacing = 0;
+  
+  u8g->state_cb = u8g_state_dummy_cb;
 }
 
 uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)
