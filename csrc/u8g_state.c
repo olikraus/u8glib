@@ -64,7 +64,7 @@ void u8g_SetHardwareBackup(u8g_t *u8g, u8g_state_cb backup_cb)
 /* AVR */
 
 #if defined(__AVR__)
-#endif
+#include <avr/interrupt.h>
 static uint8_t u8g_state_avr_spi_memory[2];
 
 void u8g_backup_avr_spi(uint8_t msg)
@@ -75,9 +75,13 @@ void u8g_backup_avr_spi(uint8_t msg)
   }
   else
   {
+    uint8_t tmp = SREG;
+    cli();
     SPCR = 0;
     SPCR = u8g_state_avr_spi_memory[U8G_STATE_MSG_GET_IDX(msg)];
+    SREG = tmp;
   }
 }
 
+#endif
 
