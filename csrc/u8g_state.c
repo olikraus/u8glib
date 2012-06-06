@@ -57,6 +57,9 @@ void u8g_state_dummy_cb(uint8_t msg)
 void u8g_SetHardwareBackup(u8g_t *u8g, u8g_state_cb backup_cb)
 {
   u8g->state_cb = backup_cb;
+  /* in most cases the init message was already sent, so this will backup the */
+  /* current u8g state */
+  backup_cb(U8G_STATE_MSG_BACKUP_U8G);
 }
 
 
