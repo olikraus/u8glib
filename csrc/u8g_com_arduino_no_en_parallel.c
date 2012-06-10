@@ -165,7 +165,7 @@ uint8_t u8g_com_arduino_no_en_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_v
         2: CS2 will be used as enable line
         this will be used in the u8g_com_arduino_no_en_parallel_write() procedure
       */
-      u8g->pin_list[U8G_PI_CS_STATE] = arg;
+      u8g->pin_list[U8G_PI_CS_STATE] = arg_val;
       break;
     case U8G_COM_MSG_WRITE_BYTE:
       u8g_com_arduino_no_en_parallel_write(u8g, arg_val);
