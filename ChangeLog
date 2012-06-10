@@ -59,8 +59,9 @@ u8glib ChangeLog
   * drawLine
 2012-04-13      v1.04	Oliver Kraus <olikraus@gmail.com>
   * Adjust U8grelease: Same version number with AVR and Arduino variant
-2012-04-21	v1.05	Oliver Kraus <olikraus@gmail.com>
+2012-06-10	v1.05	Oliver Kraus <olikraus@gmail.com>
   * m2icon font
   * experimental lc7981_240x64 device
   * experimental ssd1306
   * experimental ssd1322
+  * Hardware state backup/restore procedure

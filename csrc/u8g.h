@@ -199,6 +199,9 @@ extern u8g_dev_t u8g_dev_ssd1306_128x64_hw_spi;
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi;
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_8bit;
 
+/* experimental SBN1661/SED1520 display with 122x32 */
+extern u8g_dev_t u8g_dev_sbn1661_122x32;
+
 /* ILI9325D based TFT */
 extern u8g_dev_t u8g_dev_ili9325d_320x240_8bit;
 
@@ -289,6 +292,7 @@ uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, 
 uint8_t u8g_com_arduino_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);           /* u8g_com_arduino_parallel.c */
 uint8_t u8g_com_arduino_fast_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_arduino_fast_parallel.c */
 uint8_t u8g_com_arduino_port_d_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);       /* u8g_com_arduino_port_d_wr.c */
+uint8_t u8g_com_arduino_no_en_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);	/* u8g_com_arduino_no_en_parallel.c */		
 
 
 uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_hw_spi.c */
@@ -518,6 +522,7 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 
 /* enable / clock signal */
 #define U8G_PI_EN 4
+#define U8G_PI_CS_STATE 4
 #define U8G_PI_SCK 4
 
 
