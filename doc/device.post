@@ -13,7 +13,7 @@
   * *sck*: Clock 
   * *mosi*: Serial data
   * *cs*, *cs1*, *cs2*: Chip select
-  * *a0*, *di*: Data/instruction  register select
+  * *a0*, *di*: Data/instruction register select, datasheet names usually are A0, DI or RS
   * *rw*: Read/write line
   * *en*: Read/write enable 
   * *d0* - *d7*: Parallel data
@@ -22,4 +22,5 @@
  * setContrast: For some devices, the contrast value can be assigned with the {{{setContrast}}} procedure.
  
  * Other controller, which might be compatible (this information is not verified)
-  * ST7565: SED1565, S1D15605, S6B0723
+  * {{{ST7565}}}, {{{SED1565}}}, {{{S1D15605}}}, {{{S6B0723}}}
+  * {{{SBN1661}}}, {{{SED1520}}}
