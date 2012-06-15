@@ -178,6 +178,10 @@ void u8g_SetPinOutput(uint8_t internal_pin_number)
 {
 }
 
+void u8g_SetPinInput(uint8_t internal_pin_number)
+{
+}
+
 void u8g_SetPinLevel(uint8_t internal_pin_number, uint8_t level)
 {
 }
