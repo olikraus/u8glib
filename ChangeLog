@@ -65,6 +65,10 @@ u8glib ChangeLog
   * experimental ssd1306
   * experimental ssd1322
   * Hardware state backup/restore procedure
-2012-xx-xx	v1.06	Oliver Kraus <olikraus@gmail.com>
+2012-06-15	v1.06	Oliver Kraus <olikraus@gmail.com>
   * SBN1661 (SED1520?) support
+  * SSD1306 support
+  * U8G_PROGMEM bugfix
+2012-xx-xx	v1.07	Oliver Kraus <olikraus@gmail.com>
+  
   
