@@ -65,13 +65,14 @@ extern "C" {
 /* flash memory access */
 
 #if defined(__AVR__)
-/* #define U8G_PROGMEM U8G_SECTION(".progmem.data") */
+/* U8G_PROGMEM is used by the XBM example */
+#define U8G_PROGMEM U8G_SECTION(".progmem.data")
 typedef uint8_t PROGMEM u8g_pgm_uint8_t;
 typedef uint8_t u8g_fntpgm_uint8_t;
 #define u8g_pgm_read(adr) pgm_read_byte_near(adr)
 #define U8G_PSTR(s) ((u8g_pgm_uint8_t *)PSTR(s))
 #else
-/* #define U8G_PROGMEM */
+#define U8G_PROGMEM
 #define PROGMEM
 typedef uint8_t u8g_pgm_uint8_t;
 typedef uint8_t u8g_fntpgm_uint8_t;
@@ -199,7 +200,7 @@ extern u8g_dev_t u8g_dev_ssd1306_128x64_hw_spi;
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi;
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_8bit;
 
-/* experimental SBN1661/SED1520 display with 122x32 */
+/* SBN1661/SED1520 display with 122x32 */
 extern u8g_dev_t u8g_dev_sbn1661_122x32;
 
 /* ILI9325D based TFT */
