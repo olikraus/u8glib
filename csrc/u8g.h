@@ -178,11 +178,13 @@ extern u8g_dev_t u8g_dev_pcf8812_96x65_sw_spi;
 /* NHD-2.7-12864UCY3 OLED Display with SSD1325 Controller */
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_bw_parallel;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_gr_hw_spi;
 
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_bw_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_bw_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_bw_parallel;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi;
 
@@ -307,6 +309,7 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
   U8G_COM_HW_SPI
   U8G_COM_SW_SPI
   U8G_COM_PARALLEL
+  U8G_COM_FAST_PARALLEL
 */
 #if defined(ARDUINO)
 #define U8G_COM_HW_SPI u8g_com_arduino_hw_spi_fn
@@ -334,14 +337,17 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 
 #if defined(ARDUINO)
 #define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
+#define U8G_COM_FAST_PARALLEL u8g_com_arduino_fast_parallel_fn
 #endif
 #ifndef U8G_COM_PARALLEL
 #if defined(__AVR__)
 #define U8G_COM_PARALLEL u8g_com_atmega_parallel_fn
+#define U8G_COM_FAST_PARALLEL u8g_com_atmega_parallel_fn
 #endif
 #endif
 #ifndef U8G_COM_PARALLEL
 #define U8G_COM_PARALLEL u8g_com_null_fn
+#define U8G_COM_FAST_PARALLEL u8g_com_null_fn
 #endif
 
 

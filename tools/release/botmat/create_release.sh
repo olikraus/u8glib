@@ -21,7 +21,7 @@ cp ../../../sys/botmat/HelloWorld/*.pde ./libraries/U8glib/examples/HelloWorld/.
 # sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
 
 
-chmod -R og=u libraries
+chmod -R g=u libraries
 cd libraries 
 zip -r ../u8glib_botmat_`../../print_release.sh`.zip *
 cd ..

@@ -3,9 +3,13 @@ mkdir u8glib
 mkdir u8glib/src
 mkdir u8glib/examples
 mkdir u8glib/examples/hello_world
+cp Makefile u8glib/examples/hello_world
 mkdir u8glib/examples/graphics_test
+cp Makefile u8glib/examples/graphics_test
 mkdir u8glib/examples/menu
+cp Makefile u8glib/examples/menu
 mkdir u8glib/examples/u8g_logo
+cp Makefile u8glib/examples/u8g_logo
 
 cp ../../../ChangeLog ./u8glib/.
 cp ../../../license.txt ./u8glib/.
