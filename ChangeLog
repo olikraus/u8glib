@@ -69,6 +69,6 @@ u8glib ChangeLog
   * SBN1661 (SED1520?) support
   * SSD1306 support
   * U8G_PROGMEM bugfix
-2012-xx-xx	v1.07	Oliver Kraus <olikraus@gmail.com>
-  
-  
+2012-07-04	v1.07	Oliver Kraus <olikraus@gmail.com>
+  * Added Makefiles for AVR release (issue 77)
+  * Fixed examples for Arduino Environment (issue 78)
