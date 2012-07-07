@@ -71,17 +71,17 @@
 
 
 // DOGS102 shield configuration values
-//uint8_t uiKeyPrev = 2;
-//uint8_t uiKeyNext = 4;
-//uint8_t uiKeySelect = 5;
-//uint8_t uiKeyBack = 3;
+uint8_t uiKeyPrev = 2;
+uint8_t uiKeyNext = 4;
+uint8_t uiKeySelect = 5;
+uint8_t uiKeyBack = 3;
 
 // DOGM128-Shield	 configuration values
 // DOGXL60-Shield configuration values
-uint8_t uiKeyPrev = 7;
-uint8_t uiKeyNext = 3;
-uint8_t uiKeySelect = 2;
-uint8_t uiKeyBack = 8;
+//uint8_t uiKeyPrev = 7;
+//uint8_t uiKeyNext = 3;
+//uint8_t uiKeySelect = 2;
+//uint8_t uiKeyBack = 8;
 
 uint8_t uiKeyCodeFirst = CHESS_KEY_NONE;
 uint8_t uiKeyCodeSecond = CHESS_KEY_NONE;
@@ -124,7 +124,7 @@ void uiStep(void)
 
 void setup() {
   // rotate screen, if required
-  // u8g.setRot180();
+  u8g.setRot180();
   
   uiSetup();
   chess_Init(u8g.getU8g(), 0);
