@@ -2,7 +2,8 @@
   
   u8g_com_arduino_ssd_i2c.c
 
-  com interface for arduino (atmega) and the SSDxxxx chip variant I2C protocol
+  com interface for arduino (atmega) and the SSDxxxx chip (SOLOMON) variant 
+  I2C protocol 
 
   Universal 8bit Graphics Library
   
@@ -41,12 +42,12 @@
 
   Protocol:
     SLA, Cmd/Data Selection, Arguments
-
+    The command/data register is selected by a special instruction byte, which is sent after SLA
 */
 
 #include "u8g.h"
 
-#define I2C_SLA		0x3c
+#define I2C_SLA		(0x3c*2)
 #define I2C_CMD_MODE	0x080
 #define I2C_DATA_MODE	0x040
 
@@ -66,7 +67,22 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       break;
 
     case U8G_COM_MSG_RESET:
-      u8g_com_arduino_digital_write(u8g, U8G_PI_RESET, arg_val);
+      /* reset must be ignored by I2C */
+      /*
+	reason: at the moment most init sequences are like this
+	  init a0 line
+	  exec reset
+	  chip enable
+    
+	  this sequence would break the meachanism below where A0 command sends I2C START and SLA
+          for I2C:
+	    init a0 line  --> send START & SLA
+	    exec reset  --> ignored
+	    chip enable   --> skipped
+    
+      */
+    
+      /* u8g_com_arduino_digital_write(u8g, U8G_PI_RESET, arg_val); */
       break;
       
     case U8G_COM_MSG_CHIP_SELECT:
