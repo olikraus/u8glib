@@ -1,6 +1,6 @@
 /*
   
-  u8g_arduino_st7920_spi.c
+  u8g_com_arduino_st7920_spi.c
 
   Universal 8bit Graphics Library
   

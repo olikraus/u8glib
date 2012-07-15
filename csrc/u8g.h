@@ -531,11 +531,13 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PI_EN 4
 #define U8G_PI_CS_STATE 4
 #define U8G_PI_SCK 4
+#define U8G_PI_SCL 4
 
 
-/* data pins, shared with SPI pins */
+/* data pins, shared with SPI and I2C pins */
 #define U8G_PI_D0 5
 #define U8G_PI_MOSI 5
+#define U8G_PI_SDA 5
 #define U8G_PI_D1 6
 #define U8G_PI_MISO 6
 #define U8G_PI_D2 7
@@ -807,6 +809,24 @@ void u8g_DrawCursor(u8g_t *u8g);
 /*===============================================================*/
 void st_Draw(uint8_t fps);
 void st_Step(uint8_t player_pos, uint8_t is_auto_fire, uint8_t is_fire);
+
+/*===============================================================*/
+/* u8g_com_i2c.c */
+
+/* retrun values from u8g_twi_get_error() */
+#define U8G_TWI_ERR_NONE 0x00
+/* the following values are bit masks */
+#define U8G_TWI_ERR_TIMEOUT 0x01
+#define U8G_TWI_ERR_BUS 0x02
+
+void u8g_i2c_clear_error(void) U8G_NOINLINE;
+uint8_t  u8g_i2c_get_error(void) U8G_NOINLINE;
+void u8g_i2c_init(uint8_t options) U8G_NOINLINE;
+uint8_t u8g_i2c_wait(uint8_t mask) U8G_NOINLINE;
+uint8_t u8g_i2c_start(uint8_t sla) U8G_NOINLINE;
+uint8_t u8g_i2c_send_byte(uint8_t data) U8G_NOINLINE;
+void u8g_i2c_stop(void) U8G_NOINLINE;
+
 
 /*===============================================================*/
 /* u8g_u8toa.c */
