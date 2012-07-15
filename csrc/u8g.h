@@ -188,6 +188,15 @@ extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_bw_parallel;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi;
 
+/* LY120 OLED with SSD1327 Controller (tested with Seeedstudio module) */
+extern u8g_dev_t u8g_dev_ssd1327_96x96_gr_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1327_96x96_gr_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1327_96x96_gr_i2c;
+
+extern u8g_dev_t u8g_dev_ssd1327_96x96_2x_gr_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1327_96x96_2x_gr_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1327_96x96_2x_gr_i2c;
+
 /* NHD-3.12-25664 OLED Display with SSD1322 Controller */
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_bw_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_bw_hw_spi;
@@ -296,6 +305,7 @@ uint8_t u8g_com_arduino_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, vo
 uint8_t u8g_com_arduino_fast_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_arduino_fast_parallel.c */
 uint8_t u8g_com_arduino_port_d_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);       /* u8g_com_arduino_port_d_wr.c */
 uint8_t u8g_com_arduino_no_en_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);	/* u8g_com_arduino_no_en_parallel.c */		
+uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);		/* u8g_com_arduino_ssd_i2c.c */
 
 
 uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_hw_spi.c */
@@ -310,6 +320,7 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
   U8G_COM_SW_SPI
   U8G_COM_PARALLEL
   U8G_COM_FAST_PARALLEL
+  U8G_COM_SSD_I2C
 */
 #if defined(ARDUINO)
 #define U8G_COM_HW_SPI u8g_com_arduino_hw_spi_fn
@@ -349,6 +360,14 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 #define U8G_COM_PARALLEL u8g_com_null_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_null_fn
 #endif
+
+#if defined(ARDUINO)
+#define U8G_COM_SSD_I2C u8g_com_arduino_ssd_i2c_fn
+#endif
+#ifndef U8G_COM_SSD_I2C
+#define U8G_COM_SSD_I2C u8g_com_null_fn
+#endif
+
 
 
 /*===============================================================*/
@@ -617,6 +636,7 @@ void u8g_UpdateDimension(u8g_t *u8g);
 uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev);   /* only usefull if the device only as hardcoded ports */
 uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset);
 uint8_t u8g_InitHWSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset);
+uint8_t u8g_InitI2C(u8g_t *u8g, u8g_dev_t *dev, uint8_t options);	/* use U8G_I2C_OPT_NONE as options */
 uint8_t u8g_Init8BitFixedPort(u8g_t *u8g, u8g_dev_t *dev, uint8_t en, uint8_t cs, uint8_t di, uint8_t rw, uint8_t reset);
 uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
   uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset);
@@ -813,15 +833,18 @@ void st_Step(uint8_t player_pos, uint8_t is_auto_fire, uint8_t is_fire);
 /*===============================================================*/
 /* u8g_com_i2c.c */
 
+/* options for u8g_i2c_init() */
+#define U8G_I2C_OPT_NONE 0
+
 /* retrun values from u8g_twi_get_error() */
-#define U8G_TWI_ERR_NONE 0x00
+#define U8G_I2C_ERR_NONE 0x00
 /* the following values are bit masks */
-#define U8G_TWI_ERR_TIMEOUT 0x01
-#define U8G_TWI_ERR_BUS 0x02
+#define U8G_I2C_ERR_TIMEOUT 0x01
+#define U8G_I2C_ERR_BUS 0x02
 
 void u8g_i2c_clear_error(void) U8G_NOINLINE;
 uint8_t  u8g_i2c_get_error(void) U8G_NOINLINE;
-void u8g_i2c_init(uint8_t options) U8G_NOINLINE;
+void u8g_i2c_init(uint8_t options) U8G_NOINLINE;		/* use U8G_I2C_OPT_NONE as options */
 uint8_t u8g_i2c_wait(uint8_t mask) U8G_NOINLINE;
 uint8_t u8g_i2c_start(uint8_t sla) U8G_NOINLINE;
 uint8_t u8g_i2c_send_byte(uint8_t data) U8G_NOINLINE;

@@ -51,6 +51,7 @@ class U8GLIB : public Print
     void preparePrint(void) { tx = 0; ty = 0; }
     uint8_t initSPI(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE);
     uint8_t initHWSPI(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE);
+    uint8_t initI2C(u8g_dev_t *dev, uint8_t options);
   protected:
     uint8_t init8BitFixedPort(u8g_dev_t *dev, uint8_t en, uint8_t cs, uint8_t di, uint8_t rw, uint8_t reset);
   private:
@@ -67,6 +68,8 @@ class U8GLIB : public Print
       { initSPI(dev, sck, mosi, cs, a0, reset); }
     U8GLIB(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset) 
       { initHWSPI(dev, cs, a0, reset); }
+    U8GLIB(u8g_dev_t *dev, uint8_t options) 
+      { initI2C(dev, options); }
     U8GLIB(u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
         uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset) 
       { init8Bit(dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset); }
@@ -415,6 +418,34 @@ class U8GLIB_NHD27OLED_2X_GR : public U8GLIB
       { }
     U8GLIB_NHD27OLED_2X_GR(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
       : U8GLIB(&u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi, cs, a0, reset)
+      { }
+};
+
+class U8GLIB_SSD1327_96X96_GR : public U8GLIB 
+{
+  public:
+    U8GLIB_SSD1327_96X96_GR(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1327_96x96_gr_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1327_96X96_GR(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1327_96x96_gr_hw_spi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1327_96X96_GR(uint8_t options = U8G_I2C_OPT_NONE) 
+      : U8GLIB(&u8g_dev_ssd1327_96x96_gr_i2c, options)
+      { }
+};
+
+class U8GLIB_SSD1327_96X96_2X_GR : public U8GLIB 
+{
+  public:
+    U8GLIB_SSD1327_96X96_2X_GR(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1327_96x96_2x_gr_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1327_96X96_2X_GR(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1327_96x96_2x_gr_hw_spi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1327_96X96_2X_GR(uint8_t options = U8G_I2C_OPT_NONE) 
+      : U8GLIB(&u8g_dev_ssd1327_96x96_2x_gr_i2c, options)
       { }
 };
 

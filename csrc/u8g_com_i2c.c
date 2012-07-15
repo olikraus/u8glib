@@ -37,17 +37,17 @@
 
 #include "u8g.h"
 
-static uint8_t u8g_twi_err;
+static uint8_t u8g_i2c_err;
 
 
-void u8g_twi_clear_error(void)
+void u8g_i2c_clear_error(void)
 {
-  u8g_twi_err = U8G_TWI_ERR_NONE;
+  u8g_i2c_err = U8G_I2C_ERR_NONE;
 }
 
-uint8_t  u8g_twi_get_error(void)
+uint8_t  u8g_i2c_get_error(void)
 {
-  return u8g_twi_err;
+  return u8g_i2c_err;
 }
 
 
@@ -58,7 +58,7 @@ uint8_t  u8g_twi_get_error(void)
 
 
 
-void u8g_twi_init(uint8_t options)
+void u8g_i2c_init(uint8_t options)
 {
   /*
   TWBR: bit rate register
@@ -84,17 +84,17 @@ void u8g_twi_init(uint8_t options)
 */
   TWSR = 0;
   TWBR = 72;
-  u8g_twi_clear_error();
+  u8g_i2c_clear_error();
 }
 
-uint8_t u8g_twi_wait(uint8_t mask)
+uint8_t u8g_i2c_wait(uint8_t mask)
 {
   uint16_t cnt = 1000;	/* timout value should be > 280 for 50KHz Bus and 16 Mhz CPU*/
   while( !(TWCR & mask) )
   {
       if ( cnt == 0 )
       {
-	u8g_twi_err |= U8G_TWI_ERR_TIMEOUT;
+	u8g_i2c_err |= U8G_I2C_ERR_TIMEOUT;
 	return 0; /* error */
       }
       cnt--;
@@ -103,7 +103,7 @@ uint8_t u8g_twi_wait(uint8_t mask)
 }
 
 /* sla includes all 8 bits (with r/w bit), assums master transmit */
-uint8_t u8g_twi_start(uint8_t sla)
+uint8_t u8g_i2c_start(uint8_t sla)
 {
   register uint8_t status;
   
@@ -111,7 +111,7 @@ uint8_t u8g_twi_start(uint8_t sla)
   TWCR = _BV(TWINT) |  _BV(TWSTA)  |  _BV(TWEN);
    
   /* wait */
-  if ( u8g_twi_wait(_BV(TWINT)) == 0 )
+  if ( u8g_i2c_wait(_BV(TWINT)) == 0 )
     return 0;
   
   status = TW_STATUS;
@@ -119,7 +119,7 @@ uint8_t u8g_twi_start(uint8_t sla)
   /* check status after start */  
   if ( status != TW_START && status != TW_REP_START )
   {
-    u8g_twi_err |= U8G_TWI_ERR_BUS;
+    u8g_i2c_err |= U8G_I2C_ERR_BUS;
     return 0;
   }
 
@@ -130,55 +130,55 @@ uint8_t u8g_twi_start(uint8_t sla)
   TWCR = _BV(TWINT)  |  _BV(TWEN);
 
   /* wait */
-  if ( u8g_twi_wait(_BV(TWINT)) == 0 )
+  if ( u8g_i2c_wait(_BV(TWINT)) == 0 )
     return 0;
   status = TW_STATUS;
 
   /* check status after sla */  
   if ( status!= TW_MT_SLA_ACK )
   {
-    u8g_twi_err |= U8G_TWI_ERR_BUS;
+    u8g_i2c_err |= U8G_I2C_ERR_BUS;
     return 0;
   }
 
    return 1;
 }
 
-uint8_t u8g_twi_send_byte(uint8_t data)
+uint8_t u8g_i2c_send_byte(uint8_t data)
 {
   register uint8_t status;
   TWDR = data;
   TWCR = _BV(TWINT)  |  _BV(TWEN);
-  if ( u8g_twi_wait(_BV(TWINT)) == 0 )
+  if ( u8g_i2c_wait(_BV(TWINT)) == 0 )
     return 0;
   status = TW_STATUS;
   
   if ( status != TW_MT_DATA_ACK )
   {
-    u8g_twi_err |= U8G_TWI_ERR_BUS;
+    u8g_i2c_err |= U8G_I2C_ERR_BUS;
     return 0;
   }
   
   return 1;  
 }
 
-void u8g_twi_stop(void)
+void u8g_i2c_stop(void)
 {
   /* write stop */
   TWCR = _BV(TWINT) | _BV(TWEN) | _BV(TWSTO);
 
   /* no error is checked for the stop condition */  
-  u8g_twi_wait(_BV(TWSTO));
+  u8g_i2c_wait(_BV(TWSTO));
   
 }
 
 /*
 void twi_send(uint8_t adr, uint8_t data1, uint8_t data2)
 {
-  u8g_twi_start(adr<<1);
-  u8g_twi_send_byte(data1);
-  u8g_twi_send_byte(data2);
-  u8g_twi_stop();
+  u8g_i2c_start(adr<<1);
+  u8g_i2c_send_byte(data1);
+  u8g_i2c_send_byte(data2);
+  u8g_i2c_stop();
 }
 */
 
@@ -186,26 +186,26 @@ void twi_send(uint8_t adr, uint8_t data1, uint8_t data2)
 
 /* empty interface */
 
-void u8g_twi_init(uint8_t options)
+void u8g_i2c_init(uint8_t options)
 {
-  u8g_twi_clear_error();
+  u8g_i2c_clear_error();
 }
 
-uint8_t u8g_twi_wait(uint8_t mask)
+uint8_t u8g_i2c_wait(uint8_t mask)
 {
   return 1;
 }
 
-uint8_t u8g_twi_start(uint8_t sla)
+uint8_t u8g_i2c_start(uint8_t sla)
 {
   return 1;
 }
-uint8_t u8g_twi_send_byte(uint8_t data)
+uint8_t u8g_i2c_send_byte(uint8_t data)
 {
   return 1;
 }
 
-void u8g_twi_stop(void)
+void u8g_i2c_stop(void)
 {
 }
 

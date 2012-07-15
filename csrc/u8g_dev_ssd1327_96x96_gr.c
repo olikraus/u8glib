@@ -56,31 +56,67 @@ static const uint8_t u8g_dev_ssd1327_2bit_96x96_init_seq[] PROGMEM = {
   U8G_ESC_ADR(0),               /* instruction mode */
   U8G_ESC_RST(1),               /* do reset low pulse with (1*16)+2 milliseconds */
   U8G_ESC_CS(1),                /* enable chip */
-  
-  0x0ae,                                /* display off, sleep mode */
-  0x0b3, 0x091,                    /* set display clock divide ratio/oscillator frequency (set clock as 135 frames/sec) */
-  0x0a8, 0x03f,                     /* multiplex ratio: 0x03f * 1/64 duty */
-  0x0a2, 0x04c,                     /* display offset, shift mapping ram counter */
-  0x0a1, 0x000,                     /* display start line */
-  0x0ad, 0x002,                     /* master configuration: disable embedded DC-DC, enable internal VCOMH */
-  0x0a0, 0x056,                     /* remap configuration, vertical address increment, enable nibble remap (upper nibble is left) */
-  0x086,                                /* full current range (0x084, 0x085, 0x086) */
+  0x0fd, 0x012,			/* unlock display, usually not required because the display is unlocked after reset */
+  0x0ae,             			/* display off, sleep mode */
+  0x0a8, 0x05f,			/* multiplex ratio: 0x05f * 1/64 duty */
+  0x0a1, 0x000,            		/* display start line */
+  0x0a2, 0x060,           		/* display offset, shift mapping ram counter */
+  //0x0a2, 0x04c,           		/* NHD: display offset, shift mapping ram counter */
+  0x0a0, 0x046,  			/* remap configuration, vertical address increment, enable nibble remap (upper nibble is left) */
+  //0x0a0, 0x056,  			/* NHD: remap configuration, vertical address increment, enable nibble remap (upper nibble is left) */
+  0x0ab, 0x001,			/* Enable internal VDD regulator (RESET) */
+  0x081, 0x053,          		/* contrast, brightness, 0..128, Newhaven: 0x040, LY120 0x053, 0x070 seems also ok */
+  0x0b1, 0x051,          		/* phase length */
+  0x0b3, 0x001,           		/* set display clock divide ratio/oscillator frequency */
+  0x0b9,					/* use linear lookup table */
+#if 0
   0x0b8,                                /* set gray scale table */
       //0x01, 0x011, 0x022, 0x032, 0x043, 0x054, 0x065, 0x076,
       0x01, 0x011, 0x022, 0x032, 0x043, 0x054, 0x077, 0x077,            // 4L mode uses 0, 2, 4, 7
-  0x081, 0x070,                    /* contrast, brightness, 0..128, Newhaven: 0x040 */
+#endif  
+  0x0bc, 0x008,                    	/* pre-charge voltage level */
+  0x0be, 0x007,                     	/* VCOMH voltage */
+  0x0b6, 0x001,			/* second precharge */
+  0x0d5, 0x062,			/* enable second precharge, internal vsl (bit0 = 0) */
+  
+#if 0
+  // the following commands are not used by the SeeedGrayOLED sequence */
+  0x0ad, 0x002,                     /* master configuration: disable embedded DC-DC, enable internal VCOMH */
+  0x086,                                /* full current range (0x084, 0x085, 0x086) */
   0x0b2, 0x051,                    /* frame frequency (row period) */
-  0x0b1, 0x055,                    /* phase length */
-  0x0bc, 0x010,                    /* pre-charge voltage level */
   0x0b4, 0x002,                    /* set pre-charge compensation level (not documented in the SDD1325 datasheet, but used in the NHD init seq.) */
   0x0b0, 0x028,                    /* enable pre-charge compensation (not documented in the SDD1325 datasheet, but used in the NHD init seq.) */
-  0x0be, 0x01c,                     /* VCOMH voltage */
   0x0bf, 0x002|0x00d,           /* VSL voltage level (not documented in the SDD1325 datasheet, but used in the NHD init seq.) */
+#endif 
+
+  0x0a5,                                 /* all pixel on */
+  //0x02e,					/* no scroll (according to SeeedGrayOLED sequence) */
+  0x0af,                                  /* display on */
+  U8G_ESC_DLY(100),             /* delay 100 ms */
+  U8G_ESC_DLY(100),             /* delay 100 ms */
+  0x0a4,                                 /* normal display mode */
+  U8G_ESC_DLY(100),             /* delay 100 ms */
+  U8G_ESC_DLY(100),             /* delay 100 ms */
   0x0a5,                                 /* all pixel on */
   0x0af,                                  /* display on */
   U8G_ESC_DLY(100),             /* delay 100 ms */
   U8G_ESC_DLY(100),             /* delay 100 ms */
   0x0a4,                                 /* normal display mode */
+  
+  0x015,       /* column address... */
+  0x008,       /* start at column 8, special for the LY120 ??? */
+  0x037,       /* end at column 55, note: there are two pixel in one column */
+  
+  0x075,       /* row address... */
+  0x008,       
+  0x05f,       
+  
+  U8G_ESC_ADR(1),               /* data mode */
+  0x000f, 0x000f, 0x0000, 0x0000, 0x000f,0x000f,0x0000,0x0000,
+  0x000f, 0x000f, 0x0000, 0x0000, 0x000f,0x000f,0x0000,0x0000,
+  0x000f, 0x000f, 0x0000, 0x0000, 0x000f,0x000f,0x0000,0x0000,
+  0x000f, 0x000f, 0x0000, 0x0000, 0x000f,0x000f,0x0000,0x0000,
+  
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
 };
@@ -89,8 +125,8 @@ static const uint8_t u8g_dev_ssd1327_2bit_96x96_prepare_page_seq[] PROGMEM = {
   U8G_ESC_ADR(0),               /* instruction mode */
   U8G_ESC_CS(1),                /* enable chip */
   0x015,       /* column address... */
-  0x000,       /* start at column 0 */
-  0x03f,       /* end at column 63 (which is y == 127), because there are two pixel in one column */
+  0x008,       /* start at column 8, special for the LY120 ??? */
+  0x037,       /* end at column 55, note: there are two pixel in one column */
   0x075,       /* row address... */
   U8G_ESC_END                /* end of sequence */
 };
@@ -132,6 +168,11 @@ static void u8g_dev_ssd1327_2bit_2x_prepare_page(u8g_t *u8g, u8g_dev_t *dev, uin
 static  void u8g_dev_ssd1327_2bit_write_4_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
 {
   uint8_t d, tmp, cnt;
+  // u8g_WriteByte(u8g, dev, 0x0ff);
+  // u8g_WriteByte(u8g, dev, 0x0ff);
+  // u8g_WriteByte(u8g, dev, 0x0ff);
+  // u8g_WriteByte(u8g, dev, 0);
+  // return;
   cnt = 4;
   do    
   {
@@ -143,6 +184,7 @@ static  void u8g_dev_ssd1327_2bit_write_4_pixel(u8g_t *u8g, u8g_dev_t *dev, uint
     d |= tmp;
     d <<= 2;
     u8g_WriteByte(u8g, dev, d);
+    //u8g_WriteByte(u8g, dev, 0x0f0);
     left >>= 2;
     right >>= 2;
     cnt--;
@@ -187,7 +229,7 @@ static void u8g_dev_ssd1327_2bit_2x_write_buffer(u8g_t *u8g, u8g_dev_t *dev, uin
   } while( cnt > 0 );
 }
 
-uint8_t u8g_dev_ssd1327_nhd27oled_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_ssd1327_96x96_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
@@ -215,7 +257,7 @@ uint8_t u8g_dev_ssd1327_nhd27oled_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
   return u8g_dev_pb8v2_base_fn(u8g, dev, msg, arg);
 }
 
-uint8_t u8g_dev_ssd1327_nhd27oled_2x_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_ssd1327_96x96_2x_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
@@ -245,11 +287,13 @@ uint8_t u8g_dev_ssd1327_nhd27oled_2x_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
   return u8g_dev_pb16v2_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_ssd1327_nhd27oled_gr_sw_spi , WIDTH, HEIGHT, 4, u8g_dev_ssd1327_nhd27oled_gr_fn, U8G_COM_SW_SPI);
-U8G_PB_DEV(u8g_dev_ssd1327_nhd27oled_gr_hw_spi , WIDTH, HEIGHT, 4, u8g_dev_ssd1327_nhd27oled_gr_fn, U8G_COM_HW_SPI);
+U8G_PB_DEV(u8g_dev_ssd1327_96x96_gr_sw_spi , WIDTH, HEIGHT, 4, u8g_dev_ssd1327_96x96_gr_fn, U8G_COM_SW_SPI);
+U8G_PB_DEV(u8g_dev_ssd1327_96x96_gr_hw_spi , WIDTH, HEIGHT, 4, u8g_dev_ssd1327_96x96_gr_fn, U8G_COM_HW_SPI);
+U8G_PB_DEV(u8g_dev_ssd1327_96x96_gr_i2c , WIDTH, HEIGHT, 4, u8g_dev_ssd1327_96x96_gr_fn, U8G_COM_SSD_I2C);
 
-uint8_t u8g_dev_ssd1327_nhd27oled_2x_buf[WIDTH*2] U8G_NOCOMMON ; 
-u8g_pb_t u8g_dev_ssd1327_nhd27oled_2x_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_ssd1327_nhd27oled_2x_buf}; 
-u8g_dev_t u8g_dev_ssd1327_nhd27oled_2x_gr_sw_spi = { u8g_dev_ssd1327_nhd27oled_2x_gr_fn, &u8g_dev_ssd1327_nhd27oled_2x_pb, U8G_COM_SW_SPI };
-u8g_dev_t u8g_dev_ssd1327_nhd27oled_2x_gr_hw_spi = { u8g_dev_ssd1327_nhd27oled_2x_gr_fn, &u8g_dev_ssd1327_nhd27oled_2x_pb, U8G_COM_HW_SPI };
+uint8_t u8g_dev_ssd1327_96x96_2x_buf[WIDTH*2] U8G_NOCOMMON ; 
+u8g_pb_t u8g_dev_ssd1327_96x96_2x_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_ssd1327_96x96_2x_buf}; 
+u8g_dev_t u8g_dev_ssd1327_96x96_2x_gr_sw_spi = { u8g_dev_ssd1327_96x96_2x_gr_fn, &u8g_dev_ssd1327_96x96_2x_pb, U8G_COM_SW_SPI };
+u8g_dev_t u8g_dev_ssd1327_96x96_2x_gr_hw_spi = { u8g_dev_ssd1327_96x96_2x_gr_fn, &u8g_dev_ssd1327_96x96_2x_pb, U8G_COM_HW_SPI };
+u8g_dev_t u8g_dev_ssd1327_96x96_2x_gr_i2c = { u8g_dev_ssd1327_96x96_2x_gr_fn, &u8g_dev_ssd1327_96x96_2x_pb, U8G_COM_SSD_I2C };
 
