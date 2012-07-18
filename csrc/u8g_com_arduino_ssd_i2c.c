@@ -58,6 +58,29 @@
   2: data mode active
 */
 static uint8_t i2c_state = 0;
+/* value from the A0 message */
+static uing8_t i2c_a0 = 0;
+
+uint8_t u8g_com_arduino_ssd_start_sequence(uint8_t a0)
+{
+  /* setup bus, might be a repeated start */
+  if ( u8g_i2c_start(I2C_SLA) == 0 )
+    return 0;
+  if ( a0 == 0 )
+  {
+    // i2c_state = 1;
+    
+    if ( u8g_i2c_send_byte(I2C_CMD_MODE) == 0 )
+      return 0;
+  }
+  else
+  {
+    // i2c_state = 2;
+    if ( u8g_i2c_send_byte(I2C_DATA_MODE) == 0 )
+      return 0;
+  }
+  return 1;
+}
 
 uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
@@ -95,7 +118,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       if ( arg_val == 0 )
       {
         /* disable chip, send stop condition */
-	u8g_i2c_stop();
+	//u8g_i2c_stop();
 	i2c_state = 0;
       }
       else
@@ -105,10 +128,16 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       break;
 
     case U8G_COM_MSG_WRITE_BYTE:
-      u8g_i2c_send_byte(arg_val);
+      if ( u8g_com_arduino_ssd_start_sequence(i2c_a0) == 0 )
+	return 0;
+      if ( u8g_i2c_send_byte(arg_val) == 0 )
+	return 0;
+      u8g_i2c_stop();
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
+      if ( u8g_com_arduino_ssd_start_sequence(i2c_a0) == 0 )
+	return 0;
       {
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
@@ -118,9 +147,12 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
           arg_val--;
         }
       }
+      u8g_i2c_stop();
       break;
 
     case U8G_COM_MSG_WRITE_SEQ_P:
+      if ( u8g_com_arduino_ssd_start_sequence(i2c_a0) == 0 )
+	return 0;
       {
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
@@ -131,16 +163,24 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
           arg_val--;
         }
       }
+      u8g_i2c_stop();
       break;
       
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
+      i2c_a0 = arg_val;
+    
+#ifdef OLD_CODE    
       if ( i2c_state != 0 )
       {
 	u8g_i2c_stop();
 	i2c_state = 0;
       }
+
+      if ( u8g_com_arduino_ssd_start_sequence(arg_val) == 0 )
+	return 0;
     
       /* setup bus, might be a repeated start */
+      /*
       if ( u8g_i2c_start(I2C_SLA) == 0 )
 	return 0;
       if ( arg_val == 0 )
@@ -156,6 +196,8 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 	if ( u8g_i2c_send_byte(I2C_DATA_MODE) == 0 )
 	  return 0;
       }
+      */
+#endif
       break;
   }
   return 1;

@@ -158,11 +158,12 @@ void setup(void) {
     u8g.setColorIndex(3);         // max intensity
   else if ( u8g.getMode() == U8G_MODE_BW )
     u8g.setColorIndex(1);         // pixel on
+  
+  pinMode(13, OUTPUT);           
+  digitalWrite(13, HIGH);  
 }
 
 void loop(void) {
-  pinMode(13, OUTPUT);           
-  digitalWrite(13, HIGH);  
   
   // picture loop  
   u8g.firstPage();  
@@ -175,11 +176,23 @@ void loop(void) {
   if ( draw_state >= 6*8 )
     draw_state = 0;
 
-  pinMode(13, OUTPUT);           
-  digitalWrite(13, LOW);  
   
   // rebuild the picture after some delay
   delay(150);
+  
+  {
+    uint8_t i;
+    for ( i = 0; i < u8g_i2c_get_error()+1; i++ )
+    {
+      pinMode(13, OUTPUT);           
+      digitalWrite(13, LOW);  
+      delay(100);
+      pinMode(13, OUTPUT);           
+      digitalWrite(13, HIGH);  
+      delay(300);
+      
+    }
+  }
 }
 
 
