@@ -148,6 +148,13 @@ void draw(void) {
 }
 
 void setup(void) {
+  pinMode(A4, INPUT);           // set pin to input
+  digitalWrite(A4, HIGH);       // turn on pullup resistors  
+  pinMode(A4, OUTPUT);           // set pin to output
+  pinMode(A5, INPUT);           // set pin to input
+  digitalWrite(A5, HIGH);       // turn on pullup resistors  
+  pinMode(A5, OUTPUT);           // set pin to output
+
   // flip screen, if required
   u8g.setRot180();
 
@@ -165,6 +172,8 @@ void setup(void) {
 
 void loop(void) {
   
+  u8g_i2c_clear_error();
+  
   // picture loop  
   u8g.firstPage();  
   do {
@@ -180,18 +189,35 @@ void loop(void) {
   // rebuild the picture after some delay
   delay(150);
   
+  if ( u8g_i2c_get_error() > 0 )
   {
     uint8_t i;
-    for ( i = 0; i < u8g_i2c_get_error()+1; i++ )
+    for ( i = 0; i < u8g_i2c_get_error(); i++ )
     {
       pinMode(13, OUTPUT);           
       digitalWrite(13, LOW);  
       delay(100);
       pinMode(13, OUTPUT);           
       digitalWrite(13, HIGH);  
-      delay(300);
-      
+      delay(300);      
     }
+
+    delay(1000);
+
+    for ( i = 0; i < u8g_i2c_get_err_pos(); i++ )
+    {
+      pinMode(13, OUTPUT);           
+      digitalWrite(13, LOW);  
+      delay(100);
+      pinMode(13, OUTPUT);           
+      digitalWrite(13, HIGH);  
+      delay(300);      
+    }
+
+    delay(1000);
+    
+    //u8g_i2c_get_err_pos()
+    
   }
 }
 

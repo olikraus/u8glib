@@ -59,7 +59,7 @@
 */
 static uint8_t i2c_state = 0;
 /* value from the A0 message */
-static uing8_t i2c_a0 = 0;
+static uint8_t i2c_a0 = 0;
 
 uint8_t u8g_com_arduino_ssd_start_sequence(uint8_t a0)
 {
@@ -90,6 +90,8 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       //u8g_com_arduino_digital_write(u8g, U8G_PI_SCL, HIGH);
       //u8g_com_arduino_digital_write(u8g, U8G_PI_SDA, HIGH);
       //u8g->pin_list[U8G_PI_A0_STATE] = 0;       /* inital RS state: unknown mode */
+      u8g_i2c_init(u8g->pin_list[U8G_PI_I2C_OPTION]);
+
       break;
     
     case U8G_COM_MSG_STOP:
@@ -129,21 +131,21 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 
     case U8G_COM_MSG_WRITE_BYTE:
       if ( u8g_com_arduino_ssd_start_sequence(i2c_a0) == 0 )
-	return 0;
+	return u8g_i2c_stop(), 0;
       if ( u8g_i2c_send_byte(arg_val) == 0 )
-	return 0;
+	return u8g_i2c_stop(), 0;
       u8g_i2c_stop();
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
       if ( u8g_com_arduino_ssd_start_sequence(i2c_a0) == 0 )
-	return 0;
+	return u8g_i2c_stop(), 0;
       {
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
 	  if ( u8g_i2c_send_byte(*ptr++) == 0 )
-	    return 0;
+	    return u8g_i2c_stop(), 0;
           arg_val--;
         }
       }
@@ -152,7 +154,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 
     case U8G_COM_MSG_WRITE_SEQ_P:
       if ( u8g_com_arduino_ssd_start_sequence(i2c_a0) == 0 )
-	return 0;
+	return u8g_i2c_stop(), 0;
       {
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )

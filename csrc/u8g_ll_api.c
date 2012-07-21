@@ -226,6 +226,8 @@ uint8_t u8g_InitI2C(u8g_t *u8g, u8g_dev_t *dev, uint8_t options)
   u8g_init_data(u8g);
   u8g->dev = dev;
     
+  u8g->pin_list[U8G_PI_I2C_OPTION] = options;
+  
   /* call and init low level driver and com device */
   if ( u8g_InitLL(u8g, u8g->dev) == 0 )
     return 0;

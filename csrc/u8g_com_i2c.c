@@ -37,17 +37,38 @@
 
 #include "u8g.h"
 
-static uint8_t u8g_i2c_err;
+static uint8_t u8g_i2c_err_code;
+
+/*
+  position values
+    1: start condition
+    2: sla transfer
+*/
+static uint8_t u8g_i2c_err_pos;
 
 
 void u8g_i2c_clear_error(void)
 {
-  u8g_i2c_err = U8G_I2C_ERR_NONE;
+  u8g_i2c_err_code = U8G_I2C_ERR_NONE;
+  u8g_i2c_err_pos = 0;
 }
 
 uint8_t  u8g_i2c_get_error(void)
 {
-  return u8g_i2c_err;
+  return u8g_i2c_err_code;
+}
+
+uint8_t u8g_i2c_get_err_pos(void)
+{
+  return u8g_i2c_err_pos;
+}
+
+static void u8g_i2c_set_error(uint8_t code, uint8_t pos)
+{
+  if ( u8g_i2c_err_code > 0 )
+    return;
+  u8g_i2c_err_code |= code;
+  u8g_i2c_err_pos = pos;
 }
 
 
@@ -87,14 +108,14 @@ void u8g_i2c_init(uint8_t options)
   u8g_i2c_clear_error();
 }
 
-uint8_t u8g_i2c_wait(uint8_t mask)
+uint8_t u8g_i2c_wait(uint8_t mask, uint8_t pos)
 {
-  uint16_t cnt = 1000;	/* timout value should be > 280 for 50KHz Bus and 16 Mhz CPU*/
+  volatile uint16_t cnt = 2000;	/* timout value should be > 280 for 50KHz Bus and 16 Mhz CPU, however the start condition might need longer */
   while( !(TWCR & mask) )
   {
       if ( cnt == 0 )
       {
-	u8g_i2c_err |= U8G_I2C_ERR_TIMEOUT;
+	u8g_i2c_set_error(U8G_I2C_ERR_TIMEOUT, pos);
 	return 0; /* error */
       }
       cnt--;
@@ -111,7 +132,7 @@ uint8_t u8g_i2c_start(uint8_t sla)
   TWCR = _BV(TWINT) |  _BV(TWSTA)  |  _BV(TWEN);
    
   /* wait */
-  if ( u8g_i2c_wait(_BV(TWINT)) == 0 )
+  if ( u8g_i2c_wait(_BV(TWINT), 1) == 0 )
     return 0;
   
   status = TW_STATUS;
@@ -119,7 +140,7 @@ uint8_t u8g_i2c_start(uint8_t sla)
   /* check status after start */  
   if ( status != TW_START && status != TW_REP_START )
   {
-    u8g_i2c_err |= U8G_I2C_ERR_BUS;
+    u8g_i2c_set_error(U8G_I2C_ERR_BUS, 1);
     return 0;
   }
 
@@ -130,14 +151,14 @@ uint8_t u8g_i2c_start(uint8_t sla)
   TWCR = _BV(TWINT)  |  _BV(TWEN);
 
   /* wait */
-  if ( u8g_i2c_wait(_BV(TWINT)) == 0 )
+  if ( u8g_i2c_wait(_BV(TWINT), 2) == 0 )
     return 0;
   status = TW_STATUS;
 
   /* check status after sla */  
-  if ( status!= TW_MT_SLA_ACK )
+  if ( status != TW_MT_SLA_ACK )
   {
-    u8g_i2c_err |= U8G_I2C_ERR_BUS;
+    u8g_i2c_set_error(U8G_I2C_ERR_BUS, 2);
     return 0;
   }
 
@@ -149,13 +170,13 @@ uint8_t u8g_i2c_send_byte(uint8_t data)
   register uint8_t status;
   TWDR = data;
   TWCR = _BV(TWINT)  |  _BV(TWEN);
-  if ( u8g_i2c_wait(_BV(TWINT)) == 0 )
+  if ( u8g_i2c_wait(_BV(TWINT), 3) == 0 )
     return 0;
   status = TW_STATUS;
   
   if ( status != TW_MT_DATA_ACK )
   {
-    u8g_i2c_err |= U8G_I2C_ERR_BUS;
+    u8g_i2c_set_error(U8G_I2C_ERR_BUS, 3);
     return 0;
   }
   
@@ -168,7 +189,7 @@ void u8g_i2c_stop(void)
   TWCR = _BV(TWINT) | _BV(TWEN) | _BV(TWSTO);
 
   /* no error is checked for the stop condition */  
-  u8g_i2c_wait(_BV(TWSTO));
+  u8g_i2c_wait(_BV(TWSTO), 4);
   
 }
 

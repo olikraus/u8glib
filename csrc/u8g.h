@@ -564,6 +564,7 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PI_D3 8
 #define U8G_PI_D4 9
 #define U8G_PI_D5 10
+#define U8G_PI_I2C_OPTION 11
 #define U8G_PI_D6 11
 #define U8G_PI_D7 12
 
@@ -844,8 +845,9 @@ void st_Step(uint8_t player_pos, uint8_t is_auto_fire, uint8_t is_fire);
 
 void u8g_i2c_clear_error(void) U8G_NOINLINE;
 uint8_t  u8g_i2c_get_error(void) U8G_NOINLINE;
+uint8_t u8g_i2c_get_err_pos(void) U8G_NOINLINE;
 void u8g_i2c_init(uint8_t options) U8G_NOINLINE;		/* use U8G_I2C_OPT_NONE as options */
-uint8_t u8g_i2c_wait(uint8_t mask) U8G_NOINLINE;
+uint8_t u8g_i2c_wait(uint8_t mask, uint8_t pos) U8G_NOINLINE;
 uint8_t u8g_i2c_start(uint8_t sla) U8G_NOINLINE;
 uint8_t u8g_i2c_send_byte(uint8_t data) U8G_NOINLINE;
 void u8g_i2c_stop(void) U8G_NOINLINE;
