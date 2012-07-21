@@ -7,7 +7,7 @@
 
   Universal 8bit Graphics Library
   
-  Copyright (c) 2011, olikraus@gmail.com
+  Copyright (c) 2012, olikraus@gmail.com
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
@@ -55,42 +55,28 @@
 #define I2C_DATA_MODE	0x040
 
 
-/*
-  0: stop / init
-  1: command mode active
-  2: data mode active
-*/
-static uint8_t i2c_state = 0;
-/* value from the A0 message */
-static uint8_t i2c_use_a0 = 0;
-
-static uint8_t i2c_set_a0 = 1;
-
 uint8_t u8g_com_arduino_ssd_start_sequence(u8g_t *u8g)
 {
   /* are we requested to set the a0 state? */
-  if ( i2c_set_a0 == 0 )
+  if ( u8g->pin_list[U8G_PI_SET_A0] == 0 )
     return 1;	
   
   /* setup bus, might be a repeated start */
   if ( u8g_i2c_start(I2C_SLA) == 0 )
     return 0;
-  if ( i2c_use_a0 == 0 )
+  if ( u8g->pin_list[U8G_PI_A0_STATE] == 0 )
   {
-    // i2c_state = 1;
-    
     if ( u8g_i2c_send_byte(I2C_CMD_MODE) == 0 )
       return 0;
   }
   else
   {
-    // i2c_state = 2;
     if ( u8g_i2c_send_byte(I2C_DATA_MODE) == 0 )
       return 0;
   }
   
   
-  i2c_set_a0 = 0;
+  u8g->pin_list[U8G_PI_SET_A0] = 0;
   return 1;
 }
 
@@ -102,6 +88,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       //u8g_com_arduino_digital_write(u8g, U8G_PI_SCL, HIGH);
       //u8g_com_arduino_digital_write(u8g, U8G_PI_SDA, HIGH);
       //u8g->pin_list[U8G_PI_A0_STATE] = 0;       /* inital RS state: unknown mode */
+    
       u8g_i2c_init(u8g->pin_list[U8G_PI_I2C_OPTION]);
 
       break;
@@ -129,14 +116,13 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       break;
       
     case U8G_COM_MSG_CHIP_SELECT:
-      i2c_use_a0 = 0;
-      i2c_set_a0 = 1;		/* force a0 to set again, also forces start condition */
+      u8g->pin_list[U8G_PI_A0_STATE] = 0;
+      u8g->pin_list[U8G_PI_SET_A0] = 1;		/* force a0 to set again, also forces start condition */
       if ( arg_val == 0 )
       {
         /* disable chip, send stop condition */
 	u8g_i2c_stop();
-	i2c_state = 0;
-      }
+     }
       else
       {
         /* enable, do nothing: any byte writing will trigger the i2c start */
@@ -144,7 +130,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       break;
 
     case U8G_COM_MSG_WRITE_BYTE:
-      //i2c_set_a0 = 1;
+      //u8g->pin_list[U8G_PI_SET_A0] = 1;
       if ( u8g_com_arduino_ssd_start_sequence(u8g) == 0 )
 	return u8g_i2c_stop(), 0;
       if ( u8g_i2c_send_byte(arg_val) == 0 )
@@ -153,7 +139,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
-      //i2c_set_a0 = 1;
+      //u8g->pin_list[U8G_PI_SET_A0] = 1;
       if ( u8g_com_arduino_ssd_start_sequence(u8g) == 0 )
 	return u8g_i2c_stop(), 0;
       {
@@ -169,7 +155,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       break;
 
     case U8G_COM_MSG_WRITE_SEQ_P:
-      //i2c_set_a0 = 1;
+      //u8g->pin_list[U8G_PI_SET_A0] = 1;
       if ( u8g_com_arduino_ssd_start_sequence(u8g) == 0 )
 	return u8g_i2c_stop(), 0;
       {
@@ -186,8 +172,8 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
       break;
       
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      i2c_use_a0 = arg_val;
-      i2c_set_a0 = 1;		/* force a0 to set again */
+      u8g->pin_list[U8G_PI_A0_STATE] = arg_val;
+      u8g->pin_list[U8G_PI_SET_A0] = 1;		/* force a0 to set again */
     
 #ifdef OLD_CODE    
       if ( i2c_state != 0 )

@@ -66,7 +66,8 @@
 //U8GLIB_SBN1661_122X32 u8g(8,9,10,11,4,5,6,7,14,15, 17, U8G_PIN_NONE, 16); ; // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 cs1=14, cs2=15,di=17,rw=16,reset = 16
 //U8GLIB_SSD1306_128X64 u8g(13, 11, 10, 9);             // SW SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_SSD1306_128X64 u8g(10, 9);             // HW SPI Com: CS = 10, A0 = 9 (Hardware Pins are  SCK = 13 and MOSI = 11)
-U8GLIB_SSD1327_96X96_GR u8g(U8G_I2C_OPT_NONE);             // I2C
+//U8GLIB_SSD1327_96X96_GR u8g(U8G_I2C_OPT_NONE);             // I2C
+//U8GLIB_SSD1327_96X96_2X_GR u8g(U8G_I2C_OPT_NONE);             // I2C
 
 void u8g_prepare(void) {
   u8g.setFont(u8g_font_6x10);
@@ -148,12 +149,6 @@ void draw(void) {
 }
 
 void setup(void) {
-  pinMode(A4, INPUT);           // set pin to input
-  digitalWrite(A4, HIGH);       // turn on pullup resistors  
-  pinMode(A4, OUTPUT);           // set pin to output
-  pinMode(A5, INPUT);           // set pin to input
-  digitalWrite(A5, HIGH);       // turn on pullup resistors  
-  pinMode(A5, OUTPUT);           // set pin to output
 
   // flip screen, if required
   u8g.setRot180();
@@ -172,8 +167,6 @@ void setup(void) {
 
 void loop(void) {
   
-  u8g_i2c_clear_error();
-  
   // picture loop  
   u8g.firstPage();  
   do {
@@ -184,41 +177,10 @@ void loop(void) {
   draw_state++;
   if ( draw_state >= 6*8 )
     draw_state = 0;
-
   
   // rebuild the picture after some delay
   delay(150);
   
-  if ( u8g_i2c_get_error() > 0 )
-  {
-    uint8_t i;
-    for ( i = 0; i < u8g_i2c_get_error(); i++ )
-    {
-      pinMode(13, OUTPUT);           
-      digitalWrite(13, LOW);  
-      delay(100);
-      pinMode(13, OUTPUT);           
-      digitalWrite(13, HIGH);  
-      delay(300);      
-    }
-
-    delay(1000);
-
-    for ( i = 0; i < u8g_i2c_get_err_pos(); i++ )
-    {
-      pinMode(13, OUTPUT);           
-      digitalWrite(13, LOW);  
-      delay(100);
-      pinMode(13, OUTPUT);           
-      digitalWrite(13, HIGH);  
-      delay(300);      
-    }
-
-    delay(1000);
-    
-    //u8g_i2c_get_err_pos()
-    
-  }
 }
 
 

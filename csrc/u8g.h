@@ -140,6 +140,10 @@ extern u8g_dev_t u8g_dev_st7565_lm6063_hw_spi;
 /* Display: Topway LM6059 128x64 (Adafruit) */
 extern u8g_dev_t u8g_dev_st7565_lm6059_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_lm6059_hw_spi;
+/* Display: Newhaven NHD-C12864 */
+extern u8g_dev_t u8g_dev_st7565_nhd_c12864_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_nhd_c12864_hw_spi;
+
 
 /* dfrobot 128x64 Graphic LCD (SKU:FIT0021) */
 extern u8g_dev_t u8g_dev_st7920_128x64_sw_spi;
@@ -562,6 +566,7 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PI_D2 7
 #define U8G_PI_A0_STATE 7
 #define U8G_PI_D3 8
+#define U8G_PI_SET_A0 8
 #define U8G_PI_D4 9
 #define U8G_PI_D5 10
 #define U8G_PI_I2C_OPTION 11
