@@ -44,8 +44,9 @@
 
 #include "u8g.h"
 
-#define WIDTH 128
-#define HEIGHT 64
+#define WIDTH 96
+#define HEIGHT 96
+#define XOFFSET 8
 
 /*  
   http://www.seeedstudio.com/wiki/index.php?title=Twig_-_OLED_96x96
@@ -125,7 +126,7 @@ static const uint8_t u8g_dev_ssd1327_2bit_96x96_prepare_page_seq[] PROGMEM = {
   U8G_ESC_ADR(0),               /* instruction mode */
   U8G_ESC_CS(1),                /* enable chip */
   0x015,       /* column address... */
-  0x008,       /* start at column 8, special for the LY120 ??? */
+  XOFFSET,       /* start at column 8, special for the LY120 ??? */
   0x037,       /* end at column 55, note: there are two pixel in one column */
   0x075,       /* row address... */
   U8G_ESC_END                /* end of sequence */
@@ -155,7 +156,6 @@ static void u8g_dev_ssd1327_2bit_2x_prepare_page(u8g_t *u8g, u8g_dev_t *dev, uin
   page <<= 1;
   page += is_odd;
   
-  
   page <<= 2;
   u8g_WriteByte(u8g, dev, page);       /* start at the selected page */
   page += 3;
@@ -168,14 +168,16 @@ static void u8g_dev_ssd1327_2bit_2x_prepare_page(u8g_t *u8g, u8g_dev_t *dev, uin
 static  void u8g_dev_ssd1327_2bit_write_4_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
 {
   uint8_t d, tmp, cnt;
-  // u8g_WriteByte(u8g, dev, 0x0ff);
-  // u8g_WriteByte(u8g, dev, 0x0ff);
-  // u8g_WriteByte(u8g, dev, 0x0ff);
-  // u8g_WriteByte(u8g, dev, 0);
-  // return;
-  cnt = 4;
-  do    
+  static uint8_t buf[4];
+  buf[0] = 0;
+  buf[1] = 0;
+  buf[2] = 0;
+  buf[3] = 0;
+  cnt = 0;
+  do 
   {
+    if ( left == 0 && right == 0 )
+      break;
     d = left;
     d &= 3;
     d <<= 4;    
@@ -183,12 +185,12 @@ static  void u8g_dev_ssd1327_2bit_write_4_pixel(u8g_t *u8g, u8g_dev_t *dev, uint
     tmp &= 3;
     d |= tmp;
     d <<= 2;
-    u8g_WriteByte(u8g, dev, d);
-    //u8g_WriteByte(u8g, dev, 0x0f0);
+    buf[cnt] = d;
     left >>= 2;
     right >>= 2;
-    cnt--;
-  }while ( cnt > 0 );
+    cnt++;
+  }while ( cnt < 4 );
+  u8g_WriteSequence(u8g, dev, 4, buf);
 }
 
 static void u8g_dev_ssd1327_2bit_write_buffer(u8g_t *u8g, u8g_dev_t *dev)
