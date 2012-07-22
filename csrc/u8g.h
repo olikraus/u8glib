@@ -368,6 +368,13 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 #if defined(ARDUINO)
 #define U8G_COM_SSD_I2C u8g_com_arduino_ssd_i2c_fn
 #endif
+
+#ifndef U8G_COM_SSD_I2C
+#if defined(__AVR__)
+/* AVR variant can use the arduino version at the moment */
+#define U8G_COM_SSD_I2C u8g_com_arduino_ssd_i2c_fn
+#endif
+#endif
 #ifndef U8G_COM_SSD_I2C
 #define U8G_COM_SSD_I2C u8g_com_null_fn
 #endif
