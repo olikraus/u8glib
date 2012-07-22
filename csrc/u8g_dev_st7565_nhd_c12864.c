@@ -58,7 +58,7 @@ const uint8_t u8g_dev_st7565_nhd_c12864_init_seq[] PROGMEM = {
   0x000,		                /* 4x */
   0x027,		                /* set V0 voltage resistor ratio to large */
   0x081,		                /* set contrast */
-  0x018,		                /* contrast value, EA default: 0x016 */
+  0x008,		                /* contrast: 0x008 is a good value for NHD C12864 */
   0x0ac,		                /* indicator */
   0x000,		                /* disable */
   0x0af,		                /* display on */
@@ -76,7 +76,7 @@ static const uint8_t u8g_dev_st7565_nhd_c12864_data_start[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
   0x010,		/* set upper 4 bit of the col adr to 0 */
-  0x000,		/* set lower 4 bit of the col adr to 0 */  
+  0x004,		/* set lower 4 bit of the col adr to 4 (NHD C12864) */  
   U8G_ESC_END                /* end of sequence */
 };
 
