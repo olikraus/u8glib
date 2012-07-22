@@ -45,7 +45,7 @@
 const uint8_t u8g_dev_st7565_nhd_c12864_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
-  U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
+  U8G_ESC_RST(10),           /* do reset low pulse with (10*16)+2 milliseconds */
   U8G_ESC_CS(1),             /* enable chip */
   
   0x040,		                /* set display start line */
