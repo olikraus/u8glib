@@ -1,4 +1,8 @@
 
+/*
+  partial update of the screen by jumping out of the picture loop
+*/
+
 #include "U8glib.h"
 
 U8GLIB_ST7920_128X64 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
