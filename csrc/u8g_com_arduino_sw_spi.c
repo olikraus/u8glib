@@ -48,6 +48,8 @@
 #include "wiring_private.h"
 #endif
 
+#if defined(__AVR__)
+
 uint8_t u8g_bitData, u8g_bitNotData;
 uint8_t u8g_bitClock, u8g_bitNotClock;
 volatile uint8_t *u8g_outData;
@@ -90,6 +92,70 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
     *outClock &= bitNotClock;
   } while( cnt != 0 );
 }
+
+#elif defined(__18CXX) || defined(__PIC32MX)
+
+uint16_t dog_bitData, dog_bitNotData;
+uint16_t dog_bitClock, dog_bitNotClock;
+volatile uint32_t *dog_outData;
+volatile uint32_t *dog_outClock;
+volatile uint32_t dog_pic32_spi_tmp;
+
+static void u8g_com_arduino_init_shift_out(uint8_t dataPin, uint8_t clockPin)
+{
+  dog_outData = portOutputRegister(digitalPinToPort(dataPin));
+  dog_outClock = portOutputRegister(digitalPinToPort(clockPin));
+  dog_bitData = digitalPinToBitMask(dataPin);
+  dog_bitClock = digitalPinToBitMask(clockPin);
+
+  dog_bitNotClock = dog_bitClock;
+  dog_bitNotClock ^= 0x0ffff;
+
+  dog_bitNotData = dog_bitData;
+  dog_bitNotData ^= 0x0ffff;
+}
+
+static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
+{
+  uint8_t cnt = 8;
+  do
+  {
+    if ( val & 128 )
+	*dog_outData |= dog_bitData;
+    else
+	*dog_outData &= dog_bitNotData;    
+    val <<= 1;
+    /*
+	There must be some delay here. However
+	fetching the adress dog_outClock is enough delay, so
+	do not place dog_outClock in a local variable. This will
+	break the procedure
+    */
+    *dog_outClock |= dog_bitClock;
+    cnt--;
+    *dog_outClock &= dog_bitNotClock;
+    /* 
+	little additional delay after clk pulse, done by 3x32bit reads 
+	from I/O. Optimized for PIC32 with 80 MHz.
+    */
+    dog_pic32_spi_tmp = *dog_outClock;
+    dog_pic32_spi_tmp = *dog_outClock;
+    dog_pic32_spi_tmp = *dog_outClock;
+  } while( cnt != 0 );
+}
+
+#else
+/* empty interface */
+
+static void u8g_com_arduino_init_shift_out(uint8_t dataPin, uint8_t clockPin)
+{
+}
+
+static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
+{
+}
+
+#endif 
 
 
 uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)

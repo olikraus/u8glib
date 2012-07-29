@@ -325,10 +325,19 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
   U8G_COM_PARALLEL
   U8G_COM_FAST_PARALLEL
   U8G_COM_SSD_I2C
+  
+defined(__18CXX) || defined(__PIC32MX)  
+
 */
+/* ==== HW SPI, Arduino ====*/
 #if defined(ARDUINO)
+#if defined(__AVR__)
 #define U8G_COM_HW_SPI u8g_com_arduino_hw_spi_fn
+#elif defined(__18CXX) || defined(__PIC32MX)
+#define U8G_COM_HW_SPI u8g_com_null_fn
 #endif
+#endif
+/* ==== HW SPI, not Arduino ====*/
 #ifndef U8G_COM_HW_SPI
 #if defined(__AVR__)
 #define U8G_COM_HW_SPI u8g_com_atmega_hw_spi_fn
@@ -338,10 +347,16 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 #define U8G_COM_HW_SPI u8g_com_null_fn
 #endif
 
+/* ==== SW SPI, Arduino ====*/
 #if defined(ARDUINO)
+#if defined(__AVR__)
+#define U8G_COM_SW_SPI u8g_com_arduino_sw_spi_fn
+#elif defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_SW_SPI u8g_com_arduino_sw_spi_fn
 #endif
+#endif
 #ifndef U8G_COM_SW_SPI
+/* ==== SW SPI, not Arduino ====*/
 #if defined(__AVR__)
 #define U8G_COM_SW_SPI u8g_com_atmega_sw_spi_fn
 #endif
@@ -350,9 +365,15 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 #define U8G_COM_SW_SPI u8g_com_null_fn
 #endif
 
+/* ==== Parallel iinterface, Arduino ====*/
 #if defined(ARDUINO)
+#if defined(__AVR__)
 #define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_fast_parallel_fn
+#else
+#define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
+#define U8G_COM_FAST_PARALLEL u8g_com_arduino_parallel_fn
+#endif
 #endif
 #ifndef U8G_COM_PARALLEL
 #if defined(__AVR__)
@@ -366,7 +387,9 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 #endif
 
 #if defined(ARDUINO)
+#if defined(__AVR__)
 #define U8G_COM_SSD_I2C u8g_com_arduino_ssd_i2c_fn
+#endif
 #endif
 
 #ifndef U8G_COM_SSD_I2C

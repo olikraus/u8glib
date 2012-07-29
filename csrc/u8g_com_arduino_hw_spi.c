@@ -38,6 +38,8 @@
 
 #if defined(ARDUINO)
 
+#if defined(__AVR__)
+
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
@@ -161,6 +163,12 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
   }
   return 1;
 }
+
+/* #elif defined(__18CXX) || defined(__PIC32MX) */
+
+#else /* __AVR__ */
+
+#endif /* __AVR__ */
 
 #else /* ARDUINO */
 
