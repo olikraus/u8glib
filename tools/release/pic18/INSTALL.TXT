@@ -1,0 +1,10 @@
+
+Install instructions for u8glib, PIC18 distribution
+
+Project home: http://code.google.com/p/u8glib/
+
+1. Download u8glib_pic18_vX.XX.zip
+2. Extract content to a local directory
+further details will follow ...
+
+

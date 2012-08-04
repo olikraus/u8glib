@@ -112,6 +112,25 @@ typedef struct _u8g_box_t u8g_box_t;
 
 
 /*===============================================================*/
+/* device structure */
+
+/* device prototype */
+typedef uint8_t (*u8g_dev_fnptr)(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+
+/* com prototype */
+typedef uint8_t (*u8g_com_fnptr)(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
+
+
+
+struct _u8g_dev_t
+{
+  u8g_dev_fnptr dev_fn;         /* device procedure */
+  void *dev_mem;                /* device memory */
+  u8g_com_fnptr com_fn;         /* communication procedure */
+};
+
+
+/*===============================================================*/
 /* device list */
 
 /* Size: 128x64 SDL, u8g_dev_sdl.c */
@@ -410,25 +429,6 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_SSD_I2C u8g_com_null_fn
 #endif
 
-
-
-/*===============================================================*/
-/* common init device structure */
-
-/* device prototype */
-typedef uint8_t (*u8g_dev_fnptr)(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
-
-/* com prototype */
-typedef uint8_t (*u8g_com_fnptr)(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
-
-
-
-struct _u8g_dev_t
-{
-  u8g_dev_fnptr dev_fn;         /* device procedure */
-  void *dev_mem;                /* device memory */
-  u8g_com_fnptr com_fn;         /* communication procedure */
-};
 
 
 /*===============================================================*/
