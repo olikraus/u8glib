@@ -46,10 +46,10 @@
 typedef volatile uint8_t * IO_PTR;
 
 /* create internal pin number */
-uint8_t u8g_Pin(uint8_t port, uint8_t bit)
+uint8_t u8g_Pin(uint8_t port, uint8_t bitpos)
 {
   port <<= 3;
-  port += bit;
+  port += bitpos;
   return port;
 }
 
@@ -174,10 +174,10 @@ uint8_t u8g_GetPinLevel(uint8_t internal_pin_number)
 
 #else
 
-uint8_t u8g_Pin(uint8_t port, uint8_t bit)
+uint8_t u8g_Pin(uint8_t port, uint8_t bitpos)
 {
   port <<= 3;
-  port += bit;
+  port += bitpos;
   return port;
 }
 

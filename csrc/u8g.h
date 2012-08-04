@@ -463,8 +463,8 @@ void u8g_com_arduino_assign_pin_output_high(u8g_t *u8g);
 /* u8g_com_io.c */
 
 /* create internal number from port and pin */
-uint8_t u8g_Pin(uint8_t port, uint8_t bit);
-#define PN(port,bit) u8g_Pin(port,bit)
+uint8_t u8g_Pin(uint8_t port, uint8_t bitpos);
+#define PN(port,bitpos) u8g_Pin(port,bitpos)
 
 /* low level procedures */
 void u8g_SetPinOutput(uint8_t internal_pin_number);
