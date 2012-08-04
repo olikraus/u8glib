@@ -147,8 +147,8 @@ static  void _OLD_u8g_dev_ssd1325_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev
 static  void u8g_dev_ssd1325_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
 {
   uint8_t d, cnt;
-  cnt = 8;
   static uint8_t buf[8];
+  cnt = 8;
   do
   {
     d = 0;

@@ -174,6 +174,13 @@ uint8_t u8g_GetPinLevel(uint8_t internal_pin_number)
 
 #else
 
+uint8_t u8g_Pin(uint8_t port, uint8_t bit)
+{
+  port <<= 3;
+  port += bit;
+  return port;
+}
+
 void u8g_SetPinOutput(uint8_t internal_pin_number)
 {
 }

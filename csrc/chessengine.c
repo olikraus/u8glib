@@ -100,7 +100,6 @@
 
 */
 
-#include <stdint.h>
 #include "u8g.h"
 
 //#ifndef __unix__

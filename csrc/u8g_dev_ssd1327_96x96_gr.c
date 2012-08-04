@@ -293,7 +293,8 @@ U8G_PB_DEV(u8g_dev_ssd1327_96x96_gr_sw_spi , WIDTH, HEIGHT, 4, u8g_dev_ssd1327_9
 U8G_PB_DEV(u8g_dev_ssd1327_96x96_gr_hw_spi , WIDTH, HEIGHT, 4, u8g_dev_ssd1327_96x96_gr_fn, U8G_COM_HW_SPI);
 U8G_PB_DEV(u8g_dev_ssd1327_96x96_gr_i2c , WIDTH, HEIGHT, 4, u8g_dev_ssd1327_96x96_gr_fn, U8G_COM_SSD_I2C);
 
-uint8_t u8g_dev_ssd1327_96x96_2x_buf[WIDTH*2] U8G_NOCOMMON ; 
+#define DWIDTH (2*WIDTH)
+uint8_t u8g_dev_ssd1327_96x96_2x_buf[DWIDTH] U8G_NOCOMMON ; 
 u8g_pb_t u8g_dev_ssd1327_96x96_2x_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_ssd1327_96x96_2x_buf}; 
 u8g_dev_t u8g_dev_ssd1327_96x96_2x_gr_sw_spi = { u8g_dev_ssd1327_96x96_2x_gr_fn, &u8g_dev_ssd1327_96x96_2x_pb, U8G_COM_SW_SPI };
 u8g_dev_t u8g_dev_ssd1327_96x96_2x_gr_hw_spi = { u8g_dev_ssd1327_96x96_2x_gr_fn, &u8g_dev_ssd1327_96x96_2x_pb, U8G_COM_HW_SPI };

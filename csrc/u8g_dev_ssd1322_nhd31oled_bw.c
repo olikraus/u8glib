@@ -228,8 +228,8 @@ static  void _OLD_u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev
 static  void u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
 {
   uint8_t d, cnt;
-  cnt = 8;
   static uint8_t buf[8];
+  cnt = 8;
   do
   {
     d = 0;
@@ -327,7 +327,8 @@ uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
 U8G_PB_DEV(u8g_dev_ssd1322_nhd31oled_bw_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1322_nhd31oled_bw_fn, U8G_COM_SW_SPI);
 U8G_PB_DEV(u8g_dev_ssd1322_nhd31oled_bw_hw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1322_nhd31oled_bw_fn, U8G_COM_HW_SPI);
 
-uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_buf[WIDTH*2] U8G_NOCOMMON ; 
+#define DWIDTH (WIDTH*2)
+uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_buf[DWIDTH] U8G_NOCOMMON ; 
 u8g_pb_t u8g_dev_ssd1322_nhd31oled_2x_bw_pb = { {16, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_ssd1322_nhd31oled_2x_bw_buf}; 
 u8g_dev_t u8g_dev_ssd1322_nhd31oled_2x_bw_sw_spi = { u8g_dev_ssd1322_nhd31oled_2x_bw_fn, &u8g_dev_ssd1322_nhd31oled_2x_bw_pb, U8G_COM_SW_SPI };
 u8g_dev_t u8g_dev_ssd1322_nhd31oled_2x_bw_hw_spi = { u8g_dev_ssd1322_nhd31oled_2x_bw_fn, &u8g_dev_ssd1322_nhd31oled_2x_bw_pb, U8G_COM_HW_SPI };

@@ -37,7 +37,15 @@
 #define _U8G_H
 
 #include <stddef.h>
+
+#ifdef __18CXX
+typedef unsigned char uint8_t;
+typedef signed char int8_t;
+typedef unsigned short uint16_t;
+typedef signed short int16_t;
+#else
 #include <stdint.h>
+#endif
 
 #if defined(__AVR__)
 #include <avr/pgmspace.h>
