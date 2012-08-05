@@ -180,6 +180,10 @@ extern u8g_dev_t u8g_dev_st7920_128x64_8bit;
 extern u8g_dev_t u8g_dev_st7920_192x32_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_192x32_8bit;
 
+/* CrystalFontz CFAG20232 */
+extern u8g_dev_t u8g_dev_st7920_202x32_sw_spi;
+extern u8g_dev_t u8g_dev_st7920_202x32_8bit;
+
 /* LC7981 160x80 display*/
 extern u8g_dev_t u8g_dev_lc7981_160x80_8bit;
 /* LC7981 240x64 display*/
