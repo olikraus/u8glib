@@ -14,12 +14,25 @@ SW SPI
 <tt>u8g_dev_ssd1325_nhd27oled_bw_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_BW(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
+::
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_ssd1325_nhd27oled_bw_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_BW(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Page Size
 256 Bytes
@@ -29,14 +42,24 @@ SW SPI
 <tt>u8g_dev_ssd1325_nhd27oled_2x_bw_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_2X_BW(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_ssd1325_nhd27oled_2x_bw_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_2X_BW(cs, a0 [, reset])</tt>
-
-
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Mode
 4L
@@ -50,12 +73,24 @@ SW SPI
 <tt>u8g_dev_ssd1325_nhd27oled_gr_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_GR(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_ssd1325_nhd27oled_gr_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_GR(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Page Size
 256 Bytes
@@ -65,12 +100,24 @@ SW SPI
 <tt>u8g_dev_ssd1325_nhd27oled_2x_gr_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_2X_GR(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_NHD27OLED_2X_GR(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 
 ::
 :Controller
@@ -89,12 +136,24 @@ SW SPI
 <tt>u8g_dev_ssd1306_128x64_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_SSD1306_128X64(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_ssd1306_128x64_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_SSD1306_128X64(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 
 
 ::
@@ -114,12 +173,24 @@ SW SPI
 <tt>u8g_dev_uc1701_dogs102_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGS102(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_uc1701_dogs102_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGS102(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Controller
 ST7565
@@ -137,12 +208,24 @@ SW SPI
 <tt>u8g_dev_st7565_dogm128_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGM128(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_st7565_dogm128_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGM128(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Display/Size
 LM6059, 128x64, Adafruit
@@ -158,12 +241,24 @@ SW SPI
 <tt>u8g_dev_st7565_lm6059_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_LM6059(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_st7565_lm6059_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_LM6059(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Display/Size
 LM6063, 128x64
@@ -179,12 +274,24 @@ SW SPI
 <tt>u8g_dev_st7565_lm6063_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_LM6063(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_st7565_lm6063_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_LM6063(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Display/Size
 DOGM132, 132x32
@@ -200,12 +307,24 @@ SW SPI
 <tt>u8g_dev_st7565_dogm132_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGM132(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_st7565_dogm132_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGM132(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Controller
 ST7920
@@ -223,12 +342,24 @@ SW SPI
 <tt>u8g_dev_st7920_128x64_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_ST7920_128X64(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 8 Bit
 :Device
 <tt>u8g_dev_st7920_128x64_8bit</tt>
 :C++ Constructor
 <tt>U8GLIB_ST7920_128X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Display/Size
 192x32
@@ -244,12 +375,24 @@ SW SPI
 <tt>u8g_dev_st7920_192x32_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_ST7920_192X32(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 8 Bit
 :Device
 <tt>u8g_dev_st7920_192x32_8bit</tt>
 :C++ Constructor
 <tt>U8GLIB_ST7920_192X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 
 
 ::
@@ -269,12 +412,24 @@ SW SPI
 <tt>u8g_dev_uc1610_dogxl160_bw_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_BW(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_uc1610_dogxl160_bw_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_BW(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Page Size
 320 Bytes
@@ -284,12 +439,24 @@ SW SPI
 <tt>u8g_dev_uc1610_dogxl160_2x_bw_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_2X_BW(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_uc1610_dogxl160_2x_bw_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_2X_BW(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 
 
 ::
@@ -305,12 +472,24 @@ SW SPI
 <tt>u8g_dev_uc1610_dogxl160_gr_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_GR(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_uc1610_dogxl160_gr_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_GR(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 ::
 :Page Size
 320 Bytes
@@ -320,12 +499,24 @@ SW SPI
 <tt>u8g_dev_uc1610_dogxl160_2x_gr_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_2X_GR(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_uc1610_dogxl160_2x_gr_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_DOGXL160_2X_GR(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+n.a.
 
 
 ::
@@ -345,6 +536,12 @@ SW SPI
 <tt>u8g_dev_pcd8544_84x48_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_PCD8544(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 ::
 :Controller
 PCF8812
@@ -362,6 +559,12 @@ SW SPI
 <tt>u8g_dev_pcf8812_96x65_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_PCF8812(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
 ::
 :Controller
 KS0108
@@ -384,6 +587,12 @@ no
 <tt>u8g_dev_ks0108_128x64_fast</tt>
 :C++ Constructor
 <tt>U8GLIB_KS0108_128(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+n.a.
 ::
 :Controller
 SBN1661
@@ -401,6 +610,12 @@ no
 <tt>u8g_dev_sbn1661_122x32</tt>
 :C++ Constructor
 <tt>U8GLIB_SBN1661_122X32(d0, d1, d2, d3, d4, d5, d6, d7, cs1, cs2, di, rw [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+n.a.
 ::
 :Controller
 LC7981
@@ -418,6 +633,12 @@ no
 <tt>u8g_dev_lc7981_160x80_8bit</tt>
 :C++ Constructor
 <tt>U8GLIB_LC7981_160X80(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, di [, rw [, reset]])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+n.a.
 ::
 :Controller
 stdout
@@ -433,6 +654,13 @@ n.a.
 :Device
 <tt>u8g_dev_stdout</tt>
 :C++ Constructor
+
+:Arduino
+n.a.
+:Chipkit
+n.a.
+:AVR
+n.a.
 
 ::
 :Controller
@@ -451,6 +679,12 @@ no
 <tt>u8g_dev_sdl_1bit</tt>
 :C++ Constructor
 
+:Arduino
+n.a.
+:Chipkit
+n.a.
+:AVR
+n.a.
 :Mode
 4L
 :Set Contrast
@@ -463,3 +697,9 @@ no
 <tt>u8g_dev_sdl_2bit</tt>
 :C++ Constructor
 
+:Arduino
+n.a.
+:Chipkit
+n.a.
+:AVR
+n.a.

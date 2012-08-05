@@ -18,6 +18,11 @@
   * *en*: Read/write enable 
   * *d0* - *d7*: Parallel data
   * *reset*: Display reset
+
+ * Implementation Status
+  * verified: Implemented and tested
+  * impl.: Implemented
+  * n.a.: Not available
   
  * setContrast: For some devices, the contrast value can be assigned with the {{{setContrast}}} procedure.
  
