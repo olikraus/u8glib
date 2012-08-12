@@ -42,6 +42,8 @@
 #if defined(ARDUINO)
 #  if defined(__AVR__)
 #    define USE_AVR_DELAY
+#  elif defined(__PIC32MX)
+#    define USE_PIC32_DELAY
 #  else
 #    define USE_ARDUINO_DELAY
 #  endif
@@ -52,7 +54,6 @@
 #else
 #  define USE_DUMMY_DELAY
 #endif
-
 
 
 
@@ -103,10 +104,11 @@ void u8g_Delay(uint16_t val)
 #define GetInstructionClock()	(GetSystemClock()/4)
 
 void u8g_Delay(uint16_t val)
-{
+{/*
 	unsigned int _iTemp = (val);
 	while(_iTemp--)		
 		Delay1KTCYx((GetInstructionClock()+999999)/1000000);
+		*/
 }
 #endif
 
@@ -119,6 +121,29 @@ void u8g_Delay(uint16_t val)
 }
 #endif
 
+#if defined(USE_PIC32_DELAY)
+/* 
+  Assume chipkit here with F_CPU correctly defined
+  The problem was, that u8g_Delay() is called within the constructor.
+  It seems that the chipkit is not fully setup at this time, so a
+  call to delay() will not work. So here is my own implementation.
+
+*/
+#define CPU_COUNTS_PER_SECOND (F_CPU/2UL)
+#define TICKS_PER_MILLISECOND  (CPU_COUNTS_PER_SECOND/1000UL)
+#include "plib.h"
+void u8g_Delay(uint16_t val)
+{
+	uint32_t d;
+	uint32_t s;
+	d = val;
+	d *= TICKS_PER_MILLISECOND;
+	s = ReadCoreTimer();
+	while ( (uint32_t)(ReadCoreTimer() - s) < d )
+		;
+} 
+
+#endif
 
 /*== Any other systems: Dummy Delay ==*/
 #if defined(USE_DUMMY_DELAY)

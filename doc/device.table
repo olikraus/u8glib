@@ -592,7 +592,7 @@ verified
 :Chipkit
 impl.
 :AVR
-n.a.
+impl.
 ::
 :Controller
 SBN1661
@@ -615,7 +615,7 @@ verified
 :Chipkit
 impl.
 :AVR
-n.a.
+impl.
 ::
 :Controller
 LC7981
@@ -638,7 +638,7 @@ verified
 :Chipkit
 impl.
 :AVR
-n.a.
+impl.
 ::
 :Controller
 stdout
