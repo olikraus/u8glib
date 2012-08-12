@@ -920,6 +920,9 @@ const char *u8g_u8toa(uint8_t v, uint8_t d);
 /* delay by the specified number of milliseconds */
 void u8g_Delay(uint16_t val);
 
+/* delay by one microsecond */
+void u8g_MicroDelay(void);
+
 /*===============================================================*/
 /* chessengine.c */
 #define CHESS_KEY_NONE 0

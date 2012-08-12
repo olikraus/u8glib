@@ -93,6 +93,15 @@ void u8g_Delay(uint16_t val)
     val--;
   }
 }
+
+/* delay by one micro second */
+void u8g_MicroDelay(void)
+{
+#if (F_CPU / 4000000 ) > 0 
+  _delay_loop_2( (F_CPU / 4000000 ) );
+#endif
+}
+
 #endif 
 
 
@@ -110,6 +119,9 @@ void u8g_Delay(uint16_t val)
 		Delay1KTCYx((GetInstructionClock()+999999)/1000000);
 		*/
 }
+void u8g_MicroDelay(void)
+{
+}
 #endif
 
 
@@ -118,6 +130,10 @@ void u8g_Delay(uint16_t val)
 void u8g_Delay(uint16_t val)
 {
 	delay(val);
+}
+void u8g_MicroDelay(void)
+{
+	delayMicroseconds(1);
 }
 #endif
 
@@ -143,6 +159,16 @@ void u8g_Delay(uint16_t val)
 		;
 } 
 
+void u8g_MicroDelay(void)
+{
+	uint32_t d;
+	uint32_t s;
+	d = TICKS_PER_MILLISECOND/1000;
+	s = ReadCoreTimer();
+	while ( (uint32_t)(ReadCoreTimer() - s) < d )
+		;
+} 
+
 #endif
 
 /*== Any other systems: Dummy Delay ==*/
@@ -150,5 +176,8 @@ void u8g_Delay(uint16_t val)
 void u8g_Delay(uint16_t val)
 {
 	/* do not know how to delay... */
+}
+void u8g_MicroDelay(void)
+{
 }
 #endif

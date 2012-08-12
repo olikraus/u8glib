@@ -140,6 +140,6 @@ uint8_t u8g_dev_lc7981_240x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   return u8g_dev_pb8h1f_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_lc7981_240x64_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_lc7981_240x64_fn, U8G_COM_PARALLEL);
+U8G_PB_DEV(u8g_dev_lc7981_240x64_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_lc7981_240x64_fn, U8G_COM_FAST_PARALLEL);
 
 
