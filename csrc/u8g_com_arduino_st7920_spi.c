@@ -85,10 +85,13 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
     else
       *outData &= bitNotData;
    
+   
     *outClock |= bitClock;
+    u8g_MicroDelay();		/* 15 Aug 2012: added for high speed uC */
     val <<= 1;
     cnt--;
     *outClock &= bitNotClock;
+    u8g_MicroDelay();		/* 15 Aug 2012: added for high speed uC */
   } while( cnt != 0 );
 }
 
