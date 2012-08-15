@@ -294,6 +294,39 @@ n.a.
 n.a.
 ::
 :Display/Size
+NHD C12864, 128x64
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+128 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7565_nhd_c12864_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD_C12864(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified, v1.08
+:Chipkit
+impl. v1.08
+:AVR
+impl. v1.08
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7565_nhd_c12864_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD_C12864(cs, a0 [, reset])</tt>
+:Arduino
+verified, v1.08
+:Chipkit
+n.a.
+:AVR
+n.a.
+::
+:Display/Size
 DOGM132, 132x32
 :Mode
 BW
