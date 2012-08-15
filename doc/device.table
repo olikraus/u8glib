@@ -355,11 +355,11 @@ impl.
 :C++ Constructor
 <tt>U8GLIB_ST7920_128X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
 :Arduino
-verified
+impl.
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Display/Size
 192x32
@@ -380,7 +380,7 @@ verified
 :Chipkit
 impl.
 :AVR
-impl.
+verified
 :Com
 8 Bit
 :Device
@@ -392,7 +392,7 @@ verified
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 
 
 ::
