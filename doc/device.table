@@ -393,8 +393,39 @@ verified
 n.a.
 :AVR
 impl.
-
-
+::
+:Display/Size
+202x32
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+202 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7920_202x32_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_202X32(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl. v1.08
+:Chipkit
+impl. v1.08
+:AVR
+impl. v1.08
+:Com
+8 Bit
+:Device
+<tt>u8g_dev_st7920_202x32_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_202X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+:Arduino
+impl. v1.08
+:Chipkit
+impl. v1.08
+:AVR
+impl. v1.08
 ::
 :Controller
 UC1610
