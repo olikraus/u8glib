@@ -321,6 +321,11 @@ typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 
 
 /*===============================================================*/
+/* com options */
+
+/* uncomment the following line for Atmega HW SPI double speed, issue 89 */
+/* #define U8G_HW_SPI_2X 1 */
+
 /* com messages */
 
 #define U8G_COM_MSG_STOP        0
