@@ -48,6 +48,7 @@ verified
 impl.
 :AVR
 impl.
+::
 :Com
 HW SPI
 :Device
@@ -119,6 +120,96 @@ n.a.
 :AVR
 n.a.
 
+::
+:Controller
+SSD1327
+:Display/Size
+96x96 OLED
+:Mode
+4L
+:Set Contrast
+no
+:Page Size
+96 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1327_96x96_gr_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1327_96X96_GR(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1327_96x96_gr_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1327_96X96_GR(cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Com
+I2C
+:Device
+<tt>u8g_dev_ssd1327_96x96_gr_i2c</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1327_96X96_GR()</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+verified
+::
+:Page Size
+256 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1325_nhd27oled_2x_gr_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1327_96X96_2X_GR(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1327_96X96_2X_GR(cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Com
+I2C
+:Device
+<tt>u8g_dev_ssd1327_96x96_2x_gr_i2c</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1327_96X96_2X_GR()</tt>
+:Arduino
+impl.
+:Chipkit
+n.a.
+:AVR
+impl.
 ::
 :Controller
 SSD1306

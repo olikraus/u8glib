@@ -2,8 +2,10 @@
   
   u8g_com_arduino_ssd_i2c.c
 
-  com interface for arduino (atmega) and the SSDxxxx chip (SOLOMON) variant 
+  com interface for arduino (AND atmega) and the SSDxxxx chip (SOLOMON) variant 
   I2C protocol 
+  
+  ToDo: Rename this to u8g_com_avr_ssd_i2c.c
 
   Universal 8bit Graphics Library
   

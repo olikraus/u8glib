@@ -15,7 +15,7 @@ void glyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
   char s[2] = ".";
   u8g_GetGlyph(u8g, encoding);
   s[0] = encoding;
-  u8g_DrawStr(u8g, x, y, "gA");
+  u8g_DrawStr(u8g, x, y, "öÄ");
   u8g_DrawPixel(u8g, x, y);
   u8g_DrawPixel(u8g, x-1, y);
   //u8g_DrawPixel(u8g, x, y-u8g->glyph_y);
@@ -32,7 +32,8 @@ int main(void)
     u8g_SetColorIndex(&u8g, 1);
     u8g_DrawPixel(&u8g,0,0);
     u8g_DrawPixel(&u8g,0,1);
-    u8g_SetFont(&u8g, u8g_font_10x20);
+    u8g_SetFont(&u8g, u8g_font_unifont);
+    //u8g_SetFont(&u8g, u8g_font_10x20);
     //u8g_SetFont(&u8g, u8g_font_gdb17);
     u8g_SetFontRefHeightText(&u8g);
     //u8g_SetRefHeightAll(&u8g);
