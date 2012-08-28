@@ -124,7 +124,7 @@ n.a.
 :Controller
 SSD1327
 :Display/Size
-96x96 OLED
+96x96 OLED (Seeedstudio)
 :Mode
 4L
 :Set Contrast
@@ -171,7 +171,7 @@ n.a.
 verified
 ::
 :Page Size
-256 Bytes
+192 Bytes
 :Com
 SW SPI
 :Device
