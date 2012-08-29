@@ -78,6 +78,7 @@ u8glib ChangeLog
   * Improved speed for ST7920 parallel mode (issue 79)
   * Support for Displays Newhaven NHD-C12864, CrystalFontz GFAG20232, Seeedstudio 96x96 OLED
   * Added SPI support for ST7920 with plain AVR (issue 85)
+  * Add more LC7981 devices
   
   
   
