@@ -307,7 +307,7 @@ static void u8g_dev_ssd1322_1bit_prepare_row(u8g_t *u8g, u8g_dev_t *dev, uint8_t
 static  void u8g_dev_ssd1322_1bit_write_8h_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t b)
 {
   static uint8_t buf[4];
-  static uint8_t map[4] = { 0, 0x0f, 0x0f0, 0x0ff };
+  static uint8_t map[4] = { 0, 0x0f0, 0x00f, 0x0ff };
   buf [3] = map[b & 2];
   b>>=2;
   buf [2] = map[b & 2];
@@ -365,7 +365,7 @@ uint8_t u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
       u8g_SetChipSelect(u8g, dev, 0);      
       break;
   }
-  return u8g_dev_pb8h1f_base_fn(u8g, dev, msg, arg);
+  return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
 }
 
 
