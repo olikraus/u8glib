@@ -365,7 +365,7 @@ uint8_t u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
       u8g_SetChipSelect(u8g, dev, 0);      
       break;
   }
-  return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
+  return u8g_dev_pb8h1f_base_fn(u8g, dev, msg, arg);
 }
 
 
