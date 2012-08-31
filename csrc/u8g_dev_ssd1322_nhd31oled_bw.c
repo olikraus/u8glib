@@ -93,8 +93,8 @@ static const uint8_t u8g_dev_ssd1322_1bit_nhd_312_init_seq[] PROGMEM = {
   U8G_ESC_ADR(0),               	/* instruction mode */
   0x0a0, 					/* Set Re-Map / Dual COM Line Mode */
   U8G_ESC_ADR(1),               	/* data mode */
-  0x014,                     		
-  0x011,                     		
+  0x025, 					/* was 0x014 */                     		
+  0x001, 					/* was 0x011 */	
 
   U8G_ESC_ADR(0),               	/* instruction mode */
   0x0ab, 
