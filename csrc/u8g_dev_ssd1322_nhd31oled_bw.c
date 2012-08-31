@@ -43,7 +43,7 @@
 
 #include "u8g.h"
 
-#define WIDTH 255
+#define WIDTH 240
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
@@ -93,7 +93,7 @@ static const uint8_t u8g_dev_ssd1322_1bit_nhd_312_init_seq[] PROGMEM = {
   U8G_ESC_ADR(0),               	/* instruction mode */
   0x0a0, 					/* Set Re-Map / Dual COM Line Mode */
   U8G_ESC_ADR(1),               	/* data mode */
-  0x015, 					/* was 0x014 */                     		
+  0x014, 					/* was 0x014 */                     		
   0x011, 					/* was 0x011 */	
 
   U8G_ESC_ADR(0),               	/* instruction mode */
@@ -286,6 +286,88 @@ static const uint8_t u8g_dev_ssd1322_1bit_nhd_312_prepare_page_seq[] PROGMEM = {
   U8G_ESC_END                /* end of sequence */
 };
 
+static void u8g_dev_ssd1322_1bit_prepare_row(u8g_t *u8g, u8g_dev_t *dev, uint8_t delta_row)
+{
+  uint8_t row = ((u8g_pb_t *)(dev->dev_mem))->p.page;
+  
+  row *= ((u8g_pb_t *)(dev->dev_mem))->p.page_height;
+  row += delta_row;
+  
+  u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1322_1bit_nhd_312_prepare_page_seq);
+  
+  u8g_WriteByte(u8g, dev, row);       /* start at the selected row */
+  u8g_WriteByte(u8g, dev, row+1);       /* end within the selected row */  
+  
+  u8g_SetAddress(u8g, dev, 0);          /* instruction mode mode */
+  u8g_WriteByte(u8g, dev, 0x05c);       /* write to ram */  
+  u8g_SetAddress(u8g, dev, 1);          /* data mode */
+}
+
+
+static  void u8g_dev_ssd1322_1bit_write_8h_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t b)
+{
+  static uint8_t buf[4];
+  static uint8_t map[4] = { 0, 0x0f, 0x0f0, 0x0ff };
+  buf [3] = map[b & 2];
+  b>>=2;
+  buf [2] = map[b & 2];
+  b>>=2;
+  buf [1] = map[b & 2];
+  b>>=2;
+  buf [0] = map[b & 2];
+  u8g_WriteSequence(u8g, dev, 4, buf);
+}
+
+static void u8g_dev_ssd1322_1bit_write_row(u8g_t *u8g, u8g_dev_t *dev, uint8_t *ptr)
+{
+  uint8_t i;
+  i = (WIDTH+7)/8;
+  u8g_dev_ssd1322_1bit_write_8h_pixel(u8g, dev, 255);
+  i--;
+  do
+  {
+    u8g_dev_ssd1322_1bit_write_8h_pixel(u8g, dev, *ptr++);
+    i--;
+  } while( i != 0 );
+}
+
+uint8_t u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_InitCom(u8g, dev);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1322_1bit_nhd_312_init_seq);
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+	uint8_t i;
+	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+	uint8_t *p = pb->buf;
+
+	for( i = 0; i < pb->p.page_height; i++ )
+	{
+	  u8g_dev_ssd1322_1bit_prepare_row(u8g, dev, i);
+	  u8g_dev_ssd1322_1bit_write_row(u8g, dev, p);
+	  u8g_SetChipSelect(u8g, dev, 0);        
+	  p+=((int)pb->width+7)/8;
+	}
+      }
+      break;
+    case U8G_DEV_MSG_CONTRAST:
+      u8g_SetChipSelect(u8g, dev, 1);
+      u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
+      u8g_WriteByte(u8g, dev, 0x081);
+      u8g_SetAddress(u8g, dev, 1);          /* data mode */
+      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
+      u8g_SetChipSelect(u8g, dev, 0);      
+      break;
+  }
+  return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
+}
+
 
 static void u8g_dev_ssd1322_1bit_prepare_page(u8g_t *u8g, u8g_dev_t *dev)
 {
@@ -302,6 +384,8 @@ static void u8g_dev_ssd1322_1bit_prepare_page(u8g_t *u8g, u8g_dev_t *dev)
   u8g_WriteByte(u8g, dev, 0x05c);       /* write to ram */  
   u8g_SetAddress(u8g, dev, 1);          /* data mode */
 }
+
+
 
 static void u8g_dev_ssd1322_1bit_2x_prepare_page(u8g_t *u8g, u8g_dev_t *dev, uint8_t is_odd)
 {
@@ -345,6 +429,7 @@ static  void _OLD_u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev
   }while ( cnt > 0 );
 }
 #endif
+
 
 static  void u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
 {
@@ -396,7 +481,7 @@ static void u8g_dev_ssd1322_1bit_write_buffer(u8g_t *u8g, u8g_dev_t *dev, uint8_
   } while( cnt > 0 );
 }
 
-uint8_t u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t OLD_u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
