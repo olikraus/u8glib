@@ -65,7 +65,9 @@ void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_
   uint8_t *ptr = b->buf;
   
   y -= b->p.page_y0;
-  tmp = b->width >> 3;
+  tmp = b->width;
+  tmp >>= 1;
+  tmp >>= 2;
   tmp *= (uint8_t)y;
   ptr += tmp;
   
