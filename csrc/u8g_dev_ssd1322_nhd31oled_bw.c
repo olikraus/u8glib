@@ -346,7 +346,7 @@ static  void _OLD_u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev
 }
 #endif
 
-static  void u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right, uint8_t x)
+static  void u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
 {
   uint8_t d, cnt;
   static uint8_t buf[8];
@@ -364,8 +364,6 @@ static  void u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uin
     right <<= 1;
   }while ( cnt > 0 );
   
-  if ( x == 0 )
-  {
     buf[0] = 0x0ff;
     buf[1] = 0x00f;
     buf[2] = 0x00f;
@@ -373,8 +371,7 @@ static  void u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uin
     buf[4] = 0x00f;
     buf[5] = 0x00f;
     buf[6] = 0x00f;
-    buf[7] = 0x00f;
-  }
+    buf[7] = 0x000;
   u8g_WriteSequence(u8g, dev, 8, buf);
 }
 
@@ -393,11 +390,7 @@ static void u8g_dev_ssd1322_1bit_write_buffer(u8g_t *u8g, u8g_dev_t *dev, uint8_
   {
     left = *ptr++;
     right = *ptr++;
-    //u8g_dev_ssd1322_1bit_write_16_pixel(u8g, dev, left, right, is_odd ? 0: 255);
-    if ( is_odd )
-      u8g_dev_ssd1322_1bit_write_16_pixel(u8g, dev, 1, 2, is_odd ? 0: 255);
-    else
-      u8g_dev_ssd1322_1bit_write_16_pixel(u8g, dev, 0, 0, is_odd ? 0: 255);
+    u8g_dev_ssd1322_1bit_write_16_pixel(u8g, dev, left, right);
       
     cnt--;
   } while( cnt > 0 );
