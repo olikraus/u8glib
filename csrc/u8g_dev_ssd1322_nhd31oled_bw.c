@@ -369,8 +369,8 @@ static  void u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uin
     buf[1] = 0x00f;
     buf[2] = 0x00f;
     buf[3] = 0x000;
-    buf[4] = 0x000;
-    buf[5] = 0x000;
+    buf[4] = 0x00f;
+    buf[5] = 0x00f;
     buf[6] = 0x000;
     buf[7] = 0x000;
   }
