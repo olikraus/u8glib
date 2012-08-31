@@ -403,7 +403,6 @@ uint8_t u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
-	// disabled for testing
         u8g_dev_ssd1322_1bit_prepare_page(u8g, dev);
         u8g_dev_ssd1322_1bit_write_buffer(u8g, dev, 0);
         u8g_SetChipSelect(u8g, dev, 0);        
