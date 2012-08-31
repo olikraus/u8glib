@@ -320,6 +320,9 @@ static void u8g_dev_ssd1322_1bit_2x_prepare_page(u8g_t *u8g, u8g_dev_t *dev, uin
   u8g_SetAddress(u8g, dev, 0);          /* instruction mode mode */
   u8g_WriteByte(u8g, dev, 0x05c);       /* write to ram */  
   u8g_SetAddress(u8g, dev, 1);          /* data mode */
+  u8g_WriteByte(u8g, dev, 0x0ff);       /* write to ram */  
+  u8g_WriteByte(u8g, dev, 0x0ff);       /* write to ram */  
+  u8g_WriteByte(u8g, dev, 0x0ff);       /* write to ram */  
 }
 
 /* assumes row autoincrement and activated nibble remap */
