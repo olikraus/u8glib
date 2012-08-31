@@ -43,7 +43,7 @@
 
 #include "u8g.h"
 
-#define WIDTH 232
+#define WIDTH 248
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
@@ -325,7 +325,7 @@ static void u8g_dev_ssd1322_1bit_write_row(u8g_t *u8g, u8g_dev_t *dev, uint8_t *
   do
   {
     b = *ptr++;
-    if ( b == 1 )
+    if ( i == 1 )
       b |= 1;
     u8g_dev_ssd1322_1bit_write_8h_pixel(u8g, dev, b);
     i--;
