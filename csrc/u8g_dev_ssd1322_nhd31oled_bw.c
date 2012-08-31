@@ -43,7 +43,7 @@
 
 #include "u8g.h"
 
-#define WIDTH 240
+#define WIDTH 120
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
@@ -278,7 +278,7 @@ static const uint8_t u8g_dev_ssd1322_1bit_nhd_312_prepare_page_seq[] PROGMEM = {
   U8G_ESC_CS(1),                /* enable chip */
   0x015,       /* column address... */
   U8G_ESC_ADR(1),               /* data mode */
-  0x01c,       /* start at column 0 */
+  0x01c+0x020,       /* start at column 0 */
   0x05b,       /* end at column 127 (which is y == 255), because there are two pixel in one column */
   U8G_ESC_ADR(0),               /* instruction mode */
   0x075,       /* row address... */
