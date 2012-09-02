@@ -50,15 +50,28 @@ void u8g_pb16h1_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixe
 void u8g_pb16h1_Set8PixelStd(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel) U8G_NOINLINE;
 uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
+void u8g_pb16h1_Clear(u8g_pb_t *b)
+{
+  uint8_t *ptr = (uint8_t *)b->buf;
+  uint8_t *end_ptr = ptr;
+  end_ptr += b->width*2;
+  do
+  {
+    *ptr++ = 0;
+  } while( ptr != end_ptr );
+}
+
+
 
 void u8g_pb16h1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
 {
   b->buf = buf;
   b->width = width;
-  u8g_pb_Clear(b);
+  u8g_pb16h1_Clear(b);
 }
 
-/* limitation: total buffer must not exceed 256 bytes */
+
+/* limitation: total buffer must not exceed 2*256 bytes */
 void u8g_pb16h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
 {
   register uint8_t mask, tmp;
@@ -164,13 +177,13 @@ uint8_t u8g_dev_pb16h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *ar
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_FIRST:
-      u8g_pb_Clear(pb);
+      u8g_pb16h1_Clear(pb);
       u8g_page_First(&(pb->p));
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       if ( u8g_page_Next(&(pb->p)) == 0 )
         return 0;
-      u8g_pb_Clear(pb);
+      u8g_pb16h1_Clear(pb);
       break;
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
       return u8g_pb_IsIntersection(pb, (u8g_dev_arg_bbx_t *)arg);

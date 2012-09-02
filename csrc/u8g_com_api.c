@@ -164,3 +164,4 @@ uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, const uint8_t *esc_seq)
   }
   return 1;
 }
+

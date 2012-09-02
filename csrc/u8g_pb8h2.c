@@ -1,9 +1,9 @@
 /*
 
-  u8g_pb8h1.c
+  u8g_pb8v2.c
   
-  8bit height monochrom (1 bit) page buffer
-  byte has horizontal orientation
+  8bit height 2 bit per pixel page buffer
+  byte has vertical orientation
 
   Universal 8bit Graphics Library
   
@@ -33,62 +33,55 @@
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-
-
-  total buffer size is limited to 256 bytes because of the calculation inside the set pixel procedure
-
+  
 
 */
 
 #include "u8g.h"
 #include <string.h>
 
-
-void u8g_pb8h1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width) U8G_NOINLINE;
-void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index) U8G_NOINLINE;
-void u8g_pb8h1_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel) U8G_NOINLINE ;
-void u8g_pb8h1_Set8PixelStd(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel) U8G_NOINLINE;
-uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
-
-
-void u8g_pb8h1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
+void u8g_pb8h2_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
 {
   b->buf = buf;
   b->width = width;
   u8g_pb_Clear(b);
 }
 
-/* limitation: total buffer must not exceed 256 bytes */
-void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
+static void u8g_pb8h2_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index) U8G_NOINLINE;
+static void u8g_pb8h2_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
 {
-  register uint8_t mask, tmp;
-  //static uint8_t bitmask[8] = { 0x080, 0x040, 0x020, 0x010, 0x008, 0x004, 0x002, 0x001 };
+  register uint8_t mask;
+  register uint8_t tmp;
+  
   uint8_t *ptr = b->buf;
   
   y -= b->p.page_y0;
+  
   tmp = b->width;
-  tmp >>= 3;
+  tmp >>= 2;
   tmp *= (uint8_t)y;
   ptr += tmp;
   
-  mask = 0x080;
-  mask >>= x & 7;
-  //mask = bitmask[x & 7];
-  x >>= 3;
-  ptr += x;
-  if ( color_index )
-  {
-    *ptr |= mask;
-  }
-  else
-  {
-    mask ^=0xff;
-    *ptr &= mask;
-  }
+  tmp = x;
+  tmp >>= 2;
+  ptr += tmp;
+  
+  tmp = x;
+  tmp &= 3;
+  //tmp = 3 - tmp;			// ToDo: Correct? align this with the 4LToGRDev procedure
+  tmp <<= 1;
+  mask = 3;
+  mask <<= tmp;
+  mask = ~mask;
+  color_index &= 3;
+  color_index <<= tmp;
+    
+  *ptr &= mask;
+  *ptr |= color_index;
 }
 
 
-void u8g_pb8h1_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel)
+void u8g_pb8h2_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel)
 {
   if ( arg_pixel->y < b->p.page_y0 )
     return;
@@ -96,17 +89,18 @@ void u8g_pb8h1_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel
     return;
   if ( arg_pixel->x >= b->width )
     return;
-  u8g_pb8h1_set_pixel(b, arg_pixel->x, arg_pixel->y, arg_pixel->color);
+  u8g_pb8h2_set_pixel(b, arg_pixel->x, arg_pixel->y, arg_pixel->color);
 }
 
-void u8g_pb8h1_Set8PixelStd(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
+
+void u8g_pb8h2_Set8PixelStd(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
 {
   register uint8_t pixel = arg_pixel->pixel;
   do
   {
     if ( pixel & 128 )
     {
-      u8g_pb8h1_SetPixel(b, arg_pixel);
+      u8g_pb8h2_SetPixel(b, arg_pixel);
     }
     switch( arg_pixel->dir )
     {
@@ -117,44 +111,24 @@ void u8g_pb8h1_Set8PixelStd(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
     }
     pixel <<= 1;
   } while( pixel != 0  );
-}
 
-void u8g_pb8h1_Set8PixelOpt2(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
-{
-  register uint8_t pixel = arg_pixel->pixel;
-  u8g_uint_t dx = 0;
-  u8g_uint_t dy = 0;
-  
-  switch( arg_pixel->dir )
-  {
-    case 0: dx++; break;
-    case 1: dy++; break;
-    case 2: dx--; break;
-    case 3: dy--; break;
-  }
-  
-  do
-  {
-    if ( pixel & 128 )
-      u8g_pb8h1_SetPixel(b, arg_pixel);
-    arg_pixel->x += dx;
-    arg_pixel->y += dy;
-    pixel <<= 1;
-  } while( pixel != 0  );  
 }
 
 
-uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+
+uint8_t u8g_dev_pb8h2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
   switch(msg)
   {
     case U8G_DEV_MSG_SET_8PIXEL:
       if ( u8g_pb_Is8PixelVisible(pb, (u8g_dev_arg_pixel_t *)arg) )
-        u8g_pb8h1_Set8PixelOpt2(pb, (u8g_dev_arg_pixel_t *)arg);
+      {
+        u8g_pb8h2_Set8PixelStd(pb, (u8g_dev_arg_pixel_t *)arg);
+      }
       break;
     case U8G_DEV_MSG_SET_PIXEL:
-      u8g_pb8h1_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);
+      u8g_pb8h2_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);
       break;
     case U8G_DEV_MSG_INIT:
       break;
@@ -182,7 +156,7 @@ uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
     case U8G_DEV_MSG_SET_XY_CB:
       break;
     case U8G_DEV_MSG_GET_MODE:
-      return U8G_MODE_BW;
+      return U8G_MODE_GRAY2BIT;
   }
   return 1;
 }
