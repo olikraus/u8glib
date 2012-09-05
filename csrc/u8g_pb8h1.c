@@ -51,6 +51,115 @@ void u8g_pb8h1_Set8PixelStd(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel) U8G_NOI
 uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 
+struct u8g_pb_h1_struct
+{
+  u8g_uint_t x;
+  u8g_uint_t y;
+  uint8_t *ptr;
+  uint8_t mask;
+  uint8_t line_byte_len;
+  uint8_t cnt;
+};
+
+static uint8_t u8g_pb8h1_bitmask[8] = { 0x080, 0x040, 0x020, 0x010, 0x008, 0x004, 0x002, 0x001 };
+
+static void u8g_pb8h1_state_right(struct u8g_pb_h1_struct *s)
+{
+  register u8g_uint_t x;
+  x = s->x;
+  x++;
+  s->x = x;
+  x &= 7;
+  s->mask = u8g_pb8h1_bitmask[x];
+  if ( x == 0 )
+    s->ptr++;
+}
+
+static void u8g_pb8h1_state_left(struct u8g_pb_h1_struct *s)
+{
+  register u8g_uint_t x;
+  x = s->x;
+  x--;
+  s->x = x;
+  x &= 7;
+  s->mask = u8g_pb8h1_bitmask[x];
+  if ( x == 7 )
+    s->ptr--;
+}
+
+static void u8g_pb8h1_state_down(struct u8g_pb_h1_struct *s)
+{
+  s->y++;
+  s->ptr += s->line_byte_len;
+}
+
+static void u8g_pb8h1_state_up(struct u8g_pb_h1_struct *s)
+{
+  s->y--;
+  s->ptr -= s->line_byte_len;
+}
+
+static void u8g_pb8h1_state_init(struct u8g_pb_h1_struct *s, u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y)
+{
+  register uint8_t mask;
+  u8g_uint_t tmp;
+  
+  uint8_t *ptr = b->buf;
+  
+  s->x = x;
+  s->y = y;
+  
+  y -= b->p.page_y0;
+  tmp = b->width;
+  tmp >>= 3;
+  s->line_byte_len = tmp;
+  tmp *= (uint8_t)y;
+  ptr += tmp;
+  
+  mask = 0x080;
+  mask >>= x & 7;
+  //mask = u8g_pb8h1_bitmask[x & 7];
+  x >>= 3;
+  ptr += x;
+  s->ptr = ptr;
+  s->mask = mask;
+}
+
+static void u8g_pb8h1_state_direction(u8g_pb_t *b, struct u8g_pb_h1_struct *s, uint8_t dir)
+{
+    switch( dir )
+    {
+      case 0: 
+	// arg_pixel->x++; 
+	break;
+      case 1: 
+	// arg_pixel->y++; 
+	break;
+      case 2: 
+	// arg_pixel->x--; 
+	break;
+      case 3: 
+	// arg_pixel->y--; 
+	break;
+    }
+}
+
+
+static void u8g_pb8h1_state_set_pixel(struct u8g_pb_h1_struct *s, uint8_t color_index)
+{
+  if ( color_index )
+  {
+    *s->ptr |= s->mask;
+  }
+  else
+  {
+    uint8_t mask = s->mask;
+    mask ^=0xff;
+    *s->ptr &= mask;
+  }  
+}
+
+
 void u8g_pb8h1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
 {
   b->buf = buf;
@@ -61,7 +170,20 @@ void u8g_pb8h1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
 /* limitation: total buffer must not exceed 256 bytes */
 void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
 {
-  register uint8_t mask, tmp;
+#ifdef NEW_CODE  
+  struct u8g_pb_h1_struct s;
+  u8g_pb8h1_state_init(&s, b, x, y);
+  u8g_pb8h1_state_set_pixel(&s, color_index);
+
+  u8g_pb8h1_state_right(&s);
+  if ( s.y > b->p.page_y1 )
+    return;
+  if ( s.x > b->width )
+    return;
+  u8g_pb8h1_state_set_pixel(&s, color_index);
+#else
+  register uint8_t mask;
+  u8g_uint_t tmp;
   //static uint8_t bitmask[8] = { 0x080, 0x040, 0x020, 0x010, 0x008, 0x004, 0x002, 0x001 };
   uint8_t *ptr = b->buf;
   
@@ -85,6 +207,7 @@ void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_
     mask ^=0xff;
     *ptr &= mask;
   }
+#endif
 }
 
 

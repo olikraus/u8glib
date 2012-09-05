@@ -68,7 +68,6 @@ static void u8g_pb8h2_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t
   
   tmp = x;
   tmp &= 3;
-  //tmp = 3 - tmp;			// ToDo: Correct? align this with the 4LToGRDev procedure
   tmp <<= 1;
   mask = 3;
   mask <<= tmp;

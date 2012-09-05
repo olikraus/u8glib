@@ -3,7 +3,7 @@
   u8g_com_api_16gr.c
   
   Extension of the com api for devices with 16 graylevels (4 bit per pixel).
-  This should fit to the 8h1 and 16h1 architecture, mainly intended for SSD OLEDs
+  This should fit to the 8v and 16v architectures, mainly intended for SSD OLEDs
 
   Universal 8bit Graphics Library
   
