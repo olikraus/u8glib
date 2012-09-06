@@ -45,10 +45,10 @@
 #include "u8g.h"
 
 /* width must be multiple of 8, largest value is 248 unless u8g 16 bit mode is enabled */
-#if !defined(U8G_16BIT)
-#define WIDTH 120
+#if defined(U8G_16BIT)
+#define WIDTH 256
 #else
-#define WIDTH 128
+#define WIDTH 120
 #endif
 #define HEIGHT 64
 
@@ -108,8 +108,8 @@ static void u8g_dev_ssd1325_prepare_row(u8g_t *u8g, u8g_dev_t *dev, uint8_t delt
   u8g_WriteByte(u8g, dev, row);       /* start at the selected row */
   u8g_WriteByte(u8g, dev, row+1);       /* end within the selected row */  
   
-  u8g_SetAddress(u8g, dev, 0);          /* instruction mode mode */
-  u8g_WriteByte(u8g, dev, 0x05c);       /* write to ram */  
+  //u8g_SetAddress(u8g, dev, 0);          /* instruction mode mode */
+  //u8g_WriteByte(u8g, dev, 0x05c);       /* write to ram */  
   u8g_SetAddress(u8g, dev, 1);          /* data mode */
 }
 
@@ -129,7 +129,7 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8
 	uint8_t i;
 	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 	uint8_t *p = pb->buf;
-	uint8_t cnt;
+	u8g_uint_t cnt;
 	cnt = pb->width;
 	cnt >>= 3;
 
@@ -140,7 +140,8 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8
 	  u8g_WriteByte(u8g, dev, 0x0ff);
 	  u8g_WriteByte(u8g, dev, 0x0ff);
 #endif
-	  u8g_WriteSequenceBWTo16GrDevice(u8g, dev, cnt, p);
+	  //u8g_WriteSequenceBWTo16GrDevice(u8g, dev, cnt, p);
+	  u8g_WriteSequenceBWTo16GrDevice(u8g, dev, 128/8, p+128/8);
 #if !defined(U8G_16BIT)
 	  u8g_WriteByte(u8g, dev, 0x0ff);
 	  u8g_WriteByte(u8g, dev, 0x0ff);
@@ -177,7 +178,7 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, ui
 	uint8_t i;
 	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 	uint8_t *p = pb->buf;
-	uint8_t cnt;
+	u8g_uint_t cnt;
 	cnt = pb->width;
 	cnt >>= 3;
 

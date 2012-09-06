@@ -36,7 +36,7 @@
 #ifndef _U8G_H
 #define _U8G_H
 
-// #define U8G_16BIT 1
+#define U8G_16BIT 1
 
 #include <stddef.h>
 

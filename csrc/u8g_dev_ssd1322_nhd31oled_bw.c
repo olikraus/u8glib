@@ -43,7 +43,12 @@
 
 #include "u8g.h"
 
+/* width must be multiple of 8, largest value is 248 unless u8g 16 bit mode is enabled */
+#if defined(U8G_16BIT)
+#define WIDTH 256
+#else
 #define WIDTH 248
+#endif
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
@@ -155,119 +160,6 @@ static const uint8_t u8g_dev_ssd1322_1bit_nhd_312_init_seq[] PROGMEM = {
   U8G_ESC_ADR(0),               	/* instruction mode */
   0x0af,                               	 /* display on */
 
-  // test sequence *_*_*_******__**_____
-  U8G_ESC_ADR(0),               	/* instruction mode */
-  0x015,       /* column address... */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x01c,       /* start at column 0 */
-  0x05b,       /* end at column 127 (which is y == 255), because there are two pixel in one column */
-  U8G_ESC_ADR(0),               /* instruction mode */
-  0x075,       /* row address... */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x00,
-  0x7f,
-  U8G_ESC_ADR(0),               /* instruction mode */
-  0x05c,       /* write mode */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x0f0,
-  0x0f0,
-  0x0f0,
-  0x0fe,
-  0x0fe,
-  0x0fe,
-  0x000,
-  0x0fe,
-  0x000,
-  0x000,
-  0x000,
-  0x000,
-  0x000,
-  0x000,
-
-  // test sequence *_*_*_******__**_____
-  U8G_ESC_ADR(0),               	/* instruction mode */
-  0x015,       /* column address... */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x03c,       /* start at column 0 */
-  0x05b,       /* end at column 127 (which is y == 255), because there are two pixel in one column */
-  U8G_ESC_ADR(0),               /* instruction mode */
-  0x075,       /* row address... */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x00,
-  0x7f,
-  U8G_ESC_ADR(0),               /* instruction mode */
-  0x05c,       /* write mode */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x0f0,
-  0x0f0,
-  0x0f0,
-  0x0fe,
-  0x0fe,
-  0x0fe,
-  0x000,
-  0x0fe,
-  0x000,
-  0x000,
-  0x000,
-  0x0fe,
-  0x000,
-  0x000,
-  0x000,
-
-  // test sequence *_*_*_******__**__**___
-  U8G_ESC_ADR(0),               	/* instruction mode */
-  0x015,       /* column address... */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x01c,       /* start at column 0 */
-  0x05b,       /* end at column 127 (which is y == 255), because there are two pixel in one column */
-  U8G_ESC_ADR(0),               /* instruction mode */
-  0x075,       /* row address... */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x10,
-  0x7f,
-  U8G_ESC_ADR(0),               /* instruction mode */
-  0x05c,       /* write mode */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x0f0,
-  0x0f0,
-  0x0f0,
-  0x0fe,
-  0x0fe,
-  0x0fe,
-  0x000,
-  0x0fe,
-  0x000,
-  0x0fe,
-  0x000,
-  0x000,
-
-  // test sequence *_*_*_******__**__**__**__
-  U8G_ESC_ADR(0),               	/* instruction mode */
-  0x015,       /* column address... */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x01c,       /* start at column 0 */
-  0x05b,       /* end at column 127 (which is y == 255), because there are two pixel in one column */
-  U8G_ESC_ADR(0),               /* instruction mode */
-  0x075,       /* row address... */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x20,
-  0x7f,
-  U8G_ESC_ADR(0),               /* instruction mode */
-  0x05c,       /* write mode */
-  U8G_ESC_ADR(1),               /* data mode */
-  0x0f0,
-  0x0f0,
-  0x0f0,
-  0x0fe,
-  0x0fe,
-  0x0fe,
-  0x000,
-  0x0fe,
-  0x000,
-  0x0fe,
-  0x000,
-  0x0fe,
-  0x000,
 
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
@@ -279,7 +171,7 @@ static const uint8_t u8g_dev_ssd1322_1bit_nhd_312_prepare_page_seq[] PROGMEM = {
   0x015,       /* column address... */
   U8G_ESC_ADR(1),               /* data mode */
   0x01c,       /* start at column 0 */
-  0x05b,       /* end at column 127 (which is y == 255), because there are two pixel in one column */
+  0x05b,       /* end column */
   U8G_ESC_ADR(0),               /* instruction mode */
   0x075,       /* row address... */
   U8G_ESC_ADR(1),               /* data mode */
@@ -303,35 +195,6 @@ static void u8g_dev_ssd1322_1bit_prepare_row(u8g_t *u8g, u8g_dev_t *dev, uint8_t
   u8g_SetAddress(u8g, dev, 1);          /* data mode */
 }
 
-
-static  void u8g_dev_ssd1322_1bit_write_8h_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t b)
-{
-  static uint8_t buf[4];
-  static uint8_t map[4] = { 0, 0x00f, 0x0f0, 0x0ff };
-  buf [3] = map[b & 3];
-  b>>=2;
-  buf [2] = map[b & 3];
-  b>>=2;
-  buf [1] = map[b & 3];
-  b>>=2;
-  buf [0] = map[b & 3];
-  u8g_WriteSequence(u8g, dev, 4, buf);
-}
-
-static void u8g_dev_ssd1322_1bit_write_row(u8g_t *u8g, u8g_dev_t *dev, uint8_t *ptr)
-{
-  uint8_t i, b;
-  i = (WIDTH+7)/8;
-  do
-  {
-    b = *ptr++;
-    if ( i == 1 )
-      b |= 1;
-    u8g_dev_ssd1322_1bit_write_8h_pixel(u8g, dev, b);
-    i--;
-  } while( i != 0 );
-}
-
 uint8_t u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
@@ -347,13 +210,24 @@ uint8_t u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
 	uint8_t i;
 	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 	uint8_t *p = pb->buf;
+	u8g_uint_t cnt;
+	cnt = pb->width;
+	cnt >>= 3;
 
 	for( i = 0; i < pb->p.page_height; i++ )
 	{
-	  u8g_dev_ssd1322_1bit_prepare_row(u8g, dev, i);
-	  u8g_dev_ssd1322_1bit_write_row(u8g, dev, p);
+	  u8g_dev_ssd1322_1bit_prepare_row(u8g, dev, i);  /* this will also enable chip select */
+#if !defined(U8G_16BIT)
+	  u8g_WriteByte(u8g, dev, 0x0ff);
+	  u8g_WriteByte(u8g, dev, 0x0ff);
+#endif
+	  u8g_WriteSequenceBWTo16GrDevice(u8g, dev, cnt, p);
+#if !defined(U8G_16BIT)
+	  u8g_WriteByte(u8g, dev, 0x0ff);
+	  u8g_WriteByte(u8g, dev, 0x0ff);
+#endif
 	  u8g_SetChipSelect(u8g, dev, 0);        
-	  p+=((int)pb->width+7)/8;
+	  p+=cnt;
 	}
       }
       break;
@@ -370,148 +244,9 @@ uint8_t u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
 }
 
 
-static void u8g_dev_ssd1322_1bit_prepare_page(u8g_t *u8g, u8g_dev_t *dev)
-{
-  uint8_t page = ((u8g_pb_t *)(dev->dev_mem))->p.page;
-  
-  u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1322_1bit_nhd_312_prepare_page_seq);
-  
-  page <<= 3;
-  u8g_WriteByte(u8g, dev, page);       /* start at the selected page */
-  page += 7;
-  u8g_WriteByte(u8g, dev, page);       /* end within the selected page */  
-  
-  u8g_SetAddress(u8g, dev, 0);          /* instruction mode mode */
-  u8g_WriteByte(u8g, dev, 0x05c);       /* write to ram */  
-  u8g_SetAddress(u8g, dev, 1);          /* data mode */
-}
-
-
-
-static void u8g_dev_ssd1322_1bit_2x_prepare_page(u8g_t *u8g, u8g_dev_t *dev, uint8_t is_odd)
-{
-  uint8_t page = ((u8g_pb_t *)(dev->dev_mem))->p.page;
-  
-  u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1322_1bit_nhd_312_prepare_page_seq);
-  
-  page <<= 1;
-  page += is_odd;
-  
-  page <<= 3;
-  u8g_WriteByte(u8g, dev, page);       /* start at the selected page */
-  page += 7;
-  u8g_WriteByte(u8g, dev, page);       /* end within the selected page */  
-  
-  u8g_SetAddress(u8g, dev, 0);          /* instruction mode mode */
-  u8g_WriteByte(u8g, dev, 0x05c);       /* write to ram */  
-  u8g_SetAddress(u8g, dev, 1);          /* data mode */
-  //u8g_WriteByte(u8g, dev, 0x0ff);       /* write to ram */  
-  //u8g_WriteByte(u8g, dev, 0x0ff);       /* write to ram */  
-  //u8g_WriteByte(u8g, dev, 0x0ff);       /* write to ram */  
-}
-
-/* assumes row autoincrement and activated nibble remap */
-#ifdef OLD
-static  void _OLD_u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
-{
-  uint8_t d, cnt;
-  cnt = 8;
-  do
-  {
-    d = 0;
-    if ( left & 1 )
-      d |= 0x0f0;
-    if ( right & 1 )
-      d |= 0x00f;
-    u8g_WriteByte(u8g, dev, d);
-    left >>= 1;
-    right >>= 1;
-    cnt--;
-  }while ( cnt > 0 );
-}
-#endif
-
-
-static  void u8g_dev_ssd1322_1bit_write_16_pixel(u8g_t *u8g, u8g_dev_t *dev, uint8_t left, uint8_t right)
-{
-  uint8_t d, cnt;
-  static uint8_t buf[8];
-  cnt = 8;
-  do
-  {
-    d = 0;
-    if ( left & 128 )
-      d |= 0x0f0;
-    if ( right & 128 )
-      d |= 0x00f;
-    cnt--;
-    buf[cnt] = d;
-    left <<= 1;
-    right <<= 1;
-  }while ( cnt > 0 );
-  
-    buf[0] = 0x0ff;
-    buf[1] = 0x00f;
-    buf[2] = 0x00f;
-    buf[3] = 0x00f;
-    buf[4] = 0x00f;
-    buf[5] = 0x00f;
-    buf[6] = 0x00f;
-    buf[7] = 0x000;
-  u8g_WriteSequence(u8g, dev, 8, buf);
-}
-
-static void u8g_dev_ssd1322_1bit_write_buffer(u8g_t *u8g, u8g_dev_t *dev, uint8_t is_odd)
-{
-  uint8_t cnt, left, right;
-  uint8_t *ptr;
-  u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-  
-  ptr = pb->buf;
-  cnt = pb->width;
-  if ( is_odd )
-    ptr += cnt;
-  cnt >>= 1;
-  do
-  {
-    left = *ptr++;
-    right = *ptr++;
-    u8g_dev_ssd1322_1bit_write_16_pixel(u8g, dev, left, right);
-      
-    cnt--;
-  } while( cnt > 0 );
-}
-
-uint8_t OLD_u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
-{
-  switch(msg)
-  {
-    case U8G_DEV_MSG_INIT:
-      u8g_InitCom(u8g, dev);
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1322_1bit_nhd_312_init_seq);
-      break;
-    case U8G_DEV_MSG_STOP:
-      break;
-    case U8G_DEV_MSG_PAGE_NEXT:
-      {
-        u8g_dev_ssd1322_1bit_prepare_page(u8g, dev);
-        u8g_dev_ssd1322_1bit_write_buffer(u8g, dev, 0);
-        u8g_SetChipSelect(u8g, dev, 0);        
-      }
-      break;
-    case U8G_DEV_MSG_CONTRAST:
-      u8g_SetChipSelect(u8g, dev, 1);
-      u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
-      u8g_WriteByte(u8g, dev, 0x081);
-      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
-      u8g_SetChipSelect(u8g, dev, 0);      
-      break;
-  }
-  return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
-}
-
 uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
+  /*
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
@@ -531,12 +266,13 @@ uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
       break;
     case U8G_DEV_MSG_CONTRAST:
       u8g_SetChipSelect(u8g, dev, 1);
-      u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
+      u8g_SetAddress(u8g, dev, 0);        
       u8g_WriteByte(u8g, dev, 0x081);
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
       u8g_SetChipSelect(u8g, dev, 0);      
       break;
   }
+  */
   return u8g_dev_pb16v1_base_fn(u8g, dev, msg, arg);
 }
 
