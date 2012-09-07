@@ -140,8 +140,8 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8
 	  u8g_WriteByte(u8g, dev, 0x0ff);
 	  u8g_WriteByte(u8g, dev, 0x0ff);
 #endif
-	  //u8g_WriteSequenceBWTo16GrDevice(u8g, dev, cnt, p);
-	  u8g_WriteSequenceBWTo16GrDevice(u8g, dev, 128/8, p+128/8);
+	  u8g_WriteSequenceBWTo16GrDevice(u8g, dev, cnt, p);
+	  //u8g_WriteSequenceBWTo16GrDevice(u8g, dev, 128/8, p+128/8);
 #if !defined(U8G_16BIT)
 	  u8g_WriteByte(u8g, dev, 0x0ff);
 	  u8g_WriteByte(u8g, dev, 0x0ff);

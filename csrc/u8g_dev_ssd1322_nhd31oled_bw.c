@@ -246,7 +246,6 @@ uint8_t u8g_dev_ssd1322_nhd31oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
 
 uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
-  /*
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
@@ -257,23 +256,40 @@ uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
-        u8g_dev_ssd1322_1bit_2x_prepare_page(u8g, dev, 0);
-        u8g_dev_ssd1322_1bit_write_buffer(u8g, dev, 0);
-        u8g_dev_ssd1322_1bit_2x_prepare_page(u8g, dev, 1);
-        u8g_dev_ssd1322_1bit_write_buffer(u8g, dev, 1);
-        u8g_SetChipSelect(u8g, dev, 0);        
+	uint8_t i;
+	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+	uint8_t *p = pb->buf;
+	u8g_uint_t cnt;
+	cnt = pb->width;
+	cnt >>= 3;
+
+	for( i = 0; i < pb->p.page_height; i++ )
+	{
+	  u8g_dev_ssd1322_1bit_prepare_row(u8g, dev, i);		/* this will also enable chip select */
+#if !defined(U8G_16BIT)
+	  u8g_WriteByte(u8g, dev, 0x0ff);
+	  u8g_WriteByte(u8g, dev, 0x0ff);
+#endif
+	  u8g_WriteSequenceBWTo16GrDevice(u8g, dev, cnt, p);
+#if !defined(U8G_16BIT)
+	  u8g_WriteByte(u8g, dev, 0x0ff);
+	  u8g_WriteByte(u8g, dev, 0x0ff);
+#endif
+	  u8g_SetChipSelect(u8g, dev, 0);        
+	  p+=cnt;
+	}
       }
       break;
     case U8G_DEV_MSG_CONTRAST:
       u8g_SetChipSelect(u8g, dev, 1);
-      u8g_SetAddress(u8g, dev, 0);        
+      u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
       u8g_WriteByte(u8g, dev, 0x081);
+      u8g_SetAddress(u8g, dev, 1);          /* data mode */
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
       u8g_SetChipSelect(u8g, dev, 0);      
       break;
   }
-  */
-  return u8g_dev_pb16v1_base_fn(u8g, dev, msg, arg);
+  return u8g_dev_pb16h1_base_fn(u8g, dev, msg, arg);
 }
 
 
