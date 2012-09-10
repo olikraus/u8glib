@@ -107,20 +107,46 @@ static void u8g_dev_ssd1325_gr_prepare_row(u8g_t *u8g, u8g_dev_t *dev, uint8_t d
   u8g_SetAddress(u8g, dev, 1);          /* data mode */
 }
 
-/* obsolete, replaced by u8g_dev_ssd1325_prepare_row() */
-static void u8g_dev_ssd1325_2bit_prepare_page(u8g_t *u8g, u8g_dev_t *dev)
+
+static uint8_t u8g_dev_ssd1325_nhd27oled_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
-  uint8_t page = ((u8g_pb_t *)(dev->dev_mem))->p.page;
-  
-  u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_2bit_nhd_27_12864ucy3_prepare_page_seq);
-  
-  page <<= 2;
-  u8g_WriteByte(u8g, dev, page);       /* start at the selected page */
-  page += 3;
-  u8g_WriteByte(u8g, dev, page);       /* end within the selected page */  
-  
-  u8g_SetAddress(u8g, dev, 1);          /* data mode */
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_InitCom(u8g, dev);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_2bit_nhd_27_12864ucy3_init_seq);
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+	uint8_t i;
+	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+	uint8_t *p = pb->buf;
+	u8g_uint_t cnt;
+	cnt = pb->width;
+	cnt >>= 2;
+
+	for( i = 0; i < pb->p.page_height; i++ )
+	{
+	  u8g_dev_ssd1325_gr_prepare_row(u8g, dev, i);		/* this will also enable chip select */
+	  u8g_WriteSequence4LTo16GrDevice(u8g, dev, cnt, p);
+	  u8g_SetChipSelect(u8g, dev, 0);        
+	  p+=cnt;
+	}
+      }
+      break;
+    case U8G_DEV_MSG_CONTRAST:
+      u8g_SetChipSelect(u8g, dev, 1);
+      u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
+      u8g_WriteByte(u8g, dev, 0x081);
+      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
+      u8g_SetChipSelect(u8g, dev, 0);      
+      return 1;
+  }
+  return u8g_dev_pb8h2_base_fn(u8g, dev, msg, arg);
 }
+
 
 static void u8g_dev_ssd1325_2bit_2x_prepare_page(u8g_t *u8g, u8g_dev_t *dev, uint8_t is_odd)
 {
@@ -160,24 +186,6 @@ static  void u8g_dev_ssd1325_2bit_write_4_pixel(u8g_t *u8g, u8g_dev_t *dev, uint
   }while ( cnt > 0 );
 }
 
-static void u8g_dev_ssd1325_2bit_write_buffer(u8g_t *u8g, u8g_dev_t *dev)
-{
-  uint8_t cnt, left, right;
-  uint8_t *ptr;
-  u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-  
-  cnt = pb->width;
-  cnt >>= 1;
-  ptr = pb->buf;
-  do
-  {
-    left = *ptr++;
-    right = *ptr++;
-    u8g_dev_ssd1325_2bit_write_4_pixel(u8g, dev, left, right);
-    cnt--;
-  } while( cnt > 0 );
-}
-
 static void u8g_dev_ssd1325_2bit_2x_write_buffer(u8g_t *u8g, u8g_dev_t *dev, uint8_t is_odd)
 {
   uint8_t cnt, left, right;
@@ -196,45 +204,6 @@ static void u8g_dev_ssd1325_2bit_2x_write_buffer(u8g_t *u8g, u8g_dev_t *dev, uin
     u8g_dev_ssd1325_2bit_write_4_pixel(u8g, dev, left, right);
     cnt--;
   } while( cnt > 0 );
-}
-
-static uint8_t u8g_dev_ssd1325_nhd27oled_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
-{
-  switch(msg)
-  {
-    case U8G_DEV_MSG_INIT:
-      u8g_InitCom(u8g, dev);
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_2bit_nhd_27_12864ucy3_init_seq);
-      break;
-    case U8G_DEV_MSG_STOP:
-      break;
-    case U8G_DEV_MSG_PAGE_NEXT:
-      {
-	uint8_t i;
-	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-	uint8_t *p = pb->buf;
-	u8g_uint_t cnt;
-	cnt = pb->width;
-	cnt >>= 2;
-
-	for( i = 0; i < pb->p.page_height; i++ )
-	{
-	  u8g_dev_ssd1325_gr_prepare_row(u8g, dev, i);		/* this will also enable chip select */
-	  u8g_WriteSequence4LTo16GrDevice(u8g, dev, cnt, p);
-	  u8g_SetChipSelect(u8g, dev, 0);        
-	  p+=cnt;
-	}
-      }
-      break;
-    case U8G_DEV_MSG_CONTRAST:
-      u8g_SetChipSelect(u8g, dev, 1);
-      u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
-      u8g_WriteByte(u8g, dev, 0x081);
-      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
-      u8g_SetChipSelect(u8g, dev, 0);      
-      return 1;
-  }
-  return u8g_dev_pb8h2_base_fn(u8g, dev, msg, arg);
 }
 
 static uint8_t u8g_dev_ssd1325_nhd27oled_2x_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
