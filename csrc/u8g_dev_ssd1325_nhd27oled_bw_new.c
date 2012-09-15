@@ -69,6 +69,7 @@ static const uint8_t u8g_dev_ssd1325_nhd_27_12864_init_seq[] PROGMEM = {
   0x086,                                /* full current range (0x084, 0x085, 0x086) */
   0x0b8,                                /* set gray scale table */
       0x01, 0x011, 0x022, 0x032, 0x043, 0x054, 0x065, 0x076,
+  
   0x081, 0x070,                    /* contrast, brightness, 0..128, Newhaven: 0x040 */
   0x0b2, 0x051,                    /* frame frequency (row period) */
   0x0b1, 0x055,                    /* phase length */
@@ -155,7 +156,6 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8
       u8g_SetChipSelect(u8g, dev, 1);
       u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
       u8g_WriteByte(u8g, dev, 0x081);
-      u8g_SetAddress(u8g, dev, 1);          /* data mode */
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
       u8g_SetChipSelect(u8g, dev, 0);      
       break;
@@ -203,7 +203,6 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, ui
       u8g_SetChipSelect(u8g, dev, 1);
       u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
       u8g_WriteByte(u8g, dev, 0x081);
-      u8g_SetAddress(u8g, dev, 1);          /* data mode */
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
       u8g_SetChipSelect(u8g, dev, 0);      
       break;
