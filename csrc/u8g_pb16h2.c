@@ -148,13 +148,13 @@ uint8_t u8g_dev_pb16h2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *ar
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_FIRST:
-      u8g_pb16h2_Clear(pb);
       u8g_page_First(&(pb->p));
+      u8g_pb16h2_Clear(pb);
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       if ( u8g_page_Next(&(pb->p)) == 0 )
         return 0;
-      u8g_pb_Clear(pb);
+      u8g_pb16h2_Clear(pb);
       break;
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
       return u8g_pb_IsIntersection(pb, (u8g_dev_arg_bbx_t *)arg);
