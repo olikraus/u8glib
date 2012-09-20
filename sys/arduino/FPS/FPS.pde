@@ -41,10 +41,10 @@
   DOGXL160 SW SPI:         FPS: Box=1.7   @=1.9               iFPS: Box=6.9 @=7.7
   DOGXL160 HW SPI:         FPS: Box=1.8   @=2.1               
   
-  NHD27OLED_BW, SW SPI: FPS: Box=1.6  @=2.0
-  NHD27OLED_BW, HW SPI: FPS: Box=1.8  @=2.4
-  NHD27OLED_2X_BW, SW SPI: FPS: Box=2.0  @=2.6
-  NHD27OLED_2X_BW, HW SPI: FPS: Box=2.4  @=3.4
+  NHD27OLED_BW, SW SPI: FPS: Box=3.0  @=3.7
+  NHD27OLED_BW, HW SPI: FPS: Box=3.5  @=4.5
+  NHD27OLED_2X_BW, SW SPI: FPS: Box=3.8  @=4.9
+  NHD27OLED_2X_BW, HW SPI: FPS: Box=4.6  @=6.4
   
   
 */
@@ -54,8 +54,8 @@
 
 // setup u8g object, please remove comment from one of the following constructor calls
 
-//U8GLIB_NHD27OLED_BW u8g(13,11,10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-U8GLIB_NHD27OLED_2X_BW u8g(10, 9); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_NHD27OLED_2X_BW u8g(13, 11, 10, 9); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_2X_GR u8g(13, 11, 10, 9);  // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9

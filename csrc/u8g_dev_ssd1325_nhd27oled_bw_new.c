@@ -45,11 +45,7 @@
 #include "u8g.h"
 
 /* width must be multiple of 8, largest value is 248 unless u8g 16 bit mode is enabled */
-#if defined(U8G_16BIT)
-#define WIDTH 256
-#else
-#define WIDTH 120
-#endif
+#define WIDTH 128
 #define HEIGHT 64
 
 /* http://www.newhavendisplay.com/app_notes/OLED_2_7_12864.txt */
@@ -137,16 +133,7 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8
 	for( i = 0; i < pb->p.page_height; i++ )
 	{
 	  u8g_dev_ssd1325_prepare_row(u8g, dev, i);		/* this will also enable chip select */
-#if !defined(U8G_16BIT)
-	  u8g_WriteByte(u8g, dev, 0x0ff);
-	  u8g_WriteByte(u8g, dev, 0x0ff);
-#endif
 	  u8g_WriteSequenceBWTo16GrDevice(u8g, dev, cnt, p);
-	  //u8g_WriteSequenceBWTo16GrDevice(u8g, dev, 128/8, p+128/8);
-#if !defined(U8G_16BIT)
-	  u8g_WriteByte(u8g, dev, 0x0ff);
-	  u8g_WriteByte(u8g, dev, 0x0ff);
-#endif
 	  u8g_SetChipSelect(u8g, dev, 0);        
 	  p+=cnt;
 	}
@@ -185,15 +172,7 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, ui
 	for( i = 0; i < pb->p.page_height; i++ )
 	{
 	  u8g_dev_ssd1325_prepare_row(u8g, dev, i);		/* this will also enable chip select */
-#if !defined(U8G_16BIT)
-	  u8g_WriteByte(u8g, dev, 0x0ff);
-	  u8g_WriteByte(u8g, dev, 0x0ff);
-#endif
 	  u8g_WriteSequenceBWTo16GrDevice(u8g, dev, cnt, p);
-#if !defined(U8G_16BIT)
-	  u8g_WriteByte(u8g, dev, 0x0ff);
-	  u8g_WriteByte(u8g, dev, 0x0ff);
-#endif
 	  u8g_SetChipSelect(u8g, dev, 0);        
 	  p+=cnt;
 	}
