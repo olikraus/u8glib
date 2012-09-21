@@ -43,6 +43,8 @@
 #include "u8g.h"
 #include <string.h>
 
+#define NEW_CODE
+
 
 void u8g_pb8h1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width) U8G_NOINLINE;
 void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index) U8G_NOINLINE;
@@ -99,6 +101,7 @@ static void u8g_pb8h1_state_up(struct u8g_pb_h1_struct *s)
   s->ptr -= s->line_byte_len;
 }
 
+static void u8g_pb8h1_state_init(struct u8g_pb_h1_struct *s, u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y) U8G_NOINLINE;
 static void u8g_pb8h1_state_init(struct u8g_pb_h1_struct *s, u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y)
 {
   register uint8_t mask;
@@ -125,26 +128,6 @@ static void u8g_pb8h1_state_init(struct u8g_pb_h1_struct *s, u8g_pb_t *b, u8g_ui
   s->mask = mask;
 }
 
-static void u8g_pb8h1_state_direction(u8g_pb_t *b, struct u8g_pb_h1_struct *s, uint8_t dir)
-{
-    switch( dir )
-    {
-      case 0: 
-	// arg_pixel->x++; 
-	break;
-      case 1: 
-	// arg_pixel->y++; 
-	break;
-      case 2: 
-	// arg_pixel->x--; 
-	break;
-      case 3: 
-	// arg_pixel->y--; 
-	break;
-    }
-}
-
-
 static void u8g_pb8h1_state_set_pixel(struct u8g_pb_h1_struct *s, uint8_t color_index)
 {
   if ( color_index )
@@ -170,21 +153,20 @@ void u8g_pb8h1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
 /* limitation: total buffer must not exceed 256 bytes */
 void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
 {
-#ifdef NEW_CODE  
+#ifdef NEW_CODE
   struct u8g_pb_h1_struct s;
   u8g_pb8h1_state_init(&s, b, x, y);
   u8g_pb8h1_state_set_pixel(&s, color_index);
 
-  u8g_pb8h1_state_right(&s);
-  if ( s.y > b->p.page_y1 )
-    return;
-  if ( s.x > b->width )
-    return;
-  u8g_pb8h1_state_set_pixel(&s, color_index);
+//  u8g_pb8h1_state_up(&s);
+//  if ( s.y > b->p.page_y1 )
+//    return;
+//  if ( s.x > b->width )
+//    return;
+//  u8g_pb8h1_state_set_pixel(&s, color_index);
 #else
   register uint8_t mask;
   u8g_uint_t tmp;
-  //static uint8_t bitmask[8] = { 0x080, 0x040, 0x020, 0x010, 0x008, 0x004, 0x002, 0x001 };
   uint8_t *ptr = b->buf;
   
   y -= b->p.page_y0;
@@ -195,7 +177,6 @@ void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_
   
   mask = 0x080;
   mask >>= x & 7;
-  //mask = bitmask[x & 7];
   x >>= 3;
   ptr += x;
   if ( color_index )
@@ -266,6 +247,64 @@ void u8g_pb8h1_Set8PixelOpt2(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
   } while( pixel != 0  );  
 }
 
+void u8g_pb8h1_Set8PixelState(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
+{
+  register uint8_t pixel = arg_pixel->pixel;
+  struct u8g_pb_h1_struct s;
+  uint8_t cnt;
+  u8g_pb8h1_state_init(&s, b, arg_pixel->x, arg_pixel->y);
+  //u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
+    cnt = 8;
+    switch( arg_pixel->dir )
+    {
+      case 0: 
+	do
+	{
+	  if ( s.x < b->width )
+	    if ( pixel & 128 )
+	      u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
+	  u8g_pb8h1_state_right(&s); 
+	  pixel <<= 1;
+	  cnt--;
+	} while( cnt > 0 && pixel != 0  );
+	break;
+      case 1: 
+	do
+	{
+	  if ( s.y <= b->p.page_y1 )
+	    if ( pixel & 128 )
+	      u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
+	  u8g_pb8h1_state_down(&s); 
+	  pixel <<= 1;
+	  cnt--;
+	} while( cnt > 0 && pixel != 0  );
+	break;
+      case 2: 
+	do
+	{
+	  if ( s.x < b->width )
+	    if ( pixel & 128 )
+	      u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
+	  u8g_pb8h1_state_left(&s); 
+	  pixel <<= 1;
+	  cnt--;
+	} while( cnt > 0 && pixel != 0 );
+	break;
+      case 3: 	
+	do
+	{
+	  if ( s.y >= b->p.page_y0 )
+	    if ( pixel & 128 )
+	      u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
+	  u8g_pb8h1_state_up(&s); 
+	  pixel <<= 1;
+	  cnt--;
+	} while( cnt > 0 && pixel != 0  );
+	break;
+
+    }
+}
+
 
 uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -274,7 +313,8 @@ uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
   {
     case U8G_DEV_MSG_SET_8PIXEL:
       if ( u8g_pb_Is8PixelVisible(pb, (u8g_dev_arg_pixel_t *)arg) )
-        u8g_pb8h1_Set8PixelOpt2(pb, (u8g_dev_arg_pixel_t *)arg);
+        u8g_pb8h1_Set8PixelState(pb, (u8g_dev_arg_pixel_t *)arg);
+        //u8g_pb8h1_Set8PixelOpt2(pb, (u8g_dev_arg_pixel_t *)arg);
       break;
     case U8G_DEV_MSG_SET_PIXEL:
       u8g_pb8h1_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);
