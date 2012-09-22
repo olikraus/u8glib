@@ -91,6 +91,31 @@ void draw_set_screen(void) {
   u8g.drawBox( 0, 0, u8g.getWidth(), u8g.getHeight() );
 }
 
+void draw_clip_test(void) {
+  u8g_uint_t i, j, k;
+  char buf[3] = "AB";
+  k = 0;
+  u8g.setColorIndex(1);
+  u8g.setFont(u8g_font_6x10);
+  
+  for( i = 0; i  < 6; i++ ) {
+    for( j = 1; j  < 8; j++ ) {
+      u8g.drawHLine(i-3, k, j);
+      u8g.drawHLine(i-3+10, k, j);
+      
+      u8g.drawVLine(k+20, i-3, j);
+      u8g.drawVLine(k+20, i-3+10, j);
+      
+      k++;
+    }
+  }
+  u8g.drawStr(0-3, 50, buf);
+  u8g.drawStr(u8g.getWidth()-3, 40, buf);
+  u8g.drawStr180(0+3, 50, buf);
+  u8g.drawStr180(u8g.getWidth()+3, 40, buf);
+  
+}
+
 void draw_char(void) {
   char buf[2] = "@";
   u8g_uint_t i, j;
@@ -110,6 +135,7 @@ void draw_char(void) {
     if ( j > u8g.getHeight() )
       break;
   }
+  
 }
 
 void draw_pixel(void) {
@@ -176,12 +202,15 @@ void setup(void) {
 
 void loop(void) {
   uint16_t fps;
+  fps = picture_loop_with_fps(draw_clip_test);
+  show_result("draw clip test", fps);
+  delay(5000);
   fps = picture_loop_with_fps(draw_set_screen);
   show_result("clear screen", fps);
   delay(5000);
   fps = picture_loop_with_fps(draw_char);
   show_result("draw @", fps);
-  delay(5000);
+  delay(5000);  
   fps = picture_loop_with_fps(draw_pixel);
   show_result("draw pixel", fps);
   delay(5000);

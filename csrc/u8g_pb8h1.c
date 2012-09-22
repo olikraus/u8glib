@@ -55,8 +55,8 @@ uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 
 struct u8g_pb_h1_struct
 {
-  u8g_uint_t x;
-  u8g_uint_t y;
+  volatile u8g_uint_t x;
+  volatile u8g_uint_t y;
   uint8_t *ptr;
   uint8_t mask;
   uint8_t line_byte_len;
@@ -109,13 +109,15 @@ static void u8g_pb8h1_state_init(struct u8g_pb_h1_struct *s, u8g_pb_t *b, u8g_ui
   
   uint8_t *ptr = b->buf;
   
-  s->x = x;
+  s->x = x;  
   s->y = y;
   
   y -= b->p.page_y0;
+  
   tmp = b->width;
   tmp >>= 3;
   s->line_byte_len = tmp;
+  //s->line_byte_len = 0;
   tmp *= (uint8_t)y;
   ptr += tmp;
   
@@ -253,56 +255,57 @@ void u8g_pb8h1_Set8PixelState(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
   struct u8g_pb_h1_struct s;
   uint8_t cnt;
   u8g_pb8h1_state_init(&s, b, arg_pixel->x, arg_pixel->y);
-  //u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
-    cnt = 8;
-    switch( arg_pixel->dir )
-    {
-      case 0: 
-	do
-	{
-	  if ( s.x < b->width )
-	    if ( pixel & 128 )
-	      u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
-	  u8g_pb8h1_state_right(&s); 
-	  pixel <<= 1;
-	  cnt--;
-	} while( cnt > 0 && pixel != 0  );
-	break;
-      case 1: 
-	do
-	{
+  cnt = 8;
+  switch( arg_pixel->dir )
+  {
+    case 0: 
+      do
+      {
+	if ( s.x < b->width )
+	  if ( pixel & 128 )
+	    u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
+	u8g_pb8h1_state_right(&s); 
+	pixel <<= 1;
+	cnt--;
+      } while( cnt > 0 && pixel != 0  );
+      break;
+    case 1: 
+      
+      do
+      {
+	if ( s.y >= b->p.page_y0 )
 	  if ( s.y <= b->p.page_y1 )
 	    if ( pixel & 128 )
 	      u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
-	  u8g_pb8h1_state_down(&s); 
-	  pixel <<= 1;
-	  cnt--;
-	} while( cnt > 0 && pixel != 0  );
-	break;
-      case 2: 
-	do
-	{
-	  if ( s.x < b->width )
+	u8g_pb8h1_state_down(&s); 
+	pixel <<= 1;
+	cnt--;
+      } while( cnt > 0 && pixel != 0  );
+      break;
+    case 2: 
+      do
+      {
+	if ( s.x < b->width )
+	  if ( pixel & 128 )
+	    u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
+	u8g_pb8h1_state_left(&s); 
+	pixel <<= 1;
+	cnt--;
+      } while( cnt > 0 && pixel != 0 );
+      break;
+    case 3: 	
+      do
+      {
+	if ( s.y >= b->p.page_y0 )
+	  if ( s.y <= b->p.page_y1 )
 	    if ( pixel & 128 )
 	      u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
-	  u8g_pb8h1_state_left(&s); 
-	  pixel <<= 1;
-	  cnt--;
-	} while( cnt > 0 && pixel != 0 );
-	break;
-      case 3: 	
-	do
-	{
-	  if ( s.y >= b->p.page_y0 )
-	    if ( pixel & 128 )
-	      u8g_pb8h1_state_set_pixel(&s, arg_pixel->color);
-	  u8g_pb8h1_state_up(&s); 
-	  pixel <<= 1;
-	  cnt--;
-	} while( cnt > 0 && pixel != 0  );
-	break;
-
-    }
+	u8g_pb8h1_state_up(&s); 
+	pixel <<= 1;
+	cnt--;
+      } while( cnt > 0 && pixel != 0  );
+      break;
+  }
 }
 
 
