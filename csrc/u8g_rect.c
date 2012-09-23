@@ -83,6 +83,8 @@ void u8g_DrawHLine(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w)
 
 void u8g_DrawVLine(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w)
 {
+  if ( u8g_IsBBXIntersection(u8g, x, y, 1, w) == 0 )
+    return;
   u8g_draw_vline(u8g, x, y, w);
 }
 

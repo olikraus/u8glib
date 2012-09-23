@@ -10,7 +10,7 @@ int main(void)
   u8g_uint_t w,h;
   u8g_t u8g;
   
-  u8g_Init(&u8g, &u8g_dev_pbm);
+  u8g_Init(&u8g, &u8g_dev_pbm_8h1);
   u8g_FirstPage(&u8g);
   do
   {

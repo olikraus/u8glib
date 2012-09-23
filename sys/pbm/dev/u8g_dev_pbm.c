@@ -19,11 +19,12 @@
 #endif
 #define PAGE_HEIGHT 8
 
+/* 8v1 */
 uint8_t u8g_dev_pbm_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 
-uint8_t u8g_pb_dev_pbm_buf[WIDTH];
-u8g_pb_t u8g_pb_dev_pbm = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_pb_dev_pbm_buf };
+static uint8_t u8g_pb_dev_pbm_buf[WIDTH];
+static u8g_pb_t u8g_pb_dev_pbm = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_pb_dev_pbm_buf };
 
 u8g_dev_t u8g_dev_pbm = { u8g_dev_pbm_fn, &u8g_pb_dev_pbm };
 
@@ -70,4 +71,5 @@ uint8_t u8g_dev_pbm_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
   }
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
+
 

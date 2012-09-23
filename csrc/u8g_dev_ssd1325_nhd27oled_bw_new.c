@@ -115,6 +115,8 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8
 {
   switch(msg)
   {
+    //case U8G_DEV_MSG_IS_BBX_INTERSECTION:
+    //  return u8g_pb_IsIntersection((u8g_pb_t *)(dev->dev_mem), (u8g_dev_arg_bbx_t *)arg);
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
       u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1325_nhd_27_12864_init_seq);

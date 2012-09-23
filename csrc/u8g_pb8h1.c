@@ -37,14 +37,23 @@
 
   total buffer size is limited to 256 bytes because of the calculation inside the set pixel procedure
 
+  23. Sep 2012:Bug with down procedire, see FPS 1st page
 
 */
 
 #include "u8g.h"
 #include <string.h>
 
+#ifdef __unix__
+#include <assert.h>
+#endif
+
 #define NEW_CODE
 
+#ifdef __unix__
+void *u8g_buf_lower_limit;
+void *u8g_buf_upper_limit;
+#endif
 
 void u8g_pb8h1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width) U8G_NOINLINE;
 void u8g_pb8h1_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index) U8G_NOINLINE;
@@ -55,8 +64,8 @@ uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 
 struct u8g_pb_h1_struct
 {
-  volatile u8g_uint_t x;
-  volatile u8g_uint_t y;
+  u8g_uint_t x;
+  u8g_uint_t y;
   uint8_t *ptr;
   uint8_t mask;
   uint8_t line_byte_len;
@@ -65,6 +74,7 @@ struct u8g_pb_h1_struct
 
 static uint8_t u8g_pb8h1_bitmask[8] = { 0x080, 0x040, 0x020, 0x010, 0x008, 0x004, 0x002, 0x001 };
 
+static void u8g_pb8h1_state_right(struct u8g_pb_h1_struct *s)  U8G_NOINLINE;
 static void u8g_pb8h1_state_right(struct u8g_pb_h1_struct *s)
 {
   register u8g_uint_t x;
@@ -104,7 +114,6 @@ static void u8g_pb8h1_state_up(struct u8g_pb_h1_struct *s)
 static void u8g_pb8h1_state_init(struct u8g_pb_h1_struct *s, u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y) U8G_NOINLINE;
 static void u8g_pb8h1_state_init(struct u8g_pb_h1_struct *s, u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y)
 {
-  register uint8_t mask;
   u8g_uint_t tmp;
   
   uint8_t *ptr = b->buf;
@@ -117,21 +126,32 @@ static void u8g_pb8h1_state_init(struct u8g_pb_h1_struct *s, u8g_pb_t *b, u8g_ui
   tmp = b->width;
   tmp >>= 3;
   s->line_byte_len = tmp;
-  //s->line_byte_len = 0;
-  tmp *= (uint8_t)y;
-  ptr += tmp;
   
-  mask = 0x080;
-  mask >>= x & 7;
-  //mask = u8g_pb8h1_bitmask[x & 7];
+  /* assume negative y values, can be down to -7, subtract this from the pointer and add correction of 8 to y */
+  ptr -= tmp*8;
+  y+=8;
+  /* it is important that the result of tmp*y can be 16 bit value also for 8 bit mode */
+  ptr += tmp*y;
+  
+  s->mask = u8g_pb8h1_bitmask[x & 7];
+  
+  /* assume negative x values (to -7), subtract 8 pixel from the pointer and add 8 to x */
+  ptr--;
+  x += 8;
   x >>= 3;
   ptr += x;
   s->ptr = ptr;
-  s->mask = mask;
 }
 
+static void u8g_pb8h1_state_set_pixel(struct u8g_pb_h1_struct *s, uint8_t color_index) U8G_NOINLINE;
 static void u8g_pb8h1_state_set_pixel(struct u8g_pb_h1_struct *s, uint8_t color_index)
 {
+  
+#ifdef __unix__
+  assert( s->ptr >= u8g_buf_lower_limit );
+  assert( s->ptr < u8g_buf_upper_limit );
+#endif
+  
   if ( color_index )
   {
     *s->ptr |= s->mask;
@@ -270,7 +290,6 @@ void u8g_pb8h1_Set8PixelState(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
       } while( cnt > 0 && pixel != 0  );
       break;
     case 1: 
-      
       do
       {
 	if ( s.y >= b->p.page_y0 )

@@ -55,11 +55,14 @@ void u8g_arduino_sw_spi_shift_out(uint8_t dataPin, uint8_t clockPin, uint8_t val
     else
       digitalWrite(dataPin, LOW);
     val <<= 1;
-    delay(1);
+    u8g_MicroDelay();		/* 23 Sep 2012 */
+    //delay(1);
     digitalWrite(clockPin, HIGH);
-    delay(1);
+    u8g_MicroDelay();		/* 23 Sep 2012 */
+    //delay(1);
     digitalWrite(clockPin, LOW);		
-    delay(1);
+    u8g_MicroDelay();		/* 23 Sep 2012 */
+    //delay(1);
     i--;
   } while( i != 0 );
 }

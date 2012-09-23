@@ -36,7 +36,7 @@
 #ifndef _U8G_H
 #define _U8G_H
 
-#define U8G_16BIT 1
+//#define U8G_16BIT 1
 
 #include <stddef.h>
 
@@ -156,6 +156,7 @@ extern u8g_dev_t u8g_dev_stdout;
 
 /* Size: monochrom, writes "u8g.pbm" */
 extern u8g_dev_t u8g_dev_pbm;
+extern u8g_dev_t u8g_dev_pbm_8h1;
 
 /* Size: 128x64 monochrom, no output, used for performance measure */
 extern u8g_dev_t u8g_dev_gprof;

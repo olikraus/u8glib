@@ -110,9 +110,16 @@ void draw_clip_test(void) {
     }
   }
   u8g.drawStr(0-3, 50, buf);
-  u8g.drawStr(u8g.getWidth()-3, 40, buf);
   u8g.drawStr180(0+3, 50, buf);
+  
+  u8g.drawStr(u8g.getWidth()-3, 40, buf);
   u8g.drawStr180(u8g.getWidth()+3, 40, buf);
+
+  u8g.drawStr90(u8g.getWidth()-10, 0-3, buf);
+  u8g.drawStr270(u8g.getWidth()-10, 3, buf);
+
+  u8g.drawStr90(u8g.getWidth()-20, u8g.getHeight()-3, buf);
+  u8g.drawStr270(u8g.getWidth()-20, u8g.getHeight()+3, buf);
   
 }
 
