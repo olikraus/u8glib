@@ -433,6 +433,7 @@ int8_t u8g_GetGlyphDeltaX(u8g_t *u8g, uint8_t requested_encoding)
 /*========================================================================*/
 /* glyph drawing procedures */
 
+#ifdef OBSOLETE
 /*
   Draw a glyph
   x,y: left baseline position of the glyph
@@ -556,7 +557,7 @@ int8_t u8g_DrawGlyphDir(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uin
   }
   return u8g->glyph_dx;
 }
-
+#endif
 
 int8_t u8g_draw_glyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding)
 {
@@ -769,6 +770,7 @@ int8_t u8g_DrawGlyph270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding
 
 
 
+#ifdef OBSOLETE
 /*
   Draw a glyph
   x,y: lower left corner of the font bounding box
@@ -780,6 +782,7 @@ int8_t u8g_DrawGlyphFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir,
   y += u8g_GetFontBBXOffY(u8g);
   return u8g_DrawGlyphDir(u8g, x, y, dir, encoding);
 }
+#endif
 
 /*========================================================================*/
 /* string drawing procedures */
@@ -789,6 +792,9 @@ u8g_uint_t u8g_DrawStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
 {
   u8g_uint_t t = 0;
   int8_t d;
+  
+  //u8g_uint_t u8g_GetStrWidth(u8g, s);
+  //u8g_font_GetFontAscent(u8g->font)-u8g_font_GetFontDescent(u8g->font);
   
   y += u8g->font_calc_vref(u8g);
   
@@ -806,7 +812,7 @@ u8g_uint_t u8g_DrawStr90(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
 {
   u8g_uint_t t = 0;
   int8_t d;
-  
+    
   x -= u8g->font_calc_vref(u8g);
 
   while( *s != '\0' )
