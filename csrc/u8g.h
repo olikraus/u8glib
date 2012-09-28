@@ -95,6 +95,9 @@ typedef uint8_t u8g_fntpgm_uint8_t;
 typedef struct _u8g_t u8g_t;
 typedef struct _u8g_dev_t u8g_dev_t;
 
+typedef struct _u8g_dev_arg_pixel_t u8g_dev_arg_pixel_t;
+typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
+
 
 /*===============================================================*/
 /* generic */
@@ -106,11 +109,13 @@ typedef uint8_t u8g_uint_t;
 typedef int8_t u8g_int_t;
 #endif
 
+#ifdef OBSOLETE
 struct _u8g_box_t
 {
   u8g_uint_t x0, y0, x1, y1;  
 };
 typedef struct _u8g_box_t u8g_box_t;
+#endif /* OBSOLETE */
 
 
 /*===============================================================*/
@@ -288,6 +293,13 @@ struct _u8g_dev_arg_bbx_t
 };
 typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 
+struct _u8g_box_t
+{
+  u8g_uint_t x0, y0, x1, y1;
+};
+typedef struct _u8g_box_t u8g_box_t;
+
+
 #define U8G_DEV_MSG_INIT                10
 #define U8G_DEV_MSG_STOP                  11
 
@@ -299,6 +311,8 @@ typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 
 /* arg: u8g_dev_arg_bbx_t * */
 #define U8G_DEV_MSG_IS_BBX_INTERSECTION 22
+/* arg: u8g_box_t *, fill structure with current page properties */
+#define U8G_DEV_MSG_GET_PAGE_BOX 23
 
 /*
 #define U8G_DEV_MSG_PRIMITIVE_START             30
@@ -541,7 +555,7 @@ uint8_t u8g_page_Next(u8g_page_t *p) U8G_NOINLINE;                              
 struct _u8g_pb_t
 {
   u8g_page_t p;
-  u8g_uint_t width;
+  u8g_uint_t width;		/* pixel width */
   void *buf;
 };
 typedef struct _u8g_pb_t u8g_pb_t;
@@ -552,6 +566,7 @@ void u8g_pb_Clear(u8g_pb_t *b);
 uint8_t u8g_pb_IsYIntersection(u8g_pb_t *pb, u8g_uint_t v0, u8g_uint_t v1);
 uint8_t u8g_pb_IsXIntersection(u8g_pb_t *b, u8g_uint_t v0, u8g_uint_t v1);
 uint8_t u8g_pb_IsIntersection(u8g_pb_t *pb, u8g_dev_arg_bbx_t *bbx);
+void u8g_pb_GetPageBox(u8g_pb_t *pb, u8g_box_t *box);
 uint8_t u8g_pb_Is8PixelVisible(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel);
 uint8_t u8g_pb_WriteBuffer(u8g_pb_t *b, u8g_t *u8g, u8g_dev_t *dev);
 
@@ -711,6 +726,8 @@ struct _u8g_t
   uint8_t pin_list[U8G_PIN_LIST_LEN];
   
   u8g_state_cb state_cb;
+  
+  u8g_box_t current_page;		/* current box of the visible page */
 };
 
 #define u8g_GetFontAscent(u8g) ((u8g)->font_ref_ascent)
@@ -910,6 +927,8 @@ void u8g_DrawEllipseRect(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t x1
 void u8g_DrawCircle(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option);
 void u8g_DrawDisc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option);
 
+/* u8g_clip.c */
+uint8_t u8g_is_box_bbx_intersection(u8g_box_t *box, u8g_dev_arg_bbx_t *bbx);
 
 
 /* u8g_cursor.c */

@@ -151,6 +151,16 @@ uint8_t u8g_pb_IsIntersection(u8g_pb_t *pb, u8g_dev_arg_bbx_t *bbx)
   return u8g_pb_IsXIntersection(pb, bbx->x, tmp);
 }
 
+void u8g_pb_GetPageBox(u8g_pb_t *pb, u8g_box_t *box)
+{
+  box->x0 = 0;
+  box->y0 = pb->p.page_y0;
+  box->x1 = pb->width;
+  box->x1--;
+  box->y1 = pb->p.page_y1;
+}
+
+
 uint8_t u8g_pb_Is8PixelVisible(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
 {
   u8g_uint_t v0, v1;
