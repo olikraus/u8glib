@@ -99,6 +99,7 @@ uint8_t u8g_dev_rot90_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
     case U8G_DEV_MSG_SET_XY_CB:
     */
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
+#ifdef U8G_DEV_MSG_IS_BBX_INTERSECTION
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
       {
         u8g_dev_arg_bbx_t *bbx = (u8g_dev_arg_bbx_t *)arg;
@@ -125,14 +126,15 @@ uint8_t u8g_dev_rot90_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         bbx->y = y;
       }
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
+#endif /* U8G_DEV_MSG_IS_BBX_INTERSECTION */
     case U8G_DEV_MSG_GET_PAGE_BOX:
       /* get page size from next device in the chain */
       u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
       //printf("pre x: %3d..%3d y: %3d..%3d   ", ((u8g_box_t *)arg)->x0, ((u8g_box_t *)arg)->x1, ((u8g_box_t *)arg)->y0, ((u8g_box_t *)arg)->y1);
       {
 	u8g_box_t new_box;
-	new_box.x0 = u8g_GetHeightLL(u8g,rotation_chain) - ((u8g_box_t *)arg)->y1 - 1;
-	new_box.x1 = u8g_GetHeightLL(u8g,rotation_chain) - ((u8g_box_t *)arg)->y0 - 1;
+	//new_box.x0 = u8g_GetHeightLL(u8g,rotation_chain) - ((u8g_box_t *)arg)->y1 - 1;
+	//new_box.x1 = u8g_GetHeightLL(u8g,rotation_chain) - ((u8g_box_t *)arg)->y0 - 1;
 	
 	new_box.x0 = ((u8g_box_t *)arg)->y0;
 	new_box.x1 = ((u8g_box_t *)arg)->y1;
@@ -163,6 +165,7 @@ uint8_t u8g_dev_rot90_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
     case U8G_DEV_MSG_SET_8PIXEL:
       {
         u8g_uint_t x, y;
+	//uint16_t x,y;
         y = ((u8g_dev_arg_pixel_t *)arg)->x;
         x = u8g_GetWidthLL(u8g, rotation_chain);
         x -= ((u8g_dev_arg_pixel_t *)arg)->y; 
@@ -193,6 +196,7 @@ uint8_t u8g_dev_rot180_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
     case U8G_DEV_MSG_SET_XY_CB:
     */
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
+#ifdef U8G_DEV_MSG_IS_BBX_INTERSECTION
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
       {
         u8g_dev_arg_bbx_t *bbx = (u8g_dev_arg_bbx_t *)arg;
@@ -221,6 +225,7 @@ uint8_t u8g_dev_rot180_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         bbx->y = y;
       }
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
+#endif /* U8G_DEV_MSG_IS_BBX_INTERSECTION */
     case U8G_DEV_MSG_GET_PAGE_BOX:
       /* get page size from next device in the chain */
       u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
@@ -297,6 +302,7 @@ uint8_t u8g_dev_rot270_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
     case U8G_DEV_MSG_SET_XY_CB:
     */
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
+#ifdef U8G_DEV_MSG_IS_BBX_INTERSECTION
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
       {
         u8g_dev_arg_bbx_t *bbx = (u8g_dev_arg_bbx_t *)arg;
@@ -324,6 +330,7 @@ uint8_t u8g_dev_rot270_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         bbx->y = y;
       }
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
+#endif /* U8G_DEV_MSG_IS_BBX_INTERSECTION */
     case U8G_DEV_MSG_GET_PAGE_BOX:
       /* get page size from next device in the chain */
       u8g_call_dev_fn(u8g, rotation_chain, msg, arg);

@@ -52,8 +52,10 @@ uint8_t u8g_dev_null(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       break;
+#ifdef U8G_DEV_MSG_IS_BBX_INTERSECTION
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
       return 1;
+#endif
     case U8G_DEV_MSG_GET_PAGE_BOX:
       break;
     case U8G_DEV_MSG_SET_COLOR_INDEX:

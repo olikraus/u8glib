@@ -45,7 +45,7 @@
 
 //U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_2X_BW u8g(13, 11, 10, 9); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_2X_GR u8g(13, 11, 10, 9);  // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
@@ -71,10 +71,19 @@
 //U8GLIB_SSD1327_96X96_2X_GR u8g(U8G_I2C_OPT_NONE);             // I2C
 //U8GLIB_NHD_C12864 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 
+uint8_t offset = 0;
+
 void draw(void) {
   // graphic commands to redraw the complete screen should be placed here  
   u8g.setFont(u8g_font_unifont);
-  u8g.drawStr( 0, 20, "Hello!");
+  u8g.drawStr( 0+0, 20+0, "Hello!");
+  u8g.drawStr( 0+2, 20+16, "Hello!");
+  u8g.drawStr90( u8g.getWidth()-25, 0, "Hello!");
+  
+  u8g.drawBox(0, 0, 3, 3);
+  u8g.drawBox(u8g.getWidth()-6, 0, 6, 6);
+  u8g.drawBox(u8g.getWidth()-9, u8g.getHeight()-9, 9, 9);
+  u8g.drawBox(0, u8g.getHeight()-12, 12, 12);  
 }
 
 void setup(void) {
@@ -91,7 +100,7 @@ void rotate(void) {
       case 0: u8g.undoRotation(); break;
       case 1: u8g.setRot90(); break;
       case 2: u8g.setRot180(); break;
-      case 3: u8g.setRot270(); break;
+      case 3: u8g.setRot270(); offset = ( offset + 1 ) & 0x0f; break;
     }
     
     dir++;

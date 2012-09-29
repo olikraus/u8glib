@@ -97,6 +97,7 @@ typedef struct _u8g_dev_t u8g_dev_t;
 
 typedef struct _u8g_dev_arg_pixel_t u8g_dev_arg_pixel_t;
 typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
+typedef struct _u8g_box_t u8g_box_t;
 
 
 /*===============================================================*/
@@ -162,6 +163,7 @@ extern u8g_dev_t u8g_dev_stdout;
 /* Size: monochrom, writes "u8g.pbm" */
 extern u8g_dev_t u8g_dev_pbm;
 extern u8g_dev_t u8g_dev_pbm_8h1;
+extern u8g_dev_t u8g_dev_pbm_8h2;	/* grayscale simulation */
 
 /* Size: 128x64 monochrom, no output, used for performance measure */
 extern u8g_dev_t u8g_dev_gprof;
@@ -285,19 +287,19 @@ struct _u8g_dev_arg_pixel_t
   uint8_t dir;
   uint8_t color;
 };
-typedef struct _u8g_dev_arg_pixel_t u8g_dev_arg_pixel_t;
+/* typedef struct _u8g_dev_arg_pixel_t u8g_dev_arg_pixel_t; */ /* forward decl */
 
 struct _u8g_dev_arg_bbx_t
 {
   u8g_uint_t x, y, w, h;
 };
-typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
+/* typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t; */ /* forward decl */
 
 struct _u8g_box_t
 {
   u8g_uint_t x0, y0, x1, y1;
 };
-typedef struct _u8g_box_t u8g_box_t;
+/* typedef struct _u8g_box_t u8g_box_t; */ /* forward decl */
 
 
 #define U8G_DEV_MSG_INIT                10
@@ -310,7 +312,9 @@ typedef struct _u8g_box_t u8g_box_t;
 #define U8G_DEV_MSG_PAGE_NEXT                    21
 
 /* arg: u8g_dev_arg_bbx_t * */
-#define U8G_DEV_MSG_IS_BBX_INTERSECTION 22
+/* new algorithm with U8G_DEV_MSG_GET_PAGE_BOX makes this msg obsolete */
+/* #define U8G_DEV_MSG_IS_BBX_INTERSECTION 22 */
+
 /* arg: u8g_box_t *, fill structure with current page properties */
 #define U8G_DEV_MSG_GET_PAGE_BOX 23
 

@@ -71,5 +71,5 @@ uint8_t u8g_is_box_bbx_intersection(u8g_box_t *box, u8g_dev_arg_bbx_t *bbx)
   if ( u8g_is_intersection(box->y0, box->y1, bbx->y, bbx->y + bbx->h - 1) == 0 )
     return 0; 
   
-  return u8g_is_intersection(box->x0, box->x1, bbx->x, bbx->x + bbx->x - 1);
+  return u8g_is_intersection(box->x0, box->x1, bbx->x, bbx->x + bbx->w - 1);
 }

@@ -1,10 +1,11 @@
 /*
 
-  u8g_dev_pbm_h.c
+  u8g_dev_pbm_h2.c
   
   write file u8g.pbm
   
   for 8 and 16 bit mode, this is a 128x64 monochrome picture
+  simulates grayscale
   
 */
 
@@ -14,17 +15,17 @@
 
 #define WIDTH 128
 #define HEIGHT 64
-#define PAGE_HEIGHT 8
+#define PAGE_HEIGHT 4
 
 
 extern void *u8g_buf_lower_limit;
 extern void *u8g_buf_upper_limit;
 
 
-uint8_t u8g_dev_pbm_h_enable = 1;
+uint8_t u8g_dev_pbm_h2_enable = 1;
 
-/* 8h1 */
-uint8_t u8g_dev_pbm_8h1_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+/* 8h2 */
+uint8_t u8g_dev_pbm_8h2_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 
 static uint8_t u8g_pb_dev_pbm_buf[WIDTH];
@@ -32,12 +33,12 @@ static u8g_pb_t u8g_pb_dev_pbm = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_p
 
 
 
-u8g_dev_t u8g_dev_pbm_8h1 = { u8g_dev_pbm_8h1_fn, &u8g_pb_dev_pbm };
+u8g_dev_t u8g_dev_pbm_8h2 = { u8g_dev_pbm_8h2_fn, &u8g_pb_dev_pbm };
 
 
 
 
-uint8_t u8g_dev_pbm_8h1_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_pbm_8h2_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   static FILE *fp;
   u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
@@ -54,7 +55,7 @@ uint8_t u8g_dev_pbm_8h1_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       u8g_pb_Clear(pb);
       u8g_page_First(&(pb->p));
     
-      if ( u8g_dev_pbm_h_enable != 0 )
+      if ( u8g_dev_pbm_h2_enable != 0 )
       {
 	fp = fopen("u8g.pbm", "w");
 	fprintf(fp, "P4\n%d %d\n", WIDTH, HEIGHT);
@@ -62,17 +63,39 @@ uint8_t u8g_dev_pbm_8h1_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       return 1;
     case U8G_DEV_MSG_PAGE_NEXT:
 
-      if ( u8g_dev_pbm_h_enable != 0 )
+      if ( u8g_dev_pbm_h2_enable != 0 )
       {
-        u8g_uint_t i, j;
-        uint8_t b;
-        for( j = 0; j < 8; j++ )
+        u8g_uint_t i, j, k;
+        uint8_t b, b1,b2;
+        for( j = 0; j < PAGE_HEIGHT; j++ )
         {
           b = 0;
-          for( i = 0; i < WIDTH/8; i++ )
+	  i = 0;
+	  for(;;)
           {
-	    b = ((uint8_t *)(pb->buf))[i+j*(WIDTH/8)];
-	    fprintf(fp, "%c", b);
+	    b1 = 0;
+	    b = ((uint8_t *)(pb->buf))[i+j*(WIDTH/4)];
+	    for( k = 0; k < 4; k ++ )
+	    {
+	      b1 >>= 1;
+	      if ( (b&0xc0) != 0 )
+		b1 |= 8;
+	      b <<= 2;
+	    }
+	    i++;
+	    b2 = 0;
+	    b = ((uint8_t *)(pb->buf))[i+j*(WIDTH/4)];
+	    for( k = 0; k < 4; k ++ )
+	    {
+	      b2 >>= 1;
+	      if ( (b&0xc0) != 0 )
+		b2 |= 8;
+	      b <<= 2;
+	    }
+	    i++;
+	    fprintf(fp, "%c", b1*16+b2);
+	    if ( i >= WIDTH/4 )
+	      break;
 	  }
         }
       }
@@ -80,12 +103,12 @@ uint8_t u8g_dev_pbm_8h1_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       
       if ( u8g_page_Next(&(pb->p)) == 0 )
       {
-	if ( u8g_dev_pbm_h_enable != 0 )
+	if ( u8g_dev_pbm_h2_enable != 0 )
 	  fclose(fp);
         return 0;
       }
       u8g_pb_Clear(pb);
       return 1;
   }
-  return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
+  return u8g_dev_pb8h2_base_fn(u8g, dev, msg, arg);
 }

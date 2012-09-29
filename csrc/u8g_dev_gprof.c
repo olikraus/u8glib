@@ -95,6 +95,7 @@ uint8_t u8g_dev_gprof_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       }
       u8g_pb_Clear(pb);
       break;
+#ifdef U8G_DEV_MSG_IS_BBX_INTERSECTION
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
        {
         u8g_dev_arg_bbx_t *bbx = (u8g_dev_arg_bbx_t *)arg;
@@ -116,6 +117,7 @@ uint8_t u8g_dev_gprof_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
           return 0;
       }
       return 1;
+#endif
     case U8G_DEV_MSG_GET_PAGE_BOX:
       u8g_pb_GetPageBox(pb, (u8g_box_t *)arg);
       break;
