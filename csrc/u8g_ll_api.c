@@ -71,7 +71,10 @@ uint8_t u8g_NextPageLL(u8g_t *u8g, u8g_dev_t *dev)
   u8g->state_cb(U8G_STATE_MSG_BACKUP_ENV);
   u8g->state_cb(U8G_STATE_MSG_RESTORE_U8G);
   r = u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_PAGE_NEXT, NULL);
-  u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_GET_PAGE_BOX, &(u8g->current_page));
+  if ( r != 0 )
+  {
+    u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_GET_PAGE_BOX, &(u8g->current_page));
+  }
   u8g->state_cb(U8G_STATE_MSG_RESTORE_ENV);
   return r;
 }

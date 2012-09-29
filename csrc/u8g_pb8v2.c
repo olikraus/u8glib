@@ -129,6 +129,9 @@ uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
       break;
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
       return u8g_pb_IsIntersection(pb, (u8g_dev_arg_bbx_t *)arg);
+    case U8G_DEV_MSG_GET_PAGE_BOX:
+      u8g_pb_GetPageBox(pb, (u8g_box_t *)arg);
+      break;
     case U8G_DEV_MSG_GET_WIDTH:
       *((u8g_uint_t *)arg) = pb->width;
       break;

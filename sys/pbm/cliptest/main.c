@@ -40,6 +40,12 @@ void draw_clip_test(void) {
 
   u8g_DrawStr90(&u8g, u8g_GetWidth(&u8g)-20, u8g_GetHeight(&u8g)-3, buf);
   u8g_DrawStr270(&u8g, u8g_GetWidth(&u8g)-20, u8g_GetHeight(&u8g)+3, buf);  
+  
+  u8g_DrawBox(&u8g, 0, 0, 10, 10);
+  u8g_DrawBox(&u8g, u8g_GetWidth(&u8g)-10-1, 0, 10, 10);
+  u8g_DrawBox(&u8g, u8g_GetWidth(&u8g)-10-1, u8g_GetHeight(&u8g)-10-1, 10, 10);
+  u8g_DrawBox(&u8g, 0, u8g_GetHeight(&u8g)-10-1, 10, 10);
+  
 }
 
 
@@ -48,7 +54,11 @@ int main(void)
   int i;
   u8g_Init(&u8g, &u8g_dev_pbm_8h1);
   
-  for( i = 0; i < 10000; i++ )
+  u8g_SetRot270(&u8g);
+
+  
+  //for( i = 0; i < 10000; i++ )
+  for( i = 0; i < 1; i++ )
   {
     u8g_FirstPage(&u8g);
     do
