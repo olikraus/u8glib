@@ -78,7 +78,6 @@ void draw(void) {
   u8g.setFont(u8g_font_unifont);
   u8g.drawStr( 0+0, 20+0, "Hello!");
   u8g.drawStr( 0+2, 20+16, "Hello!");
-  u8g.drawStr90( u8g.getWidth()-25, 0, "Hello!");
   
   u8g.drawBox(0, 0, 3, 3);
   u8g.drawBox(u8g.getWidth()-6, 0, 6, 6);

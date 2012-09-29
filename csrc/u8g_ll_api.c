@@ -102,17 +102,12 @@ void u8g_Draw8PixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, ui
   u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_SET_8PIXEL, arg);
 }
 
+#ifdef U8G_DEV_MSG_IS_BBX_INTERSECTION
 uint8_t u8g_IsBBXIntersectionLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h)
-{
-  u8g_dev_arg_bbx_t arg;
-  arg.x = x;
-  arg.y = y;
-  arg.w = w;
-  arg.h = h;
-  return u8g_is_box_bbx_intersection(&(u8g->current_page), &arg);
-  
-  //return u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_IS_BBX_INTERSECTION, &arg);
+{  
+  return u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_IS_BBX_INTERSECTION, &arg);
 }
+#endif
 
 
 
@@ -335,6 +330,8 @@ void u8g_Draw8Pixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t
   u8g_Draw8PixelLL(u8g, u8g->dev, x, y, dir, pixel);
 }
 
+/* u8g_IsBBXIntersection() has been moved to u8g_clip.c */
+#ifdef OBSOLETE_CODE
 uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h)
 {
   /* new code */
@@ -348,6 +345,7 @@ uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t
   /* old code */
   //return u8g_IsBBXIntersectionLL(u8g, u8g->dev, x, y, w, h);
 }
+#endif
 
 void u8g_SetColorIndex(u8g_t *u8g, uint8_t idx)
 {

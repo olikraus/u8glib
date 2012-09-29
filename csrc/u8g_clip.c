@@ -66,10 +66,30 @@ uint8_t u8g_is_intersection(u8g_uint_t a0, u8g_uint_t a1, u8g_uint_t v0, u8g_uin
   return c1 & 1;
 }
 
+#ifdef OLD_CODE
 uint8_t u8g_is_box_bbx_intersection(u8g_box_t *box, u8g_dev_arg_bbx_t *bbx)
 {
   if ( u8g_is_intersection(box->y0, box->y1, bbx->y, bbx->y + bbx->h - 1) == 0 )
     return 0; 
   
   return u8g_is_intersection(box->x0, box->x1, bbx->x, bbx->x + bbx->w - 1);
+}
+
+uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h)
+{
+  u8g_dev_arg_bbx_t arg;
+  arg.x = x;
+  arg.y = y;
+  arg.w = w;
+  arg.h = h;
+  return u8g_is_box_bbx_intersection(&(u8g->current_page), &arg);
+}
+#endif
+
+uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h)
+{
+  if ( u8g_is_intersection(u8g->current_page.y0, u8g->current_page.y1, y, y + h - 1) == 0 )
+    return 0; 
+  
+  return u8g_is_intersection(u8g->current_page.x0, u8g->current_page.x1, x, x + w - 1);
 }

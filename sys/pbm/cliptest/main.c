@@ -58,11 +58,11 @@ int main(void)
   int i;
   u8g_Init(&u8g, &u8g_dev_pbm_8h1);
   
-  u8g_SetRot90(&u8g);
+  //u8g_SetRot90(&u8g);
 
   
-  //for( i = 0; i < 10000; i++ )
-  for( i = 0; i < 1; i++ )
+  for( i = 0; i < 10000; i++ )
+  //for( i = 0; i < 1; i++ )
   {
     u8g_FirstPage(&u8g);
     do
