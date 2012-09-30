@@ -37,7 +37,7 @@
 
   total buffer size is limited to 256 bytes because of the calculation inside the set pixel procedure
 
-  23. Sep 2012:Bug with down procedire, see FPS 1st page
+  23. Sep 2012: Bug with down procedure, see FPS 1st page --> fixed (bug located in u8g_clip.c)
 
 */
 
@@ -48,7 +48,9 @@
 #include <assert.h>
 #endif
 
-#define NEW_CODE
+/* NEW_CODE disabled, because the performance increase was too slow and not worth compared */
+/* to the increase of code size */
+/* #define NEW_CODE */
 
 #ifdef __unix__
 void *u8g_buf_lower_limit;
@@ -62,6 +64,7 @@ void u8g_pb8h1_Set8PixelStd(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel) U8G_NOI
 uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 
+#ifdef NEW_CODE
 struct u8g_pb_h1_struct
 {
   u8g_uint_t x;
@@ -163,6 +166,7 @@ static void u8g_pb8h1_state_set_pixel(struct u8g_pb_h1_struct *s, uint8_t color_
     *s->ptr &= mask;
   }  
 }
+#endif
 
 
 void u8g_pb8h1_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
@@ -269,7 +273,8 @@ void u8g_pb8h1_Set8PixelOpt2(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
   } while( pixel != 0  );  
 }
 
-void u8g_pb8h1_Set8PixelState(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
+#ifdef NEW_CODE
+static void u8g_pb8h1_Set8PixelState(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
 {
   register uint8_t pixel = arg_pixel->pixel;
   struct u8g_pb_h1_struct s;
@@ -326,7 +331,7 @@ void u8g_pb8h1_Set8PixelState(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
       break;
   }
 }
-
+#endif
 
 uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -334,9 +339,13 @@ uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
   switch(msg)
   {
     case U8G_DEV_MSG_SET_8PIXEL:
+#ifdef NEW_CODE
       if ( u8g_pb_Is8PixelVisible(pb, (u8g_dev_arg_pixel_t *)arg) )
         u8g_pb8h1_Set8PixelState(pb, (u8g_dev_arg_pixel_t *)arg);
-        //u8g_pb8h1_Set8PixelOpt2(pb, (u8g_dev_arg_pixel_t *)arg);
+#else
+      if ( u8g_pb_Is8PixelVisible(pb, (u8g_dev_arg_pixel_t *)arg) )
+        u8g_pb8h1_Set8PixelOpt2(pb, (u8g_dev_arg_pixel_t *)arg);
+#endif
       break;
     case U8G_DEV_MSG_SET_PIXEL:
       u8g_pb8h1_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);

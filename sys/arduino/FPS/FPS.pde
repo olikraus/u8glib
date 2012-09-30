@@ -47,7 +47,8 @@
   NHD27OLED_2X_BW, HW SPI: FPS: Box=4.6  @=6.4
   
   30 sep 2012
-  NHD27OLED_BW, SW SPI: FPS: Clip=9.2 Box=3.9  @=4.4
+  NHD27OLED_BW, SW SPI: FPS: Clip=9.2 Box=3.9  @=4.4		NEW_CODE
+  NHD27OLED_BW, SW SPI: FPS: Clip=9.2 Box=3.6  @=4.5
   NHD27OLED_BW, HW SPI: FPS: Clip=16.3 Box=4.7  @=5.6
   NHD27OLED_2X_BW, SW SPI: FPS: Clip=9.7 Box=4.5  @=5.8
   NHD27OLED_2X_BW, SW SPI: FPS: Clip=18.0 Box=5.8  @=7.9
@@ -59,7 +60,7 @@
 
 // setup u8g object, please remove comment from one of the following constructor calls
 
-//U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_2X_BW u8g(13, 11, 10, 9); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_2X_GR u8g(13, 11, 10, 9);  // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9

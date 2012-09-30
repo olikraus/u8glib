@@ -129,13 +129,19 @@ void u8g_com_arduino_no_en_parallel_write(u8g_t *u8g, uint8_t val)
   /* EN cycle time must be 1 micro second, digitalWrite is slow enough to do this */
   if ( u8g->pin_list[U8G_PI_CS_STATE] == 1 )
   {
+    u8g_MicroDelay();
     u8g_com_arduino_digital_write(u8g, U8G_PI_CS1, HIGH);
+    u8g_MicroDelay();
     u8g_com_arduino_digital_write(u8g, U8G_PI_CS1, LOW);
+    u8g_MicroDelay();
   }
   else if ( u8g->pin_list[U8G_PI_CS_STATE] == 2 )
   {
+    u8g_MicroDelay();
     u8g_com_arduino_digital_write(u8g, U8G_PI_CS2, HIGH);
+    u8g_MicroDelay();
     u8g_com_arduino_digital_write(u8g, U8G_PI_CS2, LOW);
+    u8g_MicroDelay();
   }
 }
 
