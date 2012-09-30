@@ -795,6 +795,48 @@ impl.
 :AVR
 impl.
 ::
+:Display/Size
+240x64
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+240 Bytes
+:Com
+8Bit
+:Device
+<tt>u8g_dev_lc7981_240x64_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_LC7981_240X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, di [, rw [, reset]])</tt>
+:Arduino
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+::
+:Display/Size
+240x128
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+240 Bytes
+:Com
+8Bit
+:Device
+<tt>u8g_dev_lc7981_240x128_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_LC7981_240X128(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, di [, rw [, reset]])</tt>
+:Arduino
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+::
 :Controller
 stdout
 :Display/Size
