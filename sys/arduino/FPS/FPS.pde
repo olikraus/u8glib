@@ -46,6 +46,11 @@
   NHD27OLED_2X_BW, SW SPI: FPS: Box=3.8  @=4.9
   NHD27OLED_2X_BW, HW SPI: FPS: Box=4.6  @=6.4
   
+  30 sep 2012
+  NHD27OLED_BW, SW SPI: FPS: Clip=9.2 Box=3.9  @=4.4
+  NHD27OLED_BW, HW SPI: FPS: Clip=16.3 Box=4.7  @=5.6
+  NHD27OLED_2X_BW, SW SPI: FPS: Clip=9.7 Box=4.5  @=5.8
+  NHD27OLED_2X_BW, SW SPI: FPS: Clip=18.0 Box=5.8  @=7.9
   
 */
 

@@ -179,6 +179,64 @@ int is_math_intersection(uint8_t b1, uint8_t b2)
   */
 }
 
+uint8_t u8g_is_intersection_math(uint8_t a0, uint8_t a1, uint8_t v0, uint8_t v1)
+{
+  uint8_t c1, c2, c3, tmp;
+  c1 = v0 <= a1;
+  c2 = v1 >= a0;
+  c3 = v0 > v1;
+  
+  tmp = c1;
+  c1 &= c2;
+  c2 &= c3;
+  c3 &= tmp;
+  c1 |= c2;
+  c1 |= c3;
+  return c1 & 1;
+}
+
+uint8_t u8g_is_intersection_decision_tree(uint8_t a0, uint8_t a1, uint8_t v0, uint8_t v1)
+{
+  if ( v0 <= a1 )
+  {
+    if ( v1 >= a0 )
+    {
+      return 1;
+    }
+    else
+    {
+      if ( v0 > v1 )
+      {
+	return 1;
+      }
+      else
+      {
+	return 0;
+      }
+    }
+  }
+  else
+  {
+    if ( v1 >= a0 )
+    {
+      if ( v0 > v1 )
+      {
+	return 1;
+      }
+      else
+      {
+	return 0;
+      }
+    }
+    else
+    {
+      return 0;
+    }
+  }
+}
+
+
+
 void check(uint8_t b1, uint8_t b2)
 {
   int intersection, p;
@@ -198,6 +256,17 @@ void check(uint8_t b1, uint8_t b2)
     printf("%02x: [%d %d] [%d %d] array_intersection:%d != %d failed\n", p, a1, a2, b1, b2, intersection, is_math_intersection(b1, b2));
     exit(0);
   }
+  if ( u8g_is_intersection_decision_tree(a1,a2,b1,b2)  != intersection )
+  {
+    printf("%02x: [%d %d] [%d %d] array_intersection:%d != %d failed\n", p, a1, a2, b1, b2, intersection, u8g_is_intersection_decision_tree(a1,a2,b1,b2));
+    exit(0);
+  }
+  if ( u8g_is_intersection_math(a1,a2,b1,b2)  != intersection )
+  {
+    printf("%02x: [%d %d] [%d %d] array_intersection:%d != %d failed\n", p, a1, a2, b1, b2, intersection, u8g_is_intersection_math(a1,a2,b1,b2));
+    exit(0);
+  }
+  
 }
 
 #define STEP 1

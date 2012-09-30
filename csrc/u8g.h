@@ -746,7 +746,7 @@ uint8_t u8g_NextPageLL(u8g_t *u8g, u8g_dev_t *dev);
 uint8_t u8g_SetContrastLL(u8g_t *u8g, u8g_dev_t *dev, uint8_t contrast);
 void u8g_DrawPixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y);
 void u8g_Draw8PixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel);
-uint8_t u8g_IsBBXIntersectionLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
+uint8_t u8g_IsBBXIntersectionLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);	/* obsolete */
 u8g_uint_t u8g_GetWidthLL(u8g_t *u8g, u8g_dev_t *dev);
 u8g_uint_t u8g_GetHeightLL(u8g_t *u8g, u8g_dev_t *dev);
 
@@ -763,7 +763,6 @@ uint8_t u8g_NextPage(u8g_t *u8g);
 uint8_t u8g_SetContrast(u8g_t *u8g, uint8_t contrast);
 void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y);
 void u8g_Draw8Pixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel);
-uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
 
 uint8_t u8g_Stop(u8g_t *u8g);
 void u8g_SetColorIndex(u8g_t *u8g, uint8_t idx);
@@ -807,6 +806,10 @@ void u8g_state_dummy_cb(uint8_t msg);
 void u8g_backup_avr_spi(uint8_t msg);		/* backup SPI state on atmel avr controller */
 
 void u8g_SetHardwareBackup(u8g_t *u8g, u8g_state_cb backup_cb);
+
+/* u8g_clip.c */
+
+uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
 
 
 /* u8g_dev_rot.c */
