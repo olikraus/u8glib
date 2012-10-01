@@ -62,6 +62,8 @@ static const uint8_t u8g_dev_uc1610_dogxl160_init_seq[] PROGMEM = {
   U8G_ESC_DLY(100),       /* delay 100 ms */
   U8G_ESC_DLY(100),       /* delay 100 ms */
   0x0a4,		                /* normal display */
+  
+  
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
 };
