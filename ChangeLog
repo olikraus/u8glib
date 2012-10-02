@@ -72,10 +72,11 @@ u8glib ChangeLog
 2012-07-04	v1.07	Oliver Kraus <olikraus@gmail.com>
   * Added Makefiles for AVR release (issue 77)
   * Fixed examples for Arduino Environment (issue 78)
-2012-08-xx	v1.08	Oliver Kraus <olikraus@gmail.com>
+2012-10-02	v1.08	Oliver Kraus <olikraus@gmail.com>
   * Improved delay calculation for strobe pulse (issue 20)
   * Support Chipkit (issue 39)
   * Improved speed for ST7920 parallel mode (issue 79)
+  * Overall speed optimization (new page intersection algorithm)
   * Support for Displays Newhaven NHD-C12864, CrystalFontz GFAG20232, Seeedstudio 96x96 OLED
   * Added SPI support for ST7920 with plain AVR (issue 85)
   * Add more LC7981 devices
