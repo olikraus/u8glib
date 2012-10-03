@@ -7,6 +7,12 @@ Fonts are licensed under different conditions.
 See http://code.google.com/p/u8glib/wiki/fontgroup for
 detailed information on the licensing conditions for each font.
 
+The repository and optionally the releases contain icons, which are
+derived from the WPZOOM Developer Icon Set:
+http://www.wpzoom.com/wpzoom/new-freebie-wpzoom-developer-icon-set-154-free-icons/
+WPZOOM Developer Icon Set by WPZOOM is licensed under a Creative Commons 
+Attribution-ShareAlike 3.0 Unported License.
+
 
 ============ BSD License for U8glib Code ============
 

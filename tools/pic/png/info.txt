@@ -1,0 +1,14 @@
+
+the following png files are derived from
+WPZOOM Developer Icon Set by WPZOOM 
+http://www.wpzoom.com/wpzoom/new-freebie-wpzoom-developer-icon-set-154-free-icons/
+
+which are licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License.
+
+
+clipboard-28.png
+clock-28.png
+closed-lock-28.png
+memory-card-28.png
+pencil-28.png
+tools-28.png
