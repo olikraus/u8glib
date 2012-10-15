@@ -266,6 +266,9 @@ class U8GLIB_ST7920_128X64 : public U8GLIB
         uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE) 
       : U8GLIB(&u8g_dev_st7920_128x64_8bit, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset)
       { }
+    // U8GLIB_ST7920_128X64(uint8_t cs) 
+    //   : U8GLIB(&u8g_dev_st7920_128x64_sw_spi, cs, U8G_PIN_NONE, U8G_PIN_NONE)
+    //   { }
 };
 
 class U8GLIB_ST7920_192X32 : public U8GLIB 

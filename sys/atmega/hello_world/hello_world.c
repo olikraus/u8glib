@@ -96,6 +96,8 @@ void u8g_setup(void)
       A0 and Reset are not used.
   */
   // u8g_InitSPI(&u8g, &u8g_dev_st7920_192x32_sw_spi, PN(2, 3), PN(2, 5), PN(2, 4), U8G_PIN_NONE, U8G_PIN_NONE);
+  // u8g_InitHWSPI(&u8g, &u8g_dev_st7920_192x32_hw_spi, PN(2, 4), U8G_PIN_NONE, U8G_PIN_NONE);
+
   
 }
 

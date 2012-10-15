@@ -48,11 +48,11 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
-static void u8g_atmega_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val) U8G_NOINLINE;
-static void u8g_atmega_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val)
+static uint8_t u8g_atmega_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val) U8G_NOINLINE;
+static uint8_t u8g_atmega_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val)
 {
   /* send data */
-  SPDR = data;
+  SPDR = val;
   /* wait for transmission */
   while (!(SPSR & (1<<SPIF))) 
     ;
@@ -86,7 +86,7 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
   {
     case U8G_COM_MSG_INIT:
       u8g_SetPIOutput(u8g, U8G_PI_CS);
-      u8g_SetPIOutput(u8g, U8G_PI_A0);
+      //u8g_SetPIOutput(u8g, U8G_PI_A0);
       
       DDRB |= _BV(3);          /* D0, MOSI */
       DDRB |= _BV(5);          /* SCK */
