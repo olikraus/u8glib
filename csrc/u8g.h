@@ -192,14 +192,17 @@ extern u8g_dev_t u8g_dev_st7565_nhd_c12864_hw_spi;
 
 /* dfrobot 128x64 Graphic LCD (SKU:FIT0021) */
 extern u8g_dev_t u8g_dev_st7920_128x64_sw_spi;
+extern u8g_dev_t u8g_dev_st7920_128x64_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_8bit;
 
 /* NHD-19232WG */
 extern u8g_dev_t u8g_dev_st7920_192x32_sw_spi;
+extern u8g_dev_t u8g_dev_st7920_192x32_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_192x32_8bit;
 
 /* CrystalFontz CFAG20232 */
 extern u8g_dev_t u8g_dev_st7920_202x32_sw_spi;
+extern u8g_dev_t u8g_dev_st7920_202x32_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_202x32_8bit;
 
 /* LC7981 160x80 display */
