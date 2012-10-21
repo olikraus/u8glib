@@ -77,6 +77,7 @@ static void u8g_com_atmega_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint
   
   u8g_atmega_st7920_hw_spi_shift_out(u8g, val & 0x0f0);
   u8g_atmega_st7920_hw_spi_shift_out(u8g, val << 4);
+  u8g_MicroDelay();
 }
 
 
@@ -104,7 +105,7 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
             1	1		fclk/128 x
       */
       SPCR = 0;
-      SPCR =  (1<<SPE) | (1<<MSTR)|(1<<SPR1)|(1<<SPR0)|(0<<CPOL)|(0<<CPHA);
+      SPCR =  (1<<SPE) | (1<<MSTR)|(0<<SPR1)|(0<<SPR0)|(0<<CPOL)|(0<<CPHA);
 #ifdef U8G_HW_SPI_2X
       SPSR = (1 << SPI2X);  /* double speed, issue 89 */
 #endif
@@ -139,7 +140,7 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
 
     case U8G_COM_MSG_WRITE_BYTE:
       u8g_com_atmega_st7920_write_byte_hw_spi(u8g, u8g->pin_list[U8G_PI_A0_STATE], arg_val);
-      u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+      //u8g->pin_list[U8G_PI_A0_STATE] = 2; 
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
@@ -148,7 +149,7 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
         while( arg_val > 0 )
         {
           u8g_com_atmega_st7920_write_byte_hw_spi(u8g, u8g->pin_list[U8G_PI_A0_STATE], *ptr++);
-	  u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+	  //u8g->pin_list[U8G_PI_A0_STATE] = 2; 
           arg_val--;
         }
       }
@@ -160,7 +161,7 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
         while( arg_val > 0 )
         {
           u8g_com_atmega_st7920_write_byte_hw_spi(u8g, u8g->pin_list[U8G_PI_A0_STATE], u8g_pgm_read(ptr));
-	  u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+	  //u8g->pin_list[U8G_PI_A0_STATE] = 2; 
           ptr++;
           arg_val--;
         }
@@ -181,3 +182,4 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
 
 #endif
 
+ 
