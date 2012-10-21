@@ -90,6 +90,7 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
       
       DDRB |= _BV(3);          /* D0, MOSI */
       DDRB |= _BV(5);          /* SCK */
+      DDRB |= _BV(2);		/* slave select */
     
       PORTB &= ~_BV(3);        /* D0, MOSI = 0 */
       PORTB &= ~_BV(5);        /* SCK = 0 */
@@ -98,12 +99,12 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
       /*
         SPR1 SPR0
             0	0		fclk/4
-            0	1		fclk/16
-            1	0		fclk/64
-            1	1		fclk/128
+            0	1		fclk/16 
+            1	0		fclk/64  
+            1	1		fclk/128 x
       */
       SPCR = 0;
-      SPCR =  (1<<SPE) | (1<<MSTR)|(0<<SPR1)|(0<<SPR0)|(0<<CPOL)|(0<<CPHA);
+      SPCR =  (1<<SPE) | (1<<MSTR)|(1<<SPR1)|(1<<SPR0)|(0<<CPOL)|(0<<CPHA);
 #ifdef U8G_HW_SPI_2X
       SPSR = (1 << SPI2X);  /* double speed, issue 89 */
 #endif

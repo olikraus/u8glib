@@ -63,6 +63,7 @@ static uint8_t u8g_atmega_spi_out(uint8_t data)
 
 uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
+ blablabla();
   switch(msg)
   {
     case U8G_COM_MSG_STOP:
@@ -75,6 +76,7 @@ uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
       
       DDRB |= _BV(3);          /* D0, MOSI */
       DDRB |= _BV(5);          /* SCK */
+      DDRB |= _BV(2);		/* slave select */
     
       PORTB &= ~_BV(3);        /* D0, MOSI = 0 */
       PORTB &= ~_BV(5);        /* SCK = 0 */
@@ -82,9 +84,9 @@ uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
 
       /*
         SPR1 SPR0
-            0	0		fclk/4
+            0	0		fclk/4    x
             0	1		fclk/16
-            1	0		fclk/64
+            1	0		fclk/64      
             1	1		fclk/128
       */
       SPCR = 0;

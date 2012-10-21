@@ -74,7 +74,7 @@ void u8g_setup(void)
     CS: PORTB, Bit 2
     A0: PORTB, Bit 1
   */
-  // u8g_InitSPI(&u8g, &u8g_dev_st7565_dogm132_sw_spi, PN(1, 5), PN(1, 3), PN(1, 2), PN(1, 1), U8G_PIN_NONE);
+  //u8g_InitSPI(&u8g, &u8g_dev_st7565_dogm132_sw_spi, PN(1, 5), PN(1, 3), PN(1, 2), PN(1, 1), U8G_PIN_NONE);
 
   /*
     Test Envionment 2, ATMEGA and Seeedstudio 96x96 OLED via I2C
@@ -83,9 +83,11 @@ void u8g_setup(void)
   */
   
   /* activate pull-up, set ports to output, init U8glib */  
+  /*
   u8g_SetPinInput(PN(2,5)); u8g_SetPinLevel(PN(2,5), 1); u8g_SetPinOutput(PN(2,5));
   u8g_SetPinInput(PN(2,4)); u8g_SetPinLevel(PN(2,4), 1); u8g_SetPinOutput(PN(2,4));
   u8g_InitI2C(&u8g, &u8g_dev_ssd1327_96x96_gr_i2c, U8G_I2C_OPT_NONE);
+  */
   
   /*
     Test Envionment 3, ATMEGA and NHD 192x32 ST7920 special SPI
@@ -96,6 +98,17 @@ void u8g_setup(void)
       A0 and Reset are not used.
   */
   //u8g_InitSPI(&u8g, &u8g_dev_st7920_192x32_sw_spi, PN(2, 3), PN(2, 5), PN(2, 4), U8G_PIN_NONE, U8G_PIN_NONE);
+  
+  /*
+    Test Envionment 4, ATMEGA and NHD 192x32 ST7920 special SPI
+    R/W, MOSI, Red: 	Port B, Bit 3
+    RS, CS, Yellow: 	Port C, Bit 4
+    EN, SCK, Green:	Port B, Bit 5
+    Arguments for u8g_InitHWSPI are: CS, A0, Reset
+      A0 and Reset are not used.
+  */
+  // u8g_SetPinOutput(PN(1,2));
+  u8g_InitHWSPI(&u8g, &u8g_dev_st7920_192x32_hw_spi, PN(2, 4), U8G_PIN_NONE, U8G_PIN_NONE);
 
   
 }
@@ -183,7 +196,7 @@ int main(void)
     {
       draw();
     } while ( u8g_NextPage(&u8g) );
-    u8g_Delay(100);
+    u8g_Delay(10);
   }
 }
 
