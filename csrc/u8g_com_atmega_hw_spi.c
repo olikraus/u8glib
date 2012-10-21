@@ -63,7 +63,6 @@ static uint8_t u8g_atmega_spi_out(uint8_t data)
 
 uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
- blablabla();
   switch(msg)
   {
     case U8G_COM_MSG_STOP:
