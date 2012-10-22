@@ -80,6 +80,8 @@ u8glib ChangeLog
   * Support for Displays Newhaven NHD-C12864, CrystalFontz GFAG20232, Seeedstudio 96x96 OLED
   * Added SPI support for ST7920 with plain AVR (issue 85)
   * Add more LC7981 devices
-  
-  
+2012-xx-xx	v1.09	  Oliver Kraus <olikraus@gmail.com>
+  * Support for Displaytech 64128n
+  * Support for MINI12864
+  * HW SPI for ST7920 (AVR variant)
   
