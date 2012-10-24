@@ -64,6 +64,8 @@ static uint8_t u8g_atmega_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val)
 static void u8g_com_atmega_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint8_t val) U8G_NOINLINE;
 static void u8g_com_atmega_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint8_t val)
 {
+  uint8_t i;
+
   if ( rs == 0 )
   {
     /* command */
@@ -77,7 +79,9 @@ static void u8g_com_atmega_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint
   
   u8g_atmega_st7920_hw_spi_shift_out(u8g, val & 0x0f0);
   u8g_atmega_st7920_hw_spi_shift_out(u8g, val << 4);
-  u8g_MicroDelay();
+
+  for( i = 0; i < 10; i++ )
+    u8g_MicroDelay();
 }
 
 
@@ -102,9 +106,11 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
             0	0		fclk/4
             0	1		fclk/16 
             1	0		fclk/64  
-            1	1		fclk/128 x
+            1	1		fclk/128
       */
       SPCR = 0;
+      
+      /* maybe set CPOL and CPHA to 1 */
       SPCR =  (1<<SPE) | (1<<MSTR)|(0<<SPR1)|(0<<SPR0)|(0<<CPOL)|(0<<CPHA);
 #ifdef U8G_HW_SPI_2X
       SPSR = (1 << SPI2X);  /* double speed, issue 89 */
