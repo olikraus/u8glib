@@ -140,6 +140,7 @@ ISO-8859-1 was incorporated as the first 256 code points of ISO/IEC 10646 and Un
 #include <assert.h>
 
 #define BDF2U8G_COMPACT_OUTPUT
+#define BDF2U8G_VERSION "1.00"
 
 /*=== result data ===*/
 #define DATA_BUF_SIZE (1024*64)
@@ -552,6 +553,8 @@ void bdf_ShowGlyph(void)
   int gx, gy;
   char *p;
   gy = bdf_char_height - 1 + bdf_char_y; 
+  
+#ifdef VERBOSE  
   printf("bbx %d %d %d %d encoding %d\n", bdf_char_width, bdf_char_height, bdf_char_x, bdf_char_y, bdf_encoding);
   for( y = 0; y < bdf_line_bm_line; y++ )
   {
@@ -582,6 +585,10 @@ void bdf_ShowGlyph(void)
     gy--;
     printf("\n");
   }
+#else
+  printf("bbx %d %d %d %d encoding %d\n", bdf_char_width, bdf_char_height, bdf_char_x, bdf_char_y, bdf_encoding);
+  fflush(stdout);
+#endif
 }
 
 void bdf_ClearGlyphBuffer(void)
@@ -1063,6 +1070,7 @@ void bdf_Generate(const char *filename, int begin, int end)
   data_buf[16] = bdf_char_xdescent;
   
   // data_buf[11] = last_valid_encoding;
+  
 }
 
 void bdf_WriteC(const char *outname, const char *fontname)
@@ -1147,6 +1155,7 @@ int main(int argc, char **argv)
   
   if ( argc < 4 )
   {
+    printf("bdf to u8glib font format converter v" BDF2U8G_VERSION "\n");
     printf("%s [-l page] [-u page] [-s shift] [-S upper-shift] [-b begin] [-e end] [-f format] fontfile fontname outputfile\n", argv[0]);
     return 1;
   }
@@ -1196,6 +1205,8 @@ int main(int argc, char **argv)
       break;
   }
   
+  printf("encoding range %d..%d\n", begin, end);
+  
   data_Init();
   map_Init();
   map_UpperLowerPage(lower_page, upper_page, mapping_shift, upper_mapping_shift);
@@ -1203,15 +1214,20 @@ int main(int argc, char **argv)
   /*
   puts(bdf_font);
   puts(bdf_copyright);
-  */
   if ( ga_argc < 3 )
   {
     printf("from page %d to page %d\n", lower_page, upper_page);
     return 1;
   }  
+  */
   
   bdf_Generate(ga_argv[0], begin, end);
   bdf_WriteC(ga_argv[2], ga_argv[1]);
+
+  printf("input file '%s'\n", ga_argv[0]);
+  printf("u8g font name '%s'\n", ga_argv[1]);  
+  printf("output file '%s'\n", ga_argv[2]);
+  
   return 0;
 }
 
