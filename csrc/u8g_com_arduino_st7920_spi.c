@@ -97,6 +97,8 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
 
 static void u8g_com_arduino_st7920_write_byte(uint8_t rs, uint8_t val)
 {
+  uint8_t i;
+
   if ( rs == 0 )
   {
     /* command */
