@@ -72,7 +72,20 @@ static void u8g_i2c_set_error(uint8_t code, uint8_t pos)
 }
 
 
+
 #if defined(__AVR__)
+#define U8G_ATMEGA_HW_TWI
+
+/* remove the definition for attiny */
+#if __AVR_ARCH__ == 2
+#undef U8G_ATMEGA_HW_TWI
+#endif
+#if __AVR_ARCH__ == 25
+#undef U8G_ATMEGA_HW_TWI
+#endif
+#endif
+
+#if defined(U8G_ATMEGA_HW_TWI)
 
 #include <avr/io.h>
 #include <util/twi.h>

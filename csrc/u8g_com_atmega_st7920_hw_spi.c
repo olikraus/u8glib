@@ -44,6 +44,18 @@
 #include "u8g.h"
 
 #if defined(__AVR__)
+#define U8G_ATMEGA_HW_SPI
+
+/* remove the definition for attiny */
+#if __AVR_ARCH__ == 2
+#undef U8G_ATMEGA_HW_SPI
+#endif
+#if __AVR_ARCH__ == 25
+#undef U8G_ATMEGA_HW_SPI
+#endif
+#endif
+
+#if defined(U8G_ATMEGA_HW_SPI)
 
 #include <avr/interrupt.h>
 #include <avr/io.h>

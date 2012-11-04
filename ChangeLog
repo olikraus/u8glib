@@ -84,4 +84,4 @@ u8glib ChangeLog
   * Support for Displaytech 64128n
   * Support for MINI12864
   * HW SPI for ST7920 (AVR variant)
-  
+  * Add delay after sending a byte with (ST7920 com)
