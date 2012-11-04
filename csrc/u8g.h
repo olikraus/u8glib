@@ -997,9 +997,12 @@ void u8g_i2c_stop(void) U8G_NOINLINE;
 
 /*===============================================================*/
 /* u8g_u8toa.c */
-
 /* v = value, d = number of digits */
 const char *u8g_u8toa(uint8_t v, uint8_t d);
+
+/* u8g_u8toa.c */
+/* v = value, d = number of digits */
+const char *u8g_u16toa(uint16_t v, uint8_t d);
 
 /*===============================================================*/
 /* u8g_delay.c */
