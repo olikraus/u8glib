@@ -58,10 +58,12 @@ void u8g_pb8h1f_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
   u8g_pb_Clear(b);
 }
 
-/* limitation: total buffer must not exceed 256 bytes */
+/* limitation: total buffer must not exceed 256 bytes, 20 nov 2012: extended to >256 bytes */
 void u8g_pb8h1f_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
 {
-  register uint8_t mask, tmp;
+  /*register uint8_t mask, tmp;*/
+  register uint8_t mask; 
+  register u8g_uint_t tmp;
   uint8_t *ptr = b->buf;
   
   y -= b->p.page_y0;
