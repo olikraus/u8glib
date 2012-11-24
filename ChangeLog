@@ -85,3 +85,5 @@ u8glib ChangeLog
   * Support for MINI12864
   * HW SPI for ST7920 (AVR variant)
   * Add delay after sending a byte with (ST7920 com)
+  * Support ATTiny
+  
