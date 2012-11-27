@@ -58,7 +58,7 @@ const uint8_t u8g_dev_st7565_nhd_c12864_init_seq[] PROGMEM = {
   0x000,		                /* 4x */
   0x027,		                /* set V0 voltage resistor ratio to large */
   0x081,		                /* set contrast */
-  0x008,		                /* contrast: 0x008 is a good value for NHD C12864 */
+  0x008,		                /* contrast: 0x008 is a good value for NHD C12864, Nov 2012: User reports that 0x1a is much better */
   0x0ac,		                /* indicator */
   0x000,		                /* disable */
   0x0af,		                /* display on */
