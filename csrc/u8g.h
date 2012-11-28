@@ -217,6 +217,8 @@ extern u8g_dev_t u8g_dev_lc7981_160x80_8bit;
 extern u8g_dev_t u8g_dev_lc7981_240x64_8bit;
 /* LC7981 240x128 display */
 extern u8g_dev_t u8g_dev_lc7981_240x128_8bit;
+/* LC7981 320x64 display */
+extern u8g_dev_t u8g_dev_lc7981_320x64_8bit;
 
 /* Display: EA DOGXL160, Size: 160x104 monochrom & gray level */
 extern u8g_dev_t u8g_dev_uc1610_dogxl160_bw_sw_spi;
@@ -288,6 +290,9 @@ extern u8g_dev_t u8g_dev_st7687_c144mvgd_8bit;
 
 /* SBN1661/SED1520 display with 122x32 */
 extern u8g_dev_t u8g_dev_sbn1661_122x32;
+
+/* flip disc matrix */
+extern u8g_dev_t u8g_flipdisc_2x7;
 
 /* ILI9325D based TFT */
 extern u8g_dev_t u8g_dev_ili9325d_320x240_8bit;
@@ -624,6 +629,9 @@ uint8_t u8g_dev_pb8v1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 
 /* u8g_pb16v1.c */
 uint8_t u8g_dev_pb16v1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+
+/* u8g_pb14v1.c */
+uint8_t u8g_dev_pb14v1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 /* u8g_pb8v2.c */
 uint8_t u8g_dev_pb8v2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
