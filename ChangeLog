@@ -83,7 +83,9 @@ u8glib ChangeLog
 2012-xx-xx	v1.09	  Oliver Kraus <olikraus@gmail.com>
   * Support for Displaytech 64128n
   * Support for MINI12864
-  * HW SPI for ST7920 (AVR variant)
+  * HW SPI for ST7920
   * Add delay after sending a byte with (ST7920 com)
   * Support ATTiny
+  * Support I2C for SSD1306
+  
   

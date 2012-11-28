@@ -245,6 +245,18 @@ verified
 n.a.
 :AVR
 n.a.
+:Com
+I2C
+:Device
+<tt>u8g_dev_ssd1306_128x64_i2c</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1306_128X64()</tt>
+:Arduino
+verified
+:Chipkit
+n.a.
+:AVR
+impl.
 
 
 ::
@@ -472,6 +484,19 @@ verified
 impl.
 :AVR
 impl.
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7920_128x64_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64(cs, a0 [, reset])</tt>
+:Arduino
+impl. v1.09
+:Chipkit
+n.a.
+:AVR
+impl. v1.09
 :Com
 8 Bit
 :Device
@@ -505,6 +530,19 @@ verified
 impl.
 :AVR
 verified
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7920_192x32_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32(cs, a0 [, reset])</tt>
+:Arduino
+impl. v1.09
+:Chipkit
+n.a.
+:AVR
+impl. v1.09
 :Com
 8 Bit
 :Device
@@ -538,6 +576,18 @@ impl. v1.08
 impl. v1.08
 :AVR
 impl. v1.08
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7920_202x32_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_202X32(cs, a0 [, reset])</tt>
+:Arduino
+impl. v1.09
+:Chipkit
+n.a.
+:AVR
+impl. v1.09
 :Com
 8 Bit
 :Device

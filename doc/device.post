@@ -28,5 +28,5 @@
  * setContrast: For some devices, the contrast value can be assigned with the {{{setContrast}}} procedure.
  
  * Other controller, which might be compatible (this information is not verified)
-  * {{{ST7565}}}, {{{SED1565}}}, {{{S1D15605}}}, {{{S6B0723}}}
+  * {{{ST7565}}}, {{{NT7534}}}, {{{SED1565}}}, {{{S1D15605}}}, {{{S6B0723}}}
   * {{{SBN1661}}}, {{{SED1520}}}: Write is triggered by CSx lines. 
