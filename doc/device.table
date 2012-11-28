@@ -295,6 +295,39 @@ n.a.
 :AVR
 n.a.
 ::
+:Display/Size
+MINI12864, 128x64
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+128 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_uc1701_mini12864_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_MINI12864(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_uc1701_mini12864_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_MINI12864(cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
 :Controller
 ST7565
 :Display/Size
@@ -427,7 +460,40 @@ verified, v1.08
 :Chipkit
 n.a.
 :AVR
+impl.
+::
+:Display/Size
+Displaytech 64128n, 128x64
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+128 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7565_64128n_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_64128N(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified, v1.09
+:Chipkit
+impl. v1.09
+:AVR
+impl. v1.09
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7565_64128n_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_64128N(cs, a0 [, reset])</tt>
+:Arduino
+verified v1.09
+:Chipkit
 n.a.
+:AVR
+impl. v1.09
 ::
 :Display/Size
 DOGM132, 132x32

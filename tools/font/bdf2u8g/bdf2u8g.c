@@ -963,7 +963,7 @@ int bdf_ReadFile(const char *filename, int encoding)
 {
   int r;
   FILE *fp;
-  fp = fopen(filename, "r");
+  fp = fopen(filename, "rb");
   if ( fp != NULL )
   {
     bdf_SetFilePos(fp, encoding);
@@ -1077,7 +1077,7 @@ void bdf_WriteC(const char *outname, const char *fontname)
 {
   int capital_ascent;
   FILE *out_fp;
-  out_fp = fopen(outname, "w");
+  out_fp = fopen(outname, "wb");
   assert( out_fp != NULL );
 
   if ( bdf_capital_A_height > 0 )
