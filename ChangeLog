@@ -87,5 +87,7 @@ u8glib ChangeLog
   * Add delay after sending a byte with (ST7920 com)
   * Support ATTiny
   * Support I2C for SSD1306
+  * bdf2u8g, Windows executable released
+  * LC7981 320x64
   
   

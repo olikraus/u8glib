@@ -953,6 +953,27 @@ impl.
 :AVR
 impl.
 ::
+:Display/Size
+320x64 (16 Bit Mode only)
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+320 Bytes
+:Com
+8Bit
+:Device
+<tt>u8g_dev_lc7981_320x64_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_LC7981_320X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, di [, rw [, reset]])</tt>
+:Arduino
+impl. v1.09
+:Chipkit
+impl. v1.09
+:AVR
+impl. v1.09
+::
 :Controller
 stdout
 :Display/Size
