@@ -606,5 +606,12 @@ class U8GLIB_ILI9325D_320x240 : public U8GLIB
       { init8BitFixedPort(&u8g_dev_ili9325d_320x240_8bit, en, cs1, di, rw, reset); }
 };
 
+class U8GLIB_FLIPDISC_2X7 : public U8GLIB 
+{
+  public:
+    U8GLIB_FLIPDISC_2X7(void) : U8GLIB(&u8g_dev_flipdisc_2x7)
+      {  }
+};
+
 
 #endif /* _CPP_U8GLIB */
