@@ -292,7 +292,7 @@ extern u8g_dev_t u8g_dev_st7687_c144mvgd_8bit;
 extern u8g_dev_t u8g_dev_sbn1661_122x32;
 
 /* flip disc matrix */
-extern u8g_dev_t u8g_flipdisc_2x7;
+extern u8g_dev_t u8g_dev_flipdisc_2x7;
 
 /* ILI9325D based TFT */
 extern u8g_dev_t u8g_dev_ili9325d_320x240_8bit;
