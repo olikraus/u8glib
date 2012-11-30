@@ -120,3 +120,22 @@ uint8_t u8g_dev_vs_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 
 u8g_dev_t u8g_dev_vs = { u8g_dev_vs_fn, NULL, NULL };
 
+void u8g_SetVirtualScreenDimension(u8g_t *vs_u8g, u8g_uint_t width, u8g_uint_t height)
+{
+  if ( vs_u8g->dev != &u8g_dev_vs )
+    return; 	/* abort if there is no a virtual screen device */
+  u8g_vs_width = width;
+  u8g_vs_height = height;  
+}
+
+uint8_t u8g_AddToVirtualScreen(u8g_t *vs_u8g, u8g_uint_t x, u8g_uint_t y, u8g_t *child_u8g)
+{
+  if ( vs_u8g->dev != &u8g_dev_vs )
+    return 0; 	/* abort if there is no a virtual screen device */
+  if ( u8g_vs_cnt >= U8g_VS_MAX )
+    return 0;  	/* maximum number of  child u8g's reached */
+  u8g_vs_list[u8g_vs_cnt].u8g = child_u8g;
+  u8g_vs_list[u8g_vs_cnt].x = x;
+  u8g_vs_list[u8g_vs_cnt].y = y;
+}
+
