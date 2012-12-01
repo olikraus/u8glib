@@ -71,7 +71,9 @@ uint8_t u8g_dev_vs_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       return 0;
     case U8G_DEV_MSG_PAGE_NEXT:
       {	
-	uint8_t ret = u8g_call_dev_fn(u8g_vs_list[u8g_vs_current].u8g, u8g_vs_list[u8g_vs_current].u8g->dev, msg, arg);
+	uint8_t ret = 0;
+	if ( u8g_vs_cnt != 0 )
+	  ret = u8g_call_dev_fn(u8g_vs_list[u8g_vs_current].u8g, u8g_vs_list[u8g_vs_current].u8g->dev, msg, arg);
 	if ( ret != 0 )
 	  return ret;
 	u8g_vs_current++;	/* next device */
@@ -107,8 +109,8 @@ uint8_t u8g_dev_vs_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
     case U8G_DEV_MSG_SET_8PIXEL:
       if ( u8g_vs_current < u8g_vs_cnt )
       {
-        ((u8g_dev_arg_pixel_t *)arg)->x += u8g_vs_list[u8g_vs_current].x;
-        ((u8g_dev_arg_pixel_t *)arg)->y += u8g_vs_list[u8g_vs_current].y;
+        ((u8g_dev_arg_pixel_t *)arg)->x -= u8g_vs_list[u8g_vs_current].x;
+        ((u8g_dev_arg_pixel_t *)arg)->y -= u8g_vs_list[u8g_vs_current].y;
 	return u8g_call_dev_fn(u8g_vs_list[u8g_vs_current].u8g, u8g_vs_list[u8g_vs_current].u8g->dev, msg, arg);
       }
       break;
@@ -137,6 +139,7 @@ uint8_t u8g_AddToVirtualScreen(u8g_t *vs_u8g, u8g_uint_t x, u8g_uint_t y, u8g_t 
   u8g_vs_list[u8g_vs_cnt].u8g = child_u8g;
   u8g_vs_list[u8g_vs_cnt].x = x;
   u8g_vs_list[u8g_vs_cnt].y = y;
+  u8g_vs_cnt++;
   return 1;
 }
 
