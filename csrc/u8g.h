@@ -297,6 +297,10 @@ extern u8g_dev_t u8g_dev_flipdisc_2x7;
 /* ILI9325D based TFT */
 extern u8g_dev_t u8g_dev_ili9325d_320x240_8bit;
 
+/* u8g_virtual_screen.c  */
+extern u8g_dev_t u8g_dev_vs;
+
+
 /*===============================================================*/
 /* device messages */
 
@@ -661,6 +665,7 @@ uint8_t u8g_dev_pb8h1f_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *ar
 uint8_t u8g_dev_pb8h8_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
 
+
 /*===============================================================*/
 /* u8g_ll_api.c */
 
@@ -976,6 +981,11 @@ void u8g_DisableCursor(u8g_t *u8g);
 void u8g_DrawCursor(u8g_t *u8g);
 
 
+
+/*===============================================================*/
+/* u8g_virtual_screen.c */
+void u8g_SetVirtualScreenDimension(u8g_t *vs_u8g, u8g_uint_t width, u8g_uint_t height);
+uint8_t u8g_AddToVirtualScreen(u8g_t *vs_u8g, u8g_uint_t x, u8g_uint_t y, u8g_t *child_u8g);
 
 /*===============================================================*/
 void st_Draw(uint8_t fps);

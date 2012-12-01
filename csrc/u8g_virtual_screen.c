@@ -137,5 +137,6 @@ uint8_t u8g_AddToVirtualScreen(u8g_t *vs_u8g, u8g_uint_t x, u8g_uint_t y, u8g_t 
   u8g_vs_list[u8g_vs_cnt].u8g = child_u8g;
   u8g_vs_list[u8g_vs_cnt].x = x;
   u8g_vs_list[u8g_vs_cnt].y = y;
+  return 1;
 }
 
