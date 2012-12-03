@@ -186,6 +186,12 @@ class U8GLIB : public Print
     void enableCursor(void) { u8g_EnableCursor(&u8g); }
     void disableCursor(void) { u8g_DisableCursor(&u8g); }
     void drawCursor(void)  { u8g_DrawCursor(&u8g); }
+    
+    /* virtual screen */
+    
+    void setVirtualScreenDimension(u8g_uint_t width, u8g_uint_t height) { u8g_SetVirtualScreenDimension(&u8g, width, height); }
+    uint8_t addToVirtualScreen(u8g_uint_t x, u8g_uint_t y, U8GLIB &child_u8g) { return u8g_AddToVirtualScreen(&u8g, x, y, &child_u8g.u8g); }
+
 };
 
 

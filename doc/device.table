@@ -267,7 +267,7 @@ DOGS102, 102x64
 :Mode
 BW
 :Set Contrast
-no
+impl. v1.09
 :Page Size
 102 Bytes
 :Com
@@ -300,7 +300,7 @@ MINI12864, 128x64
 :Mode
 BW
 :Set Contrast
-no
+impl. v1.09
 :Page Size
 128 Bytes
 :Com
@@ -335,7 +335,7 @@ DOGM128, 128x64
 :Mode
 BW
 :Set Contrast
-no
+impl. v1.09
 :Page Size
 128 Bytes
 :Com
@@ -368,7 +368,7 @@ LM6059, 128x64, Adafruit
 :Mode
 BW
 :Set Contrast
-no
+impl. v1.09
 :Page Size
 128 Bytes
 :Com
@@ -401,7 +401,7 @@ LM6063, 128x64
 :Mode
 BW
 :Set Contrast
-no
+impl. v1.09
 :Page Size
 128 Bytes
 :Com
@@ -434,7 +434,7 @@ NHD C12864, 128x64
 :Mode
 BW
 :Set Contrast
-no
+impl. v1.09
 :Page Size
 128 Bytes
 :Com
@@ -467,7 +467,7 @@ Displaytech 64128n, 128x64
 :Mode
 BW
 :Set Contrast
-no
+impl. v1.09
 :Page Size
 128 Bytes
 :Com
@@ -500,7 +500,7 @@ DOGM132, 132x32
 :Mode
 BW
 :Set Contrast
-no
+impl. v1.09
 :Page Size
 132 Bytes
 :Com
@@ -535,7 +535,7 @@ ST7920
 :Mode
 BW
 :Set Contrast
-no
+n.a.
 :Page Size
 128 Bytes
 :Com
@@ -581,7 +581,7 @@ impl.
 :Mode
 BW
 :Set Contrast
-no
+n.a.
 :Page Size
 192 Bytes
 :Com
@@ -627,7 +627,7 @@ impl.
 :Mode
 BW
 :Set Contrast
-no
+n.a.
 :Page Size
 202 Bytes
 :Com

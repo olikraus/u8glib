@@ -103,7 +103,7 @@ uint8_t u8g_dev_uc1701_mini12864_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, voi
       u8g_SetChipSelect(u8g, dev, 1);
       u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
       u8g_WriteByte(u8g, dev, 0x081);
-      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
+      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 2);
       u8g_SetChipSelect(u8g, dev, 0);      
       return 1;
   }
