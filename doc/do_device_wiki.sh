@@ -5,6 +5,7 @@ cp device.wiki ../../wiki/.
 pushd .
 cd ../../wiki
 hg pull
+hg update
 hg commit -m "device table update"
 hg push
 popd
