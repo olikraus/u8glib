@@ -143,7 +143,11 @@ void setup(void) {
   //u8g.setRot180();
 }
 
+uint8_t contrast = 0;
+
 void loop(void) {
+  
+  u8g.setContrast(contrast);
   
   // picture loop
   u8g.firstPage();  
@@ -154,5 +158,7 @@ void loop(void) {
   // rebuild the picture after some delay
   delay(200);
   
+  // contrast manipulation
+  contrast+=8;
 }
 
