@@ -102,6 +102,14 @@ void u8g_MicroDelay(void)
 #endif
 }
 
+/* delay by 10 micro seconds */
+void u8g_10MicroDelay(void)
+{
+#if (F_CPU / 400000 ) > 0 
+  _delay_loop_2( (F_CPU / 400000 ) );
+#endif
+}
+
 #endif 
 
 
@@ -121,6 +129,11 @@ void u8g_Delay(uint16_t val)
 }
 void u8g_MicroDelay(void)
 {
+  /* not implemented */
+}
+void u8g_10MicroDelay(void)
+{
+  /* not implemented */
 }
 #endif
 
@@ -134,6 +147,10 @@ void u8g_Delay(uint16_t val)
 void u8g_MicroDelay(void)
 {
 	delayMicroseconds(1);
+}
+void u8g_10MicroDelay(void)
+{
+	delayMicroseconds(10);
 }
 #endif
 
@@ -169,6 +186,16 @@ void u8g_MicroDelay(void)
 		;
 } 
 
+void u8g_10MicroDelay(void)
+{
+	uint32_t d;
+	uint32_t s;
+	d = TICKS_PER_MILLISECOND/100;
+	s = ReadCoreTimer();
+	while ( (uint32_t)(ReadCoreTimer() - s) < d )
+		;
+} 
+
 #endif
 
 /*== Any other systems: Dummy Delay ==*/
@@ -178,6 +205,9 @@ void u8g_Delay(uint16_t val)
 	/* do not know how to delay... */
 }
 void u8g_MicroDelay(void)
+{
+}
+void u8g_10MicroDelay(void)
 {
 }
 #endif
