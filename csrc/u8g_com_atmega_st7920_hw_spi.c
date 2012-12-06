@@ -92,8 +92,8 @@ static void u8g_com_atmega_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint
   u8g_atmega_st7920_hw_spi_shift_out(u8g, val & 0x0f0);
   u8g_atmega_st7920_hw_spi_shift_out(u8g, val << 4);
 
-  for( i = 0; i < 10; i++ )
-    u8g_MicroDelay();
+  for( i = 0; i < 4; i++ )
+    u8g_10MicroDelay();
 }
 
 

@@ -76,9 +76,11 @@ static void u8g_com_atmega_parallel_write(u8g_t *u8g, uint8_t val)
   val >>= 1;
   u8g_SetPILevel(u8g, U8G_PI_D7, val&1);
   
-  /* EN cycle time must be 1 micro second, digitalWrite is slow enough to do this */
+  /* EN cycle time must be 1 micro second  */
   u8g_SetPILevel(u8g, U8G_PI_EN, 1);
+  u8g_MicroDelay(); /* delay by 1000ns, reference: ST7920: 140ns, SBN1661: 100ns */
   u8g_SetPILevel(u8g, U8G_PI_EN, 0);
+  u8g_10MicroDelay(); /* ST7920 commands: 72us */
 }
 
 

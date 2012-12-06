@@ -113,8 +113,8 @@ static void u8g_com_arduino_st7920_write_byte(uint8_t rs, uint8_t val)
   u8g_com_arduino_do_shift_out_msb_first(val & 0x0f0);
   u8g_com_arduino_do_shift_out_msb_first(val << 4);
   
-  for( i = 0; i < 10; i++ )
-    u8g_MicroDelay();
+  for( i = 0; i < 4; i++ )
+    u8g_10MicroDelay();
 }
 
 

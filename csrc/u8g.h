@@ -1031,6 +1031,9 @@ void u8g_Delay(uint16_t val);
 /* delay by one microsecond */
 void u8g_MicroDelay(void);
 
+/* delay by 10 microseconds */
+void u8g_10MicroDelay(void);
+
 /*===============================================================*/
 /* chessengine.c */
 #define CHESS_KEY_NONE 0
