@@ -54,7 +54,7 @@ static const uint8_t u8g_dev_st7920_128x64_init_seq[] PROGMEM = {
   0x006,                                /* Entry mode: Cursor move to right ,DDRAM address counter (AC) plus 1, no shift */
   0x002,                                /* disable scroll, enable CGRAM adress */
   0x001,                                /* clear RAM, needs 1.6 ms */
-  U8G_ESC_DLY(100),               /* delay 10 ms */
+  U8G_ESC_DLY(100),               /* delay 100 ms */
   
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
