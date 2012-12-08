@@ -46,6 +46,7 @@ static const uint8_t u8g_dev_st7920_128x64_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
+  U8G_ESC_DLY(100),         /* 8 Dez 2012: additional delay 100 ms because of reset*/
   U8G_ESC_CS(1),             /* enable chip */
   U8G_ESC_DLY(50),         /* delay 50 ms */
 
