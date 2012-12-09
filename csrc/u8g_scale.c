@@ -69,6 +69,7 @@ uint8_t u8g_dev_scale_2x2_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
   uint8_t pixel;
   uint16_t scaled_pixel;
   uint8_t i;
+  uint8_t dir;
   u8g_uint_t x, y, xx,yy;
   
   switch(msg)
@@ -112,6 +113,7 @@ uint8_t u8g_dev_scale_2x2_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       break;
     case U8G_DEV_MSG_SET_8PIXEL:
       pixel = ((u8g_dev_arg_pixel_t *)arg)->pixel;
+      dir = ((u8g_dev_arg_pixel_t *)arg)->dir;
       scaled_pixel = 0;
       for( i = 0; i < 8; i++ )
       {
@@ -140,16 +142,18 @@ uint8_t u8g_dev_scale_2x2_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       ((u8g_dev_arg_pixel_t *)arg)->pixel = scaled_pixel>>8;      
       ((u8g_dev_arg_pixel_t *)arg)->x = x;
       ((u8g_dev_arg_pixel_t *)arg)->y = y;
+      ((u8g_dev_arg_pixel_t *)arg)->dir = dir;
       u8g_call_dev_fn(u8g, chain, msg, arg);    
 
       
       ((u8g_dev_arg_pixel_t *)arg)->x = xx;
       ((u8g_dev_arg_pixel_t *)arg)->y = yy;
+      ((u8g_dev_arg_pixel_t *)arg)->dir = dir;
       u8g_call_dev_fn(u8g, chain, msg, arg);    
       
       ((u8g_dev_arg_pixel_t *)arg)->pixel = scaled_pixel&255;
       //((u8g_dev_arg_pixel_t *)arg)->pixel = 0x00;
-      switch(((u8g_dev_arg_pixel_t *)arg)->dir)
+      switch(dir)
       {
 	case 0:
  	  x+=8;
@@ -170,10 +174,12 @@ uint8_t u8g_dev_scale_2x2_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       }
       ((u8g_dev_arg_pixel_t *)arg)->x = x;
       ((u8g_dev_arg_pixel_t *)arg)->y = y;
+      ((u8g_dev_arg_pixel_t *)arg)->dir = dir;
       u8g_call_dev_fn(u8g, chain, msg, arg);    
       
       ((u8g_dev_arg_pixel_t *)arg)->x = xx;
       ((u8g_dev_arg_pixel_t *)arg)->y = yy;
+      ((u8g_dev_arg_pixel_t *)arg)->dir = dir;
       u8g_call_dev_fn(u8g, chain, msg, arg);    
       break;
   }

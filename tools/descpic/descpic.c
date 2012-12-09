@@ -1055,6 +1055,29 @@ void draw_line(u8g_t *u8g)
   u8g_DrawCursor(u8g);
 }
 
+void draw_scale(u8g_t *u8g) 
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  u8g_SetDefaultForegroundColor(u8g);
+  draw_common(u8g, ox, oy, w, h);
+  
+  // graphic commands to redraw the complete screen should be placed here  
+  u8g_SetFont(u8g, u8g_font_unifont);
+  u8g_SetFontPosTop(u8g);
+  u8g_DrawStr(u8g, ox+0, oy+1, "Hello");
+  u8g_DrawHLine(u8g, ox+0, oy+1+14, 40);
+  u8g_SetScale2x2(u8g);					// Scale up all draw procedures
+  u8g_DrawStr(u8g, ox/2+0, oy/2+12, "Hello");			// actual display position is (0,24)
+  u8g_DrawHLine(u8g, ox/2+0, oy/2+12+14, 40);		// All other procedures are also affected
+  u8g_UndoScale(u8g);					// IMPORTANT: Switch back to normal mode
+}
+
+
 int main(void)
 {
   
@@ -1104,6 +1127,9 @@ int main(void)
   create_picture(draw_xbm, "xbm");
   create_picture(draw_menu, "menu");
   create_picture(draw_line, "line");
+  
+  create_picture(draw_scale, "scale2x2");
+  
   
   create_picture_rot90(draw_text_abc_rot90, "rot90");
   

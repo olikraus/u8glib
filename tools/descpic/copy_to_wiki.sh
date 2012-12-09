@@ -26,3 +26,4 @@ cp circle.png ../../../wiki/descpic/.
 cp circle_ur.png ../../../wiki/descpic/.
 cp menu.png ../../../wiki/descpic/.
 cp line.png ../../../wiki/descpic/.
+cp scale2x2.png ../../../wiki/descpic/.
