@@ -139,6 +139,8 @@ void u8g_UpdateDimension(u8g_t *u8g)
   u8g->width = u8g_GetWidthLL(u8g, u8g->dev);
   u8g->height = u8g_GetHeightLL(u8g, u8g->dev);
   u8g->mode = u8g_GetModeLL(u8g, u8g->dev);
+  /* 9 Dec 2012: u8g_scale.c requires update of current page */
+  u8g_call_dev_fn(u8g, u8g->dev, U8G_DEV_MSG_GET_PAGE_BOX, &(u8g->current_page));
 }
 
 static void u8g_init_data(u8g_t *u8g)

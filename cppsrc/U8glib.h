@@ -90,7 +90,11 @@ class U8GLIB : public Print
     void setRot90(void) { u8g_SetRot90(&u8g); }
     void setRot180(void) { u8g_SetRot180(&u8g); }
     void setRot270(void) { u8g_SetRot270(&u8g); }
-      
+
+     /* screen scaling */
+    void undoScale(void) { u8g_UndoScale(&u8g); }
+    void setScale2x2(void) { u8g_SetScale2x2(&u8g); }
+    
      /* picture loop */
     void firstPage(void) { u8g_FirstPage(&u8g); }
     uint8_t nextPage(void) { return u8g_NextPage(&u8g); }
