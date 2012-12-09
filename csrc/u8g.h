@@ -845,12 +845,17 @@ void u8g_SetHardwareBackup(u8g_t *u8g, u8g_state_cb backup_cb);
 uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
 
 
-/* u8g_dev_rot.c */
+/* u8g_rot.c */
 
 void u8g_UndoRotation(u8g_t *u8g);
 void u8g_SetRot90(u8g_t *u8g);
 void u8g_SetRot180(u8g_t *u8g);
 void u8g_SetRot270(u8g_t *u8g);
+
+/* u8g_scale.c */
+
+void u8g_UndoScale(u8g_t *u8g);
+void u8g_SetScale2x2(u8g_t *u8g);
 
 
 /* u8g_font.c */
