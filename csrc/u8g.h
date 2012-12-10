@@ -192,6 +192,9 @@ extern u8g_dev_t u8g_dev_st7565_lm6059_hw_spi;
 /* Display: Newhaven NHD-C12864 */
 extern u8g_dev_t u8g_dev_st7565_nhd_c12864_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_nhd_c12864_hw_spi;
+/* Display: Newhaven NHD-C12832 */
+extern u8g_dev_t u8g_dev_st7565_nhd_c12832_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_nhd_c12832_hw_spi;
 /* Display: Displaytech 64128N */
 extern u8g_dev_t u8g_dev_st7565_64128n_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_64128n_hw_spi;
