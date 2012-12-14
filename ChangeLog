@@ -90,5 +90,6 @@ u8glib ChangeLog
   * bdf2u8g, Windows executable released
   * LC7981 320x64
   * Scalue up: u8g::setScale2x2
+  * Added more bitmap fonts
   
   
