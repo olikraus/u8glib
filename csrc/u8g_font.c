@@ -955,6 +955,14 @@ u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t di
   return u8g_DrawStrDir(u8g, x, y, dir, s);
 }
 
+/* still used by picgen.c, dir argument is ignored */
+int8_t u8g_DrawGlyphFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t encoding)
+{
+  x -= u8g_GetFontBBXOffX(u8g);
+  y += u8g_GetFontBBXOffY(u8g);
+  u8g_draw_glyph(u8g, x, y, encoding);
+}
+
 
 /*========================================================================*/
 /* set ascent/descent for reference point calculation */

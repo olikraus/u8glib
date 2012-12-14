@@ -694,6 +694,7 @@ void pic_gen_short_desc(const u8g_pgm_uint8_t *font, const char *name, u8g_uint_
 }
 
 
+
 void pic_gen_font(const u8g_pgm_uint8_t *font, const char *name, u8g_uint_t width, const char *real_name)
 {
   char s[256];
@@ -1622,6 +1623,8 @@ int main(void)
   pic_gen_font(u8g_font_m2icon_5, "u8g_font_m2icon_5", 12, "u8glib m2icon");
   pic_gen_font(u8g_font_m2icon_7, "u8g_font_m2icon_7", 12, "u8glib m2icon");
   pic_gen_font(u8g_font_m2icon_9, "u8g_font_m2icon_9", 12, "u8glib m2icon");
+
+  pic_gen_font(u8g_font_freedoomr25n, "u8g_font_freedoomr25n", 32, "freedoomr25n");
 
 #endif
 

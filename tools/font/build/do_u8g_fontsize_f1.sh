@@ -13,6 +13,8 @@ CFILEN=u8g_font_${ARG3}n.c
 IDENTIFIER=u8g_font_${ARG3}
 echo $2  ... ${CFILE}
 ../otf2bdf/otf2bdf -p $1 -r 72 $2 -o ${BDF}
+# replace BDF if it exists
+if test -r ../ttfbdfupdate/${BDF}; then echo ${BDF} "manual update" &&  cp ../ttfbdfupdate/${BDF} .; fi
 ../bdf2u8g/bdf2u8g -f 1 ${BDF} ${IDENTIFIER} ${CFILE} >/dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 32 -e 127 ${BDF} ${IDENTIFIER}r ${CFILER} >/dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 42 -e 57 ${BDF} ${IDENTIFIER}n ${CFILEN} >/dev/null

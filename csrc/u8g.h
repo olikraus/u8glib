@@ -1363,6 +1363,11 @@ extern const u8g_fntpgm_uint8_t u8g_font_tpss[] U8G_SECTION(".progmem.u8g_font_t
 extern const u8g_fntpgm_uint8_t u8g_font_tpssr[] U8G_SECTION(".progmem.u8g_font_tpssr");
 extern const u8g_fntpgm_uint8_t u8g_font_tpssn[] U8G_SECTION(".progmem.u8g_font_tpssn");
 
+/* contributed */
+
+extern const u8g_fntpgm_uint8_t u8g_font_freedoomr25n[] U8G_SECTION(".progmem.u8g_font_freedoomr25n");
+
+
 #ifdef __cplusplus
 }
 #endif

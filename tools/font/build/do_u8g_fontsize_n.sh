@@ -11,5 +11,7 @@ CFILE=u8g_font_${ARG3}.c
 IDENTIFIER=u8g_font_${ARG3}
 echo $2  ... ${CFILE}
 ../otf2bdf/otf2bdf -p $1 -r 72 $2 -o ${BDF}
+# replace BDF if it exists
+if test -r ../ttfbdfupdate/${BDF}; then echo ${BDF} "manual update" &&  cp ../ttfbdfupdate/${BDF} .; fi
 ../bdf2u8g/bdf2u8g -b 42 -e 57 ${BDF} ${IDENTIFIER} ${CFILE} >/dev/null
 #cp ${CFILE} ../../../src/.

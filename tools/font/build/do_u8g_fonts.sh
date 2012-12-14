@@ -108,6 +108,9 @@ echo "unifont"
 ../bdf2u8g/bdf2u8g -l 8 -u 9 -b 0 -e 255 ../bdf/unifont.bdf u8g_font_unifont_8_9 u8g_font_unifont_8_9.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 0 -u 8 -S 32  ../bdf/unifont.bdf u8g_font_unifont_0_8 u8g_font_unifont_0_8.c > /dev/null
 
+echo "contributed"
+../bdf2u8g/bdf2u8g  -b 32 -e 127  ../bdf/freedoomr25n.bdf u8g_font_freedoomr25n u8g_font_freedoomr25n.c > /dev/null
+
 
 
 ./do_u8g_fontsize.sh 15 ../ttf/GenBasR.ttf gdr9
