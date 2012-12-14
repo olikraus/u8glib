@@ -108,6 +108,139 @@ echo "unifont"
 ../bdf2u8g/bdf2u8g -l 8 -u 9 -b 0 -e 255 ../bdf/unifont.bdf u8g_font_unifont_8_9 u8g_font_unifont_8_9.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 0 -u 8 -S 32  ../bdf/unifont.bdf u8g_font_unifont_0_8 u8g_font_unifont_0_8.c > /dev/null
 
+echo "adobe courB 08"
+../bdf2u8g/bdf2u8g ../bdf/courB08.bdf u8g_font_courB08 u8g_font_courb08.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courB08.bdf u8g_font_courB08r u8g_font_courb08r.c > /dev/null
+echo "adobe courB 10"
+../bdf2u8g/bdf2u8g ../bdf/courB10.bdf u8g_font_courB10 u8g_font_courb10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courB10.bdf u8g_font_courB10r u8g_font_courb10r.c > /dev/null
+echo "adobe courB 12"
+../bdf2u8g/bdf2u8g ../bdf/courB12.bdf u8g_font_courB12 u8g_font_courb12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courB12.bdf u8g_font_courB12r u8g_font_courb12r.c > /dev/null
+echo "adobe courB 14"
+../bdf2u8g/bdf2u8g ../bdf/courB14.bdf u8g_font_courB14 u8g_font_courb14.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courB14.bdf u8g_font_courB14r u8g_font_courb14r.c > /dev/null
+echo "adobe courB 18"
+../bdf2u8g/bdf2u8g ../bdf/courB18.bdf u8g_font_courB18 u8g_font_courb18.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courB18.bdf u8g_font_courB18r u8g_font_courb18r.c > /dev/null
+echo "adobe courB 24"
+../bdf2u8g/bdf2u8g ../bdf/courB24.bdf u8g_font_courB24 u8g_font_courb24.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courB24.bdf u8g_font_courB24r u8g_font_courb24r.c > /dev/null
+
+echo "adobe courR"
+../bdf2u8g/bdf2u8g ../bdf/courR08.bdf u8g_font_courR08 u8g_font_courr08.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courR08.bdf u8g_font_courR08r u8g_font_courr08r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/courR10.bdf u8g_font_courR10 u8g_font_courr10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courR10.bdf u8g_font_courR10r u8g_font_courr10r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/courR12.bdf u8g_font_courR12 u8g_font_courr12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courR12.bdf u8g_font_courR12r u8g_font_courr12r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/courR14.bdf u8g_font_courR14 u8g_font_courr14.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courR14.bdf u8g_font_courR14r u8g_font_courr14r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/courR18.bdf u8g_font_courR18 u8g_font_courr18.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courR18.bdf u8g_font_courR18r u8g_font_courr18r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/courR24.bdf u8g_font_courR24 u8g_font_courr24.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/courR24.bdf u8g_font_courR24r u8g_font_courr24r.c > /dev/null
+
+echo "adobe helvB"
+../bdf2u8g/bdf2u8g ../bdf/helvB08.bdf u8g_font_helvB08 u8g_font_helvb08.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB08.bdf u8g_font_helvB08r u8g_font_helvb08r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvB10.bdf u8g_font_helvB10 u8g_font_helvb10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB10.bdf u8g_font_helvB10r u8g_font_helvb10r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvB12.bdf u8g_font_helvB12 u8g_font_helvb12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB12.bdf u8g_font_helvB12r u8g_font_helvb12r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvB14.bdf u8g_font_helvB14 u8g_font_helvb14.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB14.bdf u8g_font_helvB14r u8g_font_helvb14r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvB18.bdf u8g_font_helvB18 u8g_font_helvb18.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB18.bdf u8g_font_helvB18r u8g_font_helvb18r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvB24.bdf u8g_font_helvB24 u8g_font_helvb24.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB24.bdf u8g_font_helvB24r u8g_font_helvb24r.c > /dev/null
+
+echo "adobe helvR"
+../bdf2u8g/bdf2u8g ../bdf/helvR08.bdf u8g_font_helvR08 u8g_font_helvr08.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR08.bdf u8g_font_helvR08r u8g_font_helvr08r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvR10.bdf u8g_font_helvR10 u8g_font_helvr10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR10.bdf u8g_font_helvR10r u8g_font_helvr10r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvR12.bdf u8g_font_helvR12 u8g_font_helvr12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR12.bdf u8g_font_helvR12r u8g_font_helvr12r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvR14.bdf u8g_font_helvR14 u8g_font_helvr14.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR14.bdf u8g_font_helvR14r u8g_font_helvr14r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvR18.bdf u8g_font_helvR18 u8g_font_helvr18.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR18.bdf u8g_font_helvR18r u8g_font_helvr18r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/helvR24.bdf u8g_font_helvR24 u8g_font_helvr24.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR24.bdf u8g_font_helvR24r u8g_font_helvr24r.c > /dev/null
+
+echo "adobe ncenB"
+../bdf2u8g/bdf2u8g ../bdf/ncenB08.bdf u8g_font_ncenB08 u8g_font_ncenb08.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenB08.bdf u8g_font_ncenB08r u8g_font_ncenb08r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenB10.bdf u8g_font_ncenB10 u8g_font_ncenb10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenB10.bdf u8g_font_ncenB10r u8g_font_ncenb10r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenB12.bdf u8g_font_ncenB12 u8g_font_ncenb12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenB12.bdf u8g_font_ncenB12r u8g_font_ncenb12r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenB14.bdf u8g_font_ncenB14 u8g_font_ncenb14.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenB14.bdf u8g_font_ncenB14r u8g_font_ncenb14r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenB18.bdf u8g_font_ncenB18 u8g_font_ncenb18.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenB18.bdf u8g_font_ncenB18r u8g_font_ncenb18r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenB24.bdf u8g_font_ncenB24 u8g_font_ncenb24.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenB24.bdf u8g_font_ncenB24r u8g_font_ncenb24r.c > /dev/null
+
+echo "adobe ncenR"
+../bdf2u8g/bdf2u8g ../bdf/ncenR08.bdf u8g_font_ncenR08 u8g_font_ncenr08.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenR08.bdf u8g_font_ncenR08r u8g_font_ncenr08r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenR10.bdf u8g_font_ncenR10 u8g_font_ncenr10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenR10.bdf u8g_font_ncenR10r u8g_font_ncenr10r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenR12.bdf u8g_font_ncenR12 u8g_font_ncenr12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenR12.bdf u8g_font_ncenR12r u8g_font_ncenr12r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenR14.bdf u8g_font_ncenR14 u8g_font_ncenr14.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenR14.bdf u8g_font_ncenR14r u8g_font_ncenr14r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenR18.bdf u8g_font_ncenR18 u8g_font_ncenr18.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenR18.bdf u8g_font_ncenR18r u8g_font_ncenr18r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/ncenR24.bdf u8g_font_ncenR24 u8g_font_ncenr24.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/ncenR24.bdf u8g_font_ncenR24r u8g_font_ncenr24r.c > /dev/null
+
+
+echo "adobe timB"
+../bdf2u8g/bdf2u8g ../bdf/timB08.bdf u8g_font_timB08 u8g_font_timb08.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timB08.bdf u8g_font_timB08r u8g_font_timb08r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timB10.bdf u8g_font_timB10 u8g_font_timb10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timB10.bdf u8g_font_timB10r u8g_font_timb10r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timB12.bdf u8g_font_timB12 u8g_font_timb12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timB12.bdf u8g_font_timB12r u8g_font_timb12r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timB14.bdf u8g_font_timB14 u8g_font_timb14.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timB14.bdf u8g_font_timB14r u8g_font_timb14r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timB18.bdf u8g_font_timB18 u8g_font_timb18.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timB18.bdf u8g_font_timB18r u8g_font_timb18r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timB24.bdf u8g_font_timB24 u8g_font_timb24.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timB24.bdf u8g_font_timB24r u8g_font_timb24r.c > /dev/null
+
+echo "adobe timR"
+../bdf2u8g/bdf2u8g ../bdf/timR08.bdf u8g_font_timR08 u8g_font_timr08.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timR08.bdf u8g_font_timR08r u8g_font_timr08r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timR10.bdf u8g_font_timR10 u8g_font_timr10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timR10.bdf u8g_font_timR10r u8g_font_timr10r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timR12.bdf u8g_font_timR12 u8g_font_timr12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timR12.bdf u8g_font_timR12r u8g_font_timr12r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timR14.bdf u8g_font_timR14 u8g_font_timr14.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timR14.bdf u8g_font_timR14r u8g_font_timr14r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timR18.bdf u8g_font_timR18 u8g_font_timr18.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timR18.bdf u8g_font_timR18r u8g_font_timr18r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/timR24.bdf u8g_font_timR24 u8g_font_timr24.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/timR24.bdf u8g_font_timR24r u8g_font_timr24r.c > /dev/null
+
+echo "adobe symb"
+../bdf2u8g/bdf2u8g ../bdf/symb08.bdf u8g_font_symb08 u8g_font_symb08.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/symb08.bdf u8g_font_symb08r u8g_font_symb08r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/symb10.bdf u8g_font_symb10 u8g_font_symb10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/symb10.bdf u8g_font_symb10r u8g_font_symb10r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/symb12.bdf u8g_font_symb12 u8g_font_symb12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/symb12.bdf u8g_font_symb12r u8g_font_symb12r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/symb14.bdf u8g_font_symb14 u8g_font_symb14.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/symb14.bdf u8g_font_symb14r u8g_font_symb14r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/symb18.bdf u8g_font_symb18 u8g_font_symb18.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/symb18.bdf u8g_font_symb18r u8g_font_symb18r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/symb24.bdf u8g_font_symb24 u8g_font_symb24.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/symb24.bdf u8g_font_symb24r u8g_font_symb24r.c > /dev/null
+
+
 echo "contributed"
 ../bdf2u8g/bdf2u8g  -b 32 -e 127  ../bdf/freedoomr25n.bdf u8g_font_freedoomr25n u8g_font_freedoomr25n.c > /dev/null
 

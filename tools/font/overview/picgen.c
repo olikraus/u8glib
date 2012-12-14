@@ -1361,6 +1361,7 @@ int main(void)
 
 #else
 
+#ifdef OLI
 
 
   pic_gen_font(u8g_font_10x20, "u8g_font_10x20", 14, "X11 Display Font");
@@ -1623,8 +1624,128 @@ int main(void)
   pic_gen_font(u8g_font_m2icon_5, "u8g_font_m2icon_5", 12, "u8glib m2icon");
   pic_gen_font(u8g_font_m2icon_7, "u8g_font_m2icon_7", 12, "u8glib m2icon");
   pic_gen_font(u8g_font_m2icon_9, "u8g_font_m2icon_9", 12, "u8glib m2icon");
-
+  
   pic_gen_font(u8g_font_freedoomr25n, "u8g_font_freedoomr25n", 32, "freedoomr25n");
+
+#endif
+
+  pic_gen_font(u8g_font_courB08, "u8g_font_courB08", 12, "courB08");
+  pic_gen_font(u8g_font_courB08r, "u8g_font_courB08r", 12, "courB08r");
+  pic_gen_font(u8g_font_courB10, "u8g_font_courB10", 16, "courB10");
+  pic_gen_font(u8g_font_courB10r, "u8g_font_courB10r", 16, "courB10r");
+  pic_gen_font(u8g_font_courB12, "u8g_font_courB12", 18, "courB12");
+  pic_gen_font(u8g_font_courB12r, "u8g_font_courB12r", 18, "courB12r");
+  pic_gen_font(u8g_font_courB14, "u8g_font_courB14", 22, "courB14");
+  pic_gen_font(u8g_font_courB14r, "u8g_font_courB14r", 22, "courB14r");
+  pic_gen_font(u8g_font_courB18, "u8g_font_courB18", 26, "courB18");
+  pic_gen_font(u8g_font_courB18r, "u8g_font_courB18r", 26, "courB18r");
+  pic_gen_font(u8g_font_courB24, "u8g_font_courB24", 32, "courB24");
+  pic_gen_font(u8g_font_courB24r, "u8g_font_courB24r", 32, "courB24r");
+
+  pic_gen_font(u8g_font_courR08, "u8g_font_courR08", 12, "courR08");
+  pic_gen_font(u8g_font_courR08r, "u8g_font_courR08r", 12, "courR08r");
+  pic_gen_font(u8g_font_courR10, "u8g_font_courR10", 16, "courR10");
+  pic_gen_font(u8g_font_courR10r, "u8g_font_courR10r", 16, "courR10r");
+  pic_gen_font(u8g_font_courR12, "u8g_font_courR12", 18, "courR12");
+  pic_gen_font(u8g_font_courR12r, "u8g_font_courR12r", 18, "courR12r");
+  pic_gen_font(u8g_font_courR14, "u8g_font_courR14", 22, "courR14");
+  pic_gen_font(u8g_font_courR14r, "u8g_font_courR14r", 22, "courR14r");
+  pic_gen_font(u8g_font_courR18, "u8g_font_courR18", 26, "courR18");
+  pic_gen_font(u8g_font_courR18r, "u8g_font_courR18r", 26, "courR18r");
+  pic_gen_font(u8g_font_courR24, "u8g_font_courR24", 32, "courR24");
+  pic_gen_font(u8g_font_courR24r, "u8g_font_courR24r", 32, "courR24r");
+
+  pic_gen_font(u8g_font_helvB08, "u8g_font_helvB08", 12, "helvB08");
+  pic_gen_font(u8g_font_helvB08r, "u8g_font_helvB08r", 12, "helvB08r");
+  pic_gen_font(u8g_font_helvB10, "u8g_font_helvB10", 16, "helvB10");
+  pic_gen_font(u8g_font_helvB10r, "u8g_font_helvB10r", 16, "helvB10r");
+  pic_gen_font(u8g_font_helvB12, "u8g_font_helvB12", 18, "helvB12");
+  pic_gen_font(u8g_font_helvB12r, "u8g_font_helvB12r", 18, "helvB12r");
+  pic_gen_font(u8g_font_helvB14, "u8g_font_helvB14", 22, "helvB14");
+  pic_gen_font(u8g_font_helvB14r, "u8g_font_helvB14r", 22, "helvB14r");
+  pic_gen_font(u8g_font_helvB18, "u8g_font_helvB18", 26, "helvB18");
+  pic_gen_font(u8g_font_helvB18r, "u8g_font_helvB18r", 26, "helvB18r");
+  pic_gen_font(u8g_font_helvB24, "u8g_font_helvB24", 32, "helvB24");
+  pic_gen_font(u8g_font_helvB24r, "u8g_font_helvB24r", 32, "helvB24r");
+
+  pic_gen_font(u8g_font_helvR08, "u8g_font_helvR08", 12, "helvR08");
+  pic_gen_font(u8g_font_helvR08r, "u8g_font_helvR08r", 12, "helvR08r");
+  pic_gen_font(u8g_font_helvR10, "u8g_font_helvR10", 16, "helvR10");
+  pic_gen_font(u8g_font_helvR10r, "u8g_font_helvR10r", 16, "helvR10r");
+  pic_gen_font(u8g_font_helvR12, "u8g_font_helvR12", 18, "helvR12");
+  pic_gen_font(u8g_font_helvR12r, "u8g_font_helvR12r", 18, "helvR12r");
+  pic_gen_font(u8g_font_helvR14, "u8g_font_helvR14", 22, "helvR14");
+  pic_gen_font(u8g_font_helvR14r, "u8g_font_helvR14r", 22, "helvR14r");
+  pic_gen_font(u8g_font_helvR18, "u8g_font_helvR18", 26, "helvR18");
+  pic_gen_font(u8g_font_helvR18r, "u8g_font_helvR18r", 26, "helvR18r");
+  pic_gen_font(u8g_font_helvR24, "u8g_font_helvR24", 32, "helvR24");
+  pic_gen_font(u8g_font_helvR24r, "u8g_font_helvR24r", 32, "helvR24r");
+
+  pic_gen_font(u8g_font_ncenB08, "u8g_font_ncenB08", 12, "ncenB08");
+  pic_gen_font(u8g_font_ncenB08r, "u8g_font_ncenB08r", 12, "ncenB08r");
+  pic_gen_font(u8g_font_ncenB10, "u8g_font_ncenB10", 16, "ncenB10");
+  pic_gen_font(u8g_font_ncenB10r, "u8g_font_ncenB10r", 16, "ncenB10r");
+  pic_gen_font(u8g_font_ncenB12, "u8g_font_ncenB12", 18, "ncenB12");
+  pic_gen_font(u8g_font_ncenB12r, "u8g_font_ncenB12r", 18, "ncenB12r");
+  pic_gen_font(u8g_font_ncenB14, "u8g_font_ncenB14", 22, "ncenB14");
+  pic_gen_font(u8g_font_ncenB14r, "u8g_font_ncenB14r", 22, "ncenB14r");
+  pic_gen_font(u8g_font_ncenB18, "u8g_font_ncenB18", 26, "ncenB18");
+  pic_gen_font(u8g_font_ncenB18r, "u8g_font_ncenB18r", 26, "ncenB18r");
+  pic_gen_font(u8g_font_ncenB24, "u8g_font_ncenB24", 32, "ncenB24");
+  pic_gen_font(u8g_font_ncenB24r, "u8g_font_ncenB24r", 32, "ncenB24r");
+
+  pic_gen_font(u8g_font_ncenR08, "u8g_font_ncenR08", 12, "ncenR08");
+  pic_gen_font(u8g_font_ncenR08r, "u8g_font_ncenR08r", 12, "ncenR08r");
+  pic_gen_font(u8g_font_ncenR10, "u8g_font_ncenR10", 16, "ncenR10");
+  pic_gen_font(u8g_font_ncenR10r, "u8g_font_ncenR10r", 16, "ncenR10r");
+  pic_gen_font(u8g_font_ncenR12, "u8g_font_ncenR12", 18, "ncenR12");
+  pic_gen_font(u8g_font_ncenR12r, "u8g_font_ncenR12r", 18, "ncenR12r");
+  pic_gen_font(u8g_font_ncenR14, "u8g_font_ncenR14", 22, "ncenR14");
+  pic_gen_font(u8g_font_ncenR14r, "u8g_font_ncenR14r", 22, "ncenR14r");
+  pic_gen_font(u8g_font_ncenR18, "u8g_font_ncenR18", 26, "ncenR18");
+  pic_gen_font(u8g_font_ncenR18r, "u8g_font_ncenR18r", 26, "ncenR18r");
+  pic_gen_font(u8g_font_ncenR24, "u8g_font_ncenR24", 32, "ncenR24");
+  pic_gen_font(u8g_font_ncenR24r, "u8g_font_ncenR24r", 32, "ncenR24r");
+
+  pic_gen_font(u8g_font_timB08, "u8g_font_timB08", 12, "timB08");
+  pic_gen_font(u8g_font_timB08r, "u8g_font_timB08r", 12, "timB08r");
+  pic_gen_font(u8g_font_timB10, "u8g_font_timB10", 16, "timB10");
+  pic_gen_font(u8g_font_timB10r, "u8g_font_timB10r", 16, "timB10r");
+  pic_gen_font(u8g_font_timB12, "u8g_font_timB12", 18, "timB12");
+  pic_gen_font(u8g_font_timB12r, "u8g_font_timB12r", 18, "timB12r");
+  pic_gen_font(u8g_font_timB14, "u8g_font_timB14", 22, "timB14");
+  pic_gen_font(u8g_font_timB14r, "u8g_font_timB14r", 22, "timB14r");
+  pic_gen_font(u8g_font_timB18, "u8g_font_timB18", 26, "timB18");
+  pic_gen_font(u8g_font_timB18r, "u8g_font_timB18r", 26, "timB18r");
+  pic_gen_font(u8g_font_timB24, "u8g_font_timB24", 32, "timB24");
+  pic_gen_font(u8g_font_timB24r, "u8g_font_timB24r", 32, "timB24r");
+
+  pic_gen_font(u8g_font_timR08, "u8g_font_timR08", 12, "timR08");
+  pic_gen_font(u8g_font_timR08r, "u8g_font_timR08r", 12, "timR08r");
+  pic_gen_font(u8g_font_timR10, "u8g_font_timR10", 16, "timR10");
+  pic_gen_font(u8g_font_timR10r, "u8g_font_timR10r", 16, "timR10r");
+  pic_gen_font(u8g_font_timR12, "u8g_font_timR12", 18, "timR12");
+  pic_gen_font(u8g_font_timR12r, "u8g_font_timR12r", 18, "timR12r");
+  pic_gen_font(u8g_font_timR14, "u8g_font_timR14", 22, "timR14");
+  pic_gen_font(u8g_font_timR14r, "u8g_font_timR14r", 22, "timR14r");
+  pic_gen_font(u8g_font_timR18, "u8g_font_timR18", 26, "timR18");
+  pic_gen_font(u8g_font_timR18r, "u8g_font_timR18r", 26, "timR18r");
+  pic_gen_font(u8g_font_timR24, "u8g_font_timR24", 32, "timR24");
+  pic_gen_font(u8g_font_timR24r, "u8g_font_timR24r", 32, "timR24r");
+
+  pic_gen_font(u8g_font_symb08, "u8g_font_symb08", 12, "symb08");
+  pic_gen_font(u8g_font_symb08r, "u8g_font_symb08r", 12, "symb08r");
+  pic_gen_font(u8g_font_symb10, "u8g_font_symb10", 16, "symb10");
+  pic_gen_font(u8g_font_symb10r, "u8g_font_symb10r", 16, "symb10r");
+  pic_gen_font(u8g_font_symb12, "u8g_font_symb12", 18, "symb12");
+  pic_gen_font(u8g_font_symb12r, "u8g_font_symb12r", 18, "symb12r");
+  pic_gen_font(u8g_font_symb14, "u8g_font_symb14", 22, "symb14");
+  pic_gen_font(u8g_font_symb14r, "u8g_font_symb14r", 22, "symb14r");
+  pic_gen_font(u8g_font_symb18, "u8g_font_symb18", 26, "symb18");
+  pic_gen_font(u8g_font_symb18r, "u8g_font_symb18r", 26, "symb18r");
+  pic_gen_font(u8g_font_symb24, "u8g_font_symb24", 32, "symb24");
+  pic_gen_font(u8g_font_symb24r, "u8g_font_symb24r", 32, "symb24r");
+
 
 #endif
 
