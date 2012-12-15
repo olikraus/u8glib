@@ -973,6 +973,52 @@ impl. v1.09
 impl. v1.09
 ::
 :Controller
+callback fn
+:Display/Size
+Flipdisk, 28x14
+:Mode
+BW
+:Set Contrast
+n.a.
+:Page Size
+52 Bytes
+:Com
+:Device
+<tt>u8g_dev_flipdisc_2x7</tt>
+:C++ Constructor
+U8GLIB_FLIPDISC_2X7()
+:Arduino
+n.a.
+:Chipkit
+n.a.
+:AVR
+n.a.
+
+::
+:Controller
+virtual device
+:Display/Size
+changeable
+:Mode
+BW
+:Set Contrast
+n.a.
+:Page Size
+n.a.
+:Com
+:Device
+<tt>u8g_dev_vs</tt>
+:C++ Constructor
+
+:Arduino
+n.a.
+:Chipkit
+n.a.
+:AVR
+n.a.
+
+::
+:Controller
 stdout
 :Display/Size
 Console, 70x30
