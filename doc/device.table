@@ -988,11 +988,11 @@ n.a.
 :C++ Constructor
 U8GLIB_FLIPDISC_2X7()
 :Arduino
-n.a.
+impl.
 :Chipkit
-n.a.
+impl.
 :AVR
-n.a.
+impl.
 
 ::
 :Controller
@@ -1011,12 +1011,11 @@ n.a.
 :C++ Constructor
 
 :Arduino
-n.a.
+impl.
 :Chipkit
-n.a.
+impl.
 :AVR
-n.a.
-
+impl.
 ::
 :Controller
 stdout
