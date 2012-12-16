@@ -1627,7 +1627,6 @@ int main(void)
   
   pic_gen_font(u8g_font_freedoomr25n, "u8g_font_freedoomr25n", 32, "freedoomr25n");
 
-#endif
 
   pic_gen_font(u8g_font_courB08, "u8g_font_courB08", 12, "courB08");
   pic_gen_font(u8g_font_courB08r, "u8g_font_courB08r", 12, "courB08r");
@@ -1641,6 +1640,7 @@ int main(void)
   pic_gen_font(u8g_font_courB18r, "u8g_font_courB18r", 26, "courB18r");
   pic_gen_font(u8g_font_courB24, "u8g_font_courB24", 32, "courB24");
   pic_gen_font(u8g_font_courB24r, "u8g_font_courB24r", 32, "courB24r");
+  pic_gen_font(u8g_font_courB24n, "u8g_font_courB24n", 32, "courB24n");
 
   pic_gen_font(u8g_font_courR08, "u8g_font_courR08", 12, "courR08");
   pic_gen_font(u8g_font_courR08r, "u8g_font_courR08r", 12, "courR08r");
@@ -1654,6 +1654,7 @@ int main(void)
   pic_gen_font(u8g_font_courR18r, "u8g_font_courR18r", 26, "courR18r");
   pic_gen_font(u8g_font_courR24, "u8g_font_courR24", 32, "courR24");
   pic_gen_font(u8g_font_courR24r, "u8g_font_courR24r", 32, "courR24r");
+  pic_gen_font(u8g_font_courR24n, "u8g_font_courR24n", 32, "courR24n");
 
   pic_gen_font(u8g_font_helvB08, "u8g_font_helvB08", 12, "helvB08");
   pic_gen_font(u8g_font_helvB08r, "u8g_font_helvB08r", 12, "helvB08r");
@@ -1667,6 +1668,7 @@ int main(void)
   pic_gen_font(u8g_font_helvB18r, "u8g_font_helvB18r", 26, "helvB18r");
   pic_gen_font(u8g_font_helvB24, "u8g_font_helvB24", 32, "helvB24");
   pic_gen_font(u8g_font_helvB24r, "u8g_font_helvB24r", 32, "helvB24r");
+  pic_gen_font(u8g_font_helvB24n, "u8g_font_helvB24n", 32, "helvB24n");
 
   pic_gen_font(u8g_font_helvR08, "u8g_font_helvR08", 12, "helvR08");
   pic_gen_font(u8g_font_helvR08r, "u8g_font_helvR08r", 12, "helvR08r");
@@ -1680,6 +1682,7 @@ int main(void)
   pic_gen_font(u8g_font_helvR18r, "u8g_font_helvR18r", 26, "helvR18r");
   pic_gen_font(u8g_font_helvR24, "u8g_font_helvR24", 32, "helvR24");
   pic_gen_font(u8g_font_helvR24r, "u8g_font_helvR24r", 32, "helvR24r");
+  pic_gen_font(u8g_font_helvR24n, "u8g_font_helvR24n", 32, "helvR24n");
 
   pic_gen_font(u8g_font_ncenB08, "u8g_font_ncenB08", 12, "ncenB08");
   pic_gen_font(u8g_font_ncenB08r, "u8g_font_ncenB08r", 12, "ncenB08r");
@@ -1693,6 +1696,7 @@ int main(void)
   pic_gen_font(u8g_font_ncenB18r, "u8g_font_ncenB18r", 26, "ncenB18r");
   pic_gen_font(u8g_font_ncenB24, "u8g_font_ncenB24", 32, "ncenB24");
   pic_gen_font(u8g_font_ncenB24r, "u8g_font_ncenB24r", 32, "ncenB24r");
+  pic_gen_font(u8g_font_ncenB24n, "u8g_font_ncenB24n", 32, "ncenB24n");
 
   pic_gen_font(u8g_font_ncenR08, "u8g_font_ncenR08", 12, "ncenR08");
   pic_gen_font(u8g_font_ncenR08r, "u8g_font_ncenR08r", 12, "ncenR08r");
@@ -1706,6 +1710,7 @@ int main(void)
   pic_gen_font(u8g_font_ncenR18r, "u8g_font_ncenR18r", 26, "ncenR18r");
   pic_gen_font(u8g_font_ncenR24, "u8g_font_ncenR24", 32, "ncenR24");
   pic_gen_font(u8g_font_ncenR24r, "u8g_font_ncenR24r", 32, "ncenR24r");
+  pic_gen_font(u8g_font_ncenR24n, "u8g_font_ncenR24n", 32, "ncenR24n");
 
   pic_gen_font(u8g_font_timB08, "u8g_font_timB08", 12, "timB08");
   pic_gen_font(u8g_font_timB08r, "u8g_font_timB08r", 12, "timB08r");
@@ -1719,6 +1724,7 @@ int main(void)
   pic_gen_font(u8g_font_timB18r, "u8g_font_timB18r", 26, "timB18r");
   pic_gen_font(u8g_font_timB24, "u8g_font_timB24", 32, "timB24");
   pic_gen_font(u8g_font_timB24r, "u8g_font_timB24r", 32, "timB24r");
+  pic_gen_font(u8g_font_timB24n, "u8g_font_timB24n", 32, "timB24n");
 
   pic_gen_font(u8g_font_timR08, "u8g_font_timR08", 12, "timR08");
   pic_gen_font(u8g_font_timR08r, "u8g_font_timR08r", 12, "timR08r");
@@ -1732,6 +1738,7 @@ int main(void)
   pic_gen_font(u8g_font_timR18r, "u8g_font_timR18r", 26, "timR18r");
   pic_gen_font(u8g_font_timR24, "u8g_font_timR24", 32, "timR24");
   pic_gen_font(u8g_font_timR24r, "u8g_font_timR24r", 32, "timR24r");
+  pic_gen_font(u8g_font_timR24n, "u8g_font_timR24n", 32, "timR24n");
 
   pic_gen_font(u8g_font_symb08, "u8g_font_symb08", 12, "symb08");
   pic_gen_font(u8g_font_symb08r, "u8g_font_symb08r", 12, "symb08r");
@@ -1745,6 +1752,44 @@ int main(void)
   pic_gen_font(u8g_font_symb18r, "u8g_font_symb18r", 26, "symb18r");
   pic_gen_font(u8g_font_symb24, "u8g_font_symb24", 32, "symb24");
   pic_gen_font(u8g_font_symb24r, "u8g_font_symb24r", 32, "symb24r");
+
+#endif
+
+  pic_gen_font(u8g_font_p01type, "u8g_font_p01type", 10, "P01type");
+  pic_gen_font(u8g_font_p01typer, "u8g_font_p01typer", 10, "P01type");
+  pic_gen_font(u8g_font_p01typen, "u8g_font_p01typen", 10, "P01type");
+
+  pic_gen_font(u8g_font_lucasfont_alternate, "u8g_font_lucasfont_alternate", 10, "Lucasfont Alternate");
+  pic_gen_font(u8g_font_lucasfont_alternater, "u8g_font_lucasfont_alternater", 10, "Lucasfont Alternate");
+  pic_gen_font(u8g_font_lucasfont_alternaten, "u8g_font_lucasfont_alternaten", 10, "Lucasfont Alternate");
+
+  pic_gen_font(u8g_font_fs_onebrickpixelfont, "u8g_font_fs_onebrickpixelfont", 10, "FS One-Brick-Pixel-Font");
+  pic_gen_font(u8g_font_fs_onebrickpixelfontr, "u8g_font_fs_onebrickpixelfontr", 10, "FS One-Brick-Pixel-Font");
+  pic_gen_font(u8g_font_fs_onebrickpixelfontn, "u8g_font_fs_onebrickpixelfontn", 10, "FS One-Brick-Pixel-Font");
+
+  pic_gen_font(u8g_font_chikita, "u8g_font_chikita", 10, "Chikita");
+  pic_gen_font(u8g_font_chikitar, "u8g_font_chikitar", 10, "Chikita");
+  pic_gen_font(u8g_font_chikitan, "u8g_font_chikitan", 10, "Chikita");
+
+  pic_gen_font(u8g_font_pixelle_micro, "u8g_font_pixelle_micro", 10, "Pixelle Micro");
+  pic_gen_font(u8g_font_pixelle_micror, "u8g_font_pixelle_micror", 10, "Pixelle Micro");
+  pic_gen_font(u8g_font_pixelle_micron, "u8g_font_pixelle_micron", 10, "Pixelle Micro");
+
+  pic_gen_font(u8g_font_trixel_square, "u8g_font_trixel_square", 10, "Trixel Square");
+  pic_gen_font(u8g_font_trixel_squarer, "u8g_font_trixel_squarer", 10, "Trixel Square");
+  pic_gen_font(u8g_font_trixel_squaren, "u8g_font_trixel_squaren", 10, "Trixel Square");
+
+  pic_gen_font(u8g_font_robot_de_niro, "u8g_font_robot_de_niro", 10, "Robot de Niro");
+  pic_gen_font(u8g_font_robot_de_niror, "u8g_font_robot_de_niror", 10, "Robot de Niro");
+  pic_gen_font(u8g_font_robot_de_niron, "u8g_font_robot_de_niron", 10, "Robot de Niro");
+
+  pic_gen_font(u8g_font_baby, "u8g_font_baby", 10, "Baby");
+  pic_gen_font(u8g_font_babyr, "u8g_font_babyr", 10, "Baby");
+  pic_gen_font(u8g_font_babyn, "u8g_font_babyn", 10, "Baby");
+
+  pic_gen_font(u8g_font_blipfest_07, "u8g_font_blipfest_07", 10, "Blipfest 07");
+  pic_gen_font(u8g_font_blipfest_07r, "u8g_font_blipfest_07r", 10, "Blipfest 07");
+  pic_gen_font(u8g_font_blipfest_07n, "u8g_font_blipfest_07n", 10, "Blipfest 07");
 
 
 #endif
