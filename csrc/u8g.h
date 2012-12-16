@@ -296,6 +296,7 @@ extern u8g_dev_t u8g_dev_sbn1661_122x32;
 
 /* flip disc matrix */
 extern u8g_dev_t u8g_dev_flipdisc_2x7;
+void u8g_SetFlipDiscCallback(u8g_t *u8g, void (*cb)(uint8_t id, uint8_t page, uint8_t width, uint8_t *row1, uint8_t *row2));
 
 /* ILI9325D based TFT */
 extern u8g_dev_t u8g_dev_ili9325d_320x240_8bit;

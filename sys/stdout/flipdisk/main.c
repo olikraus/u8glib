@@ -48,6 +48,7 @@ int main(void)
   u8g_t u8g;
   
   u8g_Init(&u8g, &u8g_dev_flipdisc_2x7);
+  u8g_SetFlipDiscCallback(&u8g, writeFlipDiscMatrix);
   u8g_FirstPage(&u8g);
   u8g_SetColorIndex(&u8g, 1);
   do

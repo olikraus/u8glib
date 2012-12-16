@@ -48,9 +48,12 @@ u8g_t u8g;
 int main(void)
 {
   u8g_uint_t h;
+
   
   u8g_Init(&u8g1, &u8g_dev_flipdisc_2x7);
+  u8g_SetFlipDiscCallback(&u8g1, writeFlipDiscMatrix);
   u8g_Init(&u8g2, &u8g_dev_flipdisc_2x7);
+  u8g_SetFlipDiscCallback(&u8g2, writeFlipDiscMatrix);
 
   u8g_Init(&u8g, &u8g_dev_vs);
 
