@@ -251,6 +251,7 @@ echo "adobe symb"
 
 echo "contributed"
 ../bdf2u8g/bdf2u8g  -b 32 -e 127  ../bdf/freedoomr25n.bdf u8g_font_freedoomr25n u8g_font_freedoomr25n.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127  ../bdf/freedoomr10r.bdf u8g_font_freedoomr10r u8g_font_freedoomr10r.c > /dev/null
 
 
 echo "fontstruct"

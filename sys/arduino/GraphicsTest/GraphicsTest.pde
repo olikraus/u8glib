@@ -46,7 +46,7 @@
 //U8GLIB_NHD27OLED_2X_BW u8g(13, 11, 10, 9); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);       // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_2X_GR u8g(13, 11, 10, 9);  // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_ST7920_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
@@ -97,6 +97,12 @@ void u8g_disc_circle(uint8_t a) {
   u8g.drawCircle(24+a,16+30,7);
 }
 
+void u8g_r_frame(uint8_t a) {
+  u8g.drawStr( 0, 0, "drawRFrame/Box");
+  u8g.drawRFrame(5, 10,40,30, a+1);
+  u8g.drawRBox(50, 10,25,40, a+1);
+}
+
 void u8g_string(uint8_t a) {
   u8g.drawStr(30+a,31, " 0");
   u8g.drawStr90(30,31+a, " 90");
@@ -141,13 +147,16 @@ uint8_t draw_state = 0;
 
 void draw(void) {
   u8g_prepare();
+  u8g_r_frame(draw_state&7);
+  return;
   switch(draw_state >> 3) {
     case 0: u8g_box_frame(draw_state&7); break;
     case 1: u8g_disc_circle(draw_state&7); break;
-    case 2: u8g_string(draw_state&7); break;
-    case 3: u8g_line(draw_state&7); break;
-    case 4: u8g_ascii_1(); break;
-    case 5: u8g_ascii_2(); break;
+    case 2: u8g_r_frame(draw_state&7); break;
+    case 3: u8g_string(draw_state&7); break;
+    case 4: u8g_line(draw_state&7); break;
+    case 5: u8g_ascii_1(); break;
+    case 6: u8g_ascii_2(); break;
   }
 }
 
@@ -178,7 +187,7 @@ void loop(void) {
   
   // increase the state
   draw_state++;
-  if ( draw_state >= 6*8 )
+  if ( draw_state >= 7*8 )
     draw_state = 0;
   
   // rebuild the picture after some delay

@@ -924,20 +924,22 @@ int8_t u8g_GetStrXP(u8g_t *u8g, const u8g_pgm_uint8_t *s);
 u8g_uint_t u8g_GetStrWidth(u8g_t *u8g, const char *s);
 u8g_uint_t u8g_GetStrWidthP(u8g_t *u8g, const u8g_pgm_uint8_t *s);
 
-
 u8g_uint_t u8g_DrawStrFontBBX(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s);
-
-
 
 void u8g_GetStrMinBox(u8g_t *u8g, const char *s, u8g_uint_t *x, u8g_uint_t *y, u8g_uint_t *width, u8g_uint_t *height);
 void u8g_GetStrAMinBox(u8g_t *u8g, const char *s, u8g_uint_t *x, u8g_uint_t *y, u8g_uint_t *width, u8g_uint_t *height);
 
 /* u8g_rect.c */
 
+void u8g_draw_box(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h) U8G_NOINLINE; 
+
 void u8g_DrawHLine(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w);
 void u8g_DrawVLine(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w);
 void u8g_DrawFrame(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
 void u8g_DrawBox(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h);
+
+void u8g_DrawRFrame(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h, u8g_uint_t r);
+void u8g_DrawRBox(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h, u8g_uint_t r);
 
 /* u8g_bitmap.c */
 
@@ -972,6 +974,9 @@ void u8g_DrawEllipseRect(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t x1
 #define U8G_DRAW_LOWER_LEFT 0x04
 #define U8G_DRAW_LOWER_RIGHT  0x08
 #define U8G_DRAW_ALL (U8G_DRAW_UPPER_RIGHT|U8G_DRAW_UPPER_LEFT|U8G_DRAW_LOWER_RIGHT|U8G_DRAW_LOWER_LEFT)
+
+void u8g_draw_circle(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option) U8G_NOINLINE;
+void u8g_draw_disc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option) U8G_NOINLINE;
 
 void u8g_DrawCircle(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option);
 void u8g_DrawDisc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option);
@@ -1367,6 +1372,7 @@ extern const u8g_fntpgm_uint8_t u8g_font_tpssn[] U8G_SECTION(".progmem.u8g_font_
 /* contributed */
 
 extern const u8g_fntpgm_uint8_t u8g_font_freedoomr25n[] U8G_SECTION(".progmem.u8g_font_freedoomr25n");
+extern const u8g_fntpgm_uint8_t u8g_font_freedoomr10r[] U8G_SECTION(".progmem.u8g_font_freedoomr10r");
 
 /* adobe X11 */
 extern const u8g_fntpgm_uint8_t u8g_font_courB08[] U8G_SECTION(".progmem.u8g_font_courB08");

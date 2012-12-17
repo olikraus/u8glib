@@ -107,12 +107,8 @@ void u8g_DrawFrame(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uin
   u8g_draw_hline(u8g, xtmp, y, w);
 }
 
-/* restrictions: h > 0 */
-void u8g_DrawBox(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h)
+void u8g_draw_box(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h)
 {
-  if ( u8g_IsBBXIntersection(u8g, x, y, w, h) == 0 )
-    return;
-  
   do
   { 
     u8g_draw_hline(u8g, x, y, w);
@@ -121,4 +117,116 @@ void u8g_DrawBox(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_
   } while( h != 0 );
 }
 
+/* restrictions: h > 0 */
+void u8g_DrawBox(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h)
+{
+  if ( u8g_IsBBXIntersection(u8g, x, y, w, h) == 0 )
+    return;
+  u8g_draw_box(u8g, x, y, w, h);
+}
 
+
+void u8g_DrawRFrame(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h, u8g_uint_t r)
+{
+  u8g_uint_t xl, yu;
+
+  if ( u8g_IsBBXIntersection(u8g, x, y, w, h) == 0 )
+    return;
+
+  xl = x;
+  xl += r;
+  yu = y;
+  yu += r;
+ 
+  {
+    u8g_uint_t yl, xr;
+      
+    xr = x;
+    xr += w;
+    xr -= r;
+    xr -= 1;
+    
+    yl = y;
+    yl += h;
+    yl -= r; 
+    yl -= 1;
+
+    u8g_draw_circle(u8g, xl, yu, r, U8G_DRAW_UPPER_LEFT);
+    u8g_draw_circle(u8g, xr, yu, r, U8G_DRAW_UPPER_RIGHT);
+    u8g_draw_circle(u8g, xl, yl, r, U8G_DRAW_LOWER_LEFT);
+    u8g_draw_circle(u8g, xr, yl, r, U8G_DRAW_LOWER_RIGHT);
+  }
+
+  {
+    u8g_uint_t ww, hh;
+
+    ww = w;
+    ww -= r;
+    ww -= r;
+    ww -= 2;
+    hh = h;
+    hh -= r;
+    hh -= r;
+    hh -= 2;
+    
+    xl++;
+    yu++;
+    h--;
+    w--;
+    u8g_draw_hline(u8g, xl, y, ww);
+    u8g_draw_hline(u8g, xl, y+h, ww);
+    u8g_draw_vline(u8g, x,         yu, hh);
+    u8g_draw_vline(u8g, x+w, yu, hh);
+  }
+}
+
+void u8g_DrawRBox(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h, u8g_uint_t r)
+{
+  u8g_uint_t xl, yu;
+    u8g_uint_t yl, xr;
+
+  if ( u8g_IsBBXIntersection(u8g, x, y, w, h) == 0 )
+    return;
+
+  xl = x;
+  xl += r;
+  yu = y;
+  yu += r;
+ 
+  xr = x;
+  xr += w;
+  xr -= r;
+  xr -= 1;
+  
+  yl = y;
+  yl += h;
+  yl -= r; 
+  yl -= 1;
+
+  u8g_draw_disc(u8g, xl, yu, r, U8G_DRAW_UPPER_LEFT);
+  u8g_draw_disc(u8g, xr, yu, r, U8G_DRAW_UPPER_RIGHT);
+  u8g_draw_disc(u8g, xl, yl, r, U8G_DRAW_LOWER_LEFT);
+  u8g_draw_disc(u8g, xr, yl, r, U8G_DRAW_LOWER_RIGHT);
+
+  {
+    u8g_uint_t ww, hh;
+
+    ww = w;
+    ww -= r;
+    ww -= r;
+    ww -= 2;
+    hh = h;
+    hh -= r;
+    hh -= r;
+    hh -= 2;
+    
+    xl++;
+    yu++;
+    h--;
+    u8g_draw_box(u8g, xl, y, ww, r+1);
+    u8g_draw_box(u8g, xl, yl, ww, r+1);
+    //u8g_draw_hline(u8g, xl, y+h, ww);
+    u8g_draw_box(u8g, x, yu, w, hh);
+    //u8g_draw_vline(u8g, x+w, yu, hh);
+  }
+}

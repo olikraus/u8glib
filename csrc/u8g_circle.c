@@ -236,23 +236,8 @@ static void u8g_draw_circle_section(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_
     }
 }
 
-void u8g_DrawCircle(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option)
+void u8g_draw_circle(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option)
 {
-  /* check for bounding box */
-  {
-    u8g_uint_t radp, radp2;
-    
-    radp = rad;
-    radp++;
-    radp2 = radp;
-    radp2 *= 2;
-    
-    if ( u8g_IsBBXIntersection(u8g, x0-radp, y0-radp, radp2, radp2) == 0)
-      return;    
-  }
-  
-  /* draw circle */
-  {
     u8g_int_t f;
     u8g_int_t ddF_x;
     u8g_int_t ddF_y;
@@ -284,7 +269,25 @@ void u8g_DrawCircle(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, ui
 
       u8g_draw_circle_section(u8g, x, y, x0, y0, option);    
     }
+}
+
+void u8g_DrawCircle(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option)
+{
+  /* check for bounding box */
+  {
+    u8g_uint_t radp, radp2;
+    
+    radp = rad;
+    radp++;
+    radp2 = radp;
+    radp2 *= 2;
+    
+    if ( u8g_IsBBXIntersection(u8g, x0-radp, y0-radp, radp2, radp2) == 0)
+      return;    
   }
+  
+  /* draw circle */
+  u8g_draw_circle(u8g, x0, y0, rad, option);
 }
 
 static void u8g_draw_disc_section(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t x0, u8g_uint_t y0, uint8_t option) U8G_NOINLINE;
@@ -320,6 +323,41 @@ static void u8g_draw_disc_section(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_ui
     }
 }
 
+void u8g_draw_disc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option)
+{
+  u8g_int_t f;
+  u8g_int_t ddF_x;
+  u8g_int_t ddF_y;
+  u8g_uint_t x;
+  u8g_uint_t y;
+
+  f = 1;
+  f -= rad;
+  ddF_x = 1;
+  ddF_y = 0;
+  ddF_y -= rad;
+  ddF_y *= 2;
+  x = 0;
+  y = rad;
+
+  u8g_draw_disc_section(u8g, x, y, x0, y0, option);
+  
+  while ( x < y )
+  {
+    if (f >= 0) 
+    {
+      y--;
+      ddF_y += 2;
+      f += ddF_y;
+    }
+    x++;
+    ddF_x += 2;
+    f += ddF_x;
+
+    u8g_draw_disc_section(u8g, x, y, x0, y0, option);    
+  }
+}
+
 void u8g_DrawDisc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t option)
 {
   /* check for bounding box */
@@ -336,39 +374,7 @@ void u8g_DrawDisc(u8g_t *u8g, u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint
   }
   
   /* draw disc */
-  {
-    u8g_int_t f;
-    u8g_int_t ddF_x;
-    u8g_int_t ddF_y;
-    u8g_uint_t x;
-    u8g_uint_t y;
-
-    f = 1;
-    f -= rad;
-    ddF_x = 1;
-    ddF_y = 0;
-    ddF_y -= rad;
-    ddF_y *= 2;
-    x = 0;
-    y = rad;
-
-    u8g_draw_disc_section(u8g, x, y, x0, y0, option);
-    
-    while ( x < y )
-    {
-      if (f >= 0) 
-      {
-        y--;
-        ddF_y += 2;
-        f += ddF_y;
-      }
-      x++;
-      ddF_x += 2;
-      f += ddF_x;
-
-      u8g_draw_disc_section(u8g, x, y, x0, y0, option);    
-    }
-  }
+  u8g_draw_disc(u8g, x0, y0, rad, option);
 }
 
 

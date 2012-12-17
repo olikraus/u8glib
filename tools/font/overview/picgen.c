@@ -1625,8 +1625,6 @@ int main(void)
   pic_gen_font(u8g_font_m2icon_7, "u8g_font_m2icon_7", 12, "u8glib m2icon");
   pic_gen_font(u8g_font_m2icon_9, "u8g_font_m2icon_9", 12, "u8glib m2icon");
   
-  pic_gen_font(u8g_font_freedoomr25n, "u8g_font_freedoomr25n", 32, "freedoomr25n");
-
 
   pic_gen_font(u8g_font_courB08, "u8g_font_courB08", 12, "courB08");
   pic_gen_font(u8g_font_courB08r, "u8g_font_courB08r", 12, "courB08r");
@@ -1755,6 +1753,9 @@ int main(void)
 
 #endif
 
+  pic_gen_font(u8g_font_freedoomr10r, "u8g_font_freedoomr10r", 12, "freedoomr10r");
+
+
   pic_gen_font(u8g_font_p01type, "u8g_font_p01type", 10, "P01type");
   pic_gen_font(u8g_font_p01typer, "u8g_font_p01typer", 10, "P01type");
   pic_gen_font(u8g_font_p01typen, "u8g_font_p01typen", 10, "P01type");
@@ -1763,9 +1764,9 @@ int main(void)
   pic_gen_font(u8g_font_lucasfont_alternater, "u8g_font_lucasfont_alternater", 10, "Lucasfont Alternate");
   pic_gen_font(u8g_font_lucasfont_alternaten, "u8g_font_lucasfont_alternaten", 10, "Lucasfont Alternate");
 
-  pic_gen_font(u8g_font_fs_onebrickpixelfont, "u8g_font_fs_onebrickpixelfont", 10, "FS One-Brick-Pixel-Font");
-  pic_gen_font(u8g_font_fs_onebrickpixelfontr, "u8g_font_fs_onebrickpixelfontr", 10, "FS One-Brick-Pixel-Font");
-  pic_gen_font(u8g_font_fs_onebrickpixelfontn, "u8g_font_fs_onebrickpixelfontn", 10, "FS One-Brick-Pixel-Font");
+//  pic_gen_font(u8g_font_fs_onebrickpixelfont, "u8g_font_fs_onebrickpixelfont", 10, "FS One-Brick-Pixel-Font");
+//  pic_gen_font(u8g_font_fs_onebrickpixelfontr, "u8g_font_fs_onebrickpixelfontr", 10, "FS One-Brick-Pixel-Font");
+//  pic_gen_font(u8g_font_fs_onebrickpixelfontn, "u8g_font_fs_onebrickpixelfontn", 10, "FS One-Brick-Pixel-Font");
 
   pic_gen_font(u8g_font_chikita, "u8g_font_chikita", 10, "Chikita");
   pic_gen_font(u8g_font_chikitar, "u8g_font_chikitar", 10, "Chikita");
