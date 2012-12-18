@@ -91,5 +91,6 @@ u8glib ChangeLog
   * LC7981 320x64
   * Scalue up: u8g::setScale2x2
   * Added more bitmap fonts
+  * u8g::drawRBox(), u8g::drawRFrame()
   
   
