@@ -334,6 +334,23 @@ class U8GLIB_ST7920_192X32 : public U8GLIB
       { }
 };
 
+
+class U8GLIB_ST7920_202X32 : public U8GLIB 
+{
+  public:
+    U8GLIB_ST7920_202X32(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_st7920_202x32_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_ST7920_202X32(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_st7920_202x32_hw_spi, cs, a0, reset)
+      { }
+    U8GLIB_ST7920_202X32(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+        uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_st7920_202x32_8bit, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset)
+      { }
+};
+
+
 class U8GLIB_LC7981_160X80 : public U8GLIB 
 {
   public:
