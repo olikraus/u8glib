@@ -1,6 +1,6 @@
 /*
   
-  u8g_com_atmega_st7920_hw_spi.c
+  u8g_com_arduino_st7920_hw_spi.c
 
   Universal 8bit Graphics Library
   
@@ -31,20 +31,26 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
 
-  A special SPI interface for ST7920 controller with HW SPI Support
-
-  Assumes, that 
-    MOSI is at PORTB, Pin 3
-  and
-    SCK is at PORTB, Pin 5
-
+  A special HW SPI interface for ST7920 controller
 
 */
 
 #include "u8g.h"
 
+
+
+#if ARDUINO < 100 
+#include <WProgram.h>    
+#include "wiring_private.h"
+#include "pins_arduino.h"
+
+#else 
+#include <Arduino.h> 
+#include "wiring_private.h"
+#endif
+
 #if defined(__AVR__)
-#define U8G_ATMEGA_HW_SPI
+#define U8G_ARDUINO_ATMEGA_HW_SPI
 
 /* remove the definition for attiny */
 #if __AVR_ARCH__ == 2
@@ -56,13 +62,14 @@
 
 #endif
 
-#if defined(U8G_ATMEGA_HW_SPI)
+
+#if defined(U8G_ARDUINO_ATMEGA_HW_SPI)
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
-static uint8_t u8g_atmega_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val) U8G_NOINLINE;
-static uint8_t u8g_atmega_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val)
+static uint8_t u8g_arduino_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val) U8G_NOINLINE;
+static uint8_t u8g_arduino_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val)
 {
   /* send data */
   SPDR = val;
@@ -74,37 +81,41 @@ static uint8_t u8g_atmega_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val)
 }
 
 
-static void u8g_com_atmega_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint8_t val) U8G_NOINLINE;
-static void u8g_com_atmega_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint8_t val)
+static void u8g_com_arduino_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint8_t val) U8G_NOINLINE;
+static void u8g_com_arduino_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint8_t val)
 {
   uint8_t i;
 
   if ( rs == 0 )
   {
     /* command */
-    u8g_atmega_st7920_hw_spi_shift_out(u8g, 0x0f8);
+    u8g_arduino_st7920_hw_spi_shift_out(u8g, 0x0f8);
   }
   else if ( rs == 1 )
   {
     /* data */
-    u8g_atmega_st7920_hw_spi_shift_out(u8g, 0x0fa);
+    u8g_arduino_st7920_hw_spi_shift_out(u8g, 0x0fa);
+  }
+  else
+  {
+    /* do nothing, keep same state */
   }
   
-  u8g_atmega_st7920_hw_spi_shift_out(u8g, val & 0x0f0);
-  u8g_atmega_st7920_hw_spi_shift_out(u8g, val << 4);
+  u8g_arduino_st7920_hw_spi_shift_out(u8g, val & 0x0f0);
+  u8g_arduino_st7920_hw_spi_shift_out(u8g, val << 4);
 
   for( i = 0; i < 4; i++ )
     u8g_10MicroDelay();
 }
 
 
-uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_arduino_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   switch(msg)
   {
     case U8G_COM_MSG_INIT:
-      u8g_SetPIOutput(u8g, U8G_PI_CS);
-      //u8g_SetPIOutput(u8g, U8G_PI_A0);
+      u8g_com_arduino_assign_pin_output_high(u8g);
+      u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
       
       DDRB |= _BV(3);          /* D0, MOSI */
       DDRB |= _BV(5);          /* SCK */
@@ -135,31 +146,28 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
       break;
 
     case U8G_COM_MSG_RESET:
-      u8g_SetPILevel(u8g, U8G_PI_RESET, arg_val);
+      if ( u8g->pin_list[U8G_PI_RESET] != U8G_PIN_NONE )
+	u8g_com_arduino_digital_write(u8g, U8G_PI_RESET, arg_val);
       break;
-    
-    case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      u8g->pin_list[U8G_PI_A0_STATE] = arg_val;
-      break;
-
-    case U8G_COM_MSG_CHIP_SELECT:      
+      
+    case U8G_COM_MSG_CHIP_SELECT:
       if ( arg_val == 0 )
       {
         /* disable, note: the st7920 has an active high chip select */
-        u8g_SetPILevel(u8g, U8G_PI_CS, 0);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
       }
       else
       {
-        /* u8g_SetPILevel(u8g, U8G_PI_SCK, 0 ); */
         /* enable */
-        u8g_SetPILevel(u8g, U8G_PI_CS, 1); /* CS = 1 (high active) */
+        //u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
+        u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
       }
       break;
-      
 
     case U8G_COM_MSG_WRITE_BYTE:
-      u8g_com_atmega_st7920_write_byte_hw_spi(u8g, u8g->pin_list[U8G_PI_A0_STATE], arg_val);
-      //u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+      u8g_com_arduino_st7920_write_byte_hw_spi(u8g,  u8g->pin_list[U8G_PI_A0_STATE], arg_val);
+      // u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+      //u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], arg_val);
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
@@ -167,8 +175,8 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_atmega_st7920_write_byte_hw_spi(u8g, u8g->pin_list[U8G_PI_A0_STATE], *ptr++);
-	  //u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+          u8g_com_arduino_st7920_write_byte_hw_spi(u8g, u8g->pin_list[U8G_PI_A0_STATE], *ptr++);
+          // u8g->pin_list[U8G_PI_A0_STATE] = 2; 
           arg_val--;
         }
       }
@@ -179,12 +187,16 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
-          u8g_com_atmega_st7920_write_byte_hw_spi(u8g, u8g->pin_list[U8G_PI_A0_STATE], u8g_pgm_read(ptr));
-	  //u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+          u8g_com_arduino_st7920_write_byte_hw_spi(u8g, u8g->pin_list[U8G_PI_A0_STATE], u8g_pgm_read(ptr) );
+          // u8g->pin_list[U8G_PI_A0_STATE] = 2; 
           ptr++;
           arg_val--;
         }
       }
+      break;
+      
+    case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
+      u8g->pin_list[U8G_PI_A0_STATE] = arg_val;
       break;
   }
   return 1;
@@ -192,13 +204,8 @@ uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
 
 #else
 
-
-uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_arduino_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   return 1;
 }
-
-
 #endif
-
- 
