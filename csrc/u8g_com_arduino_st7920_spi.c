@@ -49,6 +49,8 @@
 #include "wiring_private.h"
 #endif
 
+#if defined(__AVR__)
+
 uint8_t u8g_bitData, u8g_bitNotData;
 uint8_t u8g_bitClock, u8g_bitNotClock;
 volatile uint8_t *u8g_outData;
@@ -84,16 +86,83 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
       *outData |= bitData;
     else
       *outData &= bitNotData;
-   
-   
+
+    /*
     *outClock |= bitClock;
-    u8g_MicroDelay();		/* 15 Aug 2012: added for high speed uC */
     val <<= 1;
     cnt--;
     *outClock &= bitNotClock;
-    u8g_MicroDelay();		/* 15 Aug 2012: added for high speed uC */
+    */
+
+    val <<= 1;
+    *outClock &= bitNotClock;
+    cnt--;
+    // removed micro delays, because AVRs are too slow and the delay is not required
+    //u8g_MicroDelay();
+    *outClock |= bitClock;
+    //u8g_MicroDelay();
   } while( cnt != 0 );
 }
+
+#elif defined(__18CXX) || defined(__PIC32MX)
+
+uint16_t dog_bitData, dog_bitNotData;
+uint16_t dog_bitClock, dog_bitNotClock;
+volatile uint32_t *dog_outData;
+volatile uint32_t *dog_outClock;
+volatile uint32_t dog_pic32_spi_tmp;
+
+static void u8g_com_arduino_init_shift_out(uint8_t dataPin, uint8_t clockPin)
+{
+  dog_outData = portOutputRegister(digitalPinToPort(dataPin));
+  dog_outClock = portOutputRegister(digitalPinToPort(clockPin));
+  dog_bitData = digitalPinToBitMask(dataPin);
+  dog_bitClock = digitalPinToBitMask(clockPin);
+
+  dog_bitNotClock = dog_bitClock;
+  dog_bitNotClock ^= 0x0ffff;
+
+  dog_bitNotData = dog_bitData;
+  dog_bitNotData ^= 0x0ffff;
+}
+
+static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
+{
+  uint8_t cnt = 8;
+  do
+  {
+    if ( val & 128 )
+	*dog_outData |= dog_bitData;
+    else
+	*dog_outData &= dog_bitNotData;    
+    val <<= 1;
+    //u8g_MicroDelay();
+    //*dog_outClock |= dog_bitClock;
+    *dog_outClock &= dog_bitNotClock;
+    cnt--;
+    u8g_MicroDelay();
+    //*dog_outClock &= dog_bitNotClock;
+    *dog_outClock |= dog_bitClock;
+    u8g_MicroDelay();
+    
+  } while( cnt != 0 );
+}
+
+#else
+/* empty interface */
+
+static void u8g_com_arduino_init_shift_out(uint8_t dataPin, uint8_t clockPin)
+{
+}
+
+static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
+{
+}
+
+#endif 
+
+
+
 
 static void u8g_com_arduino_st7920_write_byte(uint8_t rs, uint8_t val)
 {
@@ -126,7 +195,8 @@ uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, 
     case U8G_COM_MSG_INIT:
       u8g_com_arduino_assign_pin_output_high(u8g);
       u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
-      u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
+      // u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
+      u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, HIGH);
       u8g_com_arduino_digital_write(u8g, U8G_PI_MOSI, LOW);
       u8g_com_arduino_init_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK]);
       u8g->pin_list[U8G_PI_A0_STATE] = 0;       /* inital RS state: command mode */
@@ -149,14 +219,14 @@ uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, 
       else
       {
         /* enable */
-        //u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
+        //u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, HIGH);
         u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
       }
       break;
 
     case U8G_COM_MSG_WRITE_BYTE:
       u8g_com_arduino_st7920_write_byte( u8g->pin_list[U8G_PI_A0_STATE], arg_val);
-      u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+      //u8g->pin_list[U8G_PI_A0_STATE] = 2; 
       //u8g_arduino_sw_spi_shift_out(u8g->pin_list[U8G_PI_MOSI], u8g->pin_list[U8G_PI_SCK], arg_val);
       break;
     
@@ -166,7 +236,7 @@ uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, 
         while( arg_val > 0 )
         {
           u8g_com_arduino_st7920_write_byte(u8g->pin_list[U8G_PI_A0_STATE], *ptr++);
-          u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+          //u8g->pin_list[U8G_PI_A0_STATE] = 2; 
           arg_val--;
         }
       }
@@ -178,7 +248,7 @@ uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, 
         while( arg_val > 0 )
         {
           u8g_com_arduino_st7920_write_byte(u8g->pin_list[U8G_PI_A0_STATE], u8g_pgm_read(ptr) );
-          u8g->pin_list[U8G_PI_A0_STATE] = 2; 
+          //u8g->pin_list[U8G_PI_A0_STATE] = 2; 
           ptr++;
           arg_val--;
         }
