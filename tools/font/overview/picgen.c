@@ -1625,6 +1625,7 @@ int main(void)
   pic_gen_font(u8g_font_m2icon_7, "u8g_font_m2icon_7", 12, "u8glib m2icon");
   pic_gen_font(u8g_font_m2icon_9, "u8g_font_m2icon_9", 12, "u8glib m2icon");
   
+#endif
 
   pic_gen_font(u8g_font_courB08, "u8g_font_courB08", 12, "courB08");
   pic_gen_font(u8g_font_courB08r, "u8g_font_courB08r", 12, "courB08r");
@@ -1751,7 +1752,6 @@ int main(void)
   pic_gen_font(u8g_font_symb24, "u8g_font_symb24", 32, "symb24");
   pic_gen_font(u8g_font_symb24r, "u8g_font_symb24r", 32, "symb24r");
 
-#endif
 
   pic_gen_font(u8g_font_freedoomr10r, "u8g_font_freedoomr10r", 12, "freedoomr10r");
 

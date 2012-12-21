@@ -37,7 +37,7 @@
 
 #include "u8g.h"
 
-
+#if defined(ARDUINO)
 
 #if ARDUINO < 100 
 #include <WProgram.h>    
@@ -208,3 +208,13 @@ uint8_t u8g_com_arduino_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_va
   return 1;
 }
 #endif
+
+#else /* ARDUINO */
+
+uint8_t u8g_com_arduino_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+{
+  return 1;
+}
+
+#endif /* ARDUINO */
+
