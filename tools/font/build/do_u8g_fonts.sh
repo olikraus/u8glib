@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+echo u8glib_4
+../bdf2u8g/bdf2u8g -f 1 ../bdf/u8glib_4.bdf u8g_font_u8glib_4 u8g_font_u8glib_4.c > /dev/null
+
 echo m2icon
 ../bdf2u8g/bdf2u8g -f 1 -b 65 -e 104 ../bdf/m2icon_5.bdf u8g_font_m2icon_5 u8g_font_m2icon_5.c > /dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 65 -e 104  ../bdf/m2icon_7.bdf u8g_font_m2icon_7 u8g_font_m2icon_7.c > /dev/null
