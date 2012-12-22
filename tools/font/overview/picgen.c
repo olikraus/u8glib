@@ -1626,6 +1626,8 @@ int main(void)
   pic_gen_font(u8g_font_m2icon_9, "u8g_font_m2icon_9", 12, "u8glib m2icon");
   
 #endif
+  pic_gen_font(u8g_font_u8glib_4, "u8g_font_u8glib_4", 10, "u8glib 4");
+  pic_gen_font(u8g_font_u8glib_4r, "u8g_font_u8glib_4r", 10, "u8glib 4");
 
   pic_gen_font(u8g_font_courB08, "u8g_font_courB08", 12, "courB08");
   pic_gen_font(u8g_font_courB08r, "u8g_font_courB08r", 12, "courB08r");
