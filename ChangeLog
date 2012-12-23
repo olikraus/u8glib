@@ -94,3 +94,5 @@ u8glib ChangeLog
   * u8g::drawRBox(), u8g::drawRFrame()
   * Support for CFAG20232 (st7920_202x32)
   * Fixed ST7920 SW SPI for ChipKit
+  * Support for tls8204
+  

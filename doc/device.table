@@ -786,8 +786,6 @@ verified
 n.a.
 :AVR
 n.a.
-
-
 ::
 :Controller
 PCD8544
@@ -807,6 +805,29 @@ SW SPI
 <tt>U8GLIB_PCD8544(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Chipkit
+impl.
+:AVR
+impl.
+::
+:Controller
+TLS8204
+:Display/Size
+84x48
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+84 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_tls8204_84x48_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_TLS8204_84X48(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl.
 :Chipkit
 impl.
 :AVR

@@ -240,6 +240,7 @@ extern u8g_dev_t u8g_dev_ks0108_128x64_fast;    /* faster, but uses private tabl
 
 /* Nokia 84x48 Display with PCD8544 */
 extern u8g_dev_t u8g_dev_pcd8544_84x48_sw_spi;
+extern u8g_dev_t u8g_dev_tls8204_84x48_sw_spi;
 
 /* Nokia 96x65 Display with PCF8812 */
 extern u8g_dev_t u8g_dev_pcf8812_96x65_sw_spi;
