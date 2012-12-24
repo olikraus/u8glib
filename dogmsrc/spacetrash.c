@@ -36,6 +36,9 @@
 */
 
 #include "u8g_dogm128_api.h"
+#include "u8g.h"
+
+
 
 #define ST_AREA_HEIGHT (DOG_HEIGHT - 8)
 #define ST_AREA_WIDTH DOG_WIDTH
@@ -138,6 +141,18 @@ typedef struct _st_obj_struct st_obj;
 #define ST_OT_GADGET_IMPLODE 13
 #define ST_OT_DUST_NXPY 14
 #define ST_OT_DUST_NXNY 15
+
+
+/*================================================================*/
+/* graphics object */
+/*================================================================*/
+
+u8g_t *st_u8g;
+
+/*================================================================*/
+/* object types */
+/*================================================================*/
+
 
 DOG_ROM st_ot st_object_types[] DOG_PROGMEM =
 {
@@ -687,11 +702,19 @@ void st_DrawObj(uint8_t objnr)
 	x = st_CalcXY(o);
 	y = st_px_y;
 
-	dog_SetPixel(x,y);
+	
+	// dog_SetPixel(x,y);
+	// x++; y--;
+	// dog_SetPixel(x,y);
+	// x++; y--;
+ 	// dog_SetPixel(x,y);
+	
+	u8g_SetColorIndex(st_u8g, 1);  
+	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  
 	x++; y--;
-	dog_SetPixel(x,y);
+	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  
 	x++; y--;
- 	dog_SetPixel(x,y);
+	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  	
      }      
      break;
     case ST_DRAW_SLASH:
@@ -701,11 +724,18 @@ void st_DrawObj(uint8_t objnr)
 	x = st_CalcXY(o);
 	y = st_px_y;
 	
-	dog_SetPixel(x,y);
+	// dog_SetPixel(x,y);
+	// x++; y++;
+	// dog_SetPixel(x,y);
+	// x++; y++;
+ 	// dog_SetPixel(x,y);
+	
+	u8g_SetColorIndex(st_u8g, 1);  
+	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  
 	x++; y++;
-	dog_SetPixel(x,y);
+	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  
 	x++; y++;
- 	dog_SetPixel(x,y);
+	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  	
      }      
      break;
   }
@@ -1205,23 +1235,33 @@ void st_DrawInGame(uint8_t fps)
   for( i = 0; i < ST_OBJ_CNT; i++ )
       st_DrawObj(i);
   
-  dog_ClrBox(0, ST_AREA_HEIGHT, DOG_WIDTH-1, ST_AREA_HEIGHT+3);
-  dog_SetHLine(0, ST_AREA_WIDTH-1, ST_AREA_HEIGHT-1);
-  dog_SetHLine(0, ST_AREA_WIDTH-1, 0);
-  dog_DrawStr(0, ST_AREA_HEIGHT, font_4x6, dog_itoa(st_difficulty));
-  
-  dog_SetHLine(10, 10+(st_to_diff_cnt>>ST_DIFF_FP), ST_AREA_HEIGHT+3);
-  dog_SetVLine(10,ST_AREA_HEIGHT+2, ST_AREA_HEIGHT+4);
-  dog_SetVLine(10+ST_DIFF_VIS_LEN,ST_AREA_HEIGHT+2, ST_AREA_HEIGHT+4);
+  //dog_ClrBox(0, ST_AREA_HEIGHT, DOG_WIDTH-1, ST_AREA_HEIGHT+3);
 
+  u8g_SetColorIndex(st_u8g, 0);
+  u8g_DrawBox(st_u8g, 0, dog_height_minus_one - ST_AREA_HEIGHT-3, DOG_WIDTH, 4);
+  
+  u8g_SetColorIndex(st_u8g, 1);
+  u8g_DrawHLine(st_u8g, 0, dog_height_minus_one - ST_AREA_HEIGHT+1, ST_AREA_WIDTH);
+  u8g_DrawHLine(st_u8g, 0, dog_height_minus_one, ST_AREA_WIDTH);
+  u8g_SetFont(st_u8g, u8g_font_4x6r);
+  u8g_DrawStr(st_u8g, 0, dog_height_minus_one - ST_AREA_HEIGHT, dog_itoa(st_difficulty));
+  u8g_DrawHLine(st_u8g, 10, dog_height_minus_one - ST_AREA_HEIGHT-3, (st_to_diff_cnt>>ST_DIFF_FP)+1);
+  u8g_DrawVLine(st_u8g, 10, dog_height_minus_one - ST_AREA_HEIGHT-4, 3);
+  u8g_DrawVLine(st_u8g, 10+ST_DIFF_VIS_LEN, dog_height_minus_one - ST_AREA_HEIGHT-4, 3);
+  
+  
   /* player points */
-  dog_DrawStr(ST_AREA_WIDTH-5*4-2,  ST_AREA_HEIGHT, font_4x6, dog_itoa(st_player_points_delayed));
+  u8g_DrawStr(st_u8g, ST_AREA_WIDTH-5*4-2, dog_height_minus_one - ST_AREA_HEIGHT, dog_itoa(st_player_points_delayed));
+  
   
   /* FPS output */
   if ( fps > 0 )
   {
-    i = dog_DrawStr(ST_AREA_WIDTH-5*4-2-7*4, ST_AREA_HEIGHT, font_4x6, "FPS:");
-    dog_DrawStr(ST_AREA_WIDTH-5*4-2-7*4+i, ST_AREA_HEIGHT, font_4x6, dog_itoa(fps));
+    //i = dog_DrawStr(ST_AREA_WIDTH-5*4-2-7*4, ST_AREA_HEIGHT, font_4x6, "FPS:");
+    i = u8g_DrawStr(st_u8g, ST_AREA_WIDTH-5*4-2-7*4, dog_height_minus_one - ST_AREA_HEIGHT, "FPS:");
+
+    //dog_DrawStr(ST_AREA_WIDTH-5*4-2-7*4+i, ST_AREA_HEIGHT, font_4x6, dog_itoa(fps));
+    u8g_DrawStr(st_u8g, ST_AREA_WIDTH-5*4-2-7*4+i, dog_height_minus_one - ST_AREA_HEIGHT, dog_itoa(fps));
   }
   /*dog_DrawStr(60+i, ST_AREA_HEIGHT, font_4x6, dog_itoa(st_CntObj(0)));*/
 }
@@ -1233,19 +1273,29 @@ void st_Draw(uint8_t fps)
     case ST_STATE_PREPARE:
     case ST_STATE_IPREPARE:
       //dog_DrawStr(0, (DOG_HEIGHT-6)/2, font_4x6, "SpaceTrash");
-      dog_DrawStrP(0, (DOG_HEIGHT-6)/2, font_4x6, DOG_PSTR("SpaceTrash"));
-      dog_SetHLine(DOG_WIDTH-st_to_diff_cnt-10, DOG_WIDTH-st_to_diff_cnt, (DOG_HEIGHT-6)/2-1);
+      u8g_SetFont(st_u8g, u8g_font_4x6r);
+      u8g_SetColorIndex(st_u8g, 1);
+      //dog_DrawStrP(0, (DOG_HEIGHT-6)/2, font_4x6, DOG_PSTR("SpaceTrash"));
+      u8g_DrawStrP(st_u8g, 0, dog_height_minus_one - (DOG_HEIGHT-6)/2, DOG_PSTR("SpaceTrash"));
+      //dog_SetHLine(DOG_WIDTH-st_to_diff_cnt-10, DOG_WIDTH-st_to_diff_cnt, (DOG_HEIGHT-6)/2-1);
+      u8g_DrawHLine(st_u8g, DOG_WIDTH-st_to_diff_cnt-10, dog_height_minus_one - (DOG_HEIGHT-6)/2+1, 11);
       break;
     case ST_STATE_GAME:
       st_DrawInGame(fps);
       break;
     case ST_STATE_END:
     case ST_STATE_IEND:
+      u8g_SetFont(st_u8g, u8g_font_4x6r);
+      u8g_SetColorIndex(st_u8g, 1);
       //dog_DrawStr(0, (DOG_HEIGHT-6)/2, font_4x6, "Game Over");
-      dog_DrawStrP(0, (DOG_HEIGHT-6)/2, font_4x6, DOG_PSTR("Game Over"));
-      dog_DrawStr(50, (DOG_HEIGHT-6)/2, font_4x6, dog_itoa(st_player_points));
-      dog_DrawStr(75, (DOG_HEIGHT-6)/2, font_4x6, dog_itoa(st_highscore));
-      dog_SetHLine(st_to_diff_cnt, st_to_diff_cnt+10, (DOG_HEIGHT-6)/2-1);
+      //dog_DrawStrP(0, (DOG_HEIGHT-6)/2, font_4x6, DOG_PSTR("Game Over"));
+      u8g_DrawStrP(st_u8g, 0, dog_height_minus_one - (DOG_HEIGHT-6)/2, DOG_PSTR("Game Over"));
+      //dog_DrawStr(50, (DOG_HEIGHT-6)/2, font_4x6, dog_itoa(st_player_points));
+      u8g_DrawStr(st_u8g, 50, dog_height_minus_one - (DOG_HEIGHT-6)/2, dog_itoa(st_player_points));
+      //dog_DrawStr(75, (DOG_HEIGHT-6)/2, font_4x6, dog_itoa(st_highscore));
+      u8g_DrawStr(st_u8g, 75, dog_height_minus_one - (DOG_HEIGHT-6)/2, dog_itoa(st_highscore));
+      //dog_SetHLine(st_to_diff_cnt, st_to_diff_cnt+10, (DOG_HEIGHT-6)/2-1);
+      u8g_DrawHLine(st_u8g, st_to_diff_cnt, dog_height_minus_one - (DOG_HEIGHT-6)/2+1, 11);
       break;
   }
 }
@@ -1266,8 +1316,9 @@ void st_SetupInGame(void)
 /* API: game setup */
 /*================================================================*/
 
-void st_Setup(void)
+void st_Setup(u8g_t *u8g)
 {
+  st_u8g = u8g;
 }
 
 /*================================================================*/

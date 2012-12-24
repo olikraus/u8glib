@@ -63,7 +63,7 @@ int main(void)
   uint32_t x;
   
   u8g_InitDogm128API(&u8g_dev_sdl_1bit);
-  u8g_SetDogmRot90();
+  //u8g_SetDogmRot90();
   
   uiSetup();
   
