@@ -242,7 +242,7 @@ uint16_t st_to_diff_cnt = 0;
 /* bitmaps */
 /*================================================================*/
 
-const dog_pgm_uint8_t st_bitmap_player1[] = 
+const u8g_pgm_uint8_t st_bitmap_player1[] = 
 { 
   /* 01100000 */ 0x060,
   /* 11111000 */ 0x0f8,
@@ -251,7 +251,7 @@ const dog_pgm_uint8_t st_bitmap_player1[] =
   /* 01100000 */ 0x060
 };
 
-const dog_pgm_uint8_t st_bitmap_player2[] = 
+const u8g_pgm_uint8_t st_bitmap_player2[] = 
 {   
   /* 01100000 */ 0x060,
   /* 01111100 */ 0x078,
@@ -263,7 +263,7 @@ const dog_pgm_uint8_t st_bitmap_player2[] =
   /* 01100000 */ 0x060
 };
 
-const dog_pgm_uint8_t st_bitmap_player3[] = 
+const u8g_pgm_uint8_t st_bitmap_player3[] = 
 {   
   /* 01100000 */ 0x060,
   /* 01111100 */ 0x078,
@@ -278,7 +278,7 @@ const dog_pgm_uint8_t st_bitmap_player3[] =
   /* 01100000 */ 0x060
  };
 
-const dog_pgm_uint8_t st_bitmap_trash_5x5_1[] = 
+const u8g_pgm_uint8_t st_bitmap_trash_5x5_1[] = 
 { 
   /* 01110000 */ 0x070,
   /* 11110000 */ 0x0f0,
@@ -287,7 +287,7 @@ const dog_pgm_uint8_t st_bitmap_trash_5x5_1[] =
   /* 00110000 */ 0x030,
 };
 
-const dog_pgm_uint8_t st_bitmap_trash_5x5_2[] = 
+const u8g_pgm_uint8_t st_bitmap_trash_5x5_2[] = 
 { 
   /* 00110000 */ 0x030,
   /* 11111000 */ 0x0f8,
@@ -296,7 +296,7 @@ const dog_pgm_uint8_t st_bitmap_trash_5x5_2[] =
   /* 01110000 */ 0x070,
 };
 
-const dog_pgm_uint8_t st_bitmap_trash_7x7[] = 
+const u8g_pgm_uint8_t st_bitmap_trash_7x7[] = 
 {
   /* 00111000 */ 0x038,
   /* 01111100 */ 0x07c,
@@ -307,7 +307,7 @@ const dog_pgm_uint8_t st_bitmap_trash_7x7[] =
   /* 01111000 */ 0x078,
 };
 
-const dog_pgm_uint8_t st_bitmap_gadget[] = 
+const u8g_pgm_uint8_t st_bitmap_gadget[] = 
 { 
   /* 01110000 */ 0x070,
   /* 11011000 */ 0x0d8,
@@ -319,18 +319,18 @@ const dog_pgm_uint8_t st_bitmap_gadget[] =
 /*================================================================*/
 /* forward definitions */
 /*================================================================*/
-uint8_t st_rnd(void) DOG_ATTR_FN_NOINLINE;
-static st_obj *st_GetObj(uint8_t objnr) DOG_ATTR_FN_NOINLINE;
+uint8_t st_rnd(void) U8G_NOINLINE;
+static st_obj *st_GetObj(uint8_t objnr) U8G_NOINLINE;
 uint8_t st_GetMissleMask(uint8_t objnr);
 uint8_t st_GetHitMask(uint8_t objnr);
-int8_t st_FindObj(uint8_t ot) DOG_ATTR_FN_NOINLINE;
-void st_ClrObjs(void) DOG_ATTR_FN_NOINLINE;
-int8_t st_NewObj(void) DOG_ATTR_FN_NOINLINE;
+int8_t st_FindObj(uint8_t ot) U8G_NOINLINE;
+void st_ClrObjs(void) U8G_NOINLINE;
+int8_t st_NewObj(void) U8G_NOINLINE;
 uint8_t st_CntObj(uint8_t ot);
-uint8_t st_CalcXY(st_obj *o) DOG_ATTR_FN_NOINLINE;
-void st_SetXY(st_obj *o, uint8_t x, uint8_t y) DOG_ATTR_FN_NOINLINE;
+uint8_t st_CalcXY(st_obj *o) U8G_NOINLINE;
+void st_SetXY(st_obj *o, uint8_t x, uint8_t y) U8G_NOINLINE;
 
-void st_FireStep(uint8_t is_auto_fire, uint8_t is_fire) DOG_ATTR_FN_NOINLINE;
+void st_FireStep(uint8_t is_auto_fire, uint8_t is_fire) U8G_NOINLINE;
 
 void st_InitTrash(uint8_t x, uint8_t y, int8_t dir);
 void st_NewGadget(uint8_t x, uint8_t y);
@@ -365,7 +365,7 @@ static st_obj *st_GetObj(uint8_t objnr)
 uint8_t st_GetMissleMask(uint8_t objnr)
 {
   st_obj *o = st_GetObj(objnr);
-  return dog_pgm_read(&(st_object_types[o->ot].missle_mask));
+  return u8g_pgm_read(&(st_object_types[o->ot].missle_mask));
 }
 
 /*
@@ -374,7 +374,7 @@ uint8_t st_GetMissleMask(uint8_t objnr)
 uint8_t st_GetHitMask(uint8_t objnr)
 {
   st_obj *o = st_GetObj(objnr);
-  return dog_pgm_read(&(st_object_types[o->ot].hit_mask));
+  return u8g_pgm_read(&(st_object_types[o->ot].hit_mask));
 }
 
 /*
@@ -533,7 +533,7 @@ uint8_t st_IsOut(uint8_t objnr)
 void st_Disappear(uint8_t objnr)
 {
   st_obj *o = st_GetObj(objnr);
-  st_player_points += dog_pgm_read(&(st_object_types[o->ot].points));
+  st_player_points += u8g_pgm_read(&(st_object_types[o->ot].points));
   o->ot = 0;
 }
 
@@ -544,7 +544,7 @@ void st_Disappear(uint8_t objnr)
 void st_Move(uint8_t objnr)
 {
   st_obj *o = st_GetObj(objnr);
-  switch(dog_pgm_read(&(st_object_types[o->ot].move_fn)))
+  switch(u8g_pgm_read(&(st_object_types[o->ot].move_fn)))
   {
     case ST_MOVE_NONE:
       break;
@@ -622,11 +622,11 @@ void st_DrawBBOX(uint8_t objnr)
   //dog_SetHLine(st_cbbox_x0, st_cbbox_x1, st_cbbox_y0);
   //dog_SetHLine(st_cbbox_x0, st_cbbox_x1, st_cbbox_y1);
 
-  u8g_SetColorIndex(&u8g_dogm128_obj, 1);
+  u8g_SetColorIndex(st_u8g, 1);
   y0 = dog_height_minus_one - st_cbbox_y0;
   y1 = dog_height_minus_one - st_cbbox_y1;
   
-  u8g_DrawFrame(&u8g_dogm128_obj, st_cbbox_x0, y1, st_cbbox_x1-st_cbbox_x0+1, y0-y1+1);
+  u8g_DrawFrame(st_u8g, st_cbbox_x0, y1, st_cbbox_x1-st_cbbox_x0+1, y0-y1+1);
   
   //dog_SetBox(st_cbbox_x0, st_cbbox_y0, st_cbbox_x1, st_cbbox_y1);
 
@@ -657,14 +657,14 @@ void st_DrawBitmap(uint8_t objnr, DOG_PGM_P bm, uint8_t w, uint8_t h)
   /* result is here: int16_t st_bbox_x0, st_bbox_y0, st_bbox_x1, st_bbox_y1 */
   //dog_SetBitmapP(st_bbox_x0,st_bbox_y1,bm,w,h);
   
-  u8g_DrawBitmapP(&u8g_dogm128_obj, st_bbox_x0, dog_height_minus_one - st_bbox_y1, (w+7)/8, h, bm);
+  u8g_DrawBitmapP(st_u8g, st_bbox_x0, dog_height_minus_one - st_bbox_y1, (w+7)/8, h, bm);
   
  }
 
 void st_DrawObj(uint8_t objnr)
 {
   st_obj *o = st_GetObj(objnr);
-  switch(dog_pgm_read(&(st_object_types[o->ot].draw_fn)))
+  switch(u8g_pgm_read(&(st_object_types[o->ot].draw_fn)))
   {
     case ST_DRAW_NONE:
       break;
@@ -761,7 +761,7 @@ void st_Destroy(uint8_t objnr)
 {
   int8_t nr;
   st_obj *o = st_GetObj(objnr);
-  switch(dog_pgm_read(&(st_object_types[o->ot].destroy_fn)))
+  switch(u8g_pgm_read(&(st_object_types[o->ot].destroy_fn)))
   {
     case ST_DESTROY_NONE:      /* only usefull for missels or walls which stay alife */
       break;
@@ -825,7 +825,7 @@ uint8_t st_IsHit(uint8_t objnr, uint8_t x, uint8_t y, uint8_t missle_mask)
   
   o = st_GetObj(objnr);
   
-  switch(dog_pgm_read(&(st_object_types[o->ot].is_hit_fn)))
+  switch(u8g_pgm_read(&(st_object_types[o->ot].is_hit_fn)))
   {
     case ST_IS_HIT_NONE:
       break;
@@ -904,7 +904,7 @@ void st_Fire(uint8_t objnr)
   uint8_t x;
   uint8_t y;
   
-  switch(dog_pgm_read(&(st_object_types[o->ot].fire_fn)))
+  switch(u8g_pgm_read(&(st_object_types[o->ot].fire_fn)))
   {
     case ST_FIRE_NONE: 
       break;
