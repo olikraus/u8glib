@@ -39,10 +39,6 @@
 #include "u8g.h"
 
 
-
-#define ST_AREA_HEIGHT (DOG_HEIGHT - 8)
-#define ST_AREA_WIDTH DOG_WIDTH
-
 #define ST_FP 4
 
 /* object types */
@@ -148,6 +144,13 @@ typedef struct _st_obj_struct st_obj;
 /*================================================================*/
 
 u8g_t *st_u8g;
+
+u8g_uint_t u8g_height_minus_one;
+
+
+#define ST_AREA_HEIGHT (st_u8g->height - 8)
+#define ST_AREA_WIDTH (st_u8g->width)
+
 
 /*================================================================*/
 /* object types */
@@ -623,8 +626,8 @@ void st_DrawBBOX(uint8_t objnr)
   //dog_SetHLine(st_cbbox_x0, st_cbbox_x1, st_cbbox_y1);
 
   u8g_SetColorIndex(st_u8g, 1);
-  y0 = dog_height_minus_one - st_cbbox_y0;
-  y1 = dog_height_minus_one - st_cbbox_y1;
+  y0 = u8g_height_minus_one - st_cbbox_y0;
+  y1 = u8g_height_minus_one - st_cbbox_y1;
   
   u8g_DrawFrame(st_u8g, st_cbbox_x0, y1, st_cbbox_x1-st_cbbox_x0+1, y0-y1+1);
   
@@ -650,14 +653,14 @@ void st_DrawFilledBox(uint8_t objnr)
 }
 #endif
 
-void st_DrawBitmap(uint8_t objnr, DOG_PGM_P bm, uint8_t w, uint8_t h)
+void st_DrawBitmap(uint8_t objnr, const dog_pgm_uint8_t * bm, uint8_t w, uint8_t h)
 {
   /* st_obj *o = st_GetObj(objnr); */
   st_CalcBBOX(objnr);
   /* result is here: int16_t st_bbox_x0, st_bbox_y0, st_bbox_x1, st_bbox_y1 */
   //dog_SetBitmapP(st_bbox_x0,st_bbox_y1,bm,w,h);
   
-  u8g_DrawBitmapP(st_u8g, st_bbox_x0, dog_height_minus_one - st_bbox_y1, (w+7)/8, h, bm);
+  u8g_DrawBitmapP(st_u8g, st_bbox_x0, u8g_height_minus_one - st_bbox_y1, (w+7)/8, h, bm);
   
  }
 
@@ -710,11 +713,11 @@ void st_DrawObj(uint8_t objnr)
  	// dog_SetPixel(x,y);
 	
 	u8g_SetColorIndex(st_u8g, 1);  
-	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  
+	u8g_DrawPixel(st_u8g, x, u8g_height_minus_one - y);  
 	x++; y--;
-	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  
+	u8g_DrawPixel(st_u8g, x, u8g_height_minus_one - y);  
 	x++; y--;
-	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  	
+	u8g_DrawPixel(st_u8g, x, u8g_height_minus_one - y);  	
      }      
      break;
     case ST_DRAW_SLASH:
@@ -731,11 +734,11 @@ void st_DrawObj(uint8_t objnr)
  	// dog_SetPixel(x,y);
 	
 	u8g_SetColorIndex(st_u8g, 1);  
-	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  
+	u8g_DrawPixel(st_u8g, x, u8g_height_minus_one - y);  
 	x++; y++;
-	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  
+	u8g_DrawPixel(st_u8g, x, u8g_height_minus_one - y);  
 	x++; y++;
-	u8g_DrawPixel(st_u8g, x, dog_height_minus_one - y);  	
+	u8g_DrawPixel(st_u8g, x, u8g_height_minus_one - y);  	
      }      
      break;
   }
@@ -1238,30 +1241,30 @@ void st_DrawInGame(uint8_t fps)
   //dog_ClrBox(0, ST_AREA_HEIGHT, DOG_WIDTH-1, ST_AREA_HEIGHT+3);
 
   u8g_SetColorIndex(st_u8g, 0);
-  u8g_DrawBox(st_u8g, 0, dog_height_minus_one - ST_AREA_HEIGHT-3, DOG_WIDTH, 4);
+  u8g_DrawBox(st_u8g, 0, u8g_height_minus_one - ST_AREA_HEIGHT-3, DOG_WIDTH, 4);
   
   u8g_SetColorIndex(st_u8g, 1);
-  u8g_DrawHLine(st_u8g, 0, dog_height_minus_one - ST_AREA_HEIGHT+1, ST_AREA_WIDTH);
-  u8g_DrawHLine(st_u8g, 0, dog_height_minus_one, ST_AREA_WIDTH);
+  u8g_DrawHLine(st_u8g, 0, u8g_height_minus_one - ST_AREA_HEIGHT+1, ST_AREA_WIDTH);
+  u8g_DrawHLine(st_u8g, 0, u8g_height_minus_one, ST_AREA_WIDTH);
   u8g_SetFont(st_u8g, u8g_font_4x6r);
-  u8g_DrawStr(st_u8g, 0, dog_height_minus_one - ST_AREA_HEIGHT, dog_itoa(st_difficulty));
-  u8g_DrawHLine(st_u8g, 10, dog_height_minus_one - ST_AREA_HEIGHT-3, (st_to_diff_cnt>>ST_DIFF_FP)+1);
-  u8g_DrawVLine(st_u8g, 10, dog_height_minus_one - ST_AREA_HEIGHT-4, 3);
-  u8g_DrawVLine(st_u8g, 10+ST_DIFF_VIS_LEN, dog_height_minus_one - ST_AREA_HEIGHT-4, 3);
+  u8g_DrawStr(st_u8g, 0, u8g_height_minus_one - ST_AREA_HEIGHT, dog_itoa(st_difficulty));
+  u8g_DrawHLine(st_u8g, 10, u8g_height_minus_one - ST_AREA_HEIGHT-3, (st_to_diff_cnt>>ST_DIFF_FP)+1);
+  u8g_DrawVLine(st_u8g, 10, u8g_height_minus_one - ST_AREA_HEIGHT-4, 3);
+  u8g_DrawVLine(st_u8g, 10+ST_DIFF_VIS_LEN, u8g_height_minus_one - ST_AREA_HEIGHT-4, 3);
   
   
   /* player points */
-  u8g_DrawStr(st_u8g, ST_AREA_WIDTH-5*4-2, dog_height_minus_one - ST_AREA_HEIGHT, dog_itoa(st_player_points_delayed));
+  u8g_DrawStr(st_u8g, ST_AREA_WIDTH-5*4-2, u8g_height_minus_one - ST_AREA_HEIGHT, dog_itoa(st_player_points_delayed));
   
   
   /* FPS output */
   if ( fps > 0 )
   {
     //i = dog_DrawStr(ST_AREA_WIDTH-5*4-2-7*4, ST_AREA_HEIGHT, font_4x6, "FPS:");
-    i = u8g_DrawStr(st_u8g, ST_AREA_WIDTH-5*4-2-7*4, dog_height_minus_one - ST_AREA_HEIGHT, "FPS:");
+    i = u8g_DrawStr(st_u8g, ST_AREA_WIDTH-5*4-2-7*4, u8g_height_minus_one - ST_AREA_HEIGHT, "FPS:");
 
     //dog_DrawStr(ST_AREA_WIDTH-5*4-2-7*4+i, ST_AREA_HEIGHT, font_4x6, dog_itoa(fps));
-    u8g_DrawStr(st_u8g, ST_AREA_WIDTH-5*4-2-7*4+i, dog_height_minus_one - ST_AREA_HEIGHT, dog_itoa(fps));
+    u8g_DrawStr(st_u8g, ST_AREA_WIDTH-5*4-2-7*4+i, u8g_height_minus_one - ST_AREA_HEIGHT, dog_itoa(fps));
   }
   /*dog_DrawStr(60+i, ST_AREA_HEIGHT, font_4x6, dog_itoa(st_CntObj(0)));*/
 }
@@ -1276,9 +1279,9 @@ void st_Draw(uint8_t fps)
       u8g_SetFont(st_u8g, u8g_font_4x6r);
       u8g_SetColorIndex(st_u8g, 1);
       //dog_DrawStrP(0, (DOG_HEIGHT-6)/2, font_4x6, DOG_PSTR("SpaceTrash"));
-      u8g_DrawStrP(st_u8g, 0, dog_height_minus_one - (DOG_HEIGHT-6)/2, DOG_PSTR("SpaceTrash"));
+      u8g_DrawStrP(st_u8g, 0, u8g_height_minus_one - (DOG_HEIGHT-6)/2, DOG_PSTR("SpaceTrash"));
       //dog_SetHLine(DOG_WIDTH-st_to_diff_cnt-10, DOG_WIDTH-st_to_diff_cnt, (DOG_HEIGHT-6)/2-1);
-      u8g_DrawHLine(st_u8g, DOG_WIDTH-st_to_diff_cnt-10, dog_height_minus_one - (DOG_HEIGHT-6)/2+1, 11);
+      u8g_DrawHLine(st_u8g, DOG_WIDTH-st_to_diff_cnt-10, u8g_height_minus_one - (DOG_HEIGHT-6)/2+1, 11);
       break;
     case ST_STATE_GAME:
       st_DrawInGame(fps);
@@ -1289,13 +1292,13 @@ void st_Draw(uint8_t fps)
       u8g_SetColorIndex(st_u8g, 1);
       //dog_DrawStr(0, (DOG_HEIGHT-6)/2, font_4x6, "Game Over");
       //dog_DrawStrP(0, (DOG_HEIGHT-6)/2, font_4x6, DOG_PSTR("Game Over"));
-      u8g_DrawStrP(st_u8g, 0, dog_height_minus_one - (DOG_HEIGHT-6)/2, DOG_PSTR("Game Over"));
+      u8g_DrawStrP(st_u8g, 0, u8g_height_minus_one - (DOG_HEIGHT-6)/2, DOG_PSTR("Game Over"));
       //dog_DrawStr(50, (DOG_HEIGHT-6)/2, font_4x6, dog_itoa(st_player_points));
-      u8g_DrawStr(st_u8g, 50, dog_height_minus_one - (DOG_HEIGHT-6)/2, dog_itoa(st_player_points));
+      u8g_DrawStr(st_u8g, 50, u8g_height_minus_one - (DOG_HEIGHT-6)/2, dog_itoa(st_player_points));
       //dog_DrawStr(75, (DOG_HEIGHT-6)/2, font_4x6, dog_itoa(st_highscore));
-      u8g_DrawStr(st_u8g, 75, dog_height_minus_one - (DOG_HEIGHT-6)/2, dog_itoa(st_highscore));
+      u8g_DrawStr(st_u8g, 75, u8g_height_minus_one - (DOG_HEIGHT-6)/2, dog_itoa(st_highscore));
       //dog_SetHLine(st_to_diff_cnt, st_to_diff_cnt+10, (DOG_HEIGHT-6)/2-1);
-      u8g_DrawHLine(st_u8g, st_to_diff_cnt, dog_height_minus_one - (DOG_HEIGHT-6)/2+1, 11);
+      u8g_DrawHLine(st_u8g, st_to_diff_cnt, u8g_height_minus_one - (DOG_HEIGHT-6)/2+1, 11);
       break;
   }
 }
@@ -1319,6 +1322,8 @@ void st_SetupInGame(void)
 void st_Setup(u8g_t *u8g)
 {
   st_u8g = u8g;
+  u8g_height_minus_one = u8g->height;
+  u8g_height_minus_one--;
 }
 
 /*================================================================*/

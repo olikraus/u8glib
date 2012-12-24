@@ -43,6 +43,7 @@ extern void st_Setup(u8g_t *u8g);
 u8g_t u8g_dogm128_obj;
 uint8_t dog_height_minus_one;
 
+
 static void u8g_init_dogm_common(void)
 {
   dog_height_minus_one = DOG_HEIGHT;
