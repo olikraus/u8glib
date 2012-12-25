@@ -236,7 +236,6 @@ uint8_t dog_DrawStrP(uint8_t x, uint8_t y, DOG_PGM_P font, const u8g_pgm_uint8_t
 
 
 char dog_itoa_buf[12];
-
 char *dog_itoa(unsigned long v)
 {
   volatile unsigned char i = 11;

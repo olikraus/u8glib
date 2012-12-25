@@ -1,7 +1,8 @@
 
 
 #include "SDL.h"
-#include "u8g_dogm128_api.h"
+#include "u8g.h"
+//#include "u8g_dogm128_api.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -58,22 +59,27 @@ void uiStep(void) {
   }
 }
 
+
+u8g_t u8g;
+
 int main(void)
 {
   uint32_t x;
+
+  if ( u8g_Init(&u8g, &u8g_dev_sdl_1bit) == 0 )
+    return 0;
   
-  u8g_InitDogm128API(&u8g_dev_sdl_1bit);
-  //u8g_SetDogmRot90();
+  st_Setup(&u8g);
   
   uiSetup();
   
-  for(x = 0; x < 2000; x++)
+  for(x = 0; x < 4000; x++)
   {    
-    dog_StartPage();
+    u8g_FirstPage(&u8g);
     do
     {
       st_Draw(0);
-    } while( dog_NextPage() );
+    } while( u8g_NextPage(&u8g) );
     SDL_Delay(10);
     uiStep();
     st_Step(shipLocation, isAutoFire, isFire);
