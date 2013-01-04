@@ -1,5 +1,7 @@
 /*
   http://developer.gnome.org/gtk3/3.0/gtk-getting-started.html
+
+  http://developer.gnome.org/gtk3/stable/
   
   http://developer.gnome.org/gtk3/stable/GtkImage.html
   
