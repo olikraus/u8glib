@@ -95,7 +95,7 @@ u8glib ChangeLog
   * Support for CFAG20232 (st7920_202x32)
   * Fixed ST7920 SW SPI for ChipKit
   * Support for tls8204
-2012-xx-xx	v1.10	  Oliver Kraus <olikraus@gmail.com>
+2013-xx-xx	v1.10	  Oliver Kraus <olikraus@gmail.com>
   * 
   
   
