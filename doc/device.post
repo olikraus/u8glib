@@ -29,7 +29,8 @@
  
  * 16 Bit mode: U8glib can be put into 16 Bit mode. Remove comment from {{{#define U8G_16BIT 1}}} in u8g.h
  
- * Other controller, which might be compatible (this information is not verified)
+ * Other controller, which might be compatible (this information is not verified). A controller might be compatible with other controllers in the same line.
   * {{{ST7565}}}, {{{NT7534}}}, {{{SED1565}}}, {{{S1D15605}}}, {{{S6B0723}}}
   * {{{SBN1661}}}, {{{SED1520}}}: Write is triggered by CSx lines. 
-  * {{{SED1335}}}, {{{RA8835}}}  (not supported by u8glib)
+  * {{{SED1335}}}, {{{RA8835}}}, {{{S1D3305}}}  (not supported by u8glib)
+  * {{{NT7086}}}, {{{LC7981}}}
