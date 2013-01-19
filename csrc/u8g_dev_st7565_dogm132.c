@@ -90,7 +90,7 @@ static const uint8_t u8g_dev_st7565_dogm132_data_start[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
   0x010,		/* set upper 4 bit of the col adr to 0 */
-  0x000,		/* set lower 4 bit of the col adr to 4  */
+  0x000,		/* set lower 4 bit of the col adr to 0  */
   U8G_ESC_END                /* end of sequence */
 };
 
