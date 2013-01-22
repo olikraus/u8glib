@@ -51,13 +51,70 @@ static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(1),           /* instruction mode */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_RST(1),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
+  U8G_ESC_RST(1),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
+  U8G_ESC_RST(1),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
+  
+  0x0aa,
+  0x000,
+  0x0aa,
+  0x000,
+  0x0aa,
+  0x000,
+  0x0aa,
+  0x000,
+  0x0aa,
+  0x000,
+  0x0aa,
+  0x000,
+
+#ifdef xxx  
   U8G_ESC_CS(1),             /* enable chip */
   U8G_ESC_DLY(50),         /* delay 50 ms */
-  
-  
+
+  U8G_ESC_ADR(0),               /* data mode */
+  0x000,                                /* low byte */
+  0x000,                                /* height byte */
   U8G_ESC_ADR(1),               /* instruction mode */
+  0x021,                                /* set cursor position */
+  
+  U8G_ESC_ADR(0),               /* data mode */
+  0x000,                                /* low byte */
+  0x000,                                /* height byte */
+  U8G_ESC_ADR(1),               /* instruction mode */
+  0x022,                                /* set offset */
+
+  U8G_ESC_ADR(0),               /* data mode */
+  0x000,                                /* low byte */
+  0x000,                                /* height byte */
+  U8G_ESC_ADR(1),               /* instruction mode */
+  0x040,				     /* text home */
+
+  U8G_ESC_ADR(0),               /* data mode */
+  WIDTH/8,                                /* low byte */
+  0x000,                                /* height byte */
+  U8G_ESC_ADR(1),               /* instruction mode */
+  0x041,				     /* text columns */
+
+  U8G_ESC_ADR(0),               /* data mode */
+  0x000,                                /* low byte */
+  0x000,                                /* height byte */
+  U8G_ESC_ADR(1),               /* instruction mode */
+  0x042,				     /* graphics home */
+
+  U8G_ESC_ADR(0),               /* data mode */
+  WIDTH/8,                                /* low byte */
+  0x000,                                /* height byte */
+  U8G_ESC_ADR(1),               /* instruction mode */
+  0x043,				     /* graphics columns */
+  
+  0x0a3,				    /* 8 line cursor */
+
+  //U8G_ESC_ADR(1),               /* instruction mode */
   0x080,                                /* mode register: OR Mode, Internal Character Mode */
-  0x098,                                /* mode register: Display Mode, Graphics on, Text off, Cursor off */
+  //0x098,                                /* mode register: Display Mode, Graphics on, Text off, Cursor off */
+  0x099,
   
   U8G_ESC_ADR(0),               /* data mode */
   0x000,                                /* low byte */
@@ -91,6 +148,7 @@ static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
   
   U8G_ESC_ADR(0),               /* data mode */
   U8G_ESC_CS(0),             /* disable chip */
+#endif  
   U8G_ESC_END                /* end of sequence */
 };
 
@@ -110,6 +168,11 @@ uint8_t u8g_dev_t6963_240x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
         uint16_t disp_ram_adr;
         uint8_t *ptr;
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+
+
+	u8g_WriteEscSeqP(u8g, dev, u8g_dev_t6963_240x128_init_seq);
+	
+#ifdef XXX	
         
 	u8g_SetAddress(u8g, dev, 0);           /* data mode */
         u8g_SetChipSelect(u8g, dev, 1);
@@ -132,14 +195,15 @@ uint8_t u8g_dev_t6963_240x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
           ptr += WIDTH/8;
           disp_ram_adr += WIDTH/8;
         }
-	U8G_ESC_ADR(0),               /* data mode */
+	u8g_SetAddress(u8g, dev, 0);           /* data mode */
         u8g_SetChipSelect(u8g, dev, 0);
+#endif
       }
       break;
   }
   return u8g_dev_pb8h1f_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_t6963_240x128_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_t6963_240x128_fn, U8G_COM_FAST_PARALLEL);
+U8G_PB_DEV(u8g_dev_t6963_240x128_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_t6963_240x128_fn, U8G_COM_PARALLEL);
 
 

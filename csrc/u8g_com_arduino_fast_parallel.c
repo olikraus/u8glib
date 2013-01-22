@@ -222,6 +222,11 @@ uint8_t u8g_com_arduino_fast_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_va
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
       u8g_com_arduino_digital_write(u8g, U8G_PI_DI, arg_val);
       break;
+    case U8G_COM_MSG_RESET:
+      if ( u8g->pin_list[U8G_PI_RESET] != U8G_PIN_NONE )
+        u8g_com_arduino_digital_write(u8g, U8G_PI_RESET, arg_val);
+      break;
+      
   }
   return 1;
 }
