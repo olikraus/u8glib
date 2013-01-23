@@ -49,27 +49,9 @@
 
 static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
-  U8G_ESC_ADR(1),           /* instruction mode */
+  U8G_ESC_ADR(0),           /* data mode */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
-  U8G_ESC_ADR(0),           /* instruction mode */
-  U8G_ESC_RST(1),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
-  U8G_ESC_RST(1),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
-  U8G_ESC_RST(1),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
-  
-  0x0aa,
-  0x000,
-  0x0aa,
-  0x000,
-  0x0aa,
-  0x000,
-  0x0aa,
-  0x000,
-  0x0aa,
-  0x000,
-  0x0aa,
-  0x000,
 
-#ifdef xxx  
   U8G_ESC_CS(1),             /* enable chip */
   U8G_ESC_DLY(50),         /* delay 50 ms */
 
@@ -109,12 +91,10 @@ static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
   U8G_ESC_ADR(1),               /* instruction mode */
   0x043,				     /* graphics columns */
   
-  0x0a3,				    /* 8 line cursor */
-
-  //U8G_ESC_ADR(1),               /* instruction mode */
+  U8G_ESC_ADR(1),               /* instruction mode */
   0x080,                                /* mode register: OR Mode, Internal Character Mode */
-  //0x098,                                /* mode register: Display Mode, Graphics on, Text off, Cursor off */
-  0x099,
+  U8G_ESC_ADR(1),               /* instruction mode */
+  0x098,                                /* mode register: Display Mode, Graphics on, Text off, Cursor off */
   
   U8G_ESC_ADR(0),               /* data mode */
   0x000,                                /* low byte */
@@ -123,32 +103,22 @@ static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
   0x024,                                /* set adr pointer */
   
   U8G_ESC_ADR(1),               /* instruction mode */
-  0x0B0,                                /* auto write data */
+  //0x0B0,                                /* auto write data */
   U8G_ESC_ADR(0),               /* data mode */
   0x055,
-  0x055,
-  0x055,
-  0x0f0,
-  0x0f0,
-  0x0f0,
-  0x055,
-  0x055,
-  0x055,
-  0x0f0,
-  0x0f0,
-  0x0f0,
   U8G_ESC_ADR(1),               /* instruction mode */
-  0x0B2,                                /* auto write data off */
+  0x0c0,                                /* write data and increment */
+  U8G_ESC_ADR(0),               /* data mode */  
+  0x0aa,
+  U8G_ESC_ADR(1),               /* instruction mode */
+  0x0c0,                                /* write data and increment */
+  //U8G_ESC_ADR(1),               /* instruction mode */
+  //0x0B2,                                /* auto write data off */
 
-  U8G_ESC_DLY(100),         /* delay 100 ms */
-  U8G_ESC_DLY(100),         /* delay 100 ms */
-  U8G_ESC_DLY(100),         /* delay 100 ms */
-  U8G_ESC_DLY(100),         /* delay 100 ms */
   U8G_ESC_DLY(100),         /* delay 100 ms */
   
   U8G_ESC_ADR(0),               /* data mode */
   U8G_ESC_CS(0),             /* disable chip */
-#endif  
   U8G_ESC_END                /* end of sequence */
 };
 
@@ -158,6 +128,7 @@ uint8_t u8g_dev_t6963_240x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);
+    //for(;;)
       u8g_WriteEscSeqP(u8g, dev, u8g_dev_t6963_240x128_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
@@ -170,9 +141,6 @@ uint8_t u8g_dev_t6963_240x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 
 
-	u8g_WriteEscSeqP(u8g, dev, u8g_dev_t6963_240x128_init_seq);
-	
-#ifdef XXX	
         
 	u8g_SetAddress(u8g, dev, 0);           /* data mode */
         u8g_SetChipSelect(u8g, dev, 1);
@@ -180,16 +148,19 @@ uint8_t u8g_dev_t6963_240x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
         ptr = pb->buf;
         disp_ram_adr = WIDTH/8;
         disp_ram_adr *= y;
+	disp_ram_adr += 512*12;
         for( i = 0; i < 8; i ++ )
         {
           u8g_SetAddress(u8g, dev, 0);           /* data mode */
-          u8g_WriteByte(u8g, dev, 0x000 );      /* address low byte */
-          u8g_WriteByte(u8g, dev, 0x000 );      /* address hight byte */
+          u8g_WriteByte(u8g, dev, disp_ram_adr&255 );      /* address low byte */
+          u8g_WriteByte(u8g, dev, disp_ram_adr>>8 );      /* address hight byte */
           u8g_SetAddress(u8g, dev, 1);           /* cmd mode */
           u8g_WriteByte(u8g, dev, 0x024 );      /* set adr ptr */
           u8g_WriteByte(u8g, dev, 0x0b0 );      /* auto write data */
+	  
           u8g_SetAddress(u8g, dev, 0);           /* data mode */
           u8g_WriteSequence(u8g, dev, WIDTH/8, ptr);
+	  
           u8g_SetAddress(u8g, dev, 1);           /* cmd mode */
           u8g_WriteByte(u8g, dev, 0x0b2 );      /* auto write data off */
           ptr += WIDTH/8;
@@ -197,7 +168,6 @@ uint8_t u8g_dev_t6963_240x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
         }
 	u8g_SetAddress(u8g, dev, 0);           /* data mode */
         u8g_SetChipSelect(u8g, dev, 0);
-#endif
       }
       break;
   }
