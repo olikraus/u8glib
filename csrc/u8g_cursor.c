@@ -82,10 +82,15 @@ void u8g_DrawCursor(u8g_t *u8g)
   u8g->font = u8g->cursor_font;  
   encoding++;
   u8g_SetColorIndex(u8g, u8g->cursor_bg_color); 
-  u8g_DrawGlyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding);
+  /* 27. Jan 2013: replaced call to u8g_DrawGlyph with call to u8g_draw_glyph */
+  /* required, because y adjustment should not happen to the cursor fonts */
+  u8g_draw_glyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding);
   encoding--;
   u8g_SetColorIndex(u8g, u8g->cursor_fg_color); 
-  u8g_DrawGlyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding);
+  /* 27. Jan 2013: replaced call to u8g_DrawGlyph with call to u8g_draw_glyph */
+  /* required, because y adjustment should not happen to the cursor fonts */
+  /* u8g_DrawGlyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding); */
+  u8g_draw_glyph(u8g, u8g->cursor_x, u8g->cursor_y, encoding);
   
   /* restore previous values */
   u8g->font = font;

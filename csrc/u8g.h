@@ -884,6 +884,7 @@ uint8_t u8g_GetFontCapitalAHeight(u8g_t *u8g);
 uint8_t u8g_IsGlyph(u8g_t *u8g, uint8_t requested_encoding);
 int8_t u8g_GetGlyphDeltaX(u8g_t *u8g, uint8_t requested_encoding);
 
+int8_t u8g_draw_glyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding); /* used by u8g_cursor.c */
 
 int8_t u8g_DrawGlyphDir(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t encoding);
 int8_t u8g_DrawGlyph(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding);
