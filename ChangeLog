@@ -96,6 +96,7 @@ u8glib ChangeLog
   * Fixed ST7920 SW SPI for ChipKit
   * Support for tls8204
 2013-xx-xx	v1.10	  Oliver Kraus <olikraus@gmail.com>
-  * 
+  * Support for SSD1309
+  
   
   

@@ -286,6 +286,11 @@ extern u8g_dev_t u8g_dev_ssd1306_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x64_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x64_i2c;
 
+/* OLED 128x64 Display with SSD1309 Controller */
+extern u8g_dev_t u8g_dev_ssd1309_128x64_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1309_128x64_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1309_128x64_i2c;
+
 /* OLED 128x32 Display with SSD1306 Controller */
 extern u8g_dev_t u8g_dev_ssd1306_128x32_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x32_hw_spi;
@@ -539,6 +544,7 @@ uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, const uint8_
 #define U8G_ESC_CS(x) 255, (0xd0 | ((x)&0x0f))
 #define U8G_ESC_ADR(x) 255, (0xe0 | ((x)&0x0f))
 #define U8G_ESC_RST(x) 255, (0xc0 | ((x)&0x0f))
+#define U8G_ESC_VCC(x) 255, (0xbe | ((x)&0x01))
 #define U8G_ESC_END 255, 254
 #define U8G_ESC_255 255, 255
 //uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, u8g_pgm_uint8_t *esc_seq);

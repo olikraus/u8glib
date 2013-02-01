@@ -97,6 +97,7 @@ uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, const uint8_
 #define U8G_ESC_DLY(x) 255, ((x) & 0x7f)
 #define U8G_ESC_CS(x) 255, (0xd0 | ((x)&0x0f))
 #define U8G_ESC_ADR(x) 255, (0xe0 | ((x)&0x0f))
+#define U8G_ESC_VCC(x) 255, (0xbe | ((x)&0x01))
 #define U8G_ESC_END 255, 254
 #define U8G_ESC_255 255, 255
 #define U8G_ESC_RST(x) 255, (0xc0 | ((x)&0x0f))
@@ -153,6 +154,11 @@ uint8_t u8g_WriteEscSeqP(u8g_t *u8g, u8g_dev_t *dev, const uint8_t *esc_seq)
         u8g_Delay(value);
         u8g_SetResetHigh(u8g, dev);
         u8g_Delay(value);
+      }
+      else if ( value >= 0xbe )
+      {
+	/* not yet implemented */
+        /* u8g_SetVCC(u8g, dev, value & 0x01); */
       }
       else if ( value <= 127 )
       {

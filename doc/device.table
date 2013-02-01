@@ -259,6 +259,53 @@ n.a.
 impl.
 ::
 :Controller
+SSD1309
+:Display/Size
+128x64 (Adafruit)
+:Mode
+BW
+:Set Contrast
+yes
+:Page Size
+128 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1309_128x64_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1309_128X64(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1309_128x64_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1309_128X64(cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Chipkit
+n.a.
+:AVR
+impl.
+:Com
+I2C
+:Device
+<tt>u8g_dev_ssd1309_128x64_i2c</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1309_128X64()</tt>
+:Arduino
+impl.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Controller
 UC1701
 :Display/Size
 DOGS102, 102x64
