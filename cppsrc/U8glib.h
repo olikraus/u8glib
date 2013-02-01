@@ -675,5 +675,12 @@ class U8GLIB_FLIPDISC_2X7 : public U8GLIB
       {  }
 };
 
+class U8GLIB_VS : public U8GLIB 
+{
+  public:
+    U8GLIB_VS(void) : U8GLIB(&u8g_dev_vs)
+      {  }
+};
+
 
 #endif /* _CPP_U8GLIB */
