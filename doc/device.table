@@ -261,7 +261,7 @@ impl.
 :Controller
 SSD1309
 :Display/Size
-128x64 (Adafruit)
+128x64
 :Mode
 BW
 :Set Contrast
@@ -275,11 +275,11 @@ SW SPI
 :C++ Constructor
 <tt>U8GLIB_SSD1309_128X64(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
-impl.
+impl. (v1.10)
 :Chipkit
-impl.
+impl. (v1.10)
 :AVR
-impl.
+impl. (v1.10)
 :Com
 HW SPI
 :Device
@@ -287,11 +287,11 @@ HW SPI
 :C++ Constructor
 <tt>U8GLIB_SSD1309_128X64(cs, a0 [, reset])</tt>
 :Arduino
-impl.
+impl. (v1.10)
 :Chipkit
 n.a.
 :AVR
-impl.
+impl. (v1.10)
 :Com
 I2C
 :Device
@@ -299,11 +299,11 @@ I2C
 :C++ Constructor
 <tt>U8GLIB_SSD1309_128X64()</tt>
 :Arduino
-impl.
+impl. (v1.10)
 :Chipkit
 n.a.
 :AVR
-impl.
+impl. (v1.10)
 ::
 :Controller
 UC1701
@@ -338,7 +338,7 @@ verified
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Display/Size
 MINI12864, 128x64
@@ -406,7 +406,7 @@ verified
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Display/Size
 LM6059, 128x64, Adafruit
@@ -439,7 +439,7 @@ verified
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Display/Size
 LM6063, 128x64
@@ -472,7 +472,7 @@ verified
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Display/Size
 NHD C12864, 128x64
@@ -571,7 +571,40 @@ verified
 :Chipkit
 n.a.
 :AVR
+impl.
+::
+:Display/Size
+NHD C12832, 128x32
+:Mode
+BW
+:Set Contrast
+impl.
+:Page Size
+128 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7565_nhd_c12832_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD_C12832(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
+impl.
+:AVR
+impl.
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7565_nhd_c12832_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD_C12832(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Chipkit
 n.a.
+:AVR
+impl.
 ::
 :Controller
 ST7920
@@ -1061,7 +1094,6 @@ impl.
 impl.
 :AVR
 impl.
-
 ::
 :Controller
 virtual device
@@ -1077,7 +1109,7 @@ n.a.
 :Device
 <tt>u8g_dev_vs</tt>
 :C++ Constructor
-
+U8GLIB_VS()
 :Arduino
 impl.
 :Chipkit

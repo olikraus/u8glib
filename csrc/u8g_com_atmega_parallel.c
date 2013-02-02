@@ -164,6 +164,9 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
       u8g_SetPILevel(u8g, U8G_PI_DI, arg_val);
       break;
+    case U8G_COM_MSG_RESET:
+      u8g_SetPILevel(u8g, U8G_PI_RESET, arg_val);
+      break;
   }
   return 1;
 }
