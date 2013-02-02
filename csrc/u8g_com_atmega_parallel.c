@@ -81,6 +81,7 @@ static void u8g_com_atmega_parallel_write(u8g_t *u8g, uint8_t val)
   u8g_MicroDelay(); /* delay by 1000ns, reference: ST7920: 140ns, SBN1661: 100ns */
   u8g_SetPILevel(u8g, U8G_PI_EN, 0);
   u8g_10MicroDelay(); /* ST7920 commands: 72us */
+  u8g_10MicroDelay(); /* ST7920 commands: 72us */
 }
 
 
