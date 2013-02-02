@@ -112,6 +112,7 @@ echo "unifont"
 ../bdf2u8g/bdf2u8g -l 76 -u 87 -s 32 -b 32 -e 159  ../bdf/unifont.bdf u8g_font_unifont_76 u8g_font_unifont_76.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 8 -u 9 -b 0 -e 255 ../bdf/unifont.bdf u8g_font_unifont_8_9 u8g_font_unifont_8_9.c > /dev/null
 ../bdf2u8g/bdf2u8g -l 0 -u 8 -S 32  ../bdf/unifont.bdf u8g_font_unifont_0_8 u8g_font_unifont_0_8.c > /dev/null
+../bdf2u8g/bdf2u8g -l 12 -u 13 -b 0 -e 255 ../bdf/unifont.bdf u8g_font_unifont_12_13 u8g_font_unifont_12_13.c > /dev/null
 
 echo "adobe courB 08"
 ../bdf2u8g/bdf2u8g ../bdf/courB08.bdf u8g_font_courB08 u8g_font_courb08.c > /dev/null
