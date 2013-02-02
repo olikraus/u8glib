@@ -95,8 +95,13 @@ u8glib ChangeLog
   * Support for CFAG20232 (st7920_202x32)
   * Fixed ST7920 SW SPI for ChipKit
   * Support for tls8204
-2013-xx-xx	v1.10	  Oliver Kraus <olikraus@gmail.com>
+2013-02-02	v1.10	  Oliver Kraus <olikraus@gmail.com>
   * Support for SSD1309
+  * Support for NHD-C12832A1Z 
+  * Bugfix: Fixed reset controll in parallel modes
+  * Bugfix: Fixed calculation of cursor position
+  * Bugfix: ST7920 parallel mode
+  
   
   
   
