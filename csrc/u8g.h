@@ -713,6 +713,7 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PI_CS_STATE 4
 #define U8G_PI_SCK 4
 #define U8G_PI_SCL 4
+#define U8G_PI_RD 4
 
 
 /* data pins, shared with SPI and I2C pins */
@@ -732,6 +733,7 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PI_D7 12
 
 /* read/write pin, must be the last pin in the list, this means U8G_PIN_LIST_LEN =  U8G_PI_RW + 1*/
+#define U8G_PI_WR 13
 #define U8G_PI_RW 13 
 
 #define U8G_PIN_LIST_LEN 14
