@@ -435,6 +435,7 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
   U8G_COM_HW_SPI
   U8G_COM_SW_SPI
   U8G_COM_PARALLEL
+  U8G_COM_T6963
   U8G_COM_FAST_PARALLEL
   U8G_COM_SSD_I2C
   
@@ -493,17 +494,20 @@ defined(__18CXX) || defined(__PIC32MX)
 #else
 #define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_parallel_fn
+#define U8G_COM_T6963  u8g_com_arduino_t6963_fn
 #endif
 #endif
 #ifndef U8G_COM_PARALLEL
 #if defined(__AVR__)
 #define U8G_COM_PARALLEL u8g_com_atmega_parallel_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_atmega_parallel_fn
+#define U8G_COM_T6963  u8g_com_null_fn
 #endif
 #endif
 #ifndef U8G_COM_PARALLEL
 #define U8G_COM_PARALLEL u8g_com_null_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_null_fn
+#define U8G_COM_T6963  u8g_com_null_fn
 #endif
 
 #if defined(ARDUINO)

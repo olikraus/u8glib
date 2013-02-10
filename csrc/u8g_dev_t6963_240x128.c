@@ -47,6 +47,7 @@
   http://www.mark-products.com/graphics.htm#240x64%20Pixel%20Format
 */
 
+/* text is not used, so settings are not relevant */
 static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* data mode */
@@ -74,7 +75,7 @@ static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
   0x040,				     /* text home */
 
   U8G_ESC_ADR(0),               /* data mode */
-  WIDTH/8,                                /* low byte */
+  WIDTH/8/2-1,                      /* low byte */
   0x000,                                /* height byte */
   U8G_ESC_ADR(1),               /* instruction mode */
   0x041,				     /* text columns */
@@ -86,14 +87,32 @@ static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
   0x042,				     /* graphics home */
 
   U8G_ESC_ADR(0),               /* data mode */
-  WIDTH/8,                                /* low byte */
+  WIDTH/8/2-1,                      /* low byte */
   0x000,                                /* height byte */
   U8G_ESC_ADR(1),               /* instruction mode */
   0x043,				     /* graphics columns */
   
+  // mode set
+  // 0x080: Internal CG, OR Mode
+  // 0x081: Internal CG, EXOR Mode
+  // 0x083: Internal CG, AND Mode
+  // 0x088: External CG, OR Mode
+  // 0x089: External CG, EXOR Mode
+  // 0x08B: External CG, AND Mode
   U8G_ESC_ADR(1),               /* instruction mode */
   0x080,                                /* mode register: OR Mode, Internal Character Mode */
+  
   U8G_ESC_ADR(1),               /* instruction mode */
+  // display mode
+  // 0x090: Display off
+  // 0x094: Graphic off, text on, cursor off, blink off
+  // 0x096: Graphic off, text on, cursor on, blink off
+  // 0x097: Graphic off, text on, cursor on, blink on
+  // 0x098: Graphic on, text off, cursor off, blink off
+  // 0x09a: Graphic on, text off, cursor on, blink off
+  // ...
+  // 0x09c: Graphic on, text on, cursor off, blink off
+  // 0x09f: Graphic on, text on, cursor on, blink on
   0x098,                                /* mode register: Display Mode, Graphics on, Text off, Cursor off */
   
   U8G_ESC_ADR(0),               /* data mode */
@@ -139,7 +158,6 @@ uint8_t u8g_dev_t6963_240x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
         uint16_t disp_ram_adr;
         uint8_t *ptr;
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-
 
         
 	u8g_SetAddress(u8g, dev, 0);           /* data mode */
