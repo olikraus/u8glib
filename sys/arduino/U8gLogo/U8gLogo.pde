@@ -57,7 +57,7 @@
 //U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_ST7920_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
 //U8GLIB_ST7920_128X64 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
-U8GLIB_ST7920_192X32 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_192X32 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
 //U8GLIB_ST7920_192X32 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
 //U8GLIB_ST7920_192X32 u8g(13, 11, 10, U8G_PIN_NONE);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10
 //U8GLIB_ST7920_192X32 u8g(10, U8G_PIN_NONE);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10, HW SPI
@@ -83,6 +83,8 @@ U8GLIB_ST7920_192X32 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NON
 //U8GLIB_SSD1327_96X96_2X_GR u8g(U8G_I2C_OPT_NONE);             // I2C
 //U8GLIB_NHD_C12864 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RST = 8
 //U8GLIB_NHD_C12832 u8g(13, 11, 10, 9, 8);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RST = 8
+U8GLIB_T6963_240X128 u8g(8, 9, 10, 11, 4, 5, 6, 7, 14, 15, 17, 18, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7, cs=14, a0=15, wr=17, rd=18, reset=16
+
 
 void drawColorBox(void)
 {
@@ -141,6 +143,7 @@ void draw(void) {
   }
   drawLogo(0);
   drawURL();
+  
 }
 
 void setup(void) {
@@ -154,10 +157,10 @@ void loop(void) {
   u8g.firstPage();  
   do {
     draw();
+  u8g.setColorIndex(1);
   } while( u8g.nextPage() );
   
   // rebuild the picture after some delay
-  delay(200);
-  
+  delay(200);  
 }
 

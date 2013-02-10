@@ -69,3 +69,12 @@ uint8_t U8GLIB::init8BitFixedPort(u8g_dev_t *dev, uint8_t en, uint8_t cs, uint8_
   preparePrint();
   return u8g_Init8BitFixedPort(&u8g, dev, en, cs, di, rw, reset);
 }
+
+uint8_t U8GLIB::initRW8Bit(u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+    uint8_t cs, uint8_t a0, uint8_t wr, uint8_t rd, uint8_t reset)
+{
+  preparePrint();
+  return u8g_InitRW8Bit(&u8g, dev, d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd, reset); 
+}
+
+

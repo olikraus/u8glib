@@ -420,6 +420,7 @@ uint8_t u8g_com_arduino_fast_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_va
 uint8_t u8g_com_arduino_port_d_wr_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);       /* u8g_com_arduino_port_d_wr.c */
 uint8_t u8g_com_arduino_no_en_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);	/* u8g_com_arduino_no_en_parallel.c */		
 uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);		/* u8g_com_arduino_ssd_i2c.c */
+uint8_t u8g_com_arduino_t6963_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);			/* u8g_com_arduino_t6963.c */
 
 
 uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_hw_spi.c */
@@ -491,10 +492,11 @@ defined(__18CXX) || defined(__PIC32MX)
 #if defined(__AVR__)
 #define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_fast_parallel_fn
+#define U8G_COM_T6963  u8g_com_arduino_t6963_fn
 #else
 #define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_parallel_fn
-#define U8G_COM_T6963  u8g_com_arduino_t6963_fn
+#define U8G_COM_T6963  u8g_com_null_fn
 #endif
 #endif
 #ifndef U8G_COM_PARALLEL
@@ -813,6 +815,8 @@ uint8_t u8g_InitI2C(u8g_t *u8g, u8g_dev_t *dev, uint8_t options);	/* use U8G_I2C
 uint8_t u8g_Init8BitFixedPort(u8g_t *u8g, u8g_dev_t *dev, uint8_t en, uint8_t cs, uint8_t di, uint8_t rw, uint8_t reset);
 uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
   uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset);
+uint8_t u8g_InitRW8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+  uint8_t cs, uint8_t a0, uint8_t wr, uint8_t rd, uint8_t reset);
 void u8g_FirstPage(u8g_t *u8g);
 uint8_t u8g_NextPage(u8g_t *u8g);
 uint8_t u8g_SetContrast(u8g_t *u8g, uint8_t contrast);

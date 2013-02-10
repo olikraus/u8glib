@@ -57,6 +57,8 @@ class U8GLIB : public Print
   private:
     uint8_t init8Bit(u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
         uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE);
+    uint8_t initRW8Bit(u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+      uint8_t cs, uint8_t a0, uint8_t wr, uint8_t rd, uint8_t reset);
   public:
   
     /* constructor */
@@ -73,7 +75,12 @@ class U8GLIB : public Print
     U8GLIB(u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
         uint8_t en, uint8_t cs1, uint8_t cs2, uint8_t di, uint8_t rw, uint8_t reset) 
       { init8Bit(dev, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw, reset); }
+    U8GLIB(u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+        uint8_t cs, uint8_t a0, uint8_t wr, uint8_t rd, uint8_t reset) 
+      { initRW8Bit(dev, d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd, reset); }
 
+      
+      
     void setPrintPos(u8g_uint_t x, u8g_uint_t y) { tx = x; ty = y; }
     u8g_t *getU8g(void) { return &u8g; }
     
@@ -652,8 +659,8 @@ class U8GLIB_T6963_240X128 : public U8GLIB
 {
   public:
     U8GLIB_T6963_240X128(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
-        uint8_t en, uint8_t cs, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE) 
-      : U8GLIB(&u8g_dev_t6963_240x128_8bit, d0, d1, d2, d3, d4, d5, d6, d7, en, cs, U8G_PIN_NONE, di, rw, reset)
+        uint8_t cs, uint8_t a0, uint8_t wr, uint8_t rd, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_t6963_240x128_8bit, d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd, reset)
       { }
 };
 

@@ -302,6 +302,62 @@ uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t
   return 1;
 }
 
+/*
+
+  PIN_D0 8
+  PIN_D1 9
+  PIN_D2 10
+  PIN_D3 11
+  PIN_D4 4
+  PIN_D5 5
+  PIN_D6 6
+  PIN_D7 7
+
+  PIN_CS 14
+  PIN_A0 15
+  PIN_RESET 16
+  PIN_WR 17
+  PIN_RD 18
+  
+  u8g_InitRW8Bit(u8g, dev, d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd, reset)
+  u8g_InitRW8Bit(u8g, dev,  8,  9, 10, 11,  4,  5,  6,  7, 14, 15, 17, 18, 16)
+
+*/
+
+uint8_t u8g_InitRW8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+  uint8_t cs, uint8_t a0, uint8_t wr, uint8_t rd, uint8_t reset)
+{
+  
+  /* fill data structure with some suitable values */
+  u8g_init_data(u8g);
+  u8g->dev = dev;
+    
+  /* assign user pins */
+
+  u8g->pin_list[U8G_PI_D0] = d0;
+  u8g->pin_list[U8G_PI_D1] = d1;
+  u8g->pin_list[U8G_PI_D2] = d2;
+  u8g->pin_list[U8G_PI_D3] = d3;
+  u8g->pin_list[U8G_PI_D4] = d4;
+  u8g->pin_list[U8G_PI_D5] = d5;
+  u8g->pin_list[U8G_PI_D6] = d6;
+  u8g->pin_list[U8G_PI_D7] = d7;
+
+  u8g->pin_list[U8G_PI_CS] = cs;
+  u8g->pin_list[U8G_PI_A0] = a0;
+  u8g->pin_list[U8G_PI_WR] = wr;
+  u8g->pin_list[U8G_PI_RD] = rd;
+  u8g->pin_list[U8G_PI_RESET] = reset;
+  
+  /* call and init low level driver and com device */
+  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
+    return 0;
+
+  /* fetch width and height from the low level */
+  u8g_UpdateDimension(u8g);
+  return 1;
+}
+
 void u8g_FirstPage(u8g_t *u8g)
 {
   u8g_FirstPageLL(u8g, u8g->dev);
