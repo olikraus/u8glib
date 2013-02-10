@@ -707,6 +707,8 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PI_CS 2
 #define U8G_PI_CS1 2
 #define U8G_PI_CS2 3
+/* Feb 2013: A0 state moved from 7 to 3 for t6963 controller*/
+#define U8G_PI_A0_STATE 3
 
 /* enable / clock signal */
 #define U8G_PI_EN 4
@@ -723,7 +725,6 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PI_D1 6
 #define U8G_PI_MISO 6
 #define U8G_PI_D2 7
-#define U8G_PI_A0_STATE 7
 #define U8G_PI_D3 8
 #define U8G_PI_SET_A0 8
 #define U8G_PI_D4 9
