@@ -965,6 +965,69 @@ impl.
 impl.
 ::
 :Controller
+T6963
+:Display/Size
+128x64
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+256 Bytes
+:Com
+8Bit
+:Device
+<tt>u8g_dev_t6963_128x64_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_T6963_128X64(d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd [, reset])</tt>
+:Arduino
+impl. (v1.11)
+:Chipkit
+n.a.
+:AVR
+n.a.
+:Display/Size
+240x64
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+480 Bytes
+:Com
+8Bit
+:Device
+<tt>u8g_dev_t6963_240x64_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_T6963_240X64(d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd [, reset])</tt>
+:Arduino
+impl. (v1.11)
+:Chipkit
+n.a.
+:AVR
+n.a.
+:Display/Size
+240x128
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+480 Bytes
+:Com
+8Bit
+:Device
+<tt>u8g_dev_t6963_240x128_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_T6963_240X128(d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd [, reset])</tt>
+:Arduino
+impl. (v1.11)
+:Chipkit
+n.a.
+:AVR
+n.a.
+::
+:Controller
 SBN1661
 :Display/Size
 122x32

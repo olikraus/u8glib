@@ -1,6 +1,6 @@
 /*
 
-  u8g_dev_t6963_240x128.c
+  u8g_dev_t6963_128x64.c
   
   Tested with Varitronix MGLS240128TZ
   
@@ -38,17 +38,13 @@
 
 #include "u8g.h"
 
-#define WIDTH 240
-#define HEIGHT 128
+#define WIDTH 128
+#define HEIGHT 64
 #define PAGE_HEIGHT 16
 
 
-/*
-  http://www.mark-products.com/graphics.htm#240x64%20Pixel%20Format
-*/
-
 /* text is not used, so settings are not relevant */
-static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
+static const uint8_t u8g_dev_t6963_128x64_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* data mode */
   U8G_ESC_RST(15),           /* do reset low pulse with (15*16)+2 milliseconds (=maximum delay)*/
@@ -129,13 +125,13 @@ static const uint8_t u8g_dev_t6963_240x128_init_seq[] PROGMEM = {
   U8G_ESC_END                /* end of sequence */
 };
 
-uint8_t u8g_dev_t6963_240x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_t6963_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev);    
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_t6963_240x128_init_seq);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_t6963_128x64_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
@@ -174,10 +170,10 @@ uint8_t u8g_dev_t6963_240x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   return u8g_dev_pb16h1_base_fn(u8g, dev, msg, arg);
 }
 
-// U8G_PB_DEV(u8g_dev_t6963_240x128_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_t6963_240x128_fn, U8G_COM_T6963);
+// U8G_PB_DEV(u8g_dev_t6963_128x64_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_t6963_128x64_fn, U8G_COM_T6963);
 
-uint8_t u8g_dev_t6963_240x128_2x_bw_buf[WIDTH/8*PAGE_HEIGHT] U8G_NOCOMMON ; 
-u8g_pb_t u8g_dev_t6963_240x128_2x_bw_pb = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_t6963_240x128_2x_bw_buf}; 
-u8g_dev_t u8g_dev_t6963_240x128_8bit = { u8g_dev_t6963_240x128_fn, &u8g_dev_t6963_240x128_2x_bw_pb, U8G_COM_T6963 };
+uint8_t u8g_dev_t6963_128x64_2x_bw_buf[WIDTH/8*PAGE_HEIGHT] U8G_NOCOMMON ; 
+u8g_pb_t u8g_dev_t6963_128x64_2x_bw_pb = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_t6963_128x64_2x_bw_buf}; 
+u8g_dev_t u8g_dev_t6963_128x64_8bit = { u8g_dev_t6963_128x64_fn, &u8g_dev_t6963_128x64_2x_bw_pb, U8G_COM_T6963 };
 
 
