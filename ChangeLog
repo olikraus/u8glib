@@ -101,6 +101,9 @@ u8glib ChangeLog
   * Bugfix: Fixed reset controll in parallel modes
   * Bugfix: Fixed calculation of cursor position
   * Bugfix: ST7920 parallel mode
+2013-xx-xx	v1.11	  Oliver Kraus <olikraus@gmail.com>
+  * Support for T6963
+  
   
   
   
