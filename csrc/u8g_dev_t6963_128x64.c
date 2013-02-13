@@ -33,6 +33,18 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
   
+        
+  Application Notes for the MGLS 240x128
+    www.baso.no/content/pdf/T6963C_Application.pdf
+  
+  Hitachi App Notes:
+    https://www.sparkfun.com/datasheets/LCD/Monochrome/AN-029-Toshiba_T6963C.pdf
+
+  Notes:
+    The font selection pins should generate the 8x8 font.
+    For the MGLS240128TZ only FS1 is available on pin 18.
+    FS1 must be low to generate the 8x8 font.
+  
   
 */
 
@@ -71,7 +83,7 @@ static const uint8_t u8g_dev_t6963_128x64_init_seq[] PROGMEM = {
   0x040,				     /* text home */
 
   U8G_ESC_ADR(0),               /* data mode */
-  WIDTH/8/2-1,                      /* low byte */
+  WIDTH/8,                      	    /* low byte */
   0x000,                                /* height byte */
   U8G_ESC_ADR(1),               /* instruction mode */
   0x041,				     /* text columns */
