@@ -44,6 +44,8 @@
 #    define USE_AVR_DELAY
 #  elif defined(__PIC32MX)
 #    define USE_PIC32_DELAY
+#  elif defined(__arm__)		/* Arduino Due */
+#    define USE_ARDUINO_DELAY
 #  else
 #    define USE_ARDUINO_DELAY
 #  endif
