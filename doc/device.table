@@ -16,6 +16,9 @@ SW SPI
 <tt>U8GLIB_NHD27OLED_BW(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl.
+verified
 :Chipkit
 impl.
 :AVR
@@ -29,6 +32,8 @@ HW SPI
 <tt>U8GLIB_NHD27OLED_BW(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -44,6 +49,8 @@ SW SPI
 <tt>U8GLIB_NHD27OLED_2X_BW(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+verified
 :Chipkit
 impl.
 :AVR
@@ -57,6 +64,8 @@ HW SPI
 <tt>U8GLIB_NHD27OLED_2X_BW(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -76,6 +85,8 @@ SW SPI
 <tt>U8GLIB_NHD27OLED_GR(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl.
 :Chipkit
 impl.
 :AVR
@@ -88,6 +99,8 @@ HW SPI
 <tt>U8GLIB_NHD27OLED_GR(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -103,6 +116,8 @@ SW SPI
 <tt>U8GLIB_NHD27OLED_2X_GR(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl.
 :Chipkit
 impl.
 :AVR
@@ -115,6 +130,8 @@ HW SPI
 <tt>U8GLIB_NHD27OLED_2X_GR(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -139,6 +156,8 @@ SW SPI
 <tt>U8GLIB_SSD1327_96X96_GR(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 impl.
+:Arduino Due
+impl.
 :Chipkit
 impl.
 :AVR
@@ -152,6 +171,8 @@ HW SPI
 <tt>U8GLIB_SSD1327_96X96_GR(cs, a0 [, reset])</tt>
 :Arduino
 impl.
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -165,6 +186,8 @@ I2C
 <tt>U8GLIB_SSD1327_96X96_GR()</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -180,6 +203,8 @@ SW SPI
 <tt>U8GLIB_SSD1327_96X96_2X_GR(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 impl.
+:Arduino Due
+impl.
 :Chipkit
 impl.
 :AVR
@@ -193,6 +218,8 @@ HW SPI
 <tt>U8GLIB_SSD1327_96X96_2X_GR(cs, a0 [, reset])</tt>
 :Arduino
 impl.
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -206,6 +233,8 @@ I2C
 <tt>U8GLIB_SSD1327_96X96_2X_GR()</tt>
 :Arduino
 impl.
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -229,6 +258,8 @@ SW SPI
 <tt>U8GLIB_SSD1306_128X64(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl.
 :Chipkit
 impl.
 :AVR
@@ -241,6 +272,8 @@ HW SPI
 <tt>U8GLIB_SSD1306_128X64(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -253,6 +286,8 @@ I2C
 <tt>U8GLIB_SSD1306_128X64()</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -276,6 +311,8 @@ SW SPI
 <tt>U8GLIB_SSD1309_128X64(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 impl. (v1.10)
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl. (v1.10)
 :AVR
@@ -288,6 +325,8 @@ HW SPI
 <tt>U8GLIB_SSD1309_128X64(cs, a0 [, reset])</tt>
 :Arduino
 impl. (v1.10)
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 n.a.
 :AVR
@@ -300,6 +339,8 @@ I2C
 <tt>U8GLIB_SSD1309_128X64()</tt>
 :Arduino
 impl. (v1.10)
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -323,6 +364,8 @@ SW SPI
 <tt>U8GLIB_DOGS102(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -335,6 +378,8 @@ HW SPI
 <tt>U8GLIB_DOGS102(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -356,6 +401,8 @@ SW SPI
 <tt>U8GLIB_MINI12864(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 impl.
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -368,6 +415,8 @@ HW SPI
 <tt>U8GLIB_MINI12864(cs, a0 [, reset])</tt>
 :Arduino
 impl.
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -391,6 +440,8 @@ SW SPI
 <tt>U8GLIB_DOGM128(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -403,6 +454,8 @@ HW SPI
 <tt>U8GLIB_DOGM128(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -424,6 +477,8 @@ SW SPI
 <tt>U8GLIB_LM6059(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -436,6 +491,8 @@ HW SPI
 <tt>U8GLIB_LM6059(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -457,6 +514,8 @@ SW SPI
 <tt>U8GLIB_LM6063(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -469,6 +528,8 @@ HW SPI
 <tt>U8GLIB_LM6063(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -490,6 +551,8 @@ SW SPI
 <tt>U8GLIB_NHD_C12864(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified, v1.08
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl. v1.08
 :AVR
@@ -502,6 +565,8 @@ HW SPI
 <tt>U8GLIB_NHD_C12864(cs, a0 [, reset])</tt>
 :Arduino
 verified, v1.08
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -523,6 +588,8 @@ SW SPI
 <tt>U8GLIB_64128N(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified, v1.09
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl. v1.09
 :AVR
@@ -535,6 +602,8 @@ HW SPI
 <tt>U8GLIB_64128N(cs, a0 [, reset])</tt>
 :Arduino
 verified v1.09
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -556,6 +625,8 @@ SW SPI
 <tt>U8GLIB_DOGM132(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -568,6 +639,8 @@ HW SPI
 <tt>U8GLIB_DOGM132(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -589,6 +662,8 @@ SW SPI
 <tt>U8GLIB_NHD_C12832(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -601,6 +676,8 @@ HW SPI
 <tt>U8GLIB_NHD_C12832(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -624,6 +701,8 @@ SW SPI
 <tt>U8GLIB_ST7920_128X64(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 impl.
 :AVR
@@ -637,6 +716,8 @@ HW SPI
 <tt>U8GLIB_ST7920_128X64(cs, a0 [, reset])</tt>
 :Arduino
 impl. v1.09
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -649,6 +730,8 @@ impl. v1.09
 <tt>U8GLIB_ST7920_128X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
 :Arduino
 impl.
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 n.a.
 :AVR
@@ -670,6 +753,8 @@ SW SPI
 <tt>U8GLIB_ST7920_192X32(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 impl.
 :AVR
@@ -683,6 +768,8 @@ HW SPI
 <tt>U8GLIB_ST7920_192X32(cs, a0 [, reset])</tt>
 :Arduino
 impl. v1.09
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -695,6 +782,8 @@ impl. v1.09
 <tt>U8GLIB_ST7920_192X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11) 
 :Chipkit
 n.a.
 :AVR
@@ -716,6 +805,8 @@ SW SPI
 <tt>U8GLIB_ST7920_202X32(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 impl. v1.08
+:Arduino Due
+n.a.
 :Chipkit
 impl. v1.08
 :AVR
@@ -728,6 +819,8 @@ HW SPI
 <tt>U8GLIB_ST7920_202X32(cs, a0 [, reset])</tt>
 :Arduino
 impl. v1.09
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -740,6 +833,8 @@ impl. v1.09
 <tt>U8GLIB_ST7920_202X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
 :Arduino
 impl. v1.08
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl. v1.08
 :AVR
@@ -763,6 +858,8 @@ SW SPI
 <tt>U8GLIB_DOGXL160_BW(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -775,6 +872,8 @@ HW SPI
 <tt>U8GLIB_DOGXL160_BW(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -790,6 +889,8 @@ SW SPI
 <tt>U8GLIB_DOGXL160_2X_BW(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -802,12 +903,12 @@ HW SPI
 <tt>U8GLIB_DOGXL160_2X_BW(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
 n.a.
-
-
 ::
 :Mode
 4L
@@ -823,6 +924,8 @@ SW SPI
 <tt>U8GLIB_DOGXL160_GR(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -835,10 +938,12 @@ HW SPI
 <tt>U8GLIB_DOGXL160_GR(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
-n.a.
+n.a. (?)
 ::
 :Page Size
 320 Bytes
@@ -850,6 +955,8 @@ SW SPI
 <tt>U8GLIB_DOGXL160_2X_GR(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -862,10 +969,12 @@ HW SPI
 <tt>U8GLIB_DOGXL160_2X_GR(cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
-n.a.
+n.a. (?)
 ::
 :Controller
 PCD8544
@@ -885,6 +994,8 @@ SW SPI
 <tt>U8GLIB_PCD8544(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -908,6 +1019,8 @@ SW SPI
 <tt>U8GLIB_TLS8204_84X48(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 impl.
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -931,6 +1044,8 @@ SW SPI
 <tt>U8GLIB_PCF8812(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -959,6 +1074,8 @@ no
 <tt>U8GLIB_KS0108_128(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -982,6 +1099,8 @@ no
 <tt>U8GLIB_T6963_128X64(d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd [, reset])</tt>
 :Arduino
 impl. (v1.11)
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -1002,6 +1121,8 @@ no
 <tt>U8GLIB_T6963_240X64(d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd [, reset])</tt>
 :Arduino
 impl. (v1.11)
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -1022,6 +1143,8 @@ no
 <tt>U8GLIB_T6963_240X128(d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd [, reset])</tt>
 :Arduino
 impl. (v1.11)
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -1045,6 +1168,8 @@ no
 <tt>U8GLIB_SBN1661_122X32(d0, d1, d2, d3, d4, d5, d6, d7, cs1, cs2, di, rw [, reset])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -1068,6 +1193,8 @@ no
 <tt>U8GLIB_LC7981_160X80(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, di [, rw [, reset]])</tt>
 :Arduino
 verified
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -1089,6 +1216,8 @@ no
 <tt>U8GLIB_LC7981_240X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, di [, rw [, reset]])</tt>
 :Arduino
 impl.
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -1110,6 +1239,8 @@ no
 <tt>U8GLIB_LC7981_240X128(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, di [, rw [, reset]])</tt>
 :Arduino
 impl.
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -1131,6 +1262,8 @@ no
 <tt>U8GLIB_LC7981_320X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, di [, rw [, reset]])</tt>
 :Arduino
 impl. v1.09
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl. v1.09
 :AVR
@@ -1153,6 +1286,8 @@ n.a.
 U8GLIB_FLIPDISC_2X7()
 :Arduino
 impl.
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -1175,6 +1310,8 @@ n.a.
 U8GLIB_VS()
 :Arduino
 impl.
+:Arduino Due
+impl. (v1.11)
 :Chipkit
 impl.
 :AVR
@@ -1196,6 +1333,8 @@ n.a.
 :C++ Constructor
 
 :Arduino
+n.a.
+:Arduino Due
 n.a.
 :Chipkit
 n.a.
@@ -1221,6 +1360,8 @@ no
 
 :Arduino
 n.a.
+:Arduino Due
+n.a.
 :Chipkit
 n.a.
 :AVR
@@ -1238,6 +1379,8 @@ no
 :C++ Constructor
 
 :Arduino
+n.a.
+:Arduino Due
 n.a.
 :Chipkit
 n.a.
