@@ -75,18 +75,15 @@ static const uint8_t u8g_dev_ssd1306_128x32_init_seq[] PROGMEM = {
 };
 
 
-
+#ifdef OBSOLETE
 static const uint8_t u8g_dev_ssd1306_128x32_data_start[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
-  /* 0x010, */		/* set upper 4 bit of the col adr to 0, page addressing mode */
-  /* 0x000, */		/* set lower 4 bit of the col adr to 4, page addressing mode  */
-  0x021,			/* column range for horizontal addressing mode */
-  0x000,
-  0x07f,  
-  0x022,			/* page range for horizontal addressing mode */
+  0x010, 		/* set upper 4 bit of the col adr to 0, page addressing mode */
+  0x000, 		/* set lower 4 bit of the col adr to 4, page addressing mode  */
   U8G_ESC_END                /* end of sequence */
 };
+#endif
 
 uint8_t u8g_dev_ssd1306_128x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -101,7 +98,37 @@ uint8_t u8g_dev_ssd1306_128x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
     case U8G_DEV_MSG_PAGE_NEXT:
       {
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-        u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1306_128x32_data_start);    
+        uint8_t i;
+        uint16_t disp_ram_adr;
+        uint8_t *ptr;
+	
+        disp_ram_adr = WIDTH/8;
+        disp_ram_adr *= pb->p.page_y0*2;		/* *2 to skip every 2nd line */
+        ptr = pb->buf;
+	u8g_SetChipSelect(u8g, dev, 1);
+        for( i = 0; i < PAGE_HEIGHT; i ++ )
+        {
+	  u8g_SetAddress(u8g, dev, 0);           /* command mode */
+	  
+	  u8g_WriteByte(u8g, dev, 0x021);		/* column range for horizontal addressing mode */ 
+	  u8g_WriteByte(u8g, dev, disp_ram_adr & 0x07f);		/* start column for horizontal addressing mode */ 
+	  u8g_WriteByte(u8g, dev, 0x07f);		/* end column for horizontal addressing mode */ 
+	  
+	  u8g_WriteByte(u8g, dev, 0x022);		/* page range for horizontal addressing mode */ 
+	  u8g_WriteByte(u8g, dev, disp_ram_adr >> 7);		/* start page for horizontal addressing mode */ 
+	  u8g_WriteByte(u8g, dev, disp_ram_adr >> 7);		/* end page for horizontal addressing mode */ 
+	  
+	  u8g_SetAddress(u8g, dev, 1);           /* data mode */
+          u8g_WriteSequence(u8g, dev, WIDTH/8, ptr);	
+	  
+	  u8g_SetChipSelect(u8g, dev, 0);
+  	  
+          ptr += WIDTH/8;
+          disp_ram_adr += WIDTH/8 * 2;		/* *2 to skip every 2nd line */	  
+	}
+	u8g_SetChipSelect(u8g, dev, 0);
+
+	
         u8g_WriteByte(u8g, dev, pb->p.page);   /* select start page (SSD1306, horizontal addressing mode) */
         u8g_WriteByte(u8g, dev, pb->p.page);   /* select end page (SSD1306, horizontal addressing mode) */
         /*u8g_WriteByte(u8g, dev, 0x0b0 | pb->p.page); *//* select current page (SSD1306, page addressing mode) */
