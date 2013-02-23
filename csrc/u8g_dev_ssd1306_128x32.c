@@ -102,8 +102,8 @@ uint8_t u8g_dev_ssd1306_128x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
         uint16_t disp_ram_adr;
         uint8_t *ptr;
 	
-        disp_ram_adr = WIDTH/8;
-        disp_ram_adr *= pb->p.page_y0*2;		/* *2 to skip every 2nd line */
+        disp_ram_adr = WIDTH/8 * 2;		/* *2 to skip every 2nd line */
+        disp_ram_adr *= pb->p.page_y0;		
         ptr = pb->buf;
 	u8g_SetChipSelect(u8g, dev, 1);
         for( i = 0; i < PAGE_HEIGHT; i ++ )
