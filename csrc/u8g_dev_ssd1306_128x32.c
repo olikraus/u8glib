@@ -57,7 +57,7 @@ static const uint8_t u8g_dev_ssd1306_128x32_init_seq[] PROGMEM = {
   
   0x08d, 0x014,		/* [2] charge pump setting (p62): 0x014 enable, 0x010 disable */
 
-  0x020, 0x002,		/* 2012-05-27: page addressing mode */
+  0x020, 0x000,		/* Feb 23, 2013: horizontal addressing mode (0x00)*/
   0x0a1,				/* segment remap a0/a1*/
   0x0c8,				/* c0: scan dir normal, c8: reverse */
   0x0da, 0x002,		/* com pin HW config, sequential com pin config (bit 4), disable left/right remap (bit 5), Feb 23, 2013: 128x32 OLED: 0x002,  128x64 OLED 0x012 */
