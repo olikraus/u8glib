@@ -110,6 +110,23 @@ static void u8g_dev_ssd1325_prepare_row(u8g_t *u8g, u8g_dev_t *dev, uint8_t delt
   u8g_SetAddress(u8g, dev, 1);          /* data mode */
 }
 
+static const uint8_t u8g_dev_ssd13xx_sleep_on[] PROGMEM = {
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),             /* enable chip */
+  0x0ae,		/* display off */      
+  U8G_ESC_CS(1),             /* disable chip */
+  U8G_ESC_END                /* end of sequence */
+};
+
+static const uint8_t u8g_dev_ssd13xx_sleep_off[] PROGMEM = {
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),             /* enable chip */
+  0x0af,		/* display on */      
+  U8G_ESC_DLY(50),       /* delay 50 ms */
+  U8G_ESC_CS(1),             /* disable chip */
+  U8G_ESC_END                /* end of sequence */
+};
+
 
 static uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -148,6 +165,12 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
       u8g_SetChipSelect(u8g, dev, 0);      
       break;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd13xx_sleep_on);    
+      return 1;
+    case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd13xx_sleep_off);    
+      return 1;
   }
   return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
 }
@@ -187,6 +210,12 @@ static uint8_t u8g_dev_ssd1325_nhd27oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, ui
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
       u8g_SetChipSelect(u8g, dev, 0);      
       break;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd13xx_sleep_on);    
+      return 1;
+    case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd13xx_sleep_off);    
+      return 1;
   }
   return u8g_dev_pb16h1_base_fn(u8g, dev, msg, arg);
 }
