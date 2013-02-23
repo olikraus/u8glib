@@ -102,9 +102,14 @@ uint8_t u8g_dev_ssd1306_128x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
         uint16_t disp_ram_adr;
         uint8_t *ptr;
 	
+	/* calculate the adr within the graphics memory of the controller */
         disp_ram_adr = WIDTH/8 * 2;		/* *2 to skip every 2nd line */
         disp_ram_adr *= pb->p.page_y0;		
+	
+	/* setup ptr to our local memory buffer */
         ptr = pb->buf;
+
+	/* start loop to transfer the local memory buffer */
 	u8g_SetChipSelect(u8g, dev, 1);
         for( i = 0; i < PAGE_HEIGHT; i ++ )
         {
@@ -129,13 +134,6 @@ uint8_t u8g_dev_ssd1306_128x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
 	u8g_SetChipSelect(u8g, dev, 0);
 
 	
-        u8g_WriteByte(u8g, dev, pb->p.page);   /* select start page (SSD1306, horizontal addressing mode) */
-        u8g_WriteByte(u8g, dev, pb->p.page);   /* select end page (SSD1306, horizontal addressing mode) */
-        /*u8g_WriteByte(u8g, dev, 0x0b0 | pb->p.page); *//* select current page (SSD1306, page addressing mode) */
-        u8g_SetAddress(u8g, dev, 1);           /* data mode */
-        if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
-          return 0;
-        u8g_SetChipSelect(u8g, dev, 0);
       }
       break;
   }
