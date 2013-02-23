@@ -348,6 +348,9 @@ struct _u8g_box_t
 /* arg: pointer to uint8_t, contranst value between 0 and 255 */
 #define U8G_DEV_MSG_CONTRAST            15
 
+#define U8G_DEV_MSG_SLEEP_ON            16
+#define U8G_DEV_MSG_SLEEP_OFF            17
+
 #define U8G_DEV_MSG_PAGE_FIRST                  20
 #define U8G_DEV_MSG_PAGE_NEXT                    21
 
@@ -829,6 +832,8 @@ uint8_t u8g_InitRW8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8
 void u8g_FirstPage(u8g_t *u8g);
 uint8_t u8g_NextPage(u8g_t *u8g);
 uint8_t u8g_SetContrast(u8g_t *u8g, uint8_t contrast);
+void u8g_SleepOn(u8g_t *u8g);
+void u8g_SleepOff(u8g_t *u8g);
 void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y);
 void u8g_Draw8Pixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel);
 

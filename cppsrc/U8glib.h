@@ -110,6 +110,8 @@ class U8GLIB : public Print
     
     /* system commands */
     uint8_t setContrast(uint8_t contrast) { cbegin(); return u8g_SetContrast(&u8g, contrast); }
+    void sleepOn(void) { u8g_SleepOn(&u8g); }
+    void sleepOff(void) { u8g_SleepOff(&u8g); }
     
     /* graphic primitives */
     void setColorIndex(uint8_t color_index) { u8g_SetColorIndex(&u8g, color_index); }

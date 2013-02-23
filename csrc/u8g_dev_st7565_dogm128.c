@@ -49,7 +49,7 @@ const uint8_t u8g_dev_st7565_dogm128_init_seq[] PROGMEM = {
   0x040,		                /* set display start line */
   0x0a1,		                /* ADC set to reverse */
   0x0c0,		                /* common output mode: set scan direction normal operation */
-  0x0a6,                           /* display normal, bit val 0: LCD pixel off. */
+  0x0a6,                           /* display normal (none reverse) */
   0x0a2,		                /* LCD bias 1/9 */
   0x02f,		                /* all power  control circuits on */
   0x0f8,		                /* set booster ratio to */
@@ -59,13 +59,10 @@ const uint8_t u8g_dev_st7565_dogm128_init_seq[] PROGMEM = {
   0x018,		                /* contrast value, EA default: 0x016 */
   0x0ac,		                /* indicator */
   0x000,		                /* disable */
+  0x0a4,		                /* normal display (not all on) */
   0x0af,		                /* display on */
+  U8G_ESC_DLY(50),       /* delay 50 ms */
 
-  U8G_ESC_DLY(100),       /* delay 100 ms */
-  0x0a5,		                /* display all points, ST7565 */
-  U8G_ESC_DLY(100),       /* delay 100 ms */
-  U8G_ESC_DLY(100),       /* delay 100 ms */
-  0x0a4,		                /* normal display */
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
 };
@@ -75,6 +72,27 @@ static const uint8_t u8g_dev_st7565_dogm128_data_start[] PROGMEM = {
   U8G_ESC_CS(1),             /* enable chip */
   0x010,		/* set upper 4 bit of the col adr to 0 */
   0x000,		/* set lower 4 bit of the col adr to 0 */      
+  U8G_ESC_END                /* end of sequence */
+};
+
+static const uint8_t u8g_dev_st7565_dogm128_sleep_on[] PROGMEM = {
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),             /* enable chip */
+  0x0ac,		/* static indicator off */
+  0x000,		                /* indicator register set (not sure if this is required) */
+  0x0ae,		/* display off */      
+  0x0a5,		/* all points on */      
+  U8G_ESC_CS(1),             /* disable chip */
+  U8G_ESC_END                /* end of sequence */
+};
+
+static const uint8_t u8g_dev_st7565_dogm128_sleep_off[] PROGMEM = {
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),             /* enable chip */
+  0x0a4,		/* all points off */      
+  0x0af,		/* display on */      
+  U8G_ESC_DLY(50),       /* delay 50 ms */
+  U8G_ESC_CS(1),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
 };
 
@@ -105,6 +123,11 @@ uint8_t u8g_dev_st7565_dogm128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
       u8g_WriteByte(u8g, dev, 0x081);
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 2);
       u8g_SetChipSelect(u8g, dev, 0);      
+      return 1;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_dogm128_sleep_on);    
+      return 1;
+    case U8G_DEV_MSG_SLEEP_OFF:
       return 1;
   }
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);

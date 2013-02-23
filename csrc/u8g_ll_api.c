@@ -356,6 +356,16 @@ uint8_t u8g_SetContrast(u8g_t *u8g, uint8_t contrast)
   return u8g_SetContrastLL(u8g, u8g->dev, contrast);
 }
 
+void u8g_SleepOn(u8g_t *u8g)
+{
+  u8g_call_dev_fn(u8g, u8g->dev, U8G_DEV_MSG_SLEEP_ON, NULL);
+}
+
+void u8g_SleepOff(u8g_t *u8g)
+{
+  u8g_call_dev_fn(u8g, u8g->dev, U8G_DEV_MSG_SLEEP_OFF, NULL);
+}
+
 
 void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y)
 {
