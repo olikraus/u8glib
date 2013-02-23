@@ -47,10 +47,17 @@
 #include <WProgram.h> 
 
 /* fixed pins */
+#if defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__) // Sanguino.cc board
+#define PIN_SCK         7
+#define PIN_MISO        6
+#define PIN_MOSI        5
+#define PIN_CS          4
+#else                                   // Arduino Board
 #define PIN_SCK 13
 #define PIN_MISO  12
 #define PIN_MOSI 11
 #define PIN_CS 10
+#endif // (__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
 
 #else 
 
