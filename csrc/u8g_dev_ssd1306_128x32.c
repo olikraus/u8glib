@@ -109,6 +109,7 @@ static const uint8_t u8g_dev_ssd1306_128x32_adafruit2_init_seq[] PROGMEM = {
 };
 
 /* init sequence adafruit 128x64 OLED (NOT TESTED), like adafruit3, but with page addressing mode */
+/* seems to work on some OLEDs */
 static const uint8_t u8g_dev_ssd1306_128x32_adafruit3_init_seq[] PROGMEM = {
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_ADR(0),           /* instruction mode */
@@ -117,7 +118,7 @@ static const uint8_t u8g_dev_ssd1306_128x32_adafruit3_init_seq[] PROGMEM = {
 
   0x0ae,				/* display off, sleep mode */
   0x0d5, 0x080,		/* clock divide ratio (0x00=1) and oscillator frequency (0x8) */
-  0x0a8, 0x03f,		/* */
+  0x0a8, 0x01f,		/* Feb 23, 2013: 128x32 OLED: 0x01f,  128x64 OLED 0x03f */
 
   0x0d3, 0x000,		/*  */
 
@@ -128,7 +129,7 @@ static const uint8_t u8g_dev_ssd1306_128x32_adafruit3_init_seq[] PROGMEM = {
   0x020, 0x002,		/* 2012-05-27: page addressing mode */
   0x0a1,				/* segment remap a0/a1*/
   0x0c8,				/* c0: scan dir normal, c8: reverse */
-  0x0da, 0x012,		/* com pin HW config, sequential com pin config (bit 4), disable left/right remap (bit 5) */
+  0x0da, 0x002,		/* com pin HW config, sequential com pin config (bit 4), disable left/right remap (bit 5), Feb 23, 2013: 128x32 OLED: 0x002,  128x64 OLED 0x012 */
   0x081, 0x0cf,		/* [2] set contrast control */
   0x0d9, 0x0f1,		/* [2] pre-charge period 0x022/f1*/
   0x0db, 0x040,		/* vcomh deselect level */
