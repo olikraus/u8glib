@@ -167,6 +167,17 @@ static void u8g_init_data(u8g_t *u8g)
   u8g->line_spacing = 0;
   
   u8g->state_cb = u8g_state_dummy_cb;
+
+}
+
+uint8_t u8g_Begin(u8g_t *u8g)
+{
+  /* call and init low level driver and com device */
+  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
+    return 0;
+  /* fetch width and height from the low level */
+  u8g_UpdateDimension(u8g);
+  return 1;
 }
 
 uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)
@@ -174,10 +185,11 @@ uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)
   u8g_init_data(u8g);
   u8g->dev = dev;
   
-  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
-    return 0;
-  u8g_UpdateDimension(u8g);
-  return 1;
+  /* On the Arduino Environment this will lead to two calls to u8g_Begin(), the following line will be called first (by U8glib constructors) */
+  /* if - in future releases - this is removed, then still call u8g_UpdateDimension() */
+  /* if Arduino call u8g_UpdateDimension else u8g_Begin */
+  /* issue 146 */
+  return u8g_Begin(u8g);
 }
 
 uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset)
@@ -194,13 +206,11 @@ uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8
   u8g->pin_list[U8G_PI_A0] = a0;
   u8g->pin_list[U8G_PI_RESET] = reset;
   
-  /* call and init low level driver and com device */
-  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
-    return 0;
-
-  /* fetch width and height from the low level */
-  u8g_UpdateDimension(u8g);
-  return 1;
+  /* On the Arduino Environment this will lead to two calls to u8g_Begin(), the following line will be called first (by U8glib constructors) */
+  /* if - in future releases - this is removed, then still call u8g_UpdateDimension() */
+  /* if Arduino call u8g_UpdateDimension else u8g_Begin */
+  /* issue 146 */
+  return u8g_Begin(u8g);
 }
 
 uint8_t u8g_InitHWSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset)
@@ -215,13 +225,7 @@ uint8_t u8g_InitHWSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_
   u8g->pin_list[U8G_PI_A0] = a0;
   u8g->pin_list[U8G_PI_RESET] = reset;
   
-  /* call and init low level driver and com device */
-  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
-    return 0;
-
-  /* fetch width and height from the low level */
-  u8g_UpdateDimension(u8g);
-  return 1;
+  return u8g_Begin(u8g);
 }
 
 uint8_t u8g_InitI2C(u8g_t *u8g, u8g_dev_t *dev, uint8_t options)
@@ -232,13 +236,7 @@ uint8_t u8g_InitI2C(u8g_t *u8g, u8g_dev_t *dev, uint8_t options)
     
   u8g->pin_list[U8G_PI_I2C_OPTION] = options;
   
-  /* call and init low level driver and com device */
-  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
-    return 0;
-
-  /* fetch width and height from the low level */
-  u8g_UpdateDimension(u8g);
-  return 1;
+  return u8g_Begin(u8g);
 }
 
 
@@ -257,14 +255,7 @@ uint8_t u8g_Init8BitFixedPort(u8g_t *u8g, u8g_dev_t *dev, uint8_t en, uint8_t cs
   u8g->pin_list[U8G_PI_RW] = rw;
   u8g->pin_list[U8G_PI_RESET] = reset;
 
-  /* call and init low level driver and com device */
-  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
-    return 0;
-
-  /* fetch width and height from the low level */
-  u8g_UpdateDimension(u8g);
-  return 1;
-
+  return u8g_Begin(u8g);
 }
 
 uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
@@ -293,13 +284,7 @@ uint8_t u8g_Init8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8_t
   u8g->pin_list[U8G_PI_RW] = rw;
   u8g->pin_list[U8G_PI_RESET] = reset;
   
-  /* call and init low level driver and com device */
-  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
-    return 0;
-
-  /* fetch width and height from the low level */
-  u8g_UpdateDimension(u8g);
-  return 1;
+  return u8g_Begin(u8g);
 }
 
 /*
@@ -349,13 +334,7 @@ uint8_t u8g_InitRW8Bit(u8g_t *u8g, u8g_dev_t *dev, uint8_t d0, uint8_t d1, uint8
   u8g->pin_list[U8G_PI_RD] = rd;
   u8g->pin_list[U8G_PI_RESET] = reset;
   
-  /* call and init low level driver and com device */
-  if ( u8g_InitLL(u8g, u8g->dev) == 0 )
-    return 0;
-
-  /* fetch width and height from the low level */
-  u8g_UpdateDimension(u8g);
-  return 1;
+  return u8g_Begin(u8g);
 }
 
 void u8g_FirstPage(u8g_t *u8g)

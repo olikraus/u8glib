@@ -796,6 +796,7 @@ struct _u8g_t
   u8g_state_cb state_cb;
   
   u8g_box_t current_page;		/* current box of the visible page */
+
 };
 
 #define u8g_GetFontAscent(u8g) ((u8g)->font_ref_ascent)
@@ -815,6 +816,7 @@ u8g_uint_t u8g_GetWidthLL(u8g_t *u8g, u8g_dev_t *dev);
 u8g_uint_t u8g_GetHeightLL(u8g_t *u8g, u8g_dev_t *dev);
 
 void u8g_UpdateDimension(u8g_t *u8g);
+uint8_t u8g_Begin(u8g_t *u8g);				/* reset device, put it into default state and call u8g_UpdateDimension() */
 uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev);   /* only usefull if the device only as hardcoded ports */
 uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset);
 uint8_t u8g_InitHWSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset);

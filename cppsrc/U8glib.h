@@ -47,8 +47,10 @@ class U8GLIB : public Print
   private:
     u8g_t u8g;
     u8g_uint_t tx, ty;          // current position for the Print base class procedures
+    uint8_t is_begin;
 
-    void preparePrint(void) { tx = 0; ty = 0; }
+    void prepare(void) { tx = 0; ty = 0; is_begin = 0; }
+    void cbegin(void) { if ( is_begin == 0 ) { is_begin = 1; u8g_Begin(&u8g); } }
     uint8_t initSPI(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE);
     uint8_t initHWSPI(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE);
     uint8_t initI2C(u8g_dev_t *dev, uint8_t options);
@@ -65,7 +67,7 @@ class U8GLIB : public Print
     U8GLIB(void)
       { }
     U8GLIB(u8g_dev_t *dev)
-      { preparePrint(); u8g_Init(&u8g, dev); }
+      { prepare(); u8g_Init(&u8g, dev); }
     U8GLIB(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset) 
       { initSPI(dev, sck, mosi, cs, a0, reset); }
     U8GLIB(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset) 
@@ -79,7 +81,7 @@ class U8GLIB : public Print
         uint8_t cs, uint8_t a0, uint8_t wr, uint8_t rd, uint8_t reset) 
       { initRW8Bit(dev, d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd, reset); }
 
-      
+    uint8_t begin(void) { is_begin = 1; return u8g_Begin(&u8g); }
       
     void setPrintPos(u8g_uint_t x, u8g_uint_t y) { tx = x; ty = y; }
     u8g_t *getU8g(void) { return &u8g; }
@@ -103,11 +105,11 @@ class U8GLIB : public Print
     void setScale2x2(void) { u8g_SetScale2x2(&u8g); }
     
      /* picture loop */
-    void firstPage(void) { u8g_FirstPage(&u8g); }
+    void firstPage(void) { cbegin(); u8g_FirstPage(&u8g); }
     uint8_t nextPage(void) { return u8g_NextPage(&u8g); }
     
     /* system commands */
-    uint8_t setContrast(uint8_t contrast) { return u8g_SetContrast(&u8g, contrast); }
+    uint8_t setContrast(uint8_t contrast) { cbegin(); return u8g_SetContrast(&u8g, contrast); }
     
     /* graphic primitives */
     void setColorIndex(uint8_t color_index) { u8g_SetColorIndex(&u8g, color_index); }
