@@ -204,9 +204,7 @@ void loop(void) {
     draw_state = 0;
   
   // rebuild the picture after some delay
-  u8g.sleepOn();
   delay(150);
-  u8g.sleepOff();
   
 }
 

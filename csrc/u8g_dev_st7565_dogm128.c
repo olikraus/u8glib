@@ -128,6 +128,7 @@ uint8_t u8g_dev_st7565_dogm128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
       u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_dogm128_sleep_on);    
       return 1;
     case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_dogm128_sleep_off);    
       return 1;
   }
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
