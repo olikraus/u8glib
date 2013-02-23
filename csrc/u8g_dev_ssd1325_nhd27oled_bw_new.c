@@ -74,11 +74,9 @@ static const uint8_t u8g_dev_ssd1325_nhd_27_12864_init_seq[] PROGMEM = {
   0x0b0, 0x028,                    /* enable pre-charge compensation (not documented in the SDD1325 datasheet, but used in the NHD init seq.) */
   0x0be, 0x01c,                     /* VCOMH voltage */
   0x0bf, 0x002|0x00d,           /* VSL voltage level (not documented in the SDD1325 datasheet, but used in the NHD init seq.) */
-  0x0a5,                                 /* all pixel on */
-  0x0af,                                  /* display on */
-  U8G_ESC_DLY(100),             /* delay 100 ms */
-  U8G_ESC_DLY(100),             /* delay 100 ms */
   0x0a4,                                 /* normal display mode */
+  0x0af,                                  /* display on */
+  U8G_ESC_DLY(50),             /* delay 50 ms */
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
 };

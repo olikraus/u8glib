@@ -94,13 +94,10 @@ static const uint8_t u8g_dev_ssd1327_2bit_96x96_init_seq[] PROGMEM = {
   //0x02e,					/* no scroll (according to SeeedGrayOLED sequence) */
   0x0af,                                  /* display on */
   U8G_ESC_DLY(100),             /* delay 100 ms */
-  U8G_ESC_DLY(100),             /* delay 100 ms */
   0x0a4,                                 /* normal display mode */
-  U8G_ESC_DLY(100),             /* delay 100 ms */
   U8G_ESC_DLY(100),             /* delay 100 ms */
   0x0a5,                                 /* all pixel on */
   0x0af,                                  /* display on */
-  U8G_ESC_DLY(100),             /* delay 100 ms */
   U8G_ESC_DLY(100),             /* delay 100 ms */
   0x0a4,                                 /* normal display mode */
   

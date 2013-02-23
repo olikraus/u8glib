@@ -205,7 +205,7 @@ void loop(void) {
   
   // rebuild the picture after some delay
   delay(150);
-  
+
 }
 
 

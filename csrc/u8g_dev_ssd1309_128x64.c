@@ -65,7 +65,7 @@ static const uint8_t u8g_dev_ssd1309_128x64_init_seq[] PROGMEM={
 	U8G_ESC_VCC(1),	/*Power up VCC & Stabilized */
 	U8G_ESC_DLY(50),
 	0xaf,			/*Set Display On */
-	U8G_ESC_DLY(100),
+	U8G_ESC_DLY(50),
 	U8G_ESC_CS(0),             /* disable chip */
 	U8G_ESC_END                /* end of sequence */
 };
