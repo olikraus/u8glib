@@ -1,1 +1,1 @@
-echo -n "v1.11pre4"
+echo -n "v1.11pre5"

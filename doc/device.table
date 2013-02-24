@@ -17,7 +17,6 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl.
 verified
 :Chipkit
 impl.
@@ -37,7 +36,7 @@ n.a.
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Page Size
 256 Bytes
@@ -69,7 +68,7 @@ n.a.
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Mode
 4L
@@ -104,7 +103,7 @@ n.a.
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Page Size
 256 Bytes
@@ -135,8 +134,7 @@ n.a.
 :Chipkit
 n.a.
 :AVR
-n.a.
-
+impl.
 ::
 :Controller
 SSD1327
@@ -277,7 +275,7 @@ n.a.
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 :Com
 I2C
 :Device
@@ -312,7 +310,7 @@ SW SPI
 :Arduino
 impl. (v1.10)
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl. (v1.10)
 :AVR
@@ -326,7 +324,7 @@ HW SPI
 :Arduino
 impl. (v1.10)
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 n.a.
 :AVR
@@ -365,7 +363,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -402,7 +400,7 @@ SW SPI
 :Arduino
 impl.
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -441,7 +439,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -478,7 +476,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -515,7 +513,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -552,7 +550,7 @@ SW SPI
 :Arduino
 verified, v1.08
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl. v1.08
 :AVR
@@ -589,7 +587,7 @@ SW SPI
 :Arduino
 verified, v1.09
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl. v1.09
 :AVR
@@ -626,7 +624,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -663,7 +661,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -702,7 +700,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -731,7 +729,7 @@ impl. v1.09
 :Arduino
 impl.
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 n.a.
 :AVR
@@ -754,7 +752,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -783,7 +781,7 @@ impl. v1.09
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11) 
+impl. v1.11 
 :Chipkit
 n.a.
 :AVR
@@ -806,7 +804,7 @@ SW SPI
 :Arduino
 impl. v1.08
 :Arduino Due
-n.a.
+impl. v1.11
 :Chipkit
 impl. v1.08
 :AVR
@@ -834,7 +832,7 @@ impl. v1.09
 :Arduino
 impl. v1.08
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl. v1.08
 :AVR
@@ -859,7 +857,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -877,7 +875,7 @@ n.a.
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Page Size
 320 Bytes
@@ -890,7 +888,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -908,7 +906,7 @@ n.a.
 :Chipkit
 n.a.
 :AVR
-n.a.
+impl.
 ::
 :Mode
 4L
@@ -925,7 +923,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -943,7 +941,7 @@ n.a.
 :Chipkit
 n.a.
 :AVR
-n.a. (?)
+impl.
 ::
 :Page Size
 320 Bytes
@@ -956,7 +954,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -974,7 +972,7 @@ n.a.
 :Chipkit
 n.a.
 :AVR
-n.a. (?)
+impl.
 ::
 :Controller
 PCD8544
@@ -995,7 +993,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -1020,7 +1018,7 @@ SW SPI
 :Arduino
 impl.
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -1045,7 +1043,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -1075,7 +1073,7 @@ no
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -1098,7 +1096,7 @@ no
 :C++ Constructor
 <tt>U8GLIB_T6963_128X64(d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd [, reset])</tt>
 :Arduino
-impl. (v1.11)
+impl. v1.11
 :Arduino Due
 n.a.
 :Chipkit
@@ -1120,7 +1118,7 @@ no
 :C++ Constructor
 <tt>U8GLIB_T6963_240X64(d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd [, reset])</tt>
 :Arduino
-impl. (v1.11)
+impl. v1.11
 :Arduino Due
 n.a.
 :Chipkit
@@ -1142,7 +1140,7 @@ no
 :C++ Constructor
 <tt>U8GLIB_T6963_240X128(d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd [, reset])</tt>
 :Arduino
-impl. (v1.11)
+impl. v1.11
 :Arduino Due
 n.a.
 :Chipkit
@@ -1169,7 +1167,7 @@ no
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -1194,7 +1192,7 @@ no
 :Arduino
 verified
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -1217,7 +1215,7 @@ no
 :Arduino
 impl.
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -1240,7 +1238,7 @@ no
 :Arduino
 impl.
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -1263,7 +1261,7 @@ no
 :Arduino
 impl. v1.09
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl. v1.09
 :AVR
@@ -1287,7 +1285,7 @@ U8GLIB_FLIPDISC_2X7()
 :Arduino
 impl.
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
@@ -1311,7 +1309,7 @@ U8GLIB_VS()
 :Arduino
 impl.
 :Arduino Due
-impl. (v1.11)
+impl. v1.11
 :Chipkit
 impl.
 :AVR
