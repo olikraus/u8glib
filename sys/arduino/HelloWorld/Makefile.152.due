@@ -23,6 +23,7 @@
 #	002  05 Oct 2010	added 'uno'
 #	003  06 Dec 2011    arduino 1.0 
 #	004  11 Feb 2012     u8glib   
+#	005	24 Feb 2013	arduino 1.5.2 Due
 #
 
 #=== user configuration ===
@@ -48,12 +49,12 @@ AVR_TOOLS_PATH:=/home/kraus/prg/arduino-1.5.2/hardware/tools/g++_arm_none_eabi/b
 # Install path of the arduino software. Requires a '/' at the end.
 ARDUINO_PATH:=/home/kraus/prg/arduino-1.5.2/
 
-# Install path for avrdude. Requires a '/' at the end. Can be empty if avrdude is in the search path.
+# Install path for bossac. Requires a '/' at the end. Can be empty if bossac is in the search path.
 BOSSAC_PATH:=$(ARDUINO_PATH)hardware/tools/
 
 # The unix device where we can reach the arduino board
 # Due: /dev/ttyACM0
-AVRDUDE_PORT:=/dev/ttyACM0
+PORT:=/dev/ttyACM0
 
 # List of all libaries which should be included.
 EXTRA_DIRS=$(ARDUINO_PATH)libraries/LiquidCrystal/
@@ -62,7 +63,8 @@ EXTRA_DIRS=$(ARDUINO_PATH)libraries/LiquidCrystal/
 #=== fetch parameter from boards.txt processor parameter ===
 # the basic idea is to get most of the information from boards.txt
 
-BOARDS_TXT:=$(ARDUINO_PATH)hardware/arduino/sam/boards.txt
+SAM_DIR:=$(ARDUINO_PATH)hardware/arduino/sam/
+BOARDS_TXT:=$(SAM_DIR)boards.txt
 
 # get the MCU value from the $(BOARD).build.mcu variable. For the atmega328 board this is atmega328p
 MCU:=$(shell sed -n -e "s/$(BOARD).build.mcu=\(.*\)/\1/p" $(BOARDS_TXT))
@@ -70,28 +72,22 @@ MCU:=$(shell sed -n -e "s/$(BOARD).build.mcu=\(.*\)/\1/p" $(BOARDS_TXT))
 F_CPU:=$(shell sed -n -e "s/$(BOARD).build.f_cpu=\(.*\)/\1/p" $(BOARDS_TXT))
 # get variant subfolder
 VARIANT:=$(shell sed -n -e "s/$(BOARD).build.variant=\(.*\)/\1/p" $(BOARDS_TXT))
+LDSCRIPT:=$(SAM_DIR)variants/$(VARIANT)/$(shell sed -n -e "s/$(BOARD).build.ldscript=\(.*\)/\1/p" $(BOARDS_TXT))
+SYSLIB:=$(SAM_DIR)variants/$(VARIANT)/$(shell sed -n -e "s/$(BOARD).build.variant_system_lib=\(.*\)/\1/p" $(BOARDS_TXT))
 
-
-# avrdude
-# get the AVRDUDE_UPLOAD_RATE value from the $(BOARD).upload.speed variable. For the atmega328 board this is 57600
-AVRDUDE_UPLOAD_RATE:=$(shell sed -n -e "s/$(BOARD).upload.speed=\(.*\)/\1/p" $(BOARDS_TXT))
-# get the AVRDUDE_PROGRAMMER value from the $(BOARD).upload.protocol variable. For the atmega328 board this is stk500
-AVRDUDE_PROGRAMMER:=$(shell sed -n -e "s/$(BOARD).upload.protocol=\(.*\)/\1/p" $(BOARDS_TXT))
-# use stk500v1, because stk500 will default to stk500v2
-#AVRDUDE_PROGRAMMER:=stk500v1
 
 #=== identify user files ===
 PDESRC:=$(shell ls *.pde)
 TARGETNAME=$(basename $(PDESRC))
 
 CDIRS:=$(EXTRA_DIRS) $(addsuffix utility/,$(EXTRA_DIRS))
-CDIRS:=*.c utility/*.c $(U8G_PATH)*.c $(U8G_FONT_PATH)*.c $(addsuffix *.c,$(CDIRS)) $(ARDUINO_PATH)hardware/arduino/cores/arduino/*.c
+CDIRS:=*.c utility/*.c $(U8G_PATH)*.c $(U8G_FONT_PATH)*.c $(addsuffix *.c,$(CDIRS)) $(ARDUINO_PATH)hardware/arduino/sam/cores/arduino/*.c
 CSRC:=$(shell ls $(CDIRS) 2>/dev/null)
 
 CCSRC:=$(shell ls *.cc 2>/dev/null)
 
 CPPDIRS:=$(EXTRA_DIRS) $(addsuffix utility/,$(EXTRA_DIRS))
-CPPDIRS:=*.cpp utility/*.cpp $(addsuffix *.cpp,$(CPPDIRS)) $(U8G_CPP_PATH)/*.cpp $(ARDUINO_PATH)hardware/arduino/cores/arduino/*.cpp 
+CPPDIRS:=*.cpp utility/*.cpp $(addsuffix *.cpp,$(CPPDIRS)) $(U8G_CPP_PATH)/*.cpp $(ARDUINO_PATH)hardware/arduino/sam/cores/arduino/*.cpp $(ARDUINO_PATH)hardware/arduino/sam/variants/$(VARIANT)/*.cpp
 CPPSRC:=$(shell ls $(CPPDIRS) 2>/dev/null)
 
 #=== build internal variables ===
@@ -126,37 +122,44 @@ LIBNAME:=$(TMPDIRPATH)$(TARGETNAME).a
 ELFNAME:=$(TMPDIRPATH)$(TARGETNAME).elf
 HEXNAME:=$(TMPDIRPATH)$(TARGETNAME).hex
 
-AVRDUDE_FLAGS = -V -F
-AVRDUDE_FLAGS += -C $(ARDUINO_PATH)/hardware/tools/avrdude.conf 
-AVRDUDE_FLAGS += -p $(MCU)
-AVRDUDE_FLAGS += -P $(AVRDUDE_PORT)
-AVRDUDE_FLAGS += -c $(AVRDUDE_PROGRAMMER) 
-AVRDUDE_FLAGS += -b $(AVRDUDE_UPLOAD_RATE)
-AVRDUDE_FLAGS += -U flash:w:$(HEXNAME)
+# bossac --port=ttyACM0 -U false -e -w -v -b /tmp/build3125761901550223244.tmp/Blink.cpp.bin -R
 
-AVRDUDE = $(AVRDUDE_PATH)avrdude
+
+#BOSSAC_FLAGS = --port=$(PORT) -U false -e -w -v -b $(HEXNAME) -R
+# --port does not work
+BOSSAC_FLAGS = -U false -e -w -v -b $(HEXNAME) -R
+
+BOSSAC = $(BOSSAC_PATH)bossac
 
 #=== predefined variable override ===
 # use "make -p -f/dev/null" to see the default rules and definitions
 
+
 # Build C and C++ flags. Include path information must be placed here
-COMMON_FLAGS = -DF_CPU=$(F_CPU) -mmcu=$(MCU) $(DEFS) -DARDUINO=152
-COMMON_FLAGS += -D__SAM3X8E__ -mthumb -DUSB_PID=0x03e -DUSB_VID=0x2341 -DUSBCON
-# COMMON_FLAGS += -gdwarf-2
-COMMON_FLAGS += -Os
+COMMON_FLAGS = -DF_CPU=$(F_CPU) -mcpu=$(MCU) $(DEFS) -DARDUINO=152
+COMMON_FLAGS += -D__SAM3X8E__ -mthumb -DUSB_PID=0x03e -DUSB_VID=0x2341
+#COMMON_FLAGS += -DUSBCON
+COMMON_FLAGS += -Os -w -ffunction-sections -fdata-sections -Wl,--gc-sections 
+#COMMON_FLAGS += -nostdlib 
+COMMON_FLAGS += --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -Dprintf=iprintf 
 COMMON_FLAGS += -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 COMMON_FLAGS += -I. 
+COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/sam/system/libsam
+COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/sam/system/CMSIS/CMSIS/Include/
+COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/sam/system/CMSIS/Device/ATMEL/
 COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/sam/cores/arduino
 COMMON_FLAGS += -I$(ARDUINO_PATH)hardware/arduino/sam/variants/$(VARIANT)
 COMMON_FLAGS += -I. -I$(U8G_PATH) -I$(U8G_CPP_PATH)
 COMMON_FLAGS += $(addprefix -I,$(EXTRA_DIRS))
-COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
-COMMON_FLAGS += -Wl,--Map=output.map
-COMMON_FLAGS += -Wl,--relax
-COMMON_FLAGS += -mcall-prologues
+#COMMON_FLAGS += 
+#COMMON_FLAGS += -Wl,--relax
 
 CFLAGS = $(COMMON_FLAGS) -std=gnu99 -Wstrict-prototypes  
 CXXFLAGS = $(COMMON_FLAGS) 
+
+SAMLDFLAGS =  -T $(LDSCRIPT) -Wl,--Map=output.map
+SAMLDFLAGS +=  -lm -lgcc -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all 
+SAMLDFLAGS +=-Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols 
 
 # Replace standard build tools by avr tools
 CC = $(AVRTOOLSPATH)arm-none-eabi-gcc
@@ -199,10 +202,10 @@ $(TMPDIRPATH)%.dis: $(TMPDIRPATH)%.o
 .SUFFIXES: .elf .hex .pde
 
 .elf.hex:
-	@$(OBJCOPY) -O ihex -R .eeprom $< $@
+	@$(OBJCOPY) -O binary $< $@
 	
 $(TMPDIRPATH)%.cpp: %.pde
-	@cat $(ARDUINO_PATH)hardware/arduino/cores/arduino/main.cpp > $@
+	@cat $(ARDUINO_PATH)hardware/arduino/sam/cores/arduino/main.cpp > $@
 	@cat $< >> $@
 	@echo >> $@
 	@echo 'extern "C" void __cxa_pure_virtual() { while (1); }' >> $@
@@ -213,7 +216,7 @@ all: tmpdir $(HEXNAME) assemblersource showsize
 	ls -al $(HEXNAME) $(ELFNAME)
 
 $(ELFNAME): $(LIBNAME)($(addprefix $(TMPDIRPATH),$(OBJFILES))) 
-	$(LINK.o) $(COMMON_FLAGS) $(LIBNAME) $(LOADLIBES) $(LDLIBS) -o $@
+	$(LINK.o) $(COMMON_FLAGS) $(SAMLDFLAGS) -Wl,--start-group $(LIBNAME) $(LOADLIBES) $(LDLIBS) $(SYSLIB) -Wl,--end-group -o $@
 
 $(LIBNAME)(): $(addprefix $(TMPDIRPATH),$(OBJFILES))
 
@@ -241,11 +244,11 @@ clean:
 
 # Program the device.  
 # step 1: reset the arduino board with the stty command
-# step 2: user avrdude to upload the software
+# step 2: use bossac to upload the software
 .PHONY: upload
 upload: $(HEXNAME)
-	stty -F $(AVRDUDE_PORT) hupcl
-	$(AVRDUDE) $(AVRDUDE_FLAGS)
+	stty -F $(PORT) cs8 1200 hupcl
+	$(BOSSAC) $(BOSSAC_FLAGS)
 
 
 # === dependency handling ===
