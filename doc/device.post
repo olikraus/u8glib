@@ -1,8 +1,9 @@
 
  * Currently unsupported
-  * T6963 with AVR, Chipkit (PIC32) and Arduino Due
-  * HW SPI with Chipkit (PIC32) and Arduino Due
-  * I2C with Chipkit (PIC32) and Arduino Due
+  * T6963 not supported by AVR, Chipkit (PIC32) and Arduino Due
+  * HW SPI not supported by Chipkit (PIC32) and Arduino Due
+  * I2C not supported by Chipkit (PIC32) and Arduino Due
+  * SBN1661/SED1520 not supported by AVR and Arduino Due
 
  * Mode
   * BW: Black and white mode, one bit per pixel.
