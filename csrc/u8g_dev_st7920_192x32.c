@@ -38,7 +38,7 @@
 
 #define WIDTH 192
 #define HEIGHT 32
-#define PAGE_HEIGHT 8
+#define PAGE_HEIGHT 32
 
 
 /* init sequence from https://github.com/adafruit/ST7565-LCD/blob/master/ST7565/ST7565.cpp */
@@ -99,8 +99,54 @@ uint8_t u8g_dev_st7920_192x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
   return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
 }
 
+uint8_t u8g_dev_st7920_192x32_4x_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_InitCom(u8g, dev);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7920_192x32_init_seq);
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        uint8_t y, i;
+        uint8_t *ptr;
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        
+        u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
+        u8g_SetChipSelect(u8g, dev, 1);
+        y = pb->p.page_y0;
+        ptr = pb->buf;
+        for( i = 0; i < PAGE_HEIGHT; i ++ )
+        {
+          u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
+          u8g_WriteByte(u8g, dev, 0x03e );      /* enable extended mode */
+          u8g_WriteByte(u8g, dev, 0x080 | y );      /* y pos  */
+          u8g_WriteByte(u8g, dev, 0x080  );      /* set x pos to 0*/          
+          u8g_SetAddress(u8g, dev, 1);                  /* data mode */
+          u8g_WriteSequence(u8g, dev, WIDTH/8, ptr);
+          ptr += WIDTH/8;
+          y++;
+        }
+        u8g_SetChipSelect(u8g, dev, 0);
+      }
+      break;
+  }
+  return u8g_dev_pb32h1_base_fn(u8g, dev, msg, arg);
+}
+
+
 U8G_PB_DEV(u8g_dev_st7920_192x32_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, U8G_COM_ST7920_SW_SPI);
 U8G_PB_DEV(u8g_dev_st7920_192x32_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, U8G_COM_ST7920_HW_SPI);
 U8G_PB_DEV(u8g_dev_st7920_192x32_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, U8G_COM_FAST_PARALLEL);
 
+
+#define QWIDTH (WIDTH*4)
+uint8_t u8g_dev_st7920_192x32_4x_buf[QWIDTH] U8G_NOCOMMON ; 
+u8g_pb_t u8g_dev_st7920_192x32_4x_pb = { {32, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_st7920_192x32_4x_buf}; 
+u8g_dev_t u8g_dev_st7920_192x32_4x_sw_spi = { u8g_dev_st7920_192x32_4x_fn, &u8g_dev_st7920_192x32_4x_pb, U8G_COM_ST7920_SW_SPI };
+u8g_dev_t u8g_dev_st7920_192x32_4x_hw_spi = { u8g_dev_st7920_192x32_4x_fn, &u8g_dev_st7920_192x32_4x_pb, U8G_COM_ST7920_HW_SPI };
+u8g_dev_t u8g_dev_st7920_192x32_4x_8bit = { u8g_dev_st7920_192x32_4x_fn, &u8g_dev_st7920_192x32_4x_pb, U8G_COM_FAST_PARALLEL };
 

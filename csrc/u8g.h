@@ -210,6 +210,10 @@ extern u8g_dev_t u8g_dev_st7920_192x32_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_192x32_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_192x32_8bit;
 
+extern u8g_dev_t u8g_dev_st7920_192x32_4x_sw_spi;
+extern u8g_dev_t u8g_dev_st7920_192x32_4x_hw_spi;
+extern u8g_dev_t u8g_dev_st7920_192x32_4x_8bit;
+
 /* CrystalFontz CFAG20232 */
 extern u8g_dev_t u8g_dev_st7920_202x32_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_202x32_hw_spi;
@@ -680,6 +684,10 @@ uint8_t u8g_dev_pb8h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 
 /* u8g_pb16h1.c */
 uint8_t u8g_dev_pb16h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+
+/* u8g_pb32h1.c */
+uint8_t u8g_dev_pb32h1_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+
 
 /* u8g_pb8h2.c 8 pixel rows, byte has horzontal orientation */
 uint8_t u8g_dev_pb8h2_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);

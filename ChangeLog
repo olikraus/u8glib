@@ -103,6 +103,8 @@ u8glib ChangeLog
   * Bugfix: ST7920 parallel mode
 2013-xx-xx	v1.11	  Oliver Kraus <olikraus@gmail.com>
   * Support for T6963
+  * Support for Arduino Due
+  * Sleep Mode
   
   
   
