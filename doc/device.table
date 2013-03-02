@@ -696,7 +696,7 @@ SW SPI
 :Device
 <tt>u8g_dev_st7920_128x64_sw_spi</tt>
 :C++ Constructor
-<tt>U8GLIB_ST7920_128X64(sck, mosi, cs, a0 [, reset])</tt>
+<tt>U8GLIB_ST7920_128X64_1X(sck, mosi, cs [, reset])</tt>
 :Arduino
 verified
 :Arduino Due
@@ -706,12 +706,15 @@ impl.
 :AVR
 impl.
 ::
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64(sck, mosi, cs, a0 [, reset])</tt> (OLD)
+::
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_st7920_128x64_hw_spi</tt>
 :C++ Constructor
-<tt>U8GLIB_ST7920_128X64(cs, a0 [, reset])</tt>
+<tt>U8GLIB_ST7920_128X64_1X(cs [, reset])</tt>
 :Arduino
 impl. v1.09
 :Arduino Due
@@ -720,12 +723,16 @@ n.a.
 n.a.
 :AVR
 impl. v1.09
+::
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64(cs, a0 [, reset])</tt> (OLD)
+::
 :Com
 8 Bit
 :Device
 <tt>u8g_dev_st7920_128x64_8bit</tt>
 :C++ Constructor
-<tt>U8GLIB_ST7920_128X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+<tt>U8GLIB_ST7920_128X64_1X(d0, d1, d2, d3, d4, d5, d6, d7, en, di, rw [, reset])</tt>
 :Arduino
 impl.
 :Arduino Due
@@ -734,6 +741,9 @@ impl. v1.11
 n.a.
 :AVR
 impl.
+::
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt> (OLD)
 ::
 :Display/Size
 192x32
@@ -748,7 +758,7 @@ SW SPI
 :Device
 <tt>u8g_dev_st7920_192x32_sw_spi</tt>
 :C++ Constructor
-<tt>U8GLIB_ST7920_192X32(sck, mosi, cs, a0 [, reset])</tt>
+<tt>U8GLIB_ST7920_192X32_1X(sck, mosi, cs [, reset])</tt>
 :Arduino
 verified
 :Arduino Due
@@ -758,12 +768,15 @@ impl.
 :AVR
 verified
 ::
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32(sck, mosi, cs, a0 [, reset])</tt> (OLD)
+::
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_st7920_192x32_hw_spi</tt>
 :C++ Constructor
-<tt>U8GLIB_ST7920_192X32(cs, a0 [, reset])</tt>
+<tt>U8GLIB_ST7920_192X32_1X(cs [, reset])</tt>
 :Arduino
 impl. v1.09
 :Arduino Due
@@ -772,12 +785,16 @@ n.a.
 n.a.
 :AVR
 impl. v1.09
+::
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32(cs, a0 [, reset])</tt> (OLD)
+::
 :Com
 8 Bit
 :Device
 <tt>u8g_dev_st7920_192x32_8bit</tt>
 :C++ Constructor
-<tt>U8GLIB_ST7920_192X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+<tt>U8GLIB_ST7920_192X32_1X(d0, d1, d2, d3, d4, d5, d6, d7, en, di, rw [, reset])</tt>
 :Arduino
 verified
 :Arduino Due
@@ -786,6 +803,9 @@ impl. v1.11
 n.a.
 :AVR
 impl.
+::
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt> (OLD)
 ::
 :Display/Size
 202x32
@@ -800,7 +820,7 @@ SW SPI
 :Device
 <tt>u8g_dev_st7920_202x32_sw_spi</tt>
 :C++ Constructor
-<tt>U8GLIB_ST7920_202X32(sck, mosi, cs, a0 [, reset])</tt>
+<tt>U8GLIB_ST7920_202X32_1X(sck, mosi, cs [, reset])</tt>
 :Arduino
 impl. v1.08
 :Arduino Due
@@ -809,12 +829,16 @@ impl. v1.11
 impl. v1.08
 :AVR
 impl. v1.08
+::
+:C++ Constructor
+<tt>U8GLIB_ST7920_202X32(sck, mosi, cs, a0 [, reset])</tt> (OLD)
+::
 :Com
 HW SPI
 :Device
 <tt>u8g_dev_st7920_202x32_hw_spi</tt>
 :C++ Constructor
-<tt>U8GLIB_ST7920_202X32(cs, a0 [, reset])</tt>
+<tt>U8GLIB_ST7920_202X32_1X(cs [, reset])</tt>
 :Arduino
 impl. v1.09
 :Arduino Due
@@ -823,12 +847,16 @@ n.a.
 n.a.
 :AVR
 impl. v1.09
+::
+:C++ Constructor
+<tt>U8GLIB_ST7920_202X32(cs, a0 [, reset])</tt> (OLD)
+::
 :Com
 8 Bit
 :Device
 <tt>u8g_dev_st7920_202x32_8bit</tt>
 :C++ Constructor
-<tt>U8GLIB_ST7920_202X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt>
+<tt>U8GLIB_ST7920_202X32_1X(d0, d1, d2, d3, d4, d5, d6, d7, en, di, rw [, reset])</tt>
 :Arduino
 impl. v1.08
 :Arduino Due
@@ -837,6 +865,9 @@ impl. v1.11
 impl. v1.08
 :AVR
 impl. v1.08
+::
+:C++ Constructor
+<tt>U8GLIB_ST7920_202X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt> (OLD)
 ::
 :Controller
 UC1610

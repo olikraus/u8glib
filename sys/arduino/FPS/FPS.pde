@@ -54,7 +54,6 @@
   NHD27OLED_2X_BW, SW SPI: FPS: Clip=18.0 Box=5.8  @=7.9
 
   1 okt 2012
-  ST7920_192X32, SPI:    FPS: Box=   @=                
   ST7920_192X32, 8Bit:   FPS: Box=7.2   @=10.0                
   DOGM128 SW SPI:         FPS: Box=5.2   @=6.6  Pix=2.6               
   DOGM128 HW SPI:         FPS: Clip=33.2 Box=5.5   @=7.1
@@ -62,6 +61,14 @@
   DOGXL160 HW SPI:         FPS: Box=1.8   @=2.2
 
   DOGXL160 GR SW SPI:         FPS: Box=1.1   @=1.3
+
+  1 Mar 2013
+  ST7920_192X32_1X, SPI:    FPS: Clip=10.3 Box=5.5  @=7.2 Pix=3.9
+  ST7920_192X32_4X, SPI:    FPS: Clip=10.9 Box=6.7  @=8.8 Pix=7.4
+  ST7920_192X32_1X, 8Bit:    FPS: Clip=14.2 Box=6.1  @=8.4 Pix=4.2
+  ST7920_192X32_4X, 8Bit:    FPS: Clip=14.2 Box=7.8  @=10.7 Pix=8.7
+  ST7920_192X32_1X, HW SPI:    FPS: Clip=14.2 Box=6.3  @=8.7 Pix=4.3
+  ST7920_192X32_4X, HW SPI:    FPS: Clip=15.3 Box=8.0  @=11.2 Pix=9.0
 
 */
 
@@ -82,12 +89,20 @@
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_ST7920_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
-//U8GLIB_ST7920_128X64 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
-//U8GLIB_ST7920_192X32 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
-//U8GLIB_ST7920_192X32 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
-//U8GLIB_ST7920_192X32 u8g(13, 11, 10, U8G_PIN_NONE);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10
-//U8GLIB_ST7920_192X32 u8g(10, U8G_PIN_NONE);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10, HW SPI
+//U8GLIB_ST7920_128X64_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_128X64_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_128X64_1X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_128X64_4X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_192X32_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_192X32_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_192X32_1X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_192X32_4X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_192X32_1X u8g(13, 11, 10);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10
+U8GLIB_ST7920_192X32_1X u8g(10);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10, HW SPI
+//U8GLIB_ST7920_202X32_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_202X32_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_202X32_1X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_202X32_4X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
 //U8GLIB_LM6059 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_LM6063 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGXL160_BW u8g(10, 9);            // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9

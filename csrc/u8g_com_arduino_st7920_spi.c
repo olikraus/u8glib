@@ -205,6 +205,7 @@ static void u8g_com_arduino_st7920_write_byte(uint8_t rs, uint8_t val)
   
   for( i = 0; i < 4; i++ )
     u8g_10MicroDelay();
+    
 }
 
 

@@ -38,7 +38,6 @@
 
 #define WIDTH 192
 #define HEIGHT 32
-#define PAGE_HEIGHT 32
 
 
 /* init sequence from https://github.com/adafruit/ST7565-LCD/blob/master/ST7565/ST7565.cpp */
@@ -119,7 +118,7 @@ uint8_t u8g_dev_st7920_192x32_4x_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, voi
         u8g_SetChipSelect(u8g, dev, 1);
         y = pb->p.page_y0;
         ptr = pb->buf;
-        for( i = 0; i < PAGE_HEIGHT; i ++ )
+        for( i = 0; i < 32; i ++ )
         {
           u8g_SetAddress(u8g, dev, 0);           /* cmd mode */
           u8g_WriteByte(u8g, dev, 0x03e );      /* enable extended mode */
@@ -138,9 +137,9 @@ uint8_t u8g_dev_st7920_192x32_4x_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, voi
 }
 
 
-U8G_PB_DEV(u8g_dev_st7920_192x32_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, U8G_COM_ST7920_SW_SPI);
-U8G_PB_DEV(u8g_dev_st7920_192x32_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, U8G_COM_ST7920_HW_SPI);
-U8G_PB_DEV(u8g_dev_st7920_192x32_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7920_192x32_fn, U8G_COM_FAST_PARALLEL);
+U8G_PB_DEV(u8g_dev_st7920_192x32_sw_spi, WIDTH, HEIGHT, 8, u8g_dev_st7920_192x32_fn, U8G_COM_ST7920_SW_SPI);
+U8G_PB_DEV(u8g_dev_st7920_192x32_hw_spi, WIDTH, HEIGHT, 8, u8g_dev_st7920_192x32_fn, U8G_COM_ST7920_HW_SPI);
+U8G_PB_DEV(u8g_dev_st7920_192x32_8bit, WIDTH, HEIGHT, 8, u8g_dev_st7920_192x32_fn, U8G_COM_FAST_PARALLEL);
 
 
 #define QWIDTH (WIDTH*4)

@@ -55,12 +55,20 @@
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM128 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_ST7920_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
-//U8GLIB_ST7920_128X64 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
-//U8GLIB_ST7920_192X32 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, U8G_PIN_NONE, U8G_PIN_NONE, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
-//U8GLIB_ST7920_192X32 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
-//U8GLIB_ST7920_192X32 u8g(13, 11, 10, U8G_PIN_NONE);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10
-//U8GLIB_ST7920_192X32 u8g(10, U8G_PIN_NONE);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10, HW SPI
+//U8GLIB_ST7920_128X64_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_128X64_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_128X64_1X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_128X64_4X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_192X32_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_192X32_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_192X32_1X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_192X32_4X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_192X32_1X u8g(13, 11, 10);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10
+//U8GLIB_ST7920_192X32_4X u8g(10);                  // SPI Com: SCK = en = 13, MOSI = rw = 11, CS = di = 10, HW SPI
+//U8GLIB_ST7920_202X32_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_202X32_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
+//U8GLIB_ST7920_202X32_1X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
+//U8GLIB_ST7920_202X32_4X u8g(18, 16, 17);                  				// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
 //U8GLIB_LM6059 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_LM6063 u8g(13, 11, 10, 9);                    // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGXL160_BW u8g(10, 9);            // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
