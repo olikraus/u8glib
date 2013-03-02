@@ -181,7 +181,7 @@ I2C
 :Device
 <tt>u8g_dev_ssd1327_96x96_gr_i2c</tt>
 :C++ Constructor
-<tt>U8GLIB_SSD1327_96X96_GR()</tt>
+<tt>U8GLIB_SSD1327_96X96_GR(U8G_I2C_OPT_NONE)</tt>
 :Arduino
 verified
 :Arduino Due
@@ -228,7 +228,7 @@ I2C
 :Device
 <tt>u8g_dev_ssd1327_96x96_2x_gr_i2c</tt>
 :C++ Constructor
-<tt>U8GLIB_SSD1327_96X96_2X_GR()</tt>
+<tt>U8GLIB_SSD1327_96X96_2X_GR(U8G_I2C_OPT_NONE)</tt>
 :Arduino
 impl.
 :Arduino Due
@@ -262,6 +262,7 @@ impl.
 impl.
 :AVR
 impl.
+::
 :Com
 HW SPI
 :Device
@@ -276,14 +277,68 @@ n.a.
 n.a.
 :AVR
 impl.
+::
 :Com
 I2C
 :Device
 <tt>u8g_dev_ssd1306_128x64_i2c</tt>
 :C++ Constructor
-<tt>U8GLIB_SSD1306_128X64()</tt>
+<tt>U8GLIB_SSD1306_128X64(U8G_I2C_OPT_NONE)</tt>
 :Arduino
 verified
+:Arduino Due
+n.a.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Display/Size
+128x32
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+128 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1306_128x32_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1306_128X32(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Arduino Due
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1306_128x32_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1306_128X32(cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Arduino Due
+n.a.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Com
+I2C
+:Device
+<tt>u8g_dev_ssd1306_128x32_i2c</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1306_128X32(U8G_I2C_OPT_NONE)</tt>
+:Arduino
+impl.
 :Arduino Due
 n.a.
 :Chipkit
@@ -334,7 +389,7 @@ I2C
 :Device
 <tt>u8g_dev_ssd1309_128x64_i2c</tt>
 :C++ Constructor
-<tt>U8GLIB_SSD1309_128X64()</tt>
+<tt>U8GLIB_SSD1309_128X64(U8G_I2C_OPT_NONE)</tt>
 :Arduino
 impl. (v1.10)
 :Arduino Due
@@ -745,6 +800,37 @@ impl.
 :C++ Constructor
 <tt>U8GLIB_ST7920_128X64(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt> (OLD)
 ::
+:Page Size
+512 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7920_128x64_4x_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64_4X(sck, mosi, cs [, reset])</tt>
+:Arduino
+impl.  v1.11
+:Arduino Due
+impl. v1.11
+:Chipkit
+impl. v1.11
+:AVR
+impl. v1.11
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7920_128x64_4x_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64_4X(cs [, reset])</tt>
+::
+:Com
+8 Bit
+:Device
+<tt>u8g_dev_st7920_128x64_4x_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_128X64_4X(d0, d1, d2, d3, d4, d5, d6, d7, en, di, rw [, reset])</tt>
+::
 :Display/Size
 192x32
 :Mode
@@ -807,6 +893,37 @@ impl.
 :C++ Constructor
 <tt>U8GLIB_ST7920_192X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt> (OLD)
 ::
+:Page Size
+768 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7920_192x32_4x_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32_4X(sck, mosi, cs [, reset])</tt>
+:Arduino
+impl.  v1.11
+:Arduino Due
+impl. v1.11
+:Chipkit
+impl. v1.11
+:AVR
+impl. v1.11
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7920_192x32_4x_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32_4X(cs [, reset])</tt>
+::
+:Com
+8 Bit
+:Device
+<tt>u8g_dev_st7920_192x32_4x_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_192X32_4X(d0, d1, d2, d3, d4, d5, d6, d7, en, di, rw [, reset])</tt>
+::
 :Display/Size
 202x32
 :Mode
@@ -868,6 +985,37 @@ impl. v1.08
 ::
 :C++ Constructor
 <tt>U8GLIB_ST7920_202X32(d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, cs2, di, rw [, reset])</tt> (OLD)
+::
+:Page Size
+808 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_st7920_202x32_4x_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_202X32_4X(sck, mosi, cs [, reset])</tt>
+:Arduino
+impl.  v1.11
+:Arduino Due
+impl. v1.11
+:Chipkit
+impl. v1.11
+:AVR
+impl. v1.11
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_st7920_202x32_4x_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_202X32_4X(cs [, reset])</tt>
+::
+:Com
+8 Bit
+:Device
+<tt>u8g_dev_st7920_202x32_4x_8bit</tt>
+:C++ Constructor
+<tt>U8GLIB_ST7920_202X32_4X(d0, d1, d2, d3, d4, d5, d6, d7, en, di, rw [, reset])</tt>
 ::
 :Controller
 UC1610
