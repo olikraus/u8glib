@@ -118,16 +118,25 @@ uint8_t tp_bottom = A2;
 
 */
 
+#define TPD_OPEN 0
+#define TPD_PRESSED 1
+#define TPD_FREEZE 2
 
 /* touch panel dimension */
 struct _tpd_struct
 {
   uint8_t raw;		/* input value */
+  uint8_t delta;		/* delta of the last raw value */
+  uint8_t curr;		/* current valid position */
+  uint8_t state;		/* state machine */
   
+  /* calibration values */
   uint8_t start;
   uint8_t end;		
   uint8_t open;		/* value, when not touched/pressed */
+  uint8_t mt;		/* move threshold */
   
+  /* user values */
   uint8_t range;	/* result will have range fron 0..range  (including the value of range) */
   
   uint8_t result;	/* output value: position [0...range] */
@@ -144,23 +153,11 @@ typedef struct _tp_struct tp_struct;
 
 tp_struct tp;
 
-static uint8_t tpd_delta(uint8_t a, uint8_t b)
-{
-  if ( a < b )
-    return b-a;
-  return a-b;
-}
 
-uint8_t tpd_is_pressed_sub(uint8_t raw, uint8_t cal_untouched, uint8_t cal)
-{
-  if ( tpd_delta(raw, cal_untouched)  < tpd_delta(raw, cal) )
-    return 0;
-  return 1;
-}
-
-uint8_t tpd_IsPressed(tpd_struct *d)
+uint8_t tpd_is_active_area(tpd_struct *d)
 {
   uint8_t start, end;
+  
   if  ( d->start < d->end )
   {
     start = d->start;
@@ -195,6 +192,117 @@ uint8_t tpd_IsPressed(tpd_struct *d)
   }
   return 1;		/*default: assume touch panel pressed */
 }
+
+static uint8_t tpd_delta(uint8_t a, uint8_t b)
+{
+  if ( a < b )
+    return b-a;
+  return a-b;
+}
+
+static void tpd_next_step(tpd_struct *d, uint8_t raw)
+{
+  uint8_t p = tpd_is_active_area(d);
+  d->delta = tpd_delta(d->raw, raw);
+  
+  switch(d->state)
+  {
+    case TPD_OPEN:
+      if ( p == 0 )
+      {
+	d->curr = d->raw;    
+      }
+      else
+      {
+	  /* always go to FREEZE state first */
+	  d->state = TPD_FREEZE;
+      }
+      break;
+    case TPD_PRESSED:
+      if ( p == 0 )
+      {
+	d->state = TPD_OPEN;
+	d->curr = d->raw;
+      }
+      else
+      {
+	if ( d->delta > d->mt )
+	{
+	  d->state = TPD_FREEZE;
+	}
+	else
+	{
+	  /* stay in PRESSED state */
+	  d->curr = d->raw;
+	}
+      }
+      break;
+    case TPD_FREEZE:
+      if ( p == 0 )
+      {
+	d->state = TPD_OPEN;
+	d->curr = d->raw;
+      }
+      else
+      {
+	if ( d->delta > d->mt )
+	{
+	  /* stay in FREEZE state */
+	}
+	else
+	{
+	  d->state = TPD_PRESSED;
+	  d->curr = d->raw;
+	}
+      }
+      break;
+  }
+  
+  if ( d->state == TPD_OPEN )
+    d->is_pressed = 0;
+  else
+    d->is_pressed = 1;
+}
+
+uint8_t tpd_IsPressed(tpd_struct *d)
+{
+  uint8_t start, end;
+  
+  if  ( d->start < d->end )
+  {
+    start = d->start;
+    end = d->end;
+  }
+  else
+  {
+    end = d->start;
+    start = d->end;
+  }
+  
+  
+  if ( d->open < start )
+  {
+    if ( d->raw < start )	/* it is pressed if "raw >= start", so continue to check otherwise */
+    {
+      if ( d->raw <= d->open )
+	return 0;	/* not pressed */
+      if ( (d->raw - d->open) < (start-d->raw) )
+	return 0;
+    }
+  }
+  else if ( d->open > end )
+  {
+    if ( d->raw > end)	/* it is pressed if "raw >= start", so continue to check otherwise */
+    {
+      if ( d->raw >= d->open )
+	return 0;	/* not pressed */
+      if ( (d->open - d->raw) < (d->raw - end) )
+	return 0;
+    }
+  }
+  return 1;		/*default: assume touch panel pressed */
+}
+
 
 
 /* map raw value to 0...range */
