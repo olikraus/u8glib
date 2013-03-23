@@ -103,24 +103,10 @@ uint8_t tp_top = A4;
 uint8_t tp_bottom = A2;
 
 
-/*
-  stati: OPEN, PRESSED, FREEZE
-
-
-  stabil: schwankung des raw wertes innerhalb eines deltas 
-  wenn is_pressed == 0
-    wenn stabil dann is_pressed = 1
-    
-  wenn is_pressed == 1
-      wenn nicht stabil, dann den letzten wert einfrieren, is_pressed bleibt 1
-      wenn die is_pressed berechung 0 liefert, dann is_pressed = 0
-    
-
-*/
-
 #define TPD_OPEN 0
 #define TPD_PRESSED 1
-#define TPD_FREEZE 2
+#define TPD_OPEN_TO_PRESSED 2
+#define TPD_PRESSED_TO_OPEN 3
 
 /* touch panel dimension */
 struct _tpd_struct
@@ -130,11 +116,13 @@ struct _tpd_struct
   uint8_t curr;		/* current valid position */
   uint8_t state;		/* state machine */
   
-  /* calibration values */
+  /* calibration values (set during init phase) */
   uint8_t start;
   uint8_t end;		
   uint8_t open;		/* value, when not touched/pressed */
-  uint8_t mt;		/* move threshold */
+  
+  /* calibration values (must be predefined) */
+  uint8_t mt;		/* move and open threshold */
   
   /* user values */
   uint8_t range;	/* result will have range fron 0..range  (including the value of range) */
@@ -144,14 +132,50 @@ struct _tpd_struct
 };
 typedef struct _tpd_struct tpd_struct;
 
+
+#define TP_STATE_OPEN_DETECT 0
+#define TP_STATE_OPEN_DETECT_1 1
+#define TP_STATE_START_PRESS 2
+#define TP_STATE_WAIT_START_OPEN 3
+#define TP_STATE_END_PRESS 4
+#define TP_STATE_WAIT_END_OPEN 5
+#define TP_STATE_NORMAL 6
+
+#define TP_DISPLAY_DO_NOT_TOUCH 0
+#define TP_DISPLAY_PRESS_AND_RELEASE_EDGE 1
+#define TP_DISPLAY_PRESS_AND_RELEASE_OPPOSITE_EDGE 2
+#define TP_DISPLAY_OK 3
+
 struct _tp_struct
 {
   tpd_struct x;
   tpd_struct y;
+  uint8_t state;
+  uint8_t is_pressed; /* combination of x.is_pressed && y.is_pressed */
 };
 typedef struct _tp_struct tp_struct;
 
 tp_struct tp;
+
+
+uint8_t tp_GetDisplayState(tp_struct *tp)
+{
+  switch(tp->state)
+  {
+    case TP_STATE_OPEN_DETECT:
+    case TP_STATE_OPEN_DETECT_1:
+      return TP_DISPLAY_DO_NOT_TOUCH;
+    case TP_STATE_START_PRESS:
+    case TP_STATE_WAIT_START_OPEN:
+      return TP_DISPLAY_PRESS_AND_RELEASE_EDGE;
+    case TP_STATE_END_PRESS:
+    case TP_STATE_WAIT_END_OPEN:
+      return TP_DISPLAY_PRESS_AND_RELEASE_OPPOSITE_EDGE;
+    case TP_STATE_NORMAL:
+    default:
+      return TP_DISPLAY_OK;
+  }
+}
 
 
 uint8_t tpd_is_active_area(tpd_struct *d)
@@ -168,8 +192,7 @@ uint8_t tpd_is_active_area(tpd_struct *d)
     end = d->start;
     start = d->end;
   }
-  
-  
+    
   if ( d->open < start )
   {
     if ( d->raw < start )	/* it is pressed if "raw >= start", so continue to check otherwise */
@@ -202,24 +225,25 @@ static uint8_t tpd_delta(uint8_t a, uint8_t b)
 
 static void tpd_next_step(tpd_struct *d, uint8_t raw)
 {
-  uint8_t p = tpd_is_active_area(d);
+  uint8_t is_pressed;
   d->delta = tpd_delta(d->raw, raw);
+  d->raw = raw;
+  is_pressed = tpd_is_active_area(d);
   
   switch(d->state)
   {
     case TPD_OPEN:
-      if ( p == 0 )
+      if ( is_pressed == 0 )
       {
 	d->curr = d->raw;    
       }
       else
       {
-	  /* always go to FREEZE state first */
-	  d->state = TPD_FREEZE;
+	d->state = TPD_OPEN_TO_PRESSED;
       }
       break;
     case TPD_PRESSED:
-      if ( p == 0 )
+      if ( is_pressed == 0 )
       {
 	d->state = TPD_OPEN;
 	d->curr = d->raw;
@@ -228,7 +252,7 @@ static void tpd_next_step(tpd_struct *d, uint8_t raw)
       {
 	if ( d->delta > d->mt )
 	{
-	  d->state = TPD_FREEZE;
+	  d->state = TPD_PRESSED_TO_OPEN;
 	}
 	else
 	{
@@ -237,8 +261,9 @@ static void tpd_next_step(tpd_struct *d, uint8_t raw)
 	}
       }
       break;
-    case TPD_FREEZE:
-      if ( p == 0 )
+    case TPD_PRESSED_TO_OPEN:
+    case TPD_OPEN_TO_PRESSED:
+      if ( is_pressed == 0 )
       {
 	d->state = TPD_OPEN;
 	d->curr = d->raw;
@@ -247,7 +272,7 @@ static void tpd_next_step(tpd_struct *d, uint8_t raw)
       {
 	if ( d->delta > d->mt )
 	{
-	  /* stay in FREEZE state */
+	  /* stay in current state */
 	}
 	else
 	{
@@ -258,55 +283,41 @@ static void tpd_next_step(tpd_struct *d, uint8_t raw)
       break;
   }
   
-  if ( d->state == TPD_OPEN )
+  if ( d->state == TPD_OPEN || d->state == TPD_OPEN_TO_PRESSED )
     d->is_pressed = 0;
   else
     d->is_pressed = 1;
 }
 
-uint8_t tpd_IsPressed(tpd_struct *d)
+
+static void tpd_do_calibrate(tpd_struct *d)
 {
-  uint8_t start, end;
-  
+  if ( tpd_delta(d->raw, d->open) < d->mt )
+    return;
+  if ( d->state != TPD_PRESSED )
+    return;
+
   if  ( d->start < d->end )
   {
-    start = d->start;
-    end = d->end;
+    if ( d->end < d->raw )
+      d->end = d->raw;
+    if ( d->start > d->raw )
+      d->start = d->raw;
   }
   else
   {
-    end = d->start;
-    start = d->end;
+    if ( d->end > d->raw )
+      d->end = d->raw;
+    if ( d->start < d->raw )
+      d->start = d->raw;
   }
-  
-  
-  if ( d->open < start )
-  {
-    if ( d->raw < start )	/* it is pressed if "raw >= start", so continue to check otherwise */
-    {
-      if ( d->raw <= d->open )
-	return 0;	/* not pressed */
-      if ( (d->raw - d->open) < (start-d->raw) )
-	return 0;
-    }
-  }
-  else if ( d->open > end )
-  {
-    if ( d->raw > end)	/* it is pressed if "raw >= start", so continue to check otherwise */
-    {
-      if ( d->raw >= d->open )
-	return 0;	/* not pressed */
-      if ( (d->open - d->raw) < (d->raw - end) )
-	return 0;
-    }
-  }
-  return 1;		/*default: assume touch panel pressed */
+
 }
 
 
 
-/* map raw value to 0...range */
-void tpd_MapTouchPosition(tpd_struct *d)
+/* map curr value to 0...range (result) */
+void tpd_map_touch_position(tpd_struct *d)
 {
   uint16_t p;
   uint8_t start, end;
@@ -321,19 +332,19 @@ void tpd_MapTouchPosition(tpd_struct *d)
     start = d->end;
   }
   
-  if ( d->raw <= start )
+  if ( d->curr <= start )
   {
     d->result = 0;
     return;
   }
   
-  if ( d->raw >= end )
+  if ( d->curr >= end )
   {
     d->result = d->range;
     return;
   }
   
-  p = d->raw;
+  p = d->curr;
   p -= start;
   p *= d->range;
   end -= start;
@@ -342,51 +353,95 @@ void tpd_MapTouchPosition(tpd_struct *d)
   d->result = p;
 }
 
-void tp_Init(tp_struct *tp)
+
+void tp_Init(tp_struct *tp, uint8_t width, uint8_t height)
 {
-  tp->x.start = 61;
-  tp->x.end = 199;
-  tp->x.open = 255;
-  tp->x.range = 127;
-  tp->y.start = 156;
-  tp->y.end = 105;
-  tp->y.open = 255;
-  tp->y.range = 63;
+  tp->x.start = 0;
+  tp->x.end = 0;
+  tp->x.open = 0;
+  tp->x.range = width-1;
+  tp->x.mt = width/8;
+  tp->x.state = TPD_OPEN;
+  
+  tp->y.start = 0;
+  tp->y.end = 0;
+  tp->y.open = 0;
+  tp->y.range = height-1;
+  tp->y.mt = height/8;
+  tp->y.state = TPD_OPEN;
+  
+  tp->state = TP_STATE_OPEN_DETECT;
 }
 
-void tp_Calculate(tp_struct *tp)
+uint8_t tp_IsOpen(tp_struct *tp, uint8_t x, uint8_t y)
 {
-  tpd_MapTouchPosition(&(tp->x));
-  tp->x.is_pressed = tpd_IsPressed(&(tp->x));
-  tpd_MapTouchPosition(&(tp->y));
-  tp->y.is_pressed = tpd_IsPressed(&(tp->y));
+  if ( tpd_delta(tp->x.open, x) < tp->x.mt &&  tpd_delta(tp->y.open, y)  < tp->y.mt )
+    return 1;
+  return 0;
 }
 
 void tp_SetRaw(tp_struct *tp, uint8_t x, uint8_t y)
 {
-  tp->x.raw = x;
-  tp->y.raw = y;
-  tp_Calculate(tp);
+  switch( tp->state )
+  {
+    case TP_STATE_OPEN_DETECT:
+      tp->x.open = x; 
+      tp->y.open = y;
+      tp->state = TP_STATE_OPEN_DETECT_1;
+      break;
+    case TP_STATE_OPEN_DETECT_1:
+      if ( tpd_delta(tp->x.open, x) <= tp->x.mt &&  tpd_delta(tp->y.open, y)  <= tp->y.mt )
+	tp->state = TP_STATE_START_PRESS;
+      tp->x.open = x; 
+      tp->y.open = y;
+      break;
+    case TP_STATE_START_PRESS:
+      if ( tp_IsOpen(tp,x,y) == 0 )
+      {
+	if ( tpd_delta(tp->x.start, x) <= tp->x.mt &&  tpd_delta(tp->y.start, y)  <= tp->y.mt )
+	{
+	  tp->state = TP_STATE_WAIT_START_OPEN;
+	}
+	tp->x.start = x;
+	tp->y.start = y;
+      }
+      break;
+    case TP_STATE_WAIT_START_OPEN:
+      if ( tp_IsOpen(tp,x,y) != 0 )
+	tp->state = TP_STATE_END_PRESS;
+      break;
+    case TP_STATE_END_PRESS:
+      if ( tp_IsOpen(tp,x,y) == 0 )
+      {
+	if ( tpd_delta(tp->x.start, x) > tp->x.mt &&  tpd_delta(tp->y.start, y)  > tp->y.mt )
+	{
+	  if ( tpd_delta(tp->x.end, x) <= tp->x.mt &&  tpd_delta(tp->y.end, y)  <= tp->y.mt )
+	  {
+	    tp->state = TP_STATE_WAIT_END_OPEN;
+	  }
+	  tp->x.end = x;
+	  tp->y.end = y;
+	}
+      }
+      break;
+    case TP_STATE_WAIT_END_OPEN:
+      if ( tp_IsOpen(tp,x,y) != 0 )
+	tp->state = TP_STATE_NORMAL;
+      break;
+    default:
+      tpd_next_step(&(tp->x), x);
+      tpd_map_touch_position(&(tp->x));
+      tpd_do_calibrate(&(tp->x));
+      
+      tpd_next_step(&(tp->y), y);
+      tpd_map_touch_position(&(tp->y));
+      tpd_do_calibrate(&(tp->y));
+      
+      tp->is_pressed = tp->x.is_pressed && tp->y.is_pressed;
+      break;
+  }
 }
 
-
-uint8_t tp_raw_x;
-uint8_t tp_raw_y;
-
-uint8_t tp_cal_x0 = 61;
-uint8_t tp_cal_y0 = 156;
-uint8_t tp_cal_x1 = 199;
-uint8_t tp_cal_y1 = 105;
-uint8_t tp_cal_x_untouched = 255;
-uint8_t tp_cal_y_untouched = 255;
-
-uint8_t tp_x;
-uint8_t tp_y;
-uint8_t is_pressed = 0;
-
-
-
-int cnt = 0;
 
 uint8_t getTouchPos(uint8_t hiPin, uint8_t lowPin, uint8_t sensePin, uint8_t dcPin)
 {
@@ -406,122 +461,57 @@ uint8_t getTouchPos(uint8_t hiPin, uint8_t lowPin, uint8_t sensePin, uint8_t dcP
   return val;
 }
 
-uint8_t tp_delta(uint8_t a, uint8_t b)
-{
-  if ( a < b )
-    return b-a;
-  return a-b;
-}
 
-uint8_t is_pressed_sub(uint8_t raw, uint8_t cal_untouched, uint8_t cal)
+void updateTouchPanel(void)
 {
-  if ( tp_delta(raw, cal_untouched)  < tp_delta(raw, cal) )
-    return 0;
-  return 1;
-}
+  uint8_t tp_raw_x;
+  uint8_t tp_raw_y;
 
-/*
-  returns
-    0: not pressed
-    1: pressed
-    2: error
-*/
-uint8_t isPressed(uint8_t raw, uint8_t cal_untouched, uint8_t cal0, uint8_t cal1)
-{
-  if ( cal0 < cal1 )
-  {
-    if ( cal_untouched > cal1 )
-    {
-      return is_pressed_sub(raw, cal_untouched, cal1 );
-    }
-    else if ( cal_untouched < cal0 )
-    {      
-      return is_pressed_sub(raw, cal_untouched, cal0 );
-    }
-    else
-    {
-      return 2;
-    }
-  }
-  else
-  {
-    if ( cal_untouched > cal0 )
-    {
-      return is_pressed_sub(raw, cal_untouched, cal0 );
-    }
-    else if ( cal_untouched < cal1 )
-    {      
-      return is_pressed_sub(raw, cal_untouched, cal1 );
-    }
-    else
-    {
-      return 2;
-    }
-  }
-}
-
-/* map raw value to 0...range */
-uint8_t mapTouchPos(uint8_t raw, uint8_t cal0, uint8_t cal1, uint8_t range)
-{
-  uint16_t p;
-  if  ( cal0 < cal1 )
-  {
-    if ( raw < cal0 )
-      raw = cal0;
-    if ( raw > cal1 )
-      raw = cal1;
-    raw -= cal0;
-    cal1 -= cal0;
-    p = raw * range;
-    p /= cal1;
-  }
-  else
-  {
-    if ( raw < cal1 )
-      raw = cal1;
-    if ( raw > cal0 )
-      raw = cal0;
-    raw -= cal1;
-    cal0 -= cal1;
-    p = raw * range;
-    p /= cal0;
-  }
-  
-  
-  return p;
-}
-
-void getXY(void)
-{
   tp_raw_x = getTouchPos(tp_right, tp_left, tp_bottom, tp_top);
-  tp_x = mapTouchPos(tp_raw_x, tp_cal_x0, tp_cal_x1, 127 );
   tp_raw_y = getTouchPos(tp_top, tp_bottom, tp_left, tp_right);
-  tp_y = mapTouchPos(tp_raw_y, tp_cal_y0, tp_cal_y1, 63 );
   
-  is_pressed = 1;  
-  if ( isPressed(tp_raw_x, tp_cal_x_untouched, tp_cal_x0, tp_cal_x1) == 0 )
-    is_pressed = 0;
-  if ( isPressed(tp_raw_y, tp_cal_y_untouched, tp_cal_y0, tp_cal_y1) == 0 )
-    is_pressed = 0;
-
-  tp_SetRaw(&tp, tp_raw_x, tp_raw_y);
-  tp_x = tp.x.result;
-  tp_y = tp.y.result;
-  is_pressed = tp.x.is_pressed && tp.y.is_pressed;
-  
+  tp_SetRaw(&tp, tp_raw_x, tp_raw_y);  
 }
 
-
+void center(u8g_uint_t y, const char *str)
+{
+  u8g_uint_t x;
+  x = u8g.getWidth();
+  x -= u8g.getStrWidth(str);
+  x /= 2;
+  u8g.drawStr(x, y, str);
+}
 
 
 void draw(void) {
   u8g.setFont(u8g_font_6x10);
-  u8g.drawStr( 0, 12, "Touch Panel");
-  u8g.setPrintPos(0, 24); u8g.print((int)tp_raw_x); u8g.print(" ");u8g.print((int)tp_x);
-  u8g.setPrintPos(0, 36); u8g.print((int)tp_raw_y);u8g.print(" ");u8g.print((int)tp_y);
-  u8g.setPrintPos(0, 48); u8g.print((int)cnt);
-  if ( is_pressed != 0 )
-    u8g.print(" pressed");
+  switch( tp_GetDisplayState(&tp) )
+  {
+    case TP_DISPLAY_DO_NOT_TOUCH:
+      center(12, "Do Not Touch");
+      break;
+    case TP_DISPLAY_PRESS_AND_RELEASE_EDGE:
+      /* it does not matter which edge is pressed, but later the opposite edge must be pressed */
+      center( 12, "Press");
+      center( 24, "Lower Left Edge");
+      u8g.drawLine(0, u8g.getHeight()-1, 10, u8g.getHeight()-11);
+      break;
+    case TP_DISPLAY_PRESS_AND_RELEASE_OPPOSITE_EDGE:
+      center( 12, "Press");
+      center( 24, "Upper Right Edge");
+      u8g.drawLine(u8g.getWidth()-11, 10, u8g.getWidth()-1, 0);
+      break;
+    case TP_DISPLAY_OK:
+    default:
+      center( 10, "Touch Panel");
+      if ( tp.is_pressed != 0 )
+      {
+	u8g.setPrintPos(0, 20); u8g.print("x=");u8g.print((int)tp.x.result);
+	u8g.setPrintPos(0, 30); u8g.print("y=");u8g.print((int)(u8g.getHeight()-tp.y.result-1));
+      }
+      break;
+  }
+
   
 }
 
@@ -532,18 +522,21 @@ void setup(void) {
   u8g.setCursorFont(u8g_font_cursor);
   u8g.setCursorStyle(32);
   
-  tp_Init(&tp);
+  tp_Init(&tp, u8g.getWidth(), u8g.getHeight());
   
 }
 
 void loop(void) {
-  getXY();
-  if ( is_pressed != 0 )
+  
+  // update touch panel and handle return values
+  updateTouchPanel();
+  
+  if ( tp.is_pressed != 0 )
     u8g.enableCursor();
   else
     u8g.disableCursor();
   
-  u8g.setCursorPos(tp_x, 63-tp_y);
+  u8g.setCursorPos(tp.x.result, u8g.getHeight()-tp.y.result-1);
   
   // picture loop
   u8g.firstPage();  
@@ -553,8 +546,6 @@ void loop(void) {
   
   // rebuild the picture after some delay
   delay(10);
-  
-  cnt++;
   
 }
 
