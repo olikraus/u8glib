@@ -1,6 +1,6 @@
 /*
 
-  TouchPanel4W.pde
+  TouchPanelSimple4W.pde
   
   >>> Before compiling: Please remove comment from the constructor of the 
   >>> connected graphics display (see below).
@@ -123,10 +123,9 @@ struct _tpd_struct
   /* calibration values (set during init phase) */
   uint8_t start;
   uint8_t end;		
-  uint8_t open;		/* value, when not touched/pressed */
   
   /* calibration values (must be predefined) */
-  uint8_t mt;		/* move and open threshold */
+  uint8_t mt;		/* move threshold */
   
   /* user values */
   uint8_t range;	/* result will have range fron 0..range  (including the value of range) */
@@ -138,50 +137,17 @@ struct _tpd_struct
 typedef struct _tpd_struct tpd_struct;
 
 
-#define TP_STATE_OPEN_DETECT 0
-#define TP_STATE_OPEN_DETECT_1 1
-#define TP_STATE_START_PRESS 2
-#define TP_STATE_WAIT_START_OPEN 3
-#define TP_STATE_END_PRESS 4
-#define TP_STATE_WAIT_END_OPEN 5
-#define TP_STATE_NORMAL 6
-
-#define TP_DISPLAY_DO_NOT_TOUCH 0
-#define TP_DISPLAY_PRESS_AND_RELEASE_EDGE 1
-#define TP_DISPLAY_PRESS_AND_RELEASE_OPPOSITE_EDGE 2
-#define TP_DISPLAY_OK 3
 
 struct _tp_struct
 {
   tpd_struct x;
   tpd_struct y;
-  uint8_t state;
   uint8_t is_pressed; /* combination of x.is_pressed && y.is_pressed */
   uint8_t is_update;
 };
 typedef struct _tp_struct tp_struct;
 
 tp_struct tp;
-
-
-uint8_t tp_GetDisplayState(tp_struct *tp)
-{
-  switch(tp->state)
-  {
-    case TP_STATE_OPEN_DETECT:
-    case TP_STATE_OPEN_DETECT_1:
-      return TP_DISPLAY_DO_NOT_TOUCH;
-    case TP_STATE_START_PRESS:
-    case TP_STATE_WAIT_START_OPEN:
-      return TP_DISPLAY_PRESS_AND_RELEASE_EDGE;
-    case TP_STATE_END_PRESS:
-    case TP_STATE_WAIT_END_OPEN:
-      return TP_DISPLAY_PRESS_AND_RELEASE_OPPOSITE_EDGE;
-    case TP_STATE_NORMAL:
-    default:
-      return TP_DISPLAY_OK;
-  }
-}
 
 
 uint8_t tpd_is_active_area(tpd_struct *d)
@@ -198,28 +164,13 @@ uint8_t tpd_is_active_area(tpd_struct *d)
     end = d->start;
     start = d->end;
   }
-    
-  if ( d->open < start )
-  {
-    if ( d->raw < start )	/* it is pressed if "raw >= start", so continue to check otherwise */
-    {
-      if ( d->raw <= d->open )
-	return 0;	/* not pressed */
-      if ( (d->raw - d->open) < (start-d->raw) )
-	return 0;
-    }
-  }
-  else if ( d->open > end )
-  {
-    if ( d->raw > end)	/* it is pressed if "raw >= start", so continue to check otherwise */
-    {
-      if ( d->raw >= d->open )
-	return 0;	/* not pressed */
-      if ( (d->open - d->raw) < (d->raw - end) )
-	return 0;
-    }
-  }
-  return 1;		/*default: assume touch panel pressed */
+  
+  if ( d->raw < start )
+    return 0;
+  if ( d->raw > end )
+    return 0;
+  
+  return 1;
 }
 
 static uint8_t tpd_delta(uint8_t a, uint8_t b)
@@ -299,31 +250,6 @@ static void tpd_next_step(tpd_struct *d, uint8_t raw)
 }
 
 
-static void tpd_do_calibrate(tpd_struct *d)
-{
-  if ( tpd_delta(d->raw, d->open) < d->mt )
-    return;
-  if ( d->state != TPD_PRESSED )
-    return;
-
-  if  ( d->start < d->end )
-  {
-    if ( d->end < d->raw )
-      d->end = d->raw;
-    if ( d->start > d->raw )
-      d->start = d->raw;
-  }
-  else
-  {
-    if ( d->end > d->raw )
-      d->end = d->raw;
-    if ( d->start < d->raw )
-      d->start = d->raw;
-  }
-
-}
-
-
 
 /* map curr value to 0...range (result) */
 void tpd_map_touch_position(tpd_struct *d)
@@ -367,104 +293,31 @@ void tpd_map_touch_position(tpd_struct *d)
 
 void tp_Init(tp_struct *tp, uint8_t width, uint8_t height)
 {
-  tp->x.start = 0;
-  tp->x.end = 0;
-  tp->x.open = 0;
+  tp->x.start = 65;
+  tp->x.end = 200;
   tp->x.range = width-1;
   tp->x.mt = width/8;
   tp->x.state = TPD_OPEN;
   
-  tp->y.start = 0;
-  tp->y.end = 0;
-  tp->y.open = 0;
+  tp->y.start = 105;
+  tp->y.end = 160;
   tp->y.range = height-1;
   tp->y.mt = height/8;
   tp->y.state = TPD_OPEN;
   
-  tp->state = TP_STATE_OPEN_DETECT;
   tp->is_update = 1;
-}
-
-uint8_t tp_IsOpen(tp_struct *tp, uint8_t x, uint8_t y)
-{
-  if ( tpd_delta(tp->x.open, x) < tp->x.mt &&  tpd_delta(tp->y.open, y)  < tp->y.mt )
-    return 1;
-  return 0;
 }
 
 void tp_SetRaw(tp_struct *tp, uint8_t x, uint8_t y)
 {
-  switch( tp->state )
-  {
-    case TP_STATE_OPEN_DETECT:
-      tp->x.open = x; 
-      tp->y.open = y;
-      tp->state = TP_STATE_OPEN_DETECT_1;
-      tp->is_update = 1;
-      break;
-    case TP_STATE_OPEN_DETECT_1:
-      if ( tpd_delta(tp->x.open, x) <= tp->x.mt &&  tpd_delta(tp->y.open, y)  <= tp->y.mt )
-      {
-	tp->is_update = 1;
-	tp->state = TP_STATE_START_PRESS;
-      }
-      tp->x.open = x; 
-      tp->y.open = y;
-      break;
-    case TP_STATE_START_PRESS:
-      if ( tp_IsOpen(tp,x,y) == 0 )
-      {
-	if ( tpd_delta(tp->x.start, x) <= tp->x.mt &&  tpd_delta(tp->y.start, y)  <= tp->y.mt )
-	{
-	  tp->state = TP_STATE_WAIT_START_OPEN;
-	  tp->is_update = 1;
-	}
-	tp->x.start = x;
-	tp->y.start = y;
-      }
-      break;
-    case TP_STATE_WAIT_START_OPEN:
-      if ( tp_IsOpen(tp,x,y) != 0 )
-      {      
-	tp->state = TP_STATE_END_PRESS;
-	tp->is_update = 1;
-      }
-      break;
-    case TP_STATE_END_PRESS:
-      if ( tp_IsOpen(tp,x,y) == 0 )
-      {
-	if ( tpd_delta(tp->x.start, x) > tp->x.mt &&  tpd_delta(tp->y.start, y)  > tp->y.mt )
-	{
-	  if ( tpd_delta(tp->x.end, x) <= tp->x.mt &&  tpd_delta(tp->y.end, y)  <= tp->y.mt )
-	  {
-	    tp->state = TP_STATE_WAIT_END_OPEN;
-	    tp->is_update = 1;
-	  }
-	  tp->x.end = x;
-	  tp->y.end = y;
-	}
-      }
-      break;
-    case TP_STATE_WAIT_END_OPEN:
-      if ( tp_IsOpen(tp,x,y) != 0 )
-      {
-	tp->state = TP_STATE_NORMAL;
-	tp->is_update = 1;
-      }
-      break;
-    default:
       tpd_next_step(&(tp->x), x);
       tpd_map_touch_position(&(tp->x));
-      tpd_do_calibrate(&(tp->x));
       
       tpd_next_step(&(tp->y), y);
       tpd_map_touch_position(&(tp->y));
-      tpd_do_calibrate(&(tp->y));
       
       tp->is_pressed = tp->x.is_pressed && tp->y.is_pressed;
       tp->is_update = tp->x.is_update && tp->y.is_update;
-      break;
-  }
 }
 
 
@@ -513,34 +366,14 @@ void center(u8g_uint_t y, const char *str)
 
 void draw(void) {
   u8g.setFont(u8g_font_6x10);
-  switch( tp_GetDisplayState(&tp) )
+  center( 10, "Touch Panel");
+  if ( tp.is_pressed != 0 )
   {
-    case TP_DISPLAY_DO_NOT_TOUCH:
-      center(12, "Do Not Touch");
-      break;
-    case TP_DISPLAY_PRESS_AND_RELEASE_EDGE:
-      /* it does not matter which edge is pressed, but later the opposite edge must be pressed */
-      center( 12, "Press");
-      center( 24, "Lower Left Edge");
-      u8g.drawLine(0, u8g.getHeight()-1, 10, u8g.getHeight()-11);
-      break;
-    case TP_DISPLAY_PRESS_AND_RELEASE_OPPOSITE_EDGE:
-      center( 12, "Press");
-      center( 24, "Upper Right Edge");
-      u8g.drawLine(u8g.getWidth()-11, 10, u8g.getWidth()-1, 0);
-      break;
-    case TP_DISPLAY_OK:
-    default:
-      center( 10, "Touch Panel");
-      if ( tp.is_pressed != 0 )
-      {
-	u8g.setPrintPos(0, 20); u8g.print("x=");u8g.print((int)tp.x.result);
-	u8g.setPrintPos(0, 30); u8g.print("y=");u8g.print((int)(u8g.getHeight()-tp.y.result-1));
-      }
-      break;
+    u8g.setPrintPos(0, 20); u8g.print("x=");u8g.print((int)tp.x.result);
+    u8g.setPrintPos(0, 30); u8g.print("y=");u8g.print((int)(u8g.getHeight()-tp.y.result-1));
+    u8g.setPrintPos(0, 40); u8g.print("x: ");u8g.print((int)tp.x.start);u8g.print("..");u8g.print((int)tp.x.end);
+    u8g.setPrintPos(0, 50); u8g.print("y: ");u8g.print((int)tp.y.start);u8g.print("..");u8g.print((int)tp.y.end);
   }
-
-  
 }
 
 void setup(void) {
@@ -567,7 +400,7 @@ void loop(void) {
   u8g.setCursorPos(tp.x.result, u8g.getHeight()-tp.y.result-1);
   
   // picture loop
-  if ( tp.is_update )
+  //if ( tp.is_update )
   {
     tp.is_update = 0;
     u8g.firstPage();  
