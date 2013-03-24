@@ -104,28 +104,24 @@ uint8_t tp_right = A5;
 uint8_t tp_top = A4;
 uint8_t tp_bottom = A2;
 
+/* Run "Touch4WSetup" and enter values here */
+#define X_START 64
+#define X_END 200
+#define Y_START 105
+#define Y_END 160  
+
 //================================================================
 // Touch Panel Code
-
-#define TPD_OPEN 0
-#define TPD_PRESSED 1
-#define TPD_OPEN_TO_PRESSED 2
-#define TPD_PRESSED_TO_OPEN 3
 
 /* touch panel dimension */
 struct _tpd_struct
 {
-  uint8_t raw;		/* input value */
-  uint8_t delta;		/* delta of the last raw value */
-  uint8_t curr;		/* current valid position */
-  uint8_t state;		/* state machine */
+  /* raw value */
+  uint8_t raw;
   
-  /* calibration values (set during init phase) */
+  /* calibration values  */
   uint8_t start;
   uint8_t end;		
-  
-  /* calibration values (must be predefined) */
-  uint8_t mt;		/* move threshold */
   
   /* user values */
   uint8_t range;	/* result will have range fron 0..range  (including the value of range) */
@@ -135,8 +131,6 @@ struct _tpd_struct
   uint8_t is_update;	/* will be set to 1 if result or is_pressed has been updated */
 };
 typedef struct _tpd_struct tpd_struct;
-
-
 
 struct _tp_struct
 {
@@ -149,175 +143,72 @@ typedef struct _tp_struct tp_struct;
 
 tp_struct tp;
 
-
-uint8_t tpd_is_active_area(tpd_struct *d)
-{
-  uint8_t start, end;
-  
-  if  ( d->start < d->end )
-  {
-    start = d->start;
-    end = d->end;
-  }
-  else
-  {
-    end = d->start;
-    start = d->end;
-  }
-  
-  if ( d->raw < start )
-    return 0;
-  if ( d->raw > end )
-    return 0;
-  
-  return 1;
-}
-
-static uint8_t tpd_delta(uint8_t a, uint8_t b)
-{
-  if ( a < b )
-    return b-a;
-  return a-b;
-}
-
-static void tpd_next_step(tpd_struct *d, uint8_t raw)
+/* map raw value to 0...range (result) */
+void tpd_map_touch_position(tpd_struct *d, uint8_t raw)
 {
   uint8_t is_pressed;
-  d->delta = tpd_delta(d->raw, raw);
-  d->raw = raw;
-  is_pressed = tpd_is_active_area(d);
+  uint16_t p;
+  uint8_t start, end;
   
-  switch(d->state)
+  d->raw = raw;
+  
+  start = d->start;
+  end = d->end;
+
+  /* check if position is within active area; store result in "is_pressed" */
+  is_pressed = 1;  
+  if ( raw < start )
   {
-    case TPD_OPEN:
-      if ( is_pressed == 0 )
-      {
-	d->curr = d->raw;    
-      }
-      else
-      {
-	d->state = TPD_OPEN_TO_PRESSED;
-      }
-      break;
-    case TPD_PRESSED:
-      if ( is_pressed == 0 )
-      {
-	d->state = TPD_OPEN;
-	d->curr = d->raw;
-      }
-      else
-      {
-	if ( d->delta > d->mt )
-	{
-	  d->state = TPD_PRESSED_TO_OPEN;
-	}
-	else
-	{
-	  /* stay in PRESSED state */
-	  d->curr = d->raw;
-	}
-      }
-      break;
-    case TPD_PRESSED_TO_OPEN:
-    case TPD_OPEN_TO_PRESSED:
-      if ( is_pressed == 0 )
-      {
-	d->state = TPD_OPEN;
-	d->curr = d->raw;
-      }
-      else
-      {
-	if ( d->delta > d->mt )
-	{
-	  /* stay in current state */
-	}
-	else
-	{
-	  d->state = TPD_PRESSED;
-	  d->curr = d->raw;
-	}
-      }
-      break;
+    d->result = 0;
+    is_pressed = 0;
+  }
+  if ( raw >= end )
+  {
+    d->result = d->range;
+    is_pressed = 0;
   }
   
-  if ( d->state == TPD_OPEN || d->state == TPD_OPEN_TO_PRESSED )
-    is_pressed = 0;
-  else
-    is_pressed = 1;
+  /* store "is_pressed" in the global structure, set update flag */
   if ( d->is_pressed != is_pressed )
     d->is_update = 1;
   d->is_pressed = is_pressed;
+    
+  /* map "raw" value into target range */
+  if ( is_pressed != 0 )
+  {    
+    p = raw;
+    p -= start;
+    p *= d->range;
+    end -= start;
+    p /= end;
+
+    if ( d->result != p )
+      d->is_update = 1;
+    d->result = p;
+  }
 }
 
-
-
-/* map curr value to 0...range (result) */
-void tpd_map_touch_position(tpd_struct *d)
+void tp_Init(uint8_t width, uint8_t height)
 {
-  uint16_t p;
-  uint8_t start, end;
-  if  ( d->start < d->end )
-  {
-    start = d->start;
-    end = d->end;
-  }
-  else
-  {
-    end = d->start;
-    start = d->end;
-  }
+  tp.x.start = X_START;
+  tp.x.end = X_END;
+  tp.x.range = width-1;
   
-  if ( d->curr <= start )
-  {
-    d->result = 0;
-    return;
-  }
+  tp.y.start = Y_START;
+  tp.y.end = Y_END;
+  tp.y.range = height-1;
   
-  if ( d->curr >= end )
-  {
-    d->result = d->range;
-    return;
-  }
-  
-  p = d->curr;
-  p -= start;
-  p *= d->range;
-  end -= start;
-  p /= end;
-  
-  if ( d->result != p )
-    d->is_update = 1;
-  d->result = p;
+  tp.is_update = 1;
 }
 
-
-void tp_Init(tp_struct *tp, uint8_t width, uint8_t height)
+void setTouchRawValues(uint8_t x, uint8_t y)
 {
-  tp->x.start = 65;
-  tp->x.end = 200;
-  tp->x.range = width-1;
-  tp->x.mt = width/8;
-  tp->x.state = TPD_OPEN;
-  
-  tp->y.start = 105;
-  tp->y.end = 160;
-  tp->y.range = height-1;
-  tp->y.mt = height/8;
-  tp->y.state = TPD_OPEN;
-  
-  tp->is_update = 1;
-}
-
-void tp_SetRaw(tp_struct *tp, uint8_t x, uint8_t y)
-{
-      tpd_next_step(&(tp->x), x);
-      tpd_map_touch_position(&(tp->x));
+      tpd_map_touch_position(&(tp.x), x);
+      tpd_map_touch_position(&(tp.y), y);
       
-      tpd_next_step(&(tp->y), y);
-      tpd_map_touch_position(&(tp->y));
-      
-      tp->is_pressed = tp->x.is_pressed && tp->y.is_pressed;
-      tp->is_update = tp->x.is_update && tp->y.is_update;
+      tp.is_pressed = tp.x.is_pressed && tp.y.is_pressed;
+      if ( tp.x.is_update || tp.y.is_update )
+	tp.is_update = 1;
 }
 
 
@@ -339,7 +230,6 @@ uint8_t getTouchPos(uint8_t hiPin, uint8_t lowPin, uint8_t sensePin, uint8_t dcP
   return val;
 }
 
-
 void updateTouchPanel(void)
 {
   uint8_t tp_raw_x;
@@ -348,7 +238,7 @@ void updateTouchPanel(void)
   tp_raw_x = getTouchPos(tp_right, tp_left, tp_bottom, tp_top);
   tp_raw_y = getTouchPos(tp_top, tp_bottom, tp_left, tp_right);
   
-  tp_SetRaw(&tp, tp_raw_x, tp_raw_y);  
+  setTouchRawValues(tp_raw_x, tp_raw_y);  
 }
 
 //================================================================
@@ -371,8 +261,8 @@ void draw(void) {
   {
     u8g.setPrintPos(0, 20); u8g.print("x=");u8g.print((int)tp.x.result);
     u8g.setPrintPos(0, 30); u8g.print("y=");u8g.print((int)(u8g.getHeight()-tp.y.result-1));
-    u8g.setPrintPos(0, 40); u8g.print("x: ");u8g.print((int)tp.x.start);u8g.print("..");u8g.print((int)tp.x.end);
-    u8g.setPrintPos(0, 50); u8g.print("y: ");u8g.print((int)tp.y.start);u8g.print("..");u8g.print((int)tp.y.end);
+    //u8g.setPrintPos(0, 40); u8g.print("x: ");u8g.print((int)tp.x.start);u8g.print("..");u8g.print((int)tp.x.end);
+    //u8g.setPrintPos(0, 50); u8g.print("y: ");u8g.print((int)tp.y.start);u8g.print("..");u8g.print((int)tp.y.end);
   }
 }
 
@@ -383,8 +273,9 @@ void setup(void) {
   u8g.setCursorFont(u8g_font_cursor);
   u8g.setCursorStyle(32);
   
-  tp_Init(&tp, u8g.getWidth(), u8g.getHeight());
+  tp_Init(u8g.getWidth(), u8g.getHeight());
   
+  tp.is_update = 1;
 }
 
 void loop(void) {
@@ -400,7 +291,7 @@ void loop(void) {
   u8g.setCursorPos(tp.x.result, u8g.getHeight()-tp.y.result-1);
   
   // picture loop
-  //if ( tp.is_update )
+  if ( tp.is_update != 0 )
   {
     tp.is_update = 0;
     u8g.firstPage();  
