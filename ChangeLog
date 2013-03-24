@@ -107,6 +107,8 @@ u8glib ChangeLog
   * Sleep Mode
   * 4x mode for ST7920
   * New C++ interface for ST7920 
+2013-03-24	v1.11	  Oliver Kraus <olikraus@gmail.com>
+  * Added touch panel examples
 
   
   

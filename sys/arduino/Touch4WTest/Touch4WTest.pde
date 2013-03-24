@@ -52,7 +52,7 @@
 //U8GLIB_NHD31OLED_2X_GR u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-U8GLIB_DOGM128 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGM128 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_ST7920_128X64_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
 //U8GLIB_ST7920_128X64_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
 //U8GLIB_ST7920_128X64_1X u8g(18, 16, 17);	// SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
@@ -114,7 +114,7 @@ uint8_t tp_bottom = A2;
 // Touch Panel Code
 
 /* touch panel dimension */
-struct _tpd_struct
+struct tpd_struct
 {
   /* raw value */
   uint8_t raw;
@@ -130,21 +130,19 @@ struct _tpd_struct
   uint8_t is_pressed;	/* output value: pressed (=1) or not pressed (=0) */
   uint8_t is_update;	/* will be set to 1 if result or is_pressed has been updated */
 };
-typedef struct _tpd_struct tpd_struct;
 
-struct _tp_struct
+struct tp_struct
 {
-  tpd_struct x;
-  tpd_struct y;
+  struct tpd_struct x;
+  struct tpd_struct y;
   uint8_t is_pressed; /* combination of x.is_pressed && y.is_pressed */
   uint8_t is_update;
 };
-typedef struct _tp_struct tp_struct;
 
-tp_struct tp;
+struct tp_struct tp;
 
 /* map raw value to 0...range (result) */
-void tpd_map_touch_position(tpd_struct *d, uint8_t raw)
+void tpd_map_touch_position(struct tpd_struct *d, uint8_t raw)
 {
   uint8_t is_pressed;
   uint16_t p;
@@ -273,9 +271,7 @@ void setup(void) {
   u8g.setCursorFont(u8g_font_cursor);
   u8g.setCursorStyle(32);
   
-  tp_Init(u8g.getWidth(), u8g.getHeight());
-  
-  tp.is_update = 1;
+  tp_Init(u8g.getWidth(), u8g.getHeight());  
 }
 
 void loop(void) {
