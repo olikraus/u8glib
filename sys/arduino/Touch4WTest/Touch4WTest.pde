@@ -256,7 +256,7 @@ void center(u8g_uint_t y, const char *str)
 
 void draw(void) {
   u8g.setFont(u8g_font_6x10);
-  center( 10, "Touch Panel");
+  center( 10, "Touch Panel Test");
   if ( tp.is_pressed != 0 )
   {
     u8g.setPrintPos(0, 20); u8g.print("x=");u8g.print((int)tp.x.result);
@@ -291,8 +291,7 @@ void loop(void) {
   u8g.setCursorPos(tp.x.result, u8g.getHeight()-tp.y.result-1);
   
   // picture loop
-  if ( tp.is_update != 0 )
-  {
+  if ( tp.is_update != 0 ) {
     tp.is_update = 0;
     u8g.firstPage();  
     do {
