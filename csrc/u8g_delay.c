@@ -40,6 +40,13 @@
 /*==== Part 1: Derive suitable delay procedure ====*/
 
 #if defined(ARDUINO)
+
+#  if ARDUINO < 100 
+#    include <WProgram.h> 
+#  else 
+#    include <Arduino.h> 
+#  endif
+
 #  if defined(__AVR__)
 #    define USE_AVR_DELAY
 #  elif defined(__PIC32MX)
