@@ -516,7 +516,7 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_fast_parallel_fn
 #define U8G_COM_T6963  u8g_com_arduino_t6963_fn
 #else /* Arduino Due, Chipkit PIC32 */
-#define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
+#define U8G_COM_PARALLEL u8g_com_arduino_parallel_fnp
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_parallel_fn
 #define U8G_COM_T6963  u8g_com_null_fn
 #endif
