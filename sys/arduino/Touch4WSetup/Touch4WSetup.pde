@@ -112,7 +112,7 @@ uint8_t tp_bottom = A2;
 #define Y_START 120
 #define Y_END 140 
 
-#define PULLUP_THRESHOLD 245
+#define PULLUP_THRESHOLD 235
 
 //================================================================
 // Touch Panel Code
