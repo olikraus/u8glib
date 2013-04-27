@@ -1,6 +1,6 @@
 /*
   
-  u8g_arduino_parallel.c
+  u8g_com_arduino_parallel.c
 
   Universal 8bit Graphics Library
   
