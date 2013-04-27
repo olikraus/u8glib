@@ -150,4 +150,5 @@ uint8_t u8g_dev_st7565_64128n_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
 
 U8G_PB_DEV(u8g_dev_st7565_64128n_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_64128n_fn, U8G_COM_SW_SPI);
 U8G_PB_DEV(u8g_dev_st7565_64128n_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_64128n_fn, U8G_COM_HW_SPI);
+U8G_PB_DEV(u8g_dev_st7565_64128n_parallel, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_st7565_64128n_fn, U8G_COM_PARALLEL);
 
