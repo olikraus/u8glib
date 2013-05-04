@@ -290,11 +290,13 @@ extern u8g_dev_t u8g_dev_ssd1327_96x96_2x_gr_i2c;
 /* NHD-3.12-25664 OLED Display with SSD1322 Controller */
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_bw_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_bw_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_bw_parallel;
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_2x_bw_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_2x_bw_hw_spi;
 
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_gr_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_gr_parallel;
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_2x_gr_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1322_nhd31oled_2x_gr_hw_spi;
 
@@ -518,7 +520,7 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_fast_parallel_fn
 #define U8G_COM_T6963  u8g_com_arduino_t6963_fn
 #else /* Arduino Due, Chipkit PIC32 */
-#define U8G_COM_PARALLEL u8g_com_arduino_parallel_fnp
+#define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
 #define U8G_COM_FAST_PARALLEL u8g_com_arduino_parallel_fn
 #define U8G_COM_T6963  u8g_com_null_fn
 #endif

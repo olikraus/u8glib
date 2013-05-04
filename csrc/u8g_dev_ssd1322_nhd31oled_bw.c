@@ -325,6 +325,7 @@ uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
 
 U8G_PB_DEV(u8g_dev_ssd1322_nhd31oled_bw_sw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1322_nhd31oled_bw_fn, U8G_COM_SW_SPI);
 U8G_PB_DEV(u8g_dev_ssd1322_nhd31oled_bw_hw_spi , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1322_nhd31oled_bw_fn, U8G_COM_HW_SPI);
+U8G_PB_DEV(u8g_dev_ssd1322_nhd31oled_bw_parallel , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1322_nhd31oled_bw_fn, U8G_COM_FAST_PARALLEL);
 
 #define DWIDTH (WIDTH*2)
 uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_buf[DWIDTH] U8G_NOCOMMON ; 
