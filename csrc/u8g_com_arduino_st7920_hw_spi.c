@@ -68,6 +68,33 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
+
+#if ARDUINO < 100 
+
+/* fixed pins */
+#if defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__) // Sanguino.cc board
+#define PIN_SCK         7
+#define PIN_MISO        6
+#define PIN_MOSI        5
+#define PIN_CS          4
+#else                                   // Arduino Board
+#define PIN_SCK 13
+#define PIN_MISO  12
+#define PIN_MOSI 11
+#define PIN_CS 10
+#endif // (__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
+
+#else 
+
+/* use Arduino pin definitions */
+#define PIN_SCK SCK
+#define PIN_MISO  MISO
+#define PIN_MOSI MOSI
+#define PIN_CS SS
+
+#endif
+
+
 static uint8_t u8g_arduino_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val) U8G_NOINLINE;
 static uint8_t u8g_arduino_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val)
 {
@@ -115,14 +142,29 @@ uint8_t u8g_com_arduino_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_va
   {
     case U8G_COM_MSG_INIT:
       u8g_com_arduino_assign_pin_output_high(u8g);
-      u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
       
+      
+      /* code from u8g_com-arduino_hw_spi.c */
+      pinMode(PIN_SCK, OUTPUT);
+      digitalWrite(PIN_SCK, LOW);
+      pinMode(PIN_MOSI, OUTPUT);
+      digitalWrite(PIN_MOSI, LOW);
+      /* pinMode(PIN_MISO, INPUT); */
+
+      pinMode(PIN_CS, OUTPUT);			/* system chip select for the atmega board */
+      digitalWrite(PIN_CS, HIGH);
+      
+      
+      //u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
+      
+#ifdef OBSOLETE      
       DDRB |= _BV(3);          /* D0, MOSI */
       DDRB |= _BV(5);          /* SCK */
       DDRB |= _BV(2);		/* slave select */
     
       PORTB &= ~_BV(3);        /* D0, MOSI = 0 */
       PORTB &= ~_BV(5);        /* SCK = 0 */
+#endif
 
       /*
         SPR1 SPR0
