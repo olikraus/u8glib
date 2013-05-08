@@ -6,7 +6,7 @@
 
   Universal 8bit Graphics Library
   
-  Copyright (c) 2011, olikraus@gmail.com
+  Copyright (c) 2013, olikraus@gmail.com
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
