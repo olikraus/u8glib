@@ -46,7 +46,7 @@
    * *sck*: Pin with label "E"
    * *mosi*: Pin with label "RW" 
    * *cs*: Pin with label "RS".
-   * Example: U8GLIB_ST7920_128X64_1X(sck, mosi, cs [, reset]) is equivalent to  U8GLIB_ST7920_128X64_1X(E, RW, RS , RST)  for many display modules.
+   * Example: U8GLIB_ST7920_128X64_1X(sck, mosi, cs [, reset]) is equivalent to  U8GLIB_ST7920_128X64_1X(E, RW, RS, RST)  for many display modules.
   * Parallel mode (PSB = HIGH)
    * *en*: Pin with label "E"
    * *di*: Pin with label "RS"
