@@ -40,3 +40,15 @@
   * {{{SBN1661}}}, {{{SED1520}}}: Write is triggered by CSx lines. 
   * {{{SED1335}}}, {{{RA8835}}}, {{{S1D3305}}}  (not supported by u8glib)
   * {{{NT7086}}}, {{{LC7981}}}
+  
+ * LCD Modules with ST7920 Controller
+  * Serial mode (PSB = LOW)
+   * *sck*: Pin with label "E"
+   * *mosi*: Pin with label "RW" 
+   * *cs*: Pin with label "RS".
+   * Example: U8GLIB_ST7920_128X64_1X(sck, mosi, cs [, reset]) is equivalent to  U8GLIB_ST7920_128X64_1X(E, RW, RS , RST)  for many display modules.
+  * Parallel mode (PSB = HIGH)
+   * *en*: Pin with label "E"
+   * *di*: Pin with label "RS"
+   * *rw*: Pin with label "RW"
+   
