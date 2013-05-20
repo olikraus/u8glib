@@ -394,6 +394,13 @@ uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t
 }
 #endif
 
+
+void u8g_SetColorEntry(u8g_t *u8g, uint8_t idx, uint8_t r, uint8_t g, uint8_t b)
+{
+  u8g_irgb_t irgb;
+  u8g_call_dev_fn(u8g, u8g->dev, U8G_DEV_MSG_SET_COLOR_ENTRY, NULL);
+}
+
 void u8g_SetColorIndex(u8g_t *u8g, uint8_t idx)
 {
   u8g->arg_pixel.color = idx;

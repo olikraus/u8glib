@@ -98,6 +98,7 @@ typedef struct _u8g_dev_t u8g_dev_t;
 typedef struct _u8g_dev_arg_pixel_t u8g_dev_arg_pixel_t;
 typedef struct _u8g_dev_arg_bbx_t u8g_dev_arg_bbx_t;
 typedef struct _u8g_box_t u8g_box_t;
+typedef struct _u8g_irgb_t u8g_irgb_t;
 
 
 /*===============================================================*/
@@ -357,6 +358,13 @@ struct _u8g_box_t
 };
 /* typedef struct _u8g_box_t u8g_box_t; */ /* forward decl */
 
+struct _u8g_irgb_t
+{
+  u8g_uint_t idx, r, g, b;		/* index with rgb value */
+};
+/* typedef struct _u8g_irgb_t u8g_irgb_t; */ /* forward decl */
+
+
 
 #define U8G_DEV_MSG_INIT                10
 #define U8G_DEV_MSG_STOP                  11
@@ -386,7 +394,7 @@ struct _u8g_box_t
 #define U8G_DEV_MSG_SET_PIXEL                           50
 #define U8G_DEV_MSG_SET_8PIXEL                          59
 
-#define U8G_DEV_MSG_SET_COLOR_INDEX                60
+#define U8G_DEV_MSG_SET_COLOR_ENTRY                60
 
 #define U8G_DEV_MSG_SET_XY_CB                           61
 

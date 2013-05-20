@@ -95,7 +95,7 @@ uint8_t u8g_dev_rot90_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
     case U8G_DEV_MSG_STOP:
     case U8G_DEV_MSG_PAGE_FIRST:
     case U8G_DEV_MSG_PAGE_NEXT:
-    case U8G_DEV_MSG_SET_COLOR_INDEX:
+    case U8G_DEV_MSG_SET_COLOR_ENTRY:
     case U8G_DEV_MSG_SET_XY_CB:
     */
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
@@ -192,7 +192,7 @@ uint8_t u8g_dev_rot180_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
     case U8G_DEV_MSG_STOP:
     case U8G_DEV_MSG_PAGE_FIRST:
     case U8G_DEV_MSG_PAGE_NEXT:
-    case U8G_DEV_MSG_SET_COLOR_INDEX:
+    case U8G_DEV_MSG_SET_COLOR_ENTRY:
     case U8G_DEV_MSG_SET_XY_CB:
     */
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
@@ -298,7 +298,7 @@ uint8_t u8g_dev_rot270_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
     case U8G_DEV_MSG_STOP:
     case U8G_DEV_MSG_PAGE_FIRST:
     case U8G_DEV_MSG_PAGE_NEXT:
-    case U8G_DEV_MSG_SET_COLOR_INDEX:
+    case U8G_DEV_MSG_SET_COLOR_ENTRY:
     case U8G_DEV_MSG_SET_XY_CB:
     */
       return u8g_call_dev_fn(u8g, rotation_chain, msg, arg);
