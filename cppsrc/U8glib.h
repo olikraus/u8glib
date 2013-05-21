@@ -114,6 +114,7 @@ class U8GLIB : public Print
     void sleepOff(void) { u8g_SleepOff(&u8g); }
     
     /* graphic primitives */
+    void setColorEntry(uint8_t color_index, uint8_t r, uint8_t g, uint8_t b) { u8g_SetColorEntry(&u8g, color_index, r, g, b); }
     void setColorIndex(uint8_t color_index) { u8g_SetColorIndex(&u8g, color_index); }
     uint8_t getColorIndex(void) { return u8g_GetColorIndex(&u8g); }
     

@@ -397,7 +397,7 @@ uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t
 
 void u8g_SetColorEntry(u8g_t *u8g, uint8_t idx, uint8_t r, uint8_t g, uint8_t b)
 {
-  u8g_irgb_t irgb;
+  u8g_dev_arg_irgb_t irgb;
   irgb.idx = idx;
   irgb.r = r;
   irgb.g = g;
