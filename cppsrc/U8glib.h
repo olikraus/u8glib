@@ -115,6 +115,7 @@ class U8GLIB : public Print
     
     /* graphic primitives */
     void setColorEntry(uint8_t color_index, uint8_t r, uint8_t g, uint8_t b) { u8g_SetColorEntry(&u8g, color_index, r, g, b); }
+    void setHiColor(uint8_t rgb) { u8g_SetHiColor(&u8g, rgb); }
     void setColorIndex(uint8_t color_index) { u8g_SetColorIndex(&u8g, color_index); }
     uint8_t getColorIndex(void) { return u8g_GetColorIndex(&u8g); }
     

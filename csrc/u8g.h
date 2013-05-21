@@ -342,7 +342,8 @@ struct _u8g_dev_arg_pixel_t
   u8g_uint_t x, y;              /* will be modified */
   uint8_t pixel;                  /* will be modified */
   uint8_t dir;
-  uint8_t color;
+  uint8_t color;			/* color or index value */
+  uint8_t hi_color;		/* high byte for 64K color mode, low byte is in "color" */
 };
 /* typedef struct _u8g_dev_arg_pixel_t u8g_dev_arg_pixel_t; */ /* forward decl */
 
@@ -411,6 +412,9 @@ struct _u8g_dev_arg_irgb_t
 #define U8G_MODE_GRAY2BIT     U8G_MODE(0, 0, 2)
 #define U8G_MODE_R3G3B2  U8G_MODE(0, 1, 8)
 #define U8G_MODE_INDEX  U8G_MODE(1, 1, 8)
+/* hicolor is R5G6B5 */
+#define U8G_MODE_HICOLOR  U8G_MODE(0, 1, 16)
+
 
 #define U8G_MODE_GET_BITS_PER_PIXEL(mode) ((mode)&31)
 #define U8G_MODE_IS_COLOR(mode) (((mode)&32)==0?0:1)
@@ -868,7 +872,9 @@ void u8g_DrawPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y);
 void u8g_Draw8Pixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel);
 
 uint8_t u8g_Stop(u8g_t *u8g);
+void u8g_SetColorEntry(u8g_t *u8g, uint8_t idx, uint8_t r, uint8_t g, uint8_t b);
 void u8g_SetColorIndex(u8g_t *u8g, uint8_t idx);
+void u8g_SetHiColor(u8g_t *u8g, uint16_t rgb);
 uint8_t u8g_GetColorIndex(u8g_t *u8g);
 
 uint8_t u8g_GetDefaultForegroundColor(u8g_t *u8g);
