@@ -307,7 +307,7 @@ uint8_t u8g_dev_ssd1322_nhd31oled_2x_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
     case U8G_DEV_MSG_CONTRAST:
       u8g_SetChipSelect(u8g, dev, 1);
       u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
-      u8g_WriteByte(u8g, dev, 0x081);
+      u8g_WriteByte(u8g, dev, 0x0c1);	/* 21 May 2013, fixed contrast command */
       u8g_SetAddress(u8g, dev, 1);          /* data mode */
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
       u8g_SetChipSelect(u8g, dev, 0);      
