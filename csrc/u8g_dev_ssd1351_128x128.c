@@ -42,7 +42,7 @@
 
 #define WIDTH		128
 #define HEIGHT		128
-#define PAGE_HEIGHT	1
+#define PAGE_HEIGHT	8
 
 static const uint8_t u8g_dev_ssd1351_128x128_init_seq[] PROGMEM = {
 	U8G_ESC_CS(0),					/* disable chip */
@@ -359,10 +359,21 @@ uint8_t u8g_dev_ssd1351_128x128_idx_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 }
 
 
+uint8_t u8g_dev_ssd1351_128x128_byte_buf[WIDTH*PAGE_HEIGHT] U8G_NOCOMMON ; 
+u8g_pb_t u8g_dev_ssd1351_128x128_byte_pb = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_ssd1351_128x128_byte_buf}; 
+
+u8g_dev_t u8g_dev_ssd1351_128x128_332_sw_spi = { u8g_dev_ssd1351_128x128_332_fn, &u8g_dev_ssd1351_128x128_byte_pb, U8G_COM_SW_SPI };
+u8g_dev_t u8g_dev_ssd1351_128x128_332_hw_spi = { u8g_dev_ssd1351_128x128_332_fn, &u8g_dev_ssd1351_128x128_byte_pb, U8G_COM_HW_SPI };
+
+u8g_dev_t u8g_dev_ssd1351_128x128_idx_sw_spi = { u8g_dev_ssd1351_128x128_idx_fn, &u8g_dev_ssd1351_128x128_byte_pb, U8G_COM_SW_SPI };
+u8g_dev_t u8g_dev_ssd1351_128x128_idx_hw_spi = { u8g_dev_ssd1351_128x128_idx_fn, &u8g_dev_ssd1351_128x128_byte_pb, U8G_COM_HW_SPI };
+
+
+/*
 U8G_PB_DEV(u8g_dev_ssd1351_128x128_332_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_332_fn, U8G_COM_SW_SPI);
 U8G_PB_DEV(u8g_dev_ssd1351_128x128_332_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_332_fn, U8G_COM_HW_SPI);
 
 U8G_PB_DEV(u8g_dev_ssd1351_128x128_idx_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_idx_fn, U8G_COM_SW_SPI);
 U8G_PB_DEV(u8g_dev_ssd1351_128x128_idx_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_idx_fn, U8G_COM_HW_SPI);
-
+*/
 

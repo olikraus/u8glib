@@ -417,8 +417,6 @@ U8G_PB_DEV(u8g_dev_sdl_1bit, WIDTH, HEIGHT, 8, u8g_dev_sdl_1bit_fn, NULL);
 U8G_PB_DEV(u8g_dev_sdl_1bit_h, WIDTH, HEIGHT, 8, u8g_dev_sdl_1bit_h_fn, NULL);
 U8G_PB_DEV(u8g_dev_sdl_2bit, WIDTH, HEIGHT, 4, u8g_dev_sdl_2bit_fn, NULL);
 
-
-
 uint8_t u8g_index_color_8h8_buf[WIDTH*8] U8G_NOCOMMON ; 
 u8g_pb_t u8g_index_color_8h8_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_index_color_8h8_buf}; 
 u8g_dev_t u8g_dev_sdl_8bit = { u8g_dev_sdl_8bit_fn, &u8g_index_color_8h8_pb, NULL };
@@ -426,3 +424,5 @@ u8g_dev_t u8g_dev_sdl_8bit = { u8g_dev_sdl_8bit_fn, &u8g_index_color_8h8_pb, NUL
 uint8_t u8g_dev_sdl_16v2_buf[WIDTH*2] U8G_NOCOMMON ; 
 u8g_pb_t u8g_dev_sdl_16v2_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_sdl_16v2_buf}; 
 u8g_dev_t u8g_dev_sdl_2bit_double_mem = { u8g_dev_sdl_2bit_double_mem_fn, &u8g_dev_sdl_16v2_pb, NULL };
+
+
