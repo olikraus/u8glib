@@ -5,6 +5,7 @@
   Universal 8bit Graphics Library
   
   Copyright (c) 2013, jamjardavies@gmail.com
+  Copyright (c) 2013, olikraus@gmail.com
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
@@ -31,6 +32,9 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
   
+  History:
+  Initial version	20 May 2013 jamjardavies@gmail.com	
+  indexed device	22 May 2013 olikraus@gmail.com
   
 */
 
@@ -252,7 +256,7 @@ static uint8_t u8g_ssd1351_get_b(uint8_t colour)
 	return (colour & 0x03) * 85;
 }
 
-uint8_t u8g_dev_ssd1351_128x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_ssd1351_128x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
 	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 
@@ -291,10 +295,74 @@ uint8_t u8g_dev_ssd1351_128x128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void
 		}
 
 		break;
+	case U8G_DEV_MSG_GET_MODE:
+	  return U8G_MODE_R3G3B2;
 	}
 
 	return u8g_dev_pb8h8_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_ssd1351_128x128_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_fn, U8G_COM_SW_SPI);
-U8G_PB_DEV(u8g_dev_ssd1351_128x128_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_fn, U8G_COM_HW_SPI);
+uint8_t u8g_dev_ssd1351_128x128_r[256];
+uint8_t u8g_dev_ssd1351_128x128_g[256];
+uint8_t u8g_dev_ssd1351_128x128_b[256];
+
+uint8_t u8g_dev_ssd1351_128x128_idx_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+
+	switch(msg)
+	{
+	case U8G_DEV_MSG_INIT:
+		u8g_InitCom(u8g, dev);
+		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1351_128x128_init_seq);
+		break;
+
+	case U8G_DEV_MSG_STOP:
+		break;
+	
+	case U8G_DEV_MSG_SET_COLOR_ENTRY:
+		  u8g_dev_ssd1351_128x128_r[ ((u8g_dev_arg_irgb_t *)arg)->idx ] = ((u8g_dev_arg_irgb_t *)arg)->r;
+		  u8g_dev_ssd1351_128x128_g[ ((u8g_dev_arg_irgb_t *)arg)->idx ] = ((u8g_dev_arg_irgb_t *)arg)->g;
+		  u8g_dev_ssd1351_128x128_b[ ((u8g_dev_arg_irgb_t *)arg)->idx ] = ((u8g_dev_arg_irgb_t *)arg)->b;
+		  break;
+	
+	case U8G_DEV_MSG_PAGE_FIRST:
+		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1351_128x128_column_seq);
+		break;
+
+	case U8G_DEV_MSG_PAGE_NEXT:
+		{
+			int x, y;
+			u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+			uint8_t *ptr = pb->buf;
+
+			u8g_SetChipSelect(u8g, dev, 1);
+
+			for (x = 0; x < pb->width; x++)
+			{
+				u8g_WriteByte(u8g, dev, u8g_dev_ssd1351_128x128_r[(*ptr)>>2]);
+				u8g_WriteByte(u8g, dev, u8g_dev_ssd1351_128x128_g[(*ptr)>>2]);
+				u8g_WriteByte(u8g, dev, u8g_dev_ssd1351_128x128_b[(*ptr)>>2]);
+
+				ptr++;
+			}
+
+			u8g_SetChipSelect(u8g, dev, 0);
+		}
+
+		break;
+	case U8G_DEV_MSG_GET_MODE:
+	  return U8G_MODE_INDEX;
+	}
+
+	return u8g_dev_pb8h8_base_fn(u8g, dev, msg, arg);
+}
+
+
+U8G_PB_DEV(u8g_dev_ssd1351_128x128_332_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_332_fn, U8G_COM_SW_SPI);
+U8G_PB_DEV(u8g_dev_ssd1351_128x128_332_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_332_fn, U8G_COM_HW_SPI);
+
+U8G_PB_DEV(u8g_dev_ssd1351_128x128_idx_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_idx_fn, U8G_COM_SW_SPI);
+U8G_PB_DEV(u8g_dev_ssd1351_128x128_idx_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1351_128x128_idx_fn, U8G_COM_HW_SPI);
+
+

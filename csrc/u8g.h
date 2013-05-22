@@ -330,6 +330,13 @@ void u8g_SetFlipDiscCallback(u8g_t *u8g, void (*cb)(uint8_t id, uint8_t page, ui
 /* ILI9325D based TFT */
 extern u8g_dev_t u8g_dev_ili9325d_320x240_8bit;
 
+
+/* SSD1351 OLED (breakout board from http://www.kickstarter.com/projects/ilsoftltd/colour-oled-breakout-board) */
+extern u8g_dev_t u8g_dev_ssd1351_128x128_332_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1351_128x128_332_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1351_128x128_idx_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1351_128x128_idx_hw_spi;
+
 /* u8g_virtual_screen.c  */
 extern u8g_dev_t u8g_dev_vs;
 

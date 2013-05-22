@@ -394,7 +394,12 @@ uint8_t u8g_IsBBXIntersection(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, u8g_uint_t
 }
 #endif
 
-
+/*
+  idx: index for the palette entry (0..255)
+  r: value for red (0..255)
+  g: value for green (0..255)
+  b: value for blue (0..255)
+*/
 void u8g_SetColorEntry(u8g_t *u8g, uint8_t idx, uint8_t r, uint8_t g, uint8_t b)
 {
   u8g_dev_arg_irgb_t irgb;

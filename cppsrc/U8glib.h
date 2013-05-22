@@ -826,6 +826,31 @@ class U8GLIB_ILI9325D_320x240 : public U8GLIB
       { init8BitFixedPort(&u8g_dev_ili9325d_320x240_8bit, en, cs1, di, rw, reset); }
 };
 
+
+
+class U8GLIB_SSD1351_128X128_332 : public U8GLIB 
+{
+  public:
+    U8GLIB_SSD1351_128X128_332(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128_332_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1351_128X128_332(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128_332_hw_spi, cs, a0, reset)
+      { }
+};
+
+class U8GLIB_SSD1351_128X128_IDX : public U8GLIB 
+{
+  public:
+    U8GLIB_SSD1351_128X128_IDX(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128_idx_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1351_128X128_IDX(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128_idx_hw_spi, cs, a0, reset)
+      { }
+};
+
+
 class U8GLIB_FLIPDISC_2X7 : public U8GLIB 
 {
   public:
