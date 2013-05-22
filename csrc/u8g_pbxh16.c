@@ -1,13 +1,12 @@
 /*
 
-  u8g_pb8h8.c
+  u8g_pbxh16.c
   
-  8 lines per page, horizontal, 8 bits per pixel
-  (22 May 2013: might also support any number of lines --> needs to be checked)
+  x lines per page, horizontal, 16 bits per pixel (hi color modes)
   
   Universal 8bit Graphics Library
   
-  Copyright (c) 2012, olikraus@gmail.com
+  Copyright (c) 2013, olikraus@gmail.com
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
@@ -44,9 +43,9 @@ struct _u8g_pb_t
 typedef struct _u8g_pb_t u8g_pb_t;
 
 
-uint8_t u8g_index_color_8h8_buf[WIDTH*PAGE_HEIGHT] U8G_NOCOMMON ; 
-u8g_pb_t u8g_index_color_8h8_pb = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_index_color_8h8_buff}; 
-u8g_dev_t name = { dev_fn, &u8g_index_color_8h8_pb, com_fn }
+uint8_t u8g_index_color_xh16_buf[2*WIDTH*PAGE_HEIGHT] U8G_NOCOMMON ; 
+u8g_pb_t u8g_index_color_xh16_pb = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_index_color_xh16_buf}; 
+u8g_dev_t name = { dev_fn, &u8g_index_color_xh16_pb , com_fn }
 
 */
 
@@ -59,7 +58,7 @@ u8g_dev_t name = { dev_fn, &u8g_index_color_8h8_pb, com_fn }
 #define PAGE_HEIGHT (1<<PAGE_HEIGHT_BITS)
 */
 
-void u8g_pb8h8_Clear(u8g_pb_t *b)
+void u8g_pbxh16_Clear(u8g_pb_t *b)
 {
   uint8_t *ptr = (uint8_t *)b->buf;
   uint8_t *end_ptr = ptr;
@@ -76,26 +75,30 @@ void u8g_pb8h8_Clear(u8g_pb_t *b)
 }
 
 
-void u8g_pb8h8_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
+void u8g_pbxh16_Init(u8g_pb_t *b, void *buf, u8g_uint_t width)
 {
   b->buf = buf;
   b->width = width;
-  u8g_pb8h8_Clear(b);
+  u8g_pbxh16_Clear(b);
 }
 
-static void u8g_pb8h8_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t color_index)
+static void u8g_pbxh16_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t low, uint8_t high)
 {
   uint16_t tmp;
   uint8_t *ptr = b->buf;
   y -= b->p.page_y0;
+  x <<= 1;
   tmp = y;
+  tmp <<= 1;
   tmp *= b->width;
   tmp += x;
   ptr += tmp;
-  *ptr = color_index;
+  *ptr = low;
+  ptr++;
+  *ptr = high;
 }
 
-void u8g_pb8h8_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel)
+void u8g_pbxh16_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel)
 {
   if ( arg_pixel->y < b->p.page_y0 )
     return;
@@ -103,11 +106,11 @@ void u8g_pb8h8_SetPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel
     return;
   if ( arg_pixel->x >= b->width )
     return;
-  u8g_pb8h8_set_pixel(b, arg_pixel->x, arg_pixel->y, arg_pixel->color);
+  u8g_pbxh16_set_pixel(b, arg_pixel->x, arg_pixel->y, arg_pixel->color, arg_pixel->hi_color);
 }
 
 
-void u8g_pb8h8_Set8Pixel(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
+void u8g_pbxh16_Set8Pixel(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
 {
   register uint8_t pixel = arg_pixel->pixel;
   u8g_uint_t dx = 0;
@@ -124,7 +127,7 @@ void u8g_pb8h8_Set8Pixel(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
   do
   {
     if ( pixel & 128 )
-      u8g_pb8h8_SetPixel(b, arg_pixel);
+      u8g_pbxh16_SetPixel(b, arg_pixel);
     arg_pixel->x += dx;
     arg_pixel->y += dy;
     pixel <<= 1;
@@ -132,30 +135,30 @@ void u8g_pb8h8_Set8Pixel(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
 }
 
 
-uint8_t u8g_dev_pb8h8_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_pbxh16_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
   switch(msg)
   {
     case U8G_DEV_MSG_SET_8PIXEL:
       if ( u8g_pb_Is8PixelVisible(pb, (u8g_dev_arg_pixel_t *)arg) )
-        u8g_pb8h8_Set8Pixel(pb, (u8g_dev_arg_pixel_t *)arg);
+        u8g_pbxh16_Set8Pixel(pb, (u8g_dev_arg_pixel_t *)arg);
       break;
     case U8G_DEV_MSG_SET_PIXEL:
-      u8g_pb8h8_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);
+      u8g_pbxh16_SetPixel(pb, (u8g_dev_arg_pixel_t *)arg);
       break;
     case U8G_DEV_MSG_INIT:
       break;
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_FIRST:
-      u8g_pb8h8_Clear(pb);
+      u8g_pbxh16_Clear(pb);
       u8g_page_First(&(pb->p));
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       if ( u8g_page_Next(&(pb->p)) == 0 )
         return 0;
-      u8g_pb8h8_Clear(pb);
+      u8g_pbxh16_Clear(pb);
       break;
 #ifdef U8G_DEV_MSG_IS_BBX_INTERSECTION
     case U8G_DEV_MSG_IS_BBX_INTERSECTION:
