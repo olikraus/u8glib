@@ -52,7 +52,7 @@ static const uint8_t u8g_dev_uc1601_c128032_init_seq[] PROGMEM = {
   0x0a3,		        /* 0x0a3: LCD bias 1/7 ,  0x0a2: LCD bias 1/9 */
   0x0a0,		        /* 0x0a0: ADC set to normal,  0x0a1 ADC set to inverted */
   0x0c8,                        /* common output mode: set scan direction normal operation/SHL Select, 0x0c0 --> SHL = 0, normal, 0x0c8 --> SHL = 1 */
-  0x0c4,				/* 22 May 2013: mirror y */			
+  0x0c2,				/* 22 May 2013: mirror x */
   
   0x040,		        /* set display start line */
   
@@ -83,7 +83,7 @@ static const uint8_t u8g_dev_uc1601_c128032_data_start[] PROGMEM = {
   U8G_ESC_ADR(0),           	/* instruction mode */
   U8G_ESC_CS(1),             	/* enable chip */
   0x010,			/* set upper 4 bit of the col adr to 0 */
-  0x000,			/* set lower 4 bit of the col adr  */      
+  0x004,			/* set lower 4 bit of the col adr  */      
   U8G_ESC_END                	/* end of sequence */
 };
 
