@@ -203,6 +203,10 @@ extern u8g_dev_t u8g_dev_st7565_64128n_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_64128n_hw_spi;
 extern u8g_dev_t u8g_dev_st7565_64128n_parallel;
 
+/* Display: LCD-AG-C128032R-DIW W/KK E6 PBF */
+extern u8g_dev_t u8g_dev_uc1601_c128032_sw_spi;
+extern u8g_dev_t u8g_dev_uc1601_c128032_hw_spi;
+
 /* dfrobot 128x64 Graphic LCD (SKU:FIT0021) */
 extern u8g_dev_t u8g_dev_st7920_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_hw_spi;
