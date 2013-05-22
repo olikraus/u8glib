@@ -156,6 +156,7 @@ extern u8g_dev_t u8g_dev_sdl_1bit_h;
 extern u8g_dev_t u8g_dev_sdl_2bit;
 extern u8g_dev_t u8g_dev_sdl_2bit_double_mem;
 extern u8g_dev_t u8g_dev_sdl_8bit;
+extern u8g_dev_t u8g_dev_sdl_hicolor;
 int u8g_sdl_get_key(void);
 
 /* Size: 70x30 monochrom, stdout */
@@ -888,6 +889,7 @@ uint8_t u8g_Stop(u8g_t *u8g);
 void u8g_SetColorEntry(u8g_t *u8g, uint8_t idx, uint8_t r, uint8_t g, uint8_t b);
 void u8g_SetColorIndex(u8g_t *u8g, uint8_t idx);
 void u8g_SetHiColor(u8g_t *u8g, uint16_t rgb);
+void u8g_SetHiColorByRGB(u8g_t *u8g, uint8_t r, uint8_t g, uint8_t b);
 uint8_t u8g_GetColorIndex(u8g_t *u8g);
 
 uint8_t u8g_GetDefaultForegroundColor(u8g_t *u8g);

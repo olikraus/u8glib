@@ -65,7 +65,7 @@ void u8g_pbxh16_Clear(u8g_pb_t *b)
   uint8_t cnt = b->p.page_height;
   do
   {
-    end_ptr += b->width;
+    end_ptr += b->width*2;
     cnt--;
   } while( cnt > 0 );
   do
@@ -87,11 +87,10 @@ static void u8g_pbxh16_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_
   uint16_t tmp;
   uint8_t *ptr = b->buf;
   y -= b->p.page_y0;
-  x <<= 1;
   tmp = y;
-  tmp <<= 1;
   tmp *= b->width;
   tmp += x;
+  tmp <<= 1;
   ptr += tmp;
   *ptr = low;
   ptr++;
