@@ -481,12 +481,7 @@ uint8_t u8g_dev_sdl_hicolor_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *ar
 	    low = ((uint8_t *)(pb->buf))[(i+j*WIDTH)*2];
 	    high = ((uint8_t *)(pb->buf))[(i+j*WIDTH)*2+1];
             u8g_sdl_set_hicolor(i, j+pb->p.page_y0, low, high);
-	    if ( i < 10 )
-	      printf("%02x-%02x ", high, low);
-	    
           }
-	  if ( j == 0 )
-	    printf("\n");
         }
       }
       /* update all */
