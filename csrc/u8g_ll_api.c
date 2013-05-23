@@ -425,6 +425,7 @@ void u8g_SetHiColor(u8g_t *u8g, uint16_t rgb)
 
 void u8g_SetHiColorByRGB(u8g_t *u8g, uint8_t r, uint8_t g, uint8_t b)
 {
+  
   r &= ~7;
   g >>= 2;
   b >>= 3;
@@ -432,7 +433,8 @@ void u8g_SetHiColorByRGB(u8g_t *u8g, uint8_t r, uint8_t g, uint8_t b)
   u8g->arg_pixel.color |= (g & 7) << 5;
   u8g->arg_pixel.hi_color = r;
   u8g->arg_pixel.hi_color |= (g>>3) & 7;
-  /*u8g->color_index = idx; */ /* must be removed */
+  
+  //u8g_SetHiColor(u8g, U8G_GET_HICOLOR_BY_RGB(r,g,b));
 }
 
 

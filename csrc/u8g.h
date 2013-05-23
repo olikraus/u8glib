@@ -359,6 +359,9 @@ struct _u8g_dev_arg_pixel_t
 };
 /* typedef struct _u8g_dev_arg_pixel_t u8g_dev_arg_pixel_t; */ /* forward decl */
 
+/* range for r,g,b: 0..255 */
+#define U8G_GET_HICOLOR_BY_RGB(r,g,b) (((uint16_t)((r)&0x0f8))<<8)|(((uint16_t)((g)&0x0fc))<<3)|(((uint16_t)((b)>>3)))
+
 struct _u8g_dev_arg_bbx_t
 {
   u8g_uint_t x, y, w, h;
