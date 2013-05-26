@@ -354,8 +354,9 @@ struct _u8g_dev_arg_pixel_t
   u8g_uint_t x, y;              /* will be modified */
   uint8_t pixel;                  /* will be modified */
   uint8_t dir;
-  uint8_t color;			/* color or index value */
-  uint8_t hi_color;		/* high byte for 64K color mode, low byte is in "color" */
+  uint8_t color;			/* color or index value, red value for true color mode */
+  uint8_t hi_color;		/* high byte for 64K color mode, low byte is in "color", green value for true color mode */
+  uint8_t blue;			/* blue value in true color mode */
 };
 /* typedef struct _u8g_dev_arg_pixel_t u8g_dev_arg_pixel_t; */ /* forward decl */
 
@@ -407,6 +408,9 @@ struct _u8g_dev_arg_irgb_t
 */
 
 /* arg: u8g_dev_arg_pixel_t * */
+#define U8G_DEV_MSG_SET_TPIXEL				44
+#define U8G_DEV_MSG_SET_4TPIXEL			45
+
 #define U8G_DEV_MSG_SET_PIXEL                           50
 #define U8G_DEV_MSG_SET_8PIXEL                          59
 
@@ -429,6 +433,8 @@ struct _u8g_dev_arg_irgb_t
 #define U8G_MODE_INDEX  U8G_MODE(1, 1, 8)
 /* hicolor is R5G6B5 */
 #define U8G_MODE_HICOLOR  U8G_MODE(0, 1, 16)
+/* truecolor  */
+#define U8G_MODE_TRUECOLOR  U8G_MODE(0, 1, 24)
 
 
 #define U8G_MODE_GET_BITS_PER_PIXEL(mode) ((mode)&31)
