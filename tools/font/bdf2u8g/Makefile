@@ -11,3 +11,5 @@ bdf2u8g: $(OBJ)
 clean:	
 	-rm $(OBJ) bdf2u8g
 
+test:	
+	./bdf2u8g -f 2 ../bdf/9x18.bdf u8g_aafont_9x18 u8g_aafont_9x18.c

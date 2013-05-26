@@ -114,8 +114,11 @@ format 1
   2             DWIDTH                                          signed --> upper  4 Bit
   byte 0 == 255 indicates empty glyph
 
+format 2
+  like format 0, but 4 gray levels for the glyph (4 pixel per byte in the glyph data)
+
   The glyph bitmap size is defined by BBX width and BBX height
-  number of bytes in the bitmap data (BBX width + 7)/8 * BBX height
+  number of bytes in the bitmap data (BBX width + 7)/8 * BBX height (format 0 and 1)
 
   draw_text(x,y,str)
   get_text_frame(x,y,str, &x1, &y1, &width, &height)
@@ -139,8 +142,15 @@ ISO-8859-1 was incorporated as the first 256 code points of ISO/IEC 10646 and Un
 #include <string.h>
 #include <assert.h>
 
+
 #define BDF2U8G_COMPACT_OUTPUT
-#define BDF2U8G_VERSION "1.00"
+#define BDF2U8G_VERSION "1.01"
+//#define VERBOSE
+
+
+/*=== forward declaration ===*/
+void bdf_aa_ClearDoShow(void);
+void bdf_aa_Do(void);
 
 /*=== result data ===*/
 #define DATA_BUF_SIZE (1024*64)
@@ -436,11 +446,13 @@ int bdf_requested_encoding = 0;
 #define BDF_LINE_STATE_KEYWORDS 0
 #define BDF_LINE_STATE_BITMAP 1
 #define BDF_MAX_HEIGHT 200
+#define BDF_AA_OFFSET 1
 
 
 char bdf_copyright[BDF_LINE_MAX];
 char bdf_font[BDF_LINE_MAX];
 unsigned char bdf_bitmap_line[BDF_MAX_HEIGHT][20];
+unsigned char bdf_aa_bitmap_line[BDF_MAX_HEIGHT+2*BDF_AA_OFFSET][(20+2*BDF_AA_OFFSET)*8];
 
 
 int bdf_line_state = BDF_LINE_STATE_KEYWORDS;
@@ -650,10 +662,20 @@ void bdf_PutGlyph(void)
     assert( bdf_line_bm_line == bdf_char_height);
 
     bdf_ShowGlyph();
+#ifdef VERBOSE
+    bdf_aa_ClearDoShow();
+#endif 
+    
     bdf_UpdateMax();
     
-    
-    len = (bdf_char_width + 7)/8 * bdf_char_height;
+    if ( bdf_font_format <= 1 )
+    {
+      len = (bdf_char_width + 7)/8 * bdf_char_height;
+    }
+    else
+    {
+      len = (bdf_char_width + 3)/4 * bdf_char_height;
+    }
     if ( len > 255 )
     {
       fprintf(stderr, "Glyph with encoding %d is too large (%d > 255)\n", bdf_encoding, len);
@@ -664,7 +686,7 @@ void bdf_PutGlyph(void)
     bdf_glyph_data_len = len;
 
   /*
-    format 0
+    format 0 and format 2
     glyph information 
     offset
     0             BBX width                                       unsigned
@@ -675,7 +697,7 @@ void bdf_PutGlyph(void)
     5             BBX yoffset                                    signed
   */
     
-    if ( bdf_font_format == 0 )
+    if ( bdf_font_format == 0  )
     {
       data_Put(bdf_char_width);
       data_Put(bdf_char_height);
@@ -683,6 +705,17 @@ void bdf_PutGlyph(void)
       data_Put(bdf_delta_x);
       data_Put(bdf_char_x);
       data_Put(bdf_char_y);
+      //data_Put(bdf_encoding);
+      bdf_is_encoding_successfully_done = 1;
+    }
+    else if ( bdf_font_format == 2 )
+    {
+      data_Put(bdf_char_width+2*BDF_AA_OFFSET);
+      data_Put(bdf_char_height+2*BDF_AA_OFFSET);
+      data_Put(bdf_glyph_data_len);
+      data_Put(bdf_delta_x);
+      data_Put(bdf_char_x-BDF_AA_OFFSET);
+      data_Put(bdf_char_y-BDF_AA_OFFSET);
       //data_Put(bdf_encoding);
       bdf_is_encoding_successfully_done = 1;
     }
@@ -752,19 +785,56 @@ format 1
       bdf_char_ascent,
       bdf_delta_x);
 
-    for( y = 0; y < bdf_char_height; y++ )
+    if ( bdf_font_format <= 1 )
     {
-      for( x = 0; x < ((bdf_char_width+7)/8); x++ )
+      for( y = 0; y < bdf_char_height; y++ )
       {
-        data_Put(bdf_bitmap_line[y][x]);
-        len--;
+	for( x = 0; x < ((bdf_char_width+7)/8); x++ )
+	{
+	  data_Put(bdf_bitmap_line[y][x]);
+	  len--;
+	}
+      }
+      assert( len == 0 );
+      bdf_is_put_glyph_completed = 1;
+    }
+    else /* format == 2 */
+    {
+      int b, cnt;
+      bdf_aa_Do();
+      for( y = 0; y < bdf_char_height+2*BDF_AA_OFFSET; y++ )
+      {
+	b = 0;
+	cnt = 0;
+	for( x = 0; x < bdf_char_width+2*BDF_AA_OFFSET; x++ )
+	{
+	  b<<=2;
+	  b |= bdf_aa_bitmap_line[y][x]&3;
+	  cnt++;
+	  if ( cnt == 4 )
+	  {
+	    data_Put(b);
+	    b = 0;
+	    cnt = 0;
+	    len--;	    
+	  }
+	}
+	
+	if ( cnt != 0 )
+	{
+	  b <<= 2*(4-cnt);
+	  data_Put(b);
+	  b = 0;
+	  cnt = 0;
+	  len--;	    
+	}
       }
     }
-    assert( len == 0 );
-    bdf_is_put_glyph_completed = 1;
-
   }
 }
+
+/*=========================================================================*/
+/* Glyph Clipping */
 
 int bdf_IsColZero(int x)
 {
@@ -849,6 +919,114 @@ void bdf_ReduceGlyph(void)
     bdf_char_height--;
   }
 }
+
+/*=========================================================================*/
+/* Anti Aliasing / Graylevel Glyph */
+
+int bdf_GetXYVal(int x, int y)
+{
+  int byte, bit;
+  
+  if ( x < 0 )
+    return 0;
+  if ( y < 0 )
+    return 0;
+  if ( x >= bdf_char_width    )
+    return 0;
+  if ( y >= bdf_char_height    )
+    return 0;
+  
+  byte = x >> 3;
+  bit = 7-(x & 7);
+  if ( (bdf_bitmap_line[y][byte] & (1<<bit)) != 0 )
+    return 1;
+  return 0;
+}
+
+void bdf_aa_Clear(void)
+{
+  int x,y;
+  for( y = 0; y < BDF_MAX_HEIGHT+2*BDF_AA_OFFSET; y++ )
+    for( x = 0; x < (20+2*BDF_AA_OFFSET)*8; x++ )
+      bdf_aa_bitmap_line[y][x] = 0;
+  
+}
+
+void bdf_aa_SetXYVal(int x, int y, int val)
+{
+  bdf_aa_bitmap_line[y][x] = val;
+}
+
+int bdf_aa_matrix[9] = {
+  1, 2, 1,
+  2, 3, 2,
+  1, 2, 1
+};
+int bdf_aa_sum = 9; 
+int bdf_aa_gray_levels = 4;
+
+void bdf_aa_Do(void)
+{
+  int x,y, val, sx, sy, sum, gray;
+  bdf_aa_Clear();
+  for( y = 0; y < bdf_char_height+2*BDF_AA_OFFSET; y++ )
+    for( x = 0; x < bdf_char_width+2*BDF_AA_OFFSET; x++ )
+    {
+      if ( bdf_GetXYVal(x-BDF_AA_OFFSET,y-BDF_AA_OFFSET) == 0 )
+      {
+	sum = 0;
+	for ( sy = -BDF_AA_OFFSET; sy <=BDF_AA_OFFSET; sy++ )
+	{
+	  for ( sx = -BDF_AA_OFFSET; sx <=BDF_AA_OFFSET; sx++ )
+	  {
+	    val = bdf_GetXYVal(x+sx-BDF_AA_OFFSET,y+sy-BDF_AA_OFFSET);
+	    val *= bdf_aa_matrix[(sy+BDF_AA_OFFSET)*(2*BDF_AA_OFFSET+1)+sx+BDF_AA_OFFSET];
+	    sum += val;
+	  }
+	}
+	
+	gray = (sum * (bdf_aa_gray_levels-1) + (bdf_aa_sum/2)) / bdf_aa_sum;
+	if ( gray >= bdf_aa_gray_levels )
+	{
+	  gray = bdf_aa_gray_levels-1;
+	}
+      }
+      else
+      {
+	gray = bdf_aa_gray_levels-1;
+      }
+      bdf_aa_SetXYVal(x, y, gray);
+    }
+}
+
+void bdf_aa_Show(void)
+{
+  int x,y;
+  for( y = 0; y < bdf_char_height+2*BDF_AA_OFFSET; y++ )
+  {
+    for( x = 0; x < bdf_char_width+2*BDF_AA_OFFSET; x++ )
+    {
+      switch(bdf_aa_bitmap_line[y][x])
+      {
+	case 0: printf("."); break;
+	case 1: printf("-"); break;
+	case 2: printf("+"); break;
+	case 3: printf("#"); break;
+      }
+    }
+    printf("\n");
+  }
+}
+
+void bdf_aa_ClearDoShow(void)
+{
+  bdf_aa_Do();
+  bdf_aa_Show();
+}
+
+
+/*=========================================================================*/
+/* Parser */
 
 void bdf_ReadLine(const char *s)
 {
