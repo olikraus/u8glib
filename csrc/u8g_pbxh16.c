@@ -177,7 +177,7 @@ uint8_t u8g_dev_pbxh16_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *ar
     case U8G_DEV_MSG_SET_XY_CB:
       break;
     case U8G_DEV_MSG_GET_MODE:
-      return U8G_MODE_R3G3B2;
+      return U8G_MODE_HICOLOR;
   }
   return 1;
 }

@@ -437,6 +437,20 @@ void u8g_SetHiColorByRGB(u8g_t *u8g, uint8_t r, uint8_t g, uint8_t b)
   //u8g_SetHiColor(u8g, U8G_GET_HICOLOR_BY_RGB(r,g,b));
 }
 
+void u8g_SetRGB(u8g_t *u8g, uint8_t r, uint8_t g, uint8_t b)
+{
+  if ( u8g->mode == U8G_MODE_HICOLOR )
+  {
+    u8g_SetHiColorByRGB(u8g, r,g,b);
+  }
+  else
+  {
+    u8g->arg_pixel.color = r;
+    u8g->arg_pixel.hi_color = g;
+    u8g->arg_pixel.blue = b;
+  }
+}
+
 
 uint8_t u8g_GetColorIndex(u8g_t *u8g)
 {

@@ -101,6 +101,11 @@ static void u8g_pbxh24_set_pixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_
 }
 #endif
 
+/*
+  intensity
+    0..3		intensity value
+    4			replace color
+*/
 static void u8g_pbxh24_set_tpixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8_t red, uint8_t green, uint8_t blue, uint8_t intensity)
 {
   uint16_t tmp;
@@ -115,6 +120,16 @@ static void u8g_pbxh24_set_tpixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8
   tmp += x;
   tmp *= 3;
   ptr += tmp;
+  
+  if ( intensity == 4 )
+  {
+    *ptr = red;
+    ptr++;
+    *ptr = green;
+    ptr++;
+    *ptr = blue;
+    return;
+  }
 
   if ( intensity <= 2 )
   {
@@ -128,7 +143,7 @@ static void u8g_pbxh24_set_tpixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8
     green >>= 1;
     blue >>= 1;
   }
-      
+  
   if ( *ptr < red ) *ptr = red;
   ptr++;
   if ( *ptr < green ) *ptr = green;
@@ -165,7 +180,7 @@ void u8g_pbxh24_Set8Pixel(u8g_pb_t *b, u8g_dev_arg_pixel_t *arg_pixel)
   do
   {
     if ( pixel & 128 )
-      u8g_pbxh24_SetTPixel(b, arg_pixel, 3);
+      u8g_pbxh24_SetTPixel(b, arg_pixel, 4);
     arg_pixel->x += dx;
     arg_pixel->y += dy;
     pixel <<= 1;
@@ -206,7 +221,7 @@ uint8_t u8g_dev_pbxh24_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *ar
         u8g_pbxh24_Set8Pixel(pb, (u8g_dev_arg_pixel_t *)arg);
       break;
     case U8G_DEV_MSG_SET_PIXEL:
-      u8g_pbxh24_SetTPixel(pb, (u8g_dev_arg_pixel_t *)arg, 3);
+      u8g_pbxh24_SetTPixel(pb, (u8g_dev_arg_pixel_t *)arg, 4);
       break;
     case U8G_DEV_MSG_SET_4TPIXEL:
       u8g_pbxh24_Set4TPixel(pb, (u8g_dev_arg_pixel_t *)arg);

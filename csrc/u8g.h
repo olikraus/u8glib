@@ -157,6 +157,7 @@ extern u8g_dev_t u8g_dev_sdl_2bit;
 extern u8g_dev_t u8g_dev_sdl_2bit_double_mem;
 extern u8g_dev_t u8g_dev_sdl_8bit;
 extern u8g_dev_t u8g_dev_sdl_hicolor;
+extern u8g_dev_t u8g_dev_sdl_fullcolor;
 int u8g_sdl_get_key(void);
 
 /* Size: 70x30 monochrom, stdout */
@@ -352,7 +353,7 @@ extern u8g_dev_t u8g_dev_vs;
 struct _u8g_dev_arg_pixel_t
 {
   u8g_uint_t x, y;              /* will be modified */
-  uint8_t pixel;                  /* will be modified */
+  uint8_t pixel;                  /* will be modified, pixel sequence or transparency value */
   uint8_t dir;
   uint8_t color;			/* color or index value, red value for true color mode */
   uint8_t hi_color;		/* high byte for 64K color mode, low byte is in "color", green value for true color mode */
@@ -753,6 +754,9 @@ uint8_t u8g_dev_pb8h8_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg
 /* u8g_pbxh16.c */
 uint8_t u8g_dev_pbxh16_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
+/* u8g_pbxh24.c */
+uint8_t u8g_dev_pbxh24_base_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
+
 
 /*===============================================================*/
 /* u8g_ll_api.c */
@@ -899,6 +903,7 @@ void u8g_SetColorEntry(u8g_t *u8g, uint8_t idx, uint8_t r, uint8_t g, uint8_t b)
 void u8g_SetColorIndex(u8g_t *u8g, uint8_t idx);
 void u8g_SetHiColor(u8g_t *u8g, uint16_t rgb);
 void u8g_SetHiColorByRGB(u8g_t *u8g, uint8_t r, uint8_t g, uint8_t b);
+void u8g_SetRGB(u8g_t *u8g, uint8_t r, uint8_t g, uint8_t b);
 uint8_t u8g_GetColorIndex(u8g_t *u8g);
 
 uint8_t u8g_GetDefaultForegroundColor(u8g_t *u8g);

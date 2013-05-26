@@ -83,6 +83,36 @@ void u8g_sdl_set_hicolor(int x, int y, uint8_t low, uint8_t high)
   
 }
 
+void u8g_sdl_set_fullcolor(int x, int y, unsigned int r, unsigned int g, unsigned int b)
+{
+  Uint32  *ptr;
+  Uint32 offset;
+  int i, j;
+  Uint32 color;
+
+  if ( y >= HEIGHT )
+    return;
+  if ( y < 0 )
+    return;
+  if ( x >= WIDTH )
+    return;
+  if ( x < 0 )
+    return;
+  
+  color = SDL_MapRGB( u8g_sdl_screen->format, r, g, b );  
+  for( i = 0; i < u8g_sdl_multiple; i++ )
+    for( j = 0; j < u8g_sdl_multiple; j++ )
+    {
+      offset = 
+	(y * u8g_sdl_multiple + j) * u8g_sdl_screen->w * u8g_sdl_screen->format->BytesPerPixel + 
+	(x * u8g_sdl_multiple + i) * u8g_sdl_screen->format->BytesPerPixel;
+      assert( offset < u8g_sdl_screen->w * u8g_sdl_screen->h * u8g_sdl_screen->format->BytesPerPixel );
+      ptr = u8g_sdl_screen->pixels + offset;
+      *ptr = color;
+    }
+  
+}
+
 #define W(x,w) (((x)*(w))/100)
 
 void u8g_sdl_init(void)
@@ -492,6 +522,48 @@ uint8_t u8g_dev_sdl_hicolor_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *ar
   return u8g_dev_pbxh16_base_fn(u8g, dev, msg, arg);
 }
 
+uint8_t u8g_dev_sdl_fullcolor_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  unsigned int r,g,b;
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_sdl_init_R3G3B2();
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_FIRST:
+      u8g_sdl_start();
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        uint8_t i, j, v;
+        uint8_t page_height;
+	uint8_t low;
+	uint8_t high;
+	
+        page_height = pb->p.page_y1;
+        page_height -= pb->p.page_y0;
+        page_height++;
+        for( j = 0; j < page_height; j++ )
+        {
+          for( i = 0; i < WIDTH; i++ )
+          {
+	    r = ((uint8_t *)(pb->buf))[(i+j*WIDTH)*3];
+	    g = ((uint8_t *)(pb->buf))[(i+j*WIDTH)*3+1];
+	    b = ((uint8_t *)(pb->buf))[(i+j*WIDTH)*3+2];
+            u8g_sdl_set_fullcolor(i, j+pb->p.page_y0, r,g,b);
+          }
+        }
+      }
+      /* update all */
+      /* http://www.libsdl.org/cgi/docwiki.cgi/SDL_UpdateRect */
+      SDL_UpdateRect(u8g_sdl_screen, 0,0,0,0);
+      break;    /* continue to base fn */
+  }
+  return u8g_dev_pbxh24_base_fn(u8g, dev, msg, arg);
+}
 
 
 U8G_PB_DEV(u8g_dev_sdl_1bit, WIDTH, HEIGHT, 8, u8g_dev_sdl_1bit_fn, NULL);
@@ -506,6 +578,9 @@ uint8_t u8g_hicolor_xh16_buf[WIDTH*8*2] U8G_NOCOMMON ;
 u8g_pb_t u8g_hicolor_xh16_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_hicolor_xh16_buf}; 
 u8g_dev_t u8g_dev_sdl_hicolor = { u8g_dev_sdl_hicolor_fn, &u8g_hicolor_xh16_pb, NULL };
 
+uint8_t u8g_fullcolor_xh24_buf[WIDTH*8*3] U8G_NOCOMMON ; 
+u8g_pb_t u8g_fullcolor_xh24_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_fullcolor_xh24_buf}; 
+u8g_dev_t u8g_dev_sdl_fullcolor = { u8g_dev_sdl_fullcolor_fn, &u8g_fullcolor_xh24_pb, NULL };
 
 uint8_t u8g_dev_sdl_16v2_buf[WIDTH*2] U8G_NOCOMMON ; 
 u8g_pb_t u8g_dev_sdl_16v2_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_sdl_16v2_buf}; 
