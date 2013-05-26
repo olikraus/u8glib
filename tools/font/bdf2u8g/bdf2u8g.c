@@ -145,7 +145,7 @@ ISO-8859-1 was incorporated as the first 256 code points of ISO/IEC 10646 and Un
 
 #define BDF2U8G_COMPACT_OUTPUT
 #define BDF2U8G_VERSION "1.01"
-//#define VERBOSE
+#define VERBOSE
 
 
 /*=== forward declaration ===*/
@@ -674,7 +674,7 @@ void bdf_PutGlyph(void)
     }
     else
     {
-      len = (bdf_char_width + 3)/4 * bdf_char_height;
+      len = (bdf_char_width+2*BDF_AA_OFFSET + 3)/4 * (bdf_char_height+2*BDF_AA_OFFSET);
     }
     if ( len > 255 )
     {
@@ -829,6 +829,7 @@ format 1
 	  len--;	    
 	}
       }
+      assert( len == 0 );
     }
   }
 }
@@ -958,11 +959,11 @@ void bdf_aa_SetXYVal(int x, int y, int val)
 }
 
 int bdf_aa_matrix[9] = {
-  1, 2, 1,
-  2, 3, 2,
-  1, 2, 1
+  1, 3, 1,
+  3, 4, 3,
+  1, 3, 1
 };
-int bdf_aa_sum = 9; 
+int bdf_aa_sum = 20; 
 int bdf_aa_gray_levels = 4;
 
 void bdf_aa_Do(void)
@@ -984,8 +985,14 @@ void bdf_aa_Do(void)
 	    sum += val;
 	  }
 	}
-	
-	gray = (sum * (bdf_aa_gray_levels-1) + (bdf_aa_sum/2)) / bdf_aa_sum;
+	if ( sum <= 5 )
+	{
+	  gray = 0;
+	}
+	else
+	{
+	  gray = (sum * (bdf_aa_gray_levels-1) + (bdf_aa_sum/2)) / bdf_aa_sum;
+	}
 	if ( gray >= bdf_aa_gray_levels )
 	{
 	  gray = bdf_aa_gray_levels-1;

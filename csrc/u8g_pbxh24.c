@@ -131,24 +131,44 @@ static void u8g_pbxh24_set_tpixel(u8g_pb_t *b, u8g_uint_t x, u8g_uint_t y, uint8
     return;
   }
 
-  if ( intensity <= 2 )
+  if ( intensity == 2 )
   {
+    /*
+    red = red/4 + red/2;
+    green = green/4 + green/2;
+    blue = blue/4 + blue/2;
+    */
     red >>= 1;
     green >>= 1;
     blue >>= 1;
   }
-  if ( intensity <= 1 )
+  else if ( intensity == 1 )
   {
-    red >>= 1;
-    green >>= 1;
-    blue >>= 1;
+    red >>= 2;
+    green >>= 2;
+    blue >>= 2;
   }
+
+  if ( *ptr >= 255-red ) *ptr = 255; 
+  else *ptr += red;
+  ptr++;
+
+  if ( *ptr >= 255-green ) *ptr = 255; 
+  else *ptr += green;
+  ptr++;
+
+  if ( *ptr >= 255-blue ) *ptr = 255; 
+  else *ptr += blue;
   
+  /*
   if ( *ptr < red ) *ptr = red;
   ptr++;
   if ( *ptr < green ) *ptr = green;
   ptr++;
   if ( *ptr < blue ) *ptr = blue;
+  */
+  
+  
 }
 
 void u8g_pbxh24_SetTPixel(u8g_pb_t *b, const u8g_dev_arg_pixel_t * const arg_pixel, uint8_t intensity)

@@ -102,6 +102,17 @@ void u8g_Draw8PixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, ui
   u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_SET_8PIXEL, arg);
 }
 
+void u8g_Draw4TPixelLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel)
+{
+  u8g_dev_arg_pixel_t *arg = &(u8g->arg_pixel);
+  arg->x = x;
+  arg->y = y;
+  arg->dir = dir;
+  arg->pixel = pixel;
+  u8g_call_dev_fn(u8g, dev, U8G_DEV_MSG_SET_4TPIXEL, arg);
+}
+
+
 #ifdef U8G_DEV_MSG_IS_BBX_INTERSECTION
 uint8_t u8g_IsBBXIntersectionLL(u8g_t *u8g, u8g_dev_t *dev, u8g_uint_t x, u8g_uint_t y, u8g_uint_t w, u8g_uint_t h)
 {  
@@ -376,6 +387,12 @@ void u8g_Draw8Pixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t
 {
   u8g_Draw8PixelLL(u8g, u8g->dev, x, y, dir, pixel);
 }
+
+void u8g_Draw4TPixel(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, uint8_t pixel)
+{
+  u8g_Draw4TPixelLL(u8g, u8g->dev, x, y, dir, pixel);
+}
+
 
 /* u8g_IsBBXIntersection() has been moved to u8g_clip.c */
 #ifdef OBSOLETE_CODE
