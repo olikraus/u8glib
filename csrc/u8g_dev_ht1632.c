@@ -198,6 +198,7 @@ uint8_t u8g_dev_ht1632_24x16_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *a
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
+      ht1632_init();
       break;
     case U8G_DEV_MSG_STOP:
       break;
