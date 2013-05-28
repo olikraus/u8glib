@@ -9,7 +9,7 @@ void loop(void)
 {
   u8g_t u8g;
   
-  u8g_Init(&u8g, &u8g_dev_ht1632_26x16);
+  u8g_Init(&u8g, &u8g_dev_ht1632_24x16);
   u8g_FirstPage(&u8g);
   u8g_SetColorIndex(&u8g, 1);
   do  {

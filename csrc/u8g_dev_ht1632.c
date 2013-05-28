@@ -1,6 +1,6 @@
 /*
 
-  u8g_dev_ht1632_26x16.c
+  u8g_dev_ht1632.c
   
   1-Bit (BW) Driver for HT1632 controller
 
@@ -37,7 +37,7 @@
 
 #include "u8g.h"
 
-#define WIDTH 26
+#define WIDTH 24
 #define HEIGHT 16
 #define PAGE_HEIGHT 8
 
@@ -193,7 +193,7 @@ void ht1632_transfer_data(uint8_t page, uint8_t cnt, uint8_t *data)
 #endif /* ARDUINO */
 
 
-uint8_t u8g_dev_ht1632_26x16_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+uint8_t u8g_dev_ht1632_24x16_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
@@ -216,5 +216,5 @@ uint8_t u8g_dev_ht1632_26x16_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *a
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_ht1632_26x16 , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ht1632_26x16_fn, u8g_com_null_fn);
+U8G_PB_DEV(u8g_dev_ht1632_24x16 , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ht1632_24x16_fn, u8g_com_null_fn);
 
