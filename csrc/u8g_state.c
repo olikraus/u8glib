@@ -64,6 +64,15 @@ void u8g_SetHardwareBackup(u8g_t *u8g, u8g_state_cb backup_cb)
 
 
 /*===============================================================*/
+/* register variable for restoring interrupt state */
+
+#if defined(__AVR__)
+uint8_t global_SREG_backup;
+#endif
+
+
+
+/*===============================================================*/
 /* AVR */
 
 #if defined(__AVR__)

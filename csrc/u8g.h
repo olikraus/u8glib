@@ -36,7 +36,11 @@
 #ifndef _U8G_H
 #define _U8G_H
 
+/* uncomment the following line to support displays larger than 240x240 */
 //#define U8G_16BIT 1
+/* uncomment the following to generate interrupt safe code */
+#define U8G_INTERRUPT_SAFE 1
+
 
 #include <stddef.h>
 
@@ -81,14 +85,40 @@ typedef uint8_t PROGMEM u8g_pgm_uint8_t;
 typedef uint8_t u8g_fntpgm_uint8_t;
 #define u8g_pgm_read(adr) pgm_read_byte_near(adr)
 #define U8G_PSTR(s) ((u8g_pgm_uint8_t *)PSTR(s))
+
 #else
+
 #define U8G_PROGMEM
 #define PROGMEM
 typedef uint8_t u8g_pgm_uint8_t;
 typedef uint8_t u8g_fntpgm_uint8_t;
 #define u8g_pgm_read(adr) (*(const u8g_pgm_uint8_t *)(adr)) 
 #define U8G_PSTR(s) ((u8g_pgm_uint8_t *)(s))
+
 #endif
+  
+/*===============================================================*/
+/* interrupt safe code */
+#if defined(U8G_INTERRUPT_SAFE)
+#  if defined(__AVR__)
+extern uint8_t global_SREG_backup;	/* u8g_state.c */
+#    define U8G_ATOMIC_START()		do { global_SREG_backup = SREG; cli(); } while(0)
+#    define U8G_ATOMIC_END()			SREG = global_SREG_backup
+#    define U8G_ATOMIC_OR(ptr, val) 	do { uint8_t tmpSREG = SREG; cli(); (*(ptr) |= (val)); SREG = tmpSREG; } while(0)
+#    define U8G_ATOMIC_AND(ptr, val) 	do { uint8_t tmpSREG = SREG; cli(); (*(ptr) &= (val)); SREG = tmpSREG; } while(0)
+#  else
+#    define U8G_ATOMIC_OR(ptr, val) (*(ptr) |= (val))
+#    define U8G_ATOMIC_AND(ptr, val) (*(ptr) &= (val))
+#    define U8G_ATOMIC_START()
+#    define U8G_ATOMIC_END()
+#  endif /* __AVR__ */
+#else
+#  define U8G_ATOMIC_OR(ptr, val) (*(ptr) |= (val))
+#  define U8G_ATOMIC_AND(ptr, val) (*(ptr) &= (val))
+#  define U8G_ATOMIC_START()
+#  define U8G_ATOMIC_END()
+#endif /* U8G_INTERRUPT_SAFE */
+  
   
 /*===============================================================*/
 /* forward */

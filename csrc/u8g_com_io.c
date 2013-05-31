@@ -159,9 +159,16 @@ void u8g_SetPinLevel(uint8_t internal_pin_number, uint8_t level)
   volatile uint8_t * tmp = u8g_get_avr_io_ptr(u8g_avr_port_P, internal_pin_number>>3);
   
   if ( level == 0 )
-    *tmp &= ~_BV(internal_pin_number&7);
+  {
+    U8G_ATOMIC_AND(tmp, ~_BV(internal_pin_number&7));
+   // *tmp &= ~_BV(internal_pin_number&7);
+  }
   else
-    *tmp |= _BV(internal_pin_number&7);
+  {
+    U8G_ATOMIC_OR(tmp, _BV(internal_pin_number&7));
+    //*tmp |= _BV(internal_pin_number&7);
+  }
+  
 }
 
 uint8_t u8g_GetPinLevel(uint8_t internal_pin_number)
