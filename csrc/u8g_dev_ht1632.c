@@ -86,7 +86,6 @@ void ht1632_write_data_MSB(uint8_t cnt, uint8_t data, uint8_t extra)
  
   for(i = cnt - 1; i >= 0; i--)
   {
-    digitalWrite(WR_PIN, LOW);
     if ((data >> i) & 1)
     {  
       digitalWrite(DATA_PIN, HIGH);
@@ -96,15 +95,20 @@ void ht1632_write_data_MSB(uint8_t cnt, uint8_t data, uint8_t extra)
       digitalWrite(DATA_PIN, LOW);
     }
  
+    digitalWrite(WR_PIN, LOW);
+    u8g_MicroDelay();
     digitalWrite(WR_PIN, HIGH);
+    u8g_MicroDelay();
   }
  
   // Send an extra bit
   if (extra)
   {
-    digitalWrite(WR_PIN, LOW);
     digitalWrite(DATA_PIN, HIGH);
+    digitalWrite(WR_PIN, LOW);
+    u8g_MicroDelay();
     digitalWrite(WR_PIN, HIGH);
+    u8g_MicroDelay();
   }
 }
  
@@ -113,7 +117,6 @@ void ht1632_write_data(uint8_t cnt, uint8_t data)
   uint8_t i;
   for (i = 0; i < cnt; i++)
   {
-    digitalWrite(WR_PIN, LOW);
  
     if ((data >> i) & 1) {
       digitalWrite(DATA_PIN, HIGH);
@@ -122,7 +125,10 @@ void ht1632_write_data(uint8_t cnt, uint8_t data)
       digitalWrite(DATA_PIN, LOW);
     }
  
+    digitalWrite(WR_PIN, LOW);
+    u8g_MicroDelay();
     digitalWrite(WR_PIN, HIGH);
+    u8g_MicroDelay();
   }
 }
  
