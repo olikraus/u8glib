@@ -155,6 +155,8 @@ void ht1632_init(void)
   ht1632_write_data_MSB(8, HT1632_CMD_PWM+15, true); // 8 bits  
   digitalWrite(CS_PIN, HIGH);
  
+  /* removed following (debug) code */
+  /*
   digitalWrite(CS_PIN, LOW);
   ht1632_write_data_MSB(3, HT1632_ID_WR, false); // Send "write to display" command
   ht1632_write_data_MSB(7, 0, false);
@@ -163,6 +165,7 @@ void ht1632_init(void)
     ht1632_write_data(8, 0xFF);
   }
   digitalWrite(CS_PIN, HIGH);
+  */
 }
  
 /*
@@ -186,6 +189,15 @@ void ht1632_transfer_data(uint8_t page, uint8_t cnt, uint8_t *data)
   }  
   digitalWrite(CS_PIN, HIGH);
 }
+
+/* value is between 0...15 */
+void ht1632_set_contrast(uint8_t value)
+{
+  digitalWrite(CS_PIN, LOW);
+  ht1632_write_data_MSB(3, HT1632_ID_CMD, false);
+  ht1632_write_data_MSB(8, HT1632_CMD_PWM + value);
+  digitalWrite(CS_PIN, HIGH);
+}
  
 #else
 void ht1632_init(void)
@@ -195,7 +207,11 @@ void ht1632_init(void)
 void ht1632_transfer_data(uint8_t page, uint8_t cnt, uint8_t *data)
 {
 }
- 
+
+void ht1632_set_contrast(uint8_t value)
+{
+}
+
 #endif /* ARDUINO */
  
  
@@ -218,13 +234,13 @@ uint8_t u8g_dev_ht1632_24x16_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *a
       }
       break;
     case U8G_DEV_MSG_CONTRAST:
-      return 1;
+      /* values passed to SetContrast() are between 0 and 255, scale down to 0...15 */
+      ht1632_set_contrast((*(uint8_t *)arg) >> 4);
+    return 1;
   }
   return u8g_dev_pb16v1_base_fn(u8g, dev, msg, arg);
 }
  
-//U8G_PB_DEV(u8g_dev_ht1632_24x16 , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ht1632_24x16_fn, u8g_com_null_fn);
-
 uint8_t u8g_dev_ht1632_24x16_buf[WIDTH*2] U8G_NOCOMMON ; 
 u8g_pb_t u8g_dev_ht1632_24x16_pb = { {16, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_ht1632_24x16_buf}; 
 u8g_dev_t u8g_dev_ht1632_24x16 = { u8g_dev_ht1632_24x16_fn, &u8g_dev_ht1632_24x16_pb, u8g_com_null_fn };
