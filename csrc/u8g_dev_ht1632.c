@@ -1,153 +1,143 @@
 /*
-
+ 
   u8g_dev_ht1632.c
-  
+ 
   1-Bit (BW) Driver for HT1632 controller
-
+ 
   Universal 8bit Graphics Library
-  
+ 
   Copyright (c) 2013, olikraus@gmail.com
   All rights reserved.
-
-  Redistribution and use in source and binary forms, with or without modification, 
+ 
+  Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
-
-  * Redistributions of source code must retain the above copyright notice, this list 
+ 
+  * Redistributions of source code must retain the above copyright notice, this list
     of conditions and the following disclaimer.
-    
-  * Redistributions in binary form must reproduce the above copyright notice, this 
-    list of conditions and the following disclaimer in the documentation and/or other 
+   
+  * Redistributions in binary form must reproduce the above copyright notice, this
+    list of conditions and the following disclaimer in the documentation and/or other
     materials provided with the distribution.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
-  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
-  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
-  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
-  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
-  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-  
+ 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
 */
-
+ 
 #include "u8g.h"
-
+ 
 #define WIDTH 24
 #define HEIGHT 16
-#define PAGE_HEIGHT 8
-
+#define PAGE_HEIGHT 16
+ 
 /* http://forum.arduino.cc/index.php?topic=168537.0 */
-
-#define HT1632_CMD_SYSDIS	0x00	// CMD= 0000-0000-x Turn off oscil
-#define HT1632_CMD_SYSON	0x01	// CMD= 0000-0001-x Enable system oscil
-#define HT1632_CMD_LEDOFF	0x02	// CMD= 0000-0010-x LED duty cycle gen off
-#define HT1632_CMD_LEDON	0x03	// CMD= 0000-0011-x LEDs ON
-#define HT1632_CMD_BLOFF	0x08	// CMD= 0000-1000-x Blink OFF
-#define HT1632_CMD_BLON		0x09	// CMD= 0000-1001-x Blink On
-#define HT1632_CMD_SLVMD	0x10	// CMD= 0001-00xx-x Slave Mode
-#define HT1632_CMD_MSTMD	0x14	// CMD= 0001-01xx-x Master Mode
-#define HT1632_CMD_RCCLK	0x18	// CMD= 0001-10xx-x Use on-chip clock
-#define HT1632_CMD_EXTCLK	0x1C	// CMD= 0001-11xx-x Use external clock
-#define HT1632_CMD_COMS00	0x20	// CMD= 0010-ABxx-x commons options
-#define HT1632_CMD_COMS01	0x24	// CMD= 0010-ABxx-x commons options
-#define HT1632_CMD_COMS10	0x28	// CMD= 0010-ABxx-x commons options
-#define HT1632_CMD_COMS11	0x2C	// P-MOS OUTPUT AND 16COMMON OPTION
-#define HT1632_CMD_PWM		0xA0	// CMD= 101x-PPPP-x PWM duty cycle
-
-#define HT1632_ID_CMD	0x04
-#define HT1632_ID_WR	0x05
-
-#define HT1632_ID_LEN		3		// IDs are 3 bits
-#define HT1632_CMD_LEN		8		// CMDs are 8 bits
-#define HT1632_DATA_LEN		8		// Data are 4*2 bits
-#define HT1632_ADDR_LEN		7		// Address are 7 bits
-
+ 
+#define HT1632_CMD_SYSDIS       0x00    // CMD= 0000-0000-x Turn off oscil
+#define HT1632_CMD_SYSON        0x01    // CMD= 0000-0001-x Enable system oscil
+#define HT1632_CMD_LEDOFF       0x02    // CMD= 0000-0010-x LED duty cycle gen off
+#define HT1632_CMD_LEDON        0x03    // CMD= 0000-0011-x LEDs ON
+#define HT1632_CMD_BLOFF        0x08    // CMD= 0000-1000-x Blink OFF
+#define HT1632_CMD_BLON         0x09    // CMD= 0000-1001-x Blink On
+#define HT1632_CMD_SLVMD        0x10    // CMD= 0001-00xx-x Slave Mode
+#define HT1632_CMD_MSTMD        0x14    // CMD= 0001-01xx-x Master Mode
+#define HT1632_CMD_RCCLK        0x18    // CMD= 0001-10xx-x Use on-chip clock
+#define HT1632_CMD_EXTCLK       0x1C    // CMD= 0001-11xx-x Use external clock
+#define HT1632_CMD_COMS00       0x20    // CMD= 0010-ABxx-x commons options
+#define HT1632_CMD_COMS01       0x24    // CMD= 0010-ABxx-x commons options
+#define HT1632_CMD_COMS10       0x28    // CMD= 0010-ABxx-x commons options
+#define HT1632_CMD_COMS11       0x2C    // P-MOS OUTPUT AND 16COMMON OPTION
+#define HT1632_CMD_PWM          0xA0    // CMD= 101x-PPPP-x PWM duty cycle
+ 
+#define HT1632_ID_CMD   4       /* ID = 100 - Commands */
+#define HT1632_ID_RD    6       /* ID = 110 - Read RAM */
+#define HT1632_ID_WR    5       /* ID = 101 - Write RAM */
+ 
+#define HT1632_ID_LEN           3               // IDs are 3 bits
+#define HT1632_CMD_LEN          8               // CMDs are 8 bits
+#define HT1632_DATA_LEN         8               // Data are 4*2 bits
+#define HT1632_ADDR_LEN         7               // Address are 7 bits
+ 
 #if defined(ARDUINO)
-
-#if ARDUINO < 100 
+ 
+#if ARDUINO < 100
 #include <WProgram.h>
-#else 
-#include <Arduino.h> 
+#else
+#include <Arduino.h>
 #endif
-
+ 
 #define DATA_PIN 2
 #define WR_PIN 3
 #define CS_PIN 4
-
-
-void ht1632_write_data_MSB(uint8_t cnt, uint8_t data, uint8_t extra) 
+ 
+void ht1632_write_data_MSB(uint8_t cnt, uint8_t data, uint8_t extra)
 {
   int8_t i;
-  
-  for(i = cnt - 1; i >= 0; i--) 
+ 
+  for(i = cnt - 1; i >= 0; i--)
   {
-      if ((data >> i) & 1) 
-      {	
-	//PORT |= 1 << DATA;
-	digitalWrite(DATA_PIN, HIGH);
-      }
-      else 
-      {
-	//PORT &= ~(1 << DATA);
-	digitalWrite(DATA_PIN, LOW);
-      }
-      u8g_MicroDelay();
-      // PORT &= ~(1 << WR);
-      digitalWrite(WR_PIN, LOW);
-      u8g_MicroDelay();
-      // PORT |= 1 << WR;
-      digitalWrite(WR_PIN, HIGH);
-      u8g_MicroDelay();
-  }
-
-  // Send an extra bit
-  if (extra) 
-  {
-      digitalWrite(DATA_PIN, HIGH);
-      //PORT |= 1 << DATA;
-      u8g_MicroDelay();
-      //PORT &= ~(1 << WR);
-      digitalWrite(WR_PIN, LOW);
-      u8g_MicroDelay();
-      //PORT |= 1 << WR;
-      digitalWrite(WR_PIN, HIGH);
-      u8g_MicroDelay();
-  }
-}
-
-void ht1632_write_data(uint8_t cnt, uint8_t data) 
-{
-  int8_t i;
-  for (i = 0; i < cnt; i++) 
-  {
-    if ((data >> i) & 1) 
-    {
-	    // PORT |= 1 << DATA;
-	    digitalWrite(DATA_PIN, HIGH);
-    }
-    else 
-    {
-	    // PORT &= ~(1 << DATA);
-	    digitalWrite(DATA_PIN, LOW);
-    }
-
-    //PORT &= ~(1 << WR);
     digitalWrite(WR_PIN, LOW);
-    u8g_MicroDelay();
-    //PORT |= 1 << WR;
+    if ((data >> i) & 1)
+    {  
+      digitalWrite(DATA_PIN, HIGH);
+    }
+    else
+    {
+      digitalWrite(DATA_PIN, LOW);
+    }
+ 
     digitalWrite(WR_PIN, HIGH);
-    u8g_MicroDelay();
+  }
+ 
+  // Send an extra bit
+  if (extra)
+  {
+    digitalWrite(WR_PIN, LOW);
+    digitalWrite(DATA_PIN, HIGH);
+    digitalWrite(WR_PIN, HIGH);
   }
 }
-
-
+ 
+void ht1632_write_data(uint8_t cnt, uint8_t data)
+{
+  uint8_t i;
+  for (i = 0; i < cnt; i++)
+  {
+    digitalWrite(WR_PIN, LOW);
+ 
+    if ((data >> i) & 1) {
+      digitalWrite(DATA_PIN, HIGH);
+    }
+    else {
+      digitalWrite(DATA_PIN, LOW);
+    }
+ 
+    digitalWrite(WR_PIN, HIGH);
+  }
+}
+ 
+ 
 void ht1632_init(void)
 {
+  uint8_t i;
+  pinMode(DATA_PIN, OUTPUT);
+  pinMode(WR_PIN, OUTPUT);
+  pinMode(CS_PIN, OUTPUT);
+ 
+  digitalWrite(DATA_PIN, HIGH);
+  digitalWrite(WR_PIN, HIGH);
+  digitalWrite(CS_PIN, HIGH);
+ 
   digitalWrite(CS_PIN, LOW);
   /* init display once after startup */
   ht1632_write_data_MSB(3, HT1632_ID_CMD, false); // IDs are 3 bits
@@ -158,12 +148,21 @@ void ht1632_init(void)
   ht1632_write_data_MSB(8, HT1632_CMD_BLOFF, true); // 8 bits
   ht1632_write_data_MSB(8, HT1632_CMD_PWM+15, true); // 8 bits  
   digitalWrite(CS_PIN, HIGH);
+ 
+  digitalWrite(CS_PIN, LOW);
+  ht1632_write_data_MSB(3, HT1632_ID_WR, false); // Send "write to display" command
+  ht1632_write_data_MSB(7, 0, false);
+  for(i = 0; i<48; ++i)
+  {
+    ht1632_write_data(8, 0xFF);
+  }
+  digitalWrite(CS_PIN, HIGH);
 }
-
+ 
 /*
-  page: 0=data contain lines 0..7, 1=data contain lines 8..16
-  cnt: number of bytes in the buffer
-  data: pointer to a buffer with "cnt" bytes.
+  page: 0=data contain lines 0..16, 1=data contain lines 16..32  (a 24x16 display will only have page 0)
+  cnt: width of the display
+  data: pointer to a buffer with 2*cnt bytes.
 */
 void ht1632_transfer_data(uint8_t page, uint8_t cnt, uint8_t *data)
 {
@@ -171,41 +170,42 @@ void ht1632_transfer_data(uint8_t page, uint8_t cnt, uint8_t *data)
   /* send data to the ht1632 */
   digitalWrite(CS_PIN, LOW);
   ht1632_write_data_MSB(3, HT1632_ID_WR, false); // Send "write to display" command
-  ht1632_write_data_MSB(7, page*26, false); // Oliver: Not sure if this calculation is correct 
-
+  ht1632_write_data_MSB(7, page*2*cnt, false); 
+  
   // Operating in progressive addressing mode
-  for (addr = 0; addr < cnt; addr++) 
-  { 
+  for (addr = 0; addr < cnt; addr++)
+  {
     ht1632_write_data(8, data[addr]);  
+    ht1632_write_data(8, data[addr+cnt]);
   }  
   digitalWrite(CS_PIN, HIGH);
 }
-
+ 
 #else
 void ht1632_init(void)
 {
 }
-
+ 
 void ht1632_transfer_data(uint8_t page, uint8_t cnt, uint8_t *data)
 {
 }
-
+ 
 #endif /* ARDUINO */
-
-
+ 
+ 
 uint8_t u8g_dev_ht1632_24x16_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
-      ht1632_init();
+		ht1632_init();
       break;
     case U8G_DEV_MSG_STOP:
       break;
     case U8G_DEV_MSG_PAGE_NEXT:
       {
-        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
-        
+	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+       
 	/* current page: pb->p.page */
 	/* ptr to the buffer: pb->buf */
 	ht1632_transfer_data(pb->p.page, WIDTH, pb->buf);
@@ -214,8 +214,12 @@ uint8_t u8g_dev_ht1632_24x16_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *a
     case U8G_DEV_MSG_CONTRAST:
       return 1;
   }
-  return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
+  return u8g_dev_pb16v1_base_fn(u8g, dev, msg, arg);
 }
+ 
+//U8G_PB_DEV(u8g_dev_ht1632_24x16 , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ht1632_24x16_fn, u8g_com_null_fn);
 
-U8G_PB_DEV(u8g_dev_ht1632_24x16 , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ht1632_24x16_fn, u8g_com_null_fn);
+uint8_t u8g_dev_ht1632_24x16_buf[WIDTH*2] U8G_NOCOMMON ; 
+u8g_pb_t u8g_dev_ht1632_24x16_pb = { {16, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_ht1632_24x16_buf}; 
+u8g_dev_t u8g_dev_ht1632_24x16 = { u8g_dev_ht1632_24x16_fn, &u8g_dev_ht1632_24x16_pb, u8g_com_null_fn };
 
