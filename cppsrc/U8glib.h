@@ -742,6 +742,16 @@ class U8GLIB_SSD1327_96X96_2X_GR : public U8GLIB
       { }
 };
 
+class U8GLIB_HT1632_24X16 : public U8GLIB 
+{
+  public:
+    U8GLIB_HT1632_24X16(uint8_t wr, uint8_t data, uint8_t cs) 
+      : U8GLIB(&u8g_dev_ht1632_24x16, wr, data, cs, U8G_PIN_NONE, U8G_PIN_NONE)
+      { }
+};
+
+
+
 class U8GLIB_PCF8812 : public U8GLIB 
 {
   public:

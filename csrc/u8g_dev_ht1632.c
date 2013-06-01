@@ -101,9 +101,9 @@ Usage:
 #include <Arduino.h>
 #endif
  
-#define DATA_PIN 2
-#define WR_PIN 3
-#define CS_PIN 4
+//#define WR_PIN 3
+//#define DATA_PIN 2
+//#define CS_PIN 4
  
 void ht1632_write_data_MSB(u8g_t *u8g, uint8_t cnt, uint8_t data, uint8_t extra)
 {
@@ -164,7 +164,7 @@ void ht1632_write_data(u8g_t *u8g, uint8_t cnt, uint8_t data)
  
 void ht1632_init(u8g_t *u8g)
 {
-  uint8_t i;
+  //uint8_t i;
   uint8_t data_pin = u8g->pin_list[U8G_PI_MOSI];
   uint8_t wr_pin = u8g->pin_list[U8G_PI_SCK];
   uint8_t cs_pin = u8g->pin_list[U8G_PI_CS];
@@ -229,7 +229,7 @@ void ht1632_set_contrast(u8g_t *u8g, uint8_t value)
   uint8_t cs_pin = u8g->pin_list[U8G_PI_CS];
   digitalWrite(cs_pin, LOW);
   ht1632_write_data_MSB(u8g, 3, HT1632_ID_CMD, false);
-  ht1632_write_data_MSB(u8g, 8, HT1632_CMD_PWM + value);
+  ht1632_write_data_MSB(u8g, 8, HT1632_CMD_PWM + value, false);
   digitalWrite(cs_pin, HIGH);
 }
  
