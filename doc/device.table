@@ -1463,7 +1463,7 @@ SW SPI
 :C++ Constructor
 <tt>U8GLIB_HT1632_24X16(wr/sck, data/mosi, cs) </tt>
 :Arduino
-impl.
+impl. v1.13
 :Arduino Due
 n.a.
 :Chipkit
