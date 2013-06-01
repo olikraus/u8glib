@@ -1447,6 +1447,31 @@ impl. v1.09
 impl. v1.09
 ::
 :Controller
+HT1632
+:Display/Size
+24x16
+:Mode
+BW
+:Set Contrast
+yes
+:Page Size
+48 Bytes
+:Com
+serial
+:Device
+<tt>u8g_dev_ht1632_24x16</tt>
+:C++ Constructor
+<tt>U8GLIB_HT1632_24X16(wr, data, cs) </tt>
+:Arduino
+impl.
+:Arduino Due
+n.a.
+:Chipkit
+n.a.
+:AVR
+n.a.
+::
+:Controller
 callback fn
 :Display/Size
 Flipdisk, 28x14
