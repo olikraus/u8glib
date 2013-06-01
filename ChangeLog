@@ -107,10 +107,13 @@ u8glib ChangeLog
   * Sleep Mode
   * 4x mode for ST7920
   * New C++ interface for ST7920 
-2013-03-24	v1.11	  Oliver Kraus <olikraus@gmail.com>
+2013-03-24	v1.12	  Oliver Kraus <olikraus@gmail.com>
   * Added touch panel examples
-2013-xx-xx	v1.12
+2013-xx-xx	v1.13
   * Fixed missing "Arduino.h" in u8g_delay.c
+  * Support for HT1632: U8GLIB_HT1632_24X16 u8g(wr, data, cs);
+
+  
   
   
   
