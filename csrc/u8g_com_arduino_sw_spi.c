@@ -31,6 +31,12 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
   
+  Update for ATOMIC operation done (01 Jun 2013)
+    U8G_ATOMIC_OR(ptr, val)
+    U8G_ATOMIC_AND(ptr, val)
+    U8G_ATOMIC_START();
+    U8G_ATOMIC_END();
+ 
 
 */
 
@@ -79,6 +85,7 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
   uint8_t bitNotClock = u8g_bitNotClock;
   volatile uint8_t *outData = u8g_outData;
   volatile uint8_t *outClock = u8g_outClock;
+  U8G_ATOMIC_START();
   do
   {
     if ( val & 128 )
@@ -91,6 +98,7 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
     cnt--;
     *outClock &= bitNotClock;
   } while( cnt != 0 );
+  U8G_ATOMIC_END();
 }
 
 #elif defined(__18CXX) || defined(__PIC32MX)
@@ -118,6 +126,7 @@ static void u8g_com_arduino_init_shift_out(uint8_t dataPin, uint8_t clockPin)
 static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
 {
   uint8_t cnt = 8;
+  U8G_ATOMIC_START();
   do
   {
     if ( val & 128 )
@@ -142,6 +151,7 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
     dog_pic32_spi_tmp = *dog_outClock;
     dog_pic32_spi_tmp = *dog_outClock;
   } while( cnt != 0 );
+  U8G_ATOMIC_END();
 }
 
 #else
