@@ -32,7 +32,32 @@
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
+
+
+
+    U8G_PIN_NONE can be used as argument
+   
+    uint8_t u8g_InitSPI(u8g_t *u8g, u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset)
+    {
+      ...      
+      u8g->pin_list[U8G_PI_SCK] = sck;
+      u8g->pin_list[U8G_PI_MOSI] = mosi;
+      u8g->pin_list[U8G_PI_CS] = cs;
+      u8g->pin_list[U8G_PI_A0] = a0;
+      u8g->pin_list[U8G_PI_RESET] = reset;
+
+mapping  
+
+#define DATA_PIN --> U8G_PI_MOSI
+#define WR_PIN    --> U8G_PI_SCK
+#define CS_PIN      --> U8G_PI_CS
+				    U8G_PI_A0 --> not used
+				    U8G_PI_RESET --> not used
+
+Usage:
+
+    u8g_InitSPI(&u8g, &u8g_dev_ht1632_24x16, WR_PIN, DATA_IN, CS_PIN, U8G_PIN_NONE, U8G_PIN_NONE)
+
 */
  
 #include "u8g.h"
@@ -80,91 +105,98 @@
 #define WR_PIN 3
 #define CS_PIN 4
  
-void ht1632_write_data_MSB(uint8_t cnt, uint8_t data, uint8_t extra)
+void ht1632_write_data_MSB(u8g_t *u8g, uint8_t cnt, uint8_t data, uint8_t extra)
 {
   int8_t i;
+  uint8_t data_pin = u8g->pin_list[U8G_PI_MOSI];
+  uint8_t wr_pin = u8g->pin_list[U8G_PI_SCK];
  
   for(i = cnt - 1; i >= 0; i--)
   {
     if ((data >> i) & 1)
     {  
-      digitalWrite(DATA_PIN, HIGH);
+      digitalWrite(data_pin, HIGH);
     }
     else
     {
-      digitalWrite(DATA_PIN, LOW);
+      digitalWrite(data_pin, LOW);
     }
  
-    digitalWrite(WR_PIN, LOW);
+    digitalWrite(wr_pin, LOW);
     u8g_MicroDelay();
-    digitalWrite(WR_PIN, HIGH);
+    digitalWrite(wr_pin, HIGH);
     u8g_MicroDelay();
   }
  
   // Send an extra bit
   if (extra)
   {
-    digitalWrite(DATA_PIN, HIGH);
-    digitalWrite(WR_PIN, LOW);
+    digitalWrite(data_pin, HIGH);
+    digitalWrite(wr_pin, LOW);
     u8g_MicroDelay();
-    digitalWrite(WR_PIN, HIGH);
+    digitalWrite(wr_pin, HIGH);
     u8g_MicroDelay();
   }
 }
  
-void ht1632_write_data(uint8_t cnt, uint8_t data)
+void ht1632_write_data(u8g_t *u8g, uint8_t cnt, uint8_t data)
 {
   uint8_t i;
+  uint8_t data_pin = u8g->pin_list[U8G_PI_MOSI];
+  uint8_t wr_pin = u8g->pin_list[U8G_PI_SCK];
   for (i = 0; i < cnt; i++)
   {
  
     if ((data >> i) & 1) {
-      digitalWrite(DATA_PIN, HIGH);
+      digitalWrite(data_pin, HIGH);
     }
     else {
-      digitalWrite(DATA_PIN, LOW);
+      digitalWrite(data_pin, LOW);
     }
  
-    digitalWrite(WR_PIN, LOW);
+    digitalWrite(wr_pin, LOW);
     u8g_MicroDelay();
-    digitalWrite(WR_PIN, HIGH);
+    digitalWrite(wr_pin, HIGH);
     u8g_MicroDelay();
   }
 }
  
  
-void ht1632_init(void)
+void ht1632_init(u8g_t *u8g)
 {
   uint8_t i;
-  pinMode(DATA_PIN, OUTPUT);
-  pinMode(WR_PIN, OUTPUT);
-  pinMode(CS_PIN, OUTPUT);
+  uint8_t data_pin = u8g->pin_list[U8G_PI_MOSI];
+  uint8_t wr_pin = u8g->pin_list[U8G_PI_SCK];
+  uint8_t cs_pin = u8g->pin_list[U8G_PI_CS];
+  pinMode(data_pin, OUTPUT);
+  pinMode(wr_pin, OUTPUT);
+  pinMode(cs_pin, OUTPUT);
  
-  digitalWrite(DATA_PIN, HIGH);
-  digitalWrite(WR_PIN, HIGH);
-  digitalWrite(CS_PIN, HIGH);
+  digitalWrite(data_pin, HIGH);
+  digitalWrite(wr_pin, HIGH);
+  digitalWrite(cs_pin, HIGH);
  
-  digitalWrite(CS_PIN, LOW);
+  digitalWrite(cs_pin, LOW);
   /* init display once after startup */
-  ht1632_write_data_MSB(3, HT1632_ID_CMD, false); // IDs are 3 bits
-  ht1632_write_data_MSB(8, HT1632_CMD_SYSDIS, true); // 8 bits
-  ht1632_write_data_MSB(8, HT1632_CMD_SYSON, true); // 8 bits
-  ht1632_write_data_MSB(8, HT1632_CMD_COMS11, true); // 8 bits
-  ht1632_write_data_MSB(8, HT1632_CMD_LEDON, true); // 8 bits
-  ht1632_write_data_MSB(8, HT1632_CMD_BLOFF, true); // 8 bits
-  ht1632_write_data_MSB(8, HT1632_CMD_PWM+15, true); // 8 bits  
-  digitalWrite(CS_PIN, HIGH);
+  ht1632_write_data_MSB(u8g, 3, HT1632_ID_CMD, false); // IDs are 3 bits
+  ht1632_write_data_MSB(u8g, 8, HT1632_CMD_SYSDIS, true); // 8 bits
+  ht1632_write_data_MSB(u8g, 8, HT1632_CMD_SYSON, true); // 8 bits
+  ht1632_write_data_MSB(u8g, 8, HT1632_CMD_COMS11, true); // 8 bits
+  ht1632_write_data_MSB(u8g, 8, HT1632_CMD_LEDON, true); // 8 bits
+  ht1632_write_data_MSB(u8g, 8, HT1632_CMD_BLOFF, true); // 8 bits
+  ht1632_write_data_MSB(u8g, 8, HT1632_CMD_PWM+15, true); // 8 bits  
+  digitalWrite(cs_pin, HIGH);
  
   /* removed following (debug) code */
   /*
-  digitalWrite(CS_PIN, LOW);
-  ht1632_write_data_MSB(3, HT1632_ID_WR, false); // Send "write to display" command
-  ht1632_write_data_MSB(7, 0, false);
+  digitalWrite(cs_pin, LOW);
+  ht1632_write_data_MSB(u8g, 3, HT1632_ID_WR, false); // Send "write to display" command
+  ht1632_write_data_MSB(u8g, 7, 0, false);
   for(i = 0; i<48; ++i)
   {
-    ht1632_write_data(8, 0xFF);
+    ht1632_write_data(u8g, 8, 0xFF);
   }
-  digitalWrite(CS_PIN, HIGH);
+  digitalWrite(cs_pin, HIGH);
   */
 }
  
@@ -173,42 +205,44 @@ void ht1632_init(void)
   cnt: width of the display
   data: pointer to a buffer with 2*cnt bytes.
 */
-void ht1632_transfer_data(uint8_t page, uint8_t cnt, uint8_t *data)
+void ht1632_transfer_data(u8g_t *u8g, uint8_t page, uint8_t cnt, uint8_t *data)
 {
   uint8_t addr;
+  uint8_t cs_pin = u8g->pin_list[U8G_PI_CS];
   /* send data to the ht1632 */
-  digitalWrite(CS_PIN, LOW);
-  ht1632_write_data_MSB(3, HT1632_ID_WR, false); // Send "write to display" command
-  ht1632_write_data_MSB(7, page*2*cnt, false); 
+  digitalWrite(cs_pin, LOW);
+  ht1632_write_data_MSB(u8g, 3, HT1632_ID_WR, false); // Send "write to display" command
+  ht1632_write_data_MSB(u8g, 7, page*2*cnt, false); 
   
   // Operating in progressive addressing mode
   for (addr = 0; addr < cnt; addr++)
   {
-    ht1632_write_data(8, data[addr]);  
-    ht1632_write_data(8, data[addr+cnt]);
+    ht1632_write_data(u8g, 8, data[addr]);  
+    ht1632_write_data(u8g, 8, data[addr+cnt]);
   }  
-  digitalWrite(CS_PIN, HIGH);
+  digitalWrite(cs_pin, HIGH);
 }
 
 /* value is between 0...15 */
-void ht1632_set_contrast(uint8_t value)
+void ht1632_set_contrast(u8g_t *u8g, uint8_t value)
 {
-  digitalWrite(CS_PIN, LOW);
-  ht1632_write_data_MSB(3, HT1632_ID_CMD, false);
-  ht1632_write_data_MSB(8, HT1632_CMD_PWM + value);
-  digitalWrite(CS_PIN, HIGH);
+  uint8_t cs_pin = u8g->pin_list[U8G_PI_CS];
+  digitalWrite(cs_pin, LOW);
+  ht1632_write_data_MSB(u8g, 3, HT1632_ID_CMD, false);
+  ht1632_write_data_MSB(u8g, 8, HT1632_CMD_PWM + value);
+  digitalWrite(cs_pin, HIGH);
 }
  
 #else
-void ht1632_init(void)
+void ht1632_init(u8g_t *u8g)
 {
 }
  
-void ht1632_transfer_data(uint8_t page, uint8_t cnt, uint8_t *data)
+void ht1632_transfer_data(u8g_t *u8g, uint8_t page, uint8_t cnt, uint8_t *data)
 {
 }
 
-void ht1632_set_contrast(uint8_t value)
+void ht1632_set_contrast(u8g_t *u8g, uint8_t value)
 {
 }
 
@@ -220,7 +254,7 @@ uint8_t u8g_dev_ht1632_24x16_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *a
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
-		ht1632_init();
+      ht1632_init(u8g);
       break;
     case U8G_DEV_MSG_STOP:
       break;
@@ -230,12 +264,12 @@ uint8_t u8g_dev_ht1632_24x16_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *a
        
 	/* current page: pb->p.page */
 	/* ptr to the buffer: pb->buf */
-	ht1632_transfer_data(pb->p.page, WIDTH, pb->buf);
+	ht1632_transfer_data(u8g, pb->p.page, WIDTH, pb->buf);
       }
       break;
     case U8G_DEV_MSG_CONTRAST:
       /* values passed to SetContrast() are between 0 and 255, scale down to 0...15 */
-      ht1632_set_contrast((*(uint8_t *)arg) >> 4);
+      ht1632_set_contrast(u8g, (*(uint8_t *)arg) >> 4);
     return 1;
   }
   return u8g_dev_pb16v1_base_fn(u8g, dev, msg, arg);
