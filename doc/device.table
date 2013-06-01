@@ -1457,11 +1457,11 @@ yes
 :Page Size
 48 Bytes
 :Com
-serial
+SW SPI
 :Device
 <tt>u8g_dev_ht1632_24x16</tt>
 :C++ Constructor
-<tt>U8GLIB_HT1632_24X16(wr, data, cs) </tt>
+<tt>U8GLIB_HT1632_24X16(wr=sck, data=mosi, cs) </tt>
 :Arduino
 impl.
 :Arduino Due
