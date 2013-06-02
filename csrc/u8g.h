@@ -38,7 +38,7 @@
 
 /* uncomment the following line to support displays larger than 240x240 */
 //#define U8G_16BIT 1
-/* uncomment the following to generate interrupt safe code */
+/* comment the following line to generate more compact but interrupt unsafe code */
 #define U8G_INTERRUPT_SAFE 1
 
 
@@ -217,6 +217,11 @@ extern u8g_dev_t u8g_dev_st7565_dogm132_hw_spi;
 extern u8g_dev_t u8g_dev_st7565_dogm128_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_dogm128_hw_spi;
 extern u8g_dev_t u8g_dev_st7565_dogm128_parallel;
+
+extern u8g_dev_t u8g_dev_st7565_dogm128_2x_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_dogm128_2x_hw_spi;
+extern u8g_dev_t u8g_dev_st7565_dogm128_2x_parallel;
+
 /* Display: Topway LM6063 128x64 */
 extern u8g_dev_t u8g_dev_st7565_lm6063_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_lm6063_hw_spi;
@@ -342,6 +347,10 @@ extern u8g_dev_t u8g_dev_ssd1306_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x64_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x64_i2c;
 
+extern u8g_dev_t u8g_dev_ssd1306_128x64_2x_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1306_128x64_2x_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1306_128x64_2x_i2c;
+
 /* OLED 128x64 Display with SSD1309 Controller */
 extern u8g_dev_t u8g_dev_ssd1309_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1309_128x64_hw_spi;
@@ -351,6 +360,10 @@ extern u8g_dev_t u8g_dev_ssd1309_128x64_i2c;
 extern u8g_dev_t u8g_dev_ssd1306_128x32_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x32_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x32_i2c;
+
+extern u8g_dev_t u8g_dev_ssd1306_128x32_2x_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1306_128x32_2x_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1306_128x32_2x_i2c;
 
 /* experimental 65K TFT with st7687 controller */
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi;
