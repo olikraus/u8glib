@@ -222,23 +222,35 @@ extern u8g_dev_t u8g_dev_st7565_dogm128_2x_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_dogm128_2x_hw_spi;
 extern u8g_dev_t u8g_dev_st7565_dogm128_2x_parallel;
 
-/* Display: Topway LM6063 128x64 */
-extern u8g_dev_t u8g_dev_st7565_lm6063_sw_spi;
-extern u8g_dev_t u8g_dev_st7565_lm6063_hw_spi;
 /* Display: Topway LM6059 128x64 (Adafruit) */
 extern u8g_dev_t u8g_dev_st7565_lm6059_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_lm6059_hw_spi;
+extern u8g_dev_t u8g_dev_st7565_lm6059_2x_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_lm6059_2x_hw_spi;
+/* Display: Topway LM6063 128x64 */
+extern u8g_dev_t u8g_dev_st7565_lm6063_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_lm6063_hw_spi;
+extern u8g_dev_t u8g_dev_st7565_lm6063_2x_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_lm6063_2x_hw_spi;
 /* Display: Newhaven NHD-C12864 */
 extern u8g_dev_t u8g_dev_st7565_nhd_c12864_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_nhd_c12864_hw_spi;
+extern u8g_dev_t u8g_dev_st7565_nhd_c12864_2x_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_nhd_c12864_2x_hw_spi;
+
 /* Display: Newhaven NHD-C12832 */
 extern u8g_dev_t u8g_dev_st7565_nhd_c12832_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_nhd_c12832_hw_spi;
 extern u8g_dev_t u8g_dev_st7565_nhd_c12832_parallel;
+
 /* Display: Displaytech 64128N */
 extern u8g_dev_t u8g_dev_st7565_64128n_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_64128n_hw_spi;
 extern u8g_dev_t u8g_dev_st7565_64128n_parallel;
+
+extern u8g_dev_t u8g_dev_st7565_64128n_2x_sw_spi;
+extern u8g_dev_t u8g_dev_st7565_64128n_2x_hw_spi;
+extern u8g_dev_t u8g_dev_st7565_64128n_2x_parallel;
 
 /* Display: LCD-AG-C128032R-DIW W/KK E6 PBF */
 extern u8g_dev_t u8g_dev_uc1601_c128032_sw_spi;
