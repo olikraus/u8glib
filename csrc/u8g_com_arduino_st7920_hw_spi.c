@@ -108,6 +108,34 @@ static uint8_t u8g_arduino_st7920_hw_spi_shift_out(u8g_t *u8g, uint8_t val)
 }
 
 
+static void u8g_com_arduino_st7920_write_byte_hw_spi_seq(u8g_t *u8g, uint8_t rs, uint8_t *ptr, uint8_t len)
+{
+  uint8_t i;
+
+  if ( rs == 0 )
+  {
+    /* command */
+    u8g_arduino_st7920_hw_spi_shift_out(u8g, 0x0f8);
+  }
+  else if ( rs == 1 )
+  {
+    /* data */
+    u8g_arduino_st7920_hw_spi_shift_out(u8g, 0x0fa);
+  }
+
+  while( len > 0 )
+  {
+    u8g_arduino_st7920_hw_spi_shift_out(u8g, *ptr & 0x0f0);
+    u8g_arduino_st7920_hw_spi_shift_out(u8g, *ptr << 4);
+    ptr++;
+    len--;
+    u8g_10MicroDelay();
+  }
+  
+  for( i = 0; i < 4; i++ )
+    u8g_10MicroDelay();
+}
+
 static void u8g_com_arduino_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint8_t val) U8G_NOINLINE;
 static void u8g_com_arduino_st7920_write_byte_hw_spi(u8g_t *u8g, uint8_t rs, uint8_t val)
 {
@@ -212,15 +240,18 @@ uint8_t u8g_com_arduino_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_va
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
+      u8g_com_arduino_st7920_write_byte_hw_spi_seq(u8g, u8g->pin_list[U8G_PI_A0_STATE], (uint8_t *)arg_ptr, arg_val);
+      /*
       {
         register uint8_t *ptr = arg_ptr;
         while( arg_val > 0 )
         {
           u8g_com_arduino_st7920_write_byte_hw_spi(u8g, u8g->pin_list[U8G_PI_A0_STATE], *ptr++);
-          // u8g->pin_list[U8G_PI_A0_STATE] = 2; 
           arg_val--;
         }
       }
+      */
+      
       break;
 
       case U8G_COM_MSG_WRITE_SEQ_P:
