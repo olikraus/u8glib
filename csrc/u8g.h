@@ -269,10 +269,12 @@ extern u8g_dev_t u8g_dev_uc1601_c128032_2x_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_8bit;
+extern u8g_dev_t u8g_dev_st7920_128x64_custom;
 
 extern u8g_dev_t u8g_dev_st7920_128x64_4x_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_4x_hw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_4x_8bit;
+extern u8g_dev_t u8g_dev_st7920_128x64_4x_custom;
 
 /* NHD-19232WG */
 extern u8g_dev_t u8g_dev_st7920_192x32_sw_spi;
@@ -539,6 +541,7 @@ uint8_t u8g_com_arduino_std_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, 
 uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);        /* u8g_com_arduino_sw_spi.c */
 uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);          /* u8g_com_arduino_hw_spi.c */
 uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);  /* u8g_com_arduino_st7920_spi.c */
+uint8_t u8g_com_arduino_st7920_custom_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr); /* u8g_com_arduino_st7920_custom.c */
 uint8_t u8g_com_arduino_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);  /* u8g_com_arduino_st7920_hw_spi.c */
 uint8_t u8g_com_arduino_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);           /* u8g_com_arduino_parallel.c */
 uint8_t u8g_com_arduino_fast_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_arduino_fast_parallel.c */

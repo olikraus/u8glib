@@ -466,6 +466,14 @@ class U8GLIB_ST7920_128X64_1X : public U8GLIB
       { }
 };
 
+class U8GLIB_ST7920_128X64_CUSTOM_1X : public U8GLIB 
+{
+  public:
+    U8GLIB_ST7920_128X64_CUSTOM_1X(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_st7920_128x64_custom, sck, mosi, cs, U8G_PIN_NONE, reset)		// a0 = U8G_PIN_NONE
+      { }
+};
+
 class U8GLIB_ST7920_128X64_4X : public U8GLIB 
 {
   public:
@@ -481,6 +489,13 @@ class U8GLIB_ST7920_128X64_4X : public U8GLIB
       { }
 };
 
+class U8GLIB_ST7920_128X64_CUSTOM_4X : public U8GLIB 
+{
+  public:
+    U8GLIB_ST7920_128X64_CUSTOM_4X(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_st7920_128x64_4x_custom, sck, mosi, cs, U8G_PIN_NONE, reset)		// a0 = U8G_PIN_NONE
+      { }
+};
 
 
 class U8GLIB_ST7920_192X32 : public U8GLIB  // OBSOLETE, use U8GLIB_ST7920_192X32_1X instead
