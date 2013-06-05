@@ -258,7 +258,7 @@ static uint8_t u8g_ssd1351_get_b(uint8_t colour)
 
 uint8_t u8g_dev_ssd1351_128x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
-	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+//	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 
 	switch(msg)
 	{
@@ -276,7 +276,7 @@ uint8_t u8g_dev_ssd1351_128x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 
 	case U8G_DEV_MSG_PAGE_NEXT:
 		{
-			int x, y;
+			int x;
 			u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 			uint8_t *ptr = pb->buf;
 
@@ -308,7 +308,7 @@ uint8_t u8g_dev_ssd1351_128x128_b[256];
 
 uint8_t u8g_dev_ssd1351_128x128_idx_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
-	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+//	u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 
 	switch(msg)
 	{
@@ -332,7 +332,7 @@ uint8_t u8g_dev_ssd1351_128x128_idx_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 
 	case U8G_DEV_MSG_PAGE_NEXT:
 		{
-			int x, y;
+			int x;
 			u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 			uint8_t *ptr = pb->buf;
 

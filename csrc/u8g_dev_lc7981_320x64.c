@@ -40,7 +40,12 @@
 
 #include "u8g.h"
 
+#ifdef U8G_16BIT
 #define WIDTH 320
+#else
+#define WIDTH 240
+#endif
+
 #define HEIGHT 64
 #define PAGE_HEIGHT 8
 
@@ -143,3 +148,4 @@ uint8_t u8g_dev_lc7981_320x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
 }
 
 U8G_PB_DEV(u8g_dev_lc7981_320x64_8bit, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_lc7981_320x64_fn, U8G_COM_FAST_PARALLEL);
+
