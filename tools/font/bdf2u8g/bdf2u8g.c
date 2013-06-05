@@ -1288,7 +1288,7 @@ void bdf_WriteC(const char *outname, const char *fontname)
 
   fprintf(out_fp, "*/\n");
   fprintf(out_fp, "#include \"u8g.h\"\n");  
-  fprintf(out_fp, "const u8g_fntpgm_uint8_t %s[%d] U8G_SECTION(\".progmem.%s\") = {\n", fontname, data_pos, fontname);
+  fprintf(out_fp, "const u8g_fntpgm_uint8_t %s[%d] U8G_FONT_SECTION(\"%s\") = {\n", fontname, data_pos, fontname);
   fprintf(out_fp, "  ");
   data_Write(out_fp, "  ");
   fprintf(out_fp, "};\n");

@@ -65,17 +65,30 @@ extern "C" {
   
 /*===============================================================*/
 #ifdef __GNUC__
-#define U8G_NOINLINE __attribute__((noinline))
-#define U8G_PURE  __attribute__ ((pure))
-#define U8G_NOCOMMON __attribute__ ((nocommon))
-#define U8G_SECTION(name) __attribute__ ((section (name)))
+#  define U8G_NOINLINE __attribute__((noinline))
+#  define U8G_PURE  __attribute__ ((pure))
+#  define U8G_NOCOMMON __attribute__ ((nocommon))
+#  define U8G_SECTION(name) __attribute__ ((section (name)))
+#  define U8G_FONT_SECTION(name)
+#  if defined(__MSPGCC__)
+/* mspgcc does not have .progmem sections. Use -fdata-sections. */
+#    define U8G_FONT_SECTION(name)
+#  endif
+#  if defined(__AVR__)
+#    define U8G_FONT_SECTION(name) U8G_SECTION(".progmem." name)
+#  endif
 #else
-#define U8G_NOINLINE
-#define U8G_PURE
-#define U8G_NOCOMMON
-#define U8G_SECTION(name)
+#  define U8G_NOINLINE
+#  define U8G_PURE
+#  define U8G_NOCOMMON
+#  define U8G_SECTION(name)
 #endif
-  
+
+#ifndef U8G_FONT_SECTION
+#  define U8G_FONT_SECTION(name)
+#endif
+
+
 /*===============================================================*/
 /* flash memory access */
 

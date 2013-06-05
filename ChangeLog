@@ -109,9 +109,11 @@ u8glib ChangeLog
   * New C++ interface for ST7920 
 2013-03-24	v1.12	  Oliver Kraus <olikraus@gmail.com>
   * Added touch panel examples
-2013-xx-xx	v1.13
+2013-xx-xx	v1.13	  Oliver Kraus <olikraus@gmail.com>
   * Fixed missing "Arduino.h" in u8g_delay.c
   * Support for HT1632: U8GLIB_HT1632_24X16 u8g(wr, data, cs);
+  * Cleaned up several compiler warnings
+  * Performance improvement for ST7920
 
   
   
