@@ -151,7 +151,11 @@ void u8g_10MicroDelay(void)
 #if defined(USE_ARDUINO_DELAY)
 void u8g_Delay(uint16_t val)
 {
+#if defined(__arm__)
+	delayMicroseconds((uint32_t)val*(uint32_t)1000);
+#else
 	delay(val);
+#endif
 }
 void u8g_MicroDelay(void)
 {
