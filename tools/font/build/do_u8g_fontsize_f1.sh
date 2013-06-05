@@ -17,5 +17,5 @@ echo $2  ... ${CFILE}
 if test -r ../ttfbdfupdate/${BDF}; then echo ${BDF} "manual update" &&  cp ../ttfbdfupdate/${BDF} .; fi
 ../bdf2u8g/bdf2u8g -f 1 ${BDF} ${IDENTIFIER} ${CFILE} >/dev/null
 ../bdf2u8g/bdf2u8g -f 1 -b 32 -e 127 ${BDF} ${IDENTIFIER}r ${CFILER} >/dev/null
-../bdf2u8g/bdf2u8g -f 1 -b 42 -e 57 ${BDF} ${IDENTIFIER}n ${CFILEN} >/dev/null
+../bdf2u8g/bdf2u8g -f 1 -b 42 -e 58 ${BDF} ${IDENTIFIER}n ${CFILEN} >/dev/null
 #cp ${CFILE} ../../../src/.

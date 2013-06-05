@@ -13,5 +13,5 @@ echo $2  ... ${CFILE}
 ../otf2bdf/otf2bdf -a -p $1 -r 72 $2 -o ${BDF}
 # replace BDF if it exists
 if test -r ../ttfbdfupdate/${BDF}; then echo ${BDF} "manual update" &&  cp ../ttfbdfupdate/${BDF} .; fi
-../bdf2u8g/bdf2u8g -b 42 -e 57 ${BDF} ${IDENTIFIER} ${CFILE} >/dev/null
+../bdf2u8g/bdf2u8g -b 42 -e 58 ${BDF} ${IDENTIFIER} ${CFILE} >/dev/null
 #cp ${CFILE} ../../../src/.
