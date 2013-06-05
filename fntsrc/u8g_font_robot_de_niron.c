@@ -10,8 +10,8 @@
   Max Font    ascent = 9 descent= 0
 */
 #include "u8g.h"
-const u8g_fntpgm_uint8_t u8g_font_robot_de_niron[178] U8G_SECTION(".progmem.u8g_font_robot_de_niron") = {
-  0,10,10,255,0,5,0,0,0,0,42,57,0,9,0,5,
+const u8g_fntpgm_uint8_t u8g_font_robot_de_niron[187] U8G_FONT_SECTION("u8g_font_robot_de_niron") = {
+  0,10,10,255,0,5,0,0,0,0,42,58,0,9,0,5,
   0,3,3,3,4,0,6,160,64,160,3,3,3,4,0,4,
   64,224,64,2,2,2,3,0,2,64,128,3,1,1,4,0,
   5,224,1,1,1,2,0,3,128,3,5,5,4,0,3,32,
@@ -22,4 +22,4 @@ const u8g_fntpgm_uint8_t u8g_font_robot_de_niron[178] U8G_SECTION(".progmem.u8g_
   3,96,128,224,32,224,3,5,5,4,0,3,96,128,224,160,
   64,4,5,5,5,0,3,224,32,112,32,32,3,5,5,4,
   0,3,96,160,224,160,192,3,5,5,4,0,3,96,160,224,
-  32,192};
+  32,192,1,3,3,2,0,4,128,0,128};

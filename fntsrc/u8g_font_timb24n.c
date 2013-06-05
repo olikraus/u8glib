@@ -2,7 +2,7 @@
   Fontname: -Adobe-Times-Bold-R-Normal--34-240-100-100-P-177-ISO10646-1
   Copyright: Copyright (c) 1984, 1987 Adobe Systems Incorporated. All Rights Reserved. Copyright (c) 1988, 1991 Digital Equipment Corporation. All Rights Reserved.
   Capital A Height: 0, '1' Height: 23
-  Calculated Max Values w=16 h=25 x= 2 y= 9 dx=19 dy= 0 ascent=25 len=50
+  Calculated Max Values w=16 h=25 x= 3 y= 9 dx=19 dy= 0 ascent=25 len=50
   Font Bounding box     w=38 h=49 x=-5 y=-12
   Calculated Min Values           x= 0 y=-6 dx= 0 dy= 0
   Pure Font   ascent =23 descent= 0
@@ -10,8 +10,8 @@
   Max Font    ascent =25 descent=-6
 */
 #include "u8g.h"
-const u8g_fntpgm_uint8_t u8g_font_timB24n[701] U8G_SECTION(".progmem.u8g_font_timB24n") = {
-  0,38,49,251,244,23,0,0,0,0,42,57,0,25,250,23,
+const u8g_fntpgm_uint8_t u8g_font_timB24n[723] U8G_FONT_SECTION("u8g_font_timB24n") = {
+  0,38,49,251,244,23,0,0,0,0,42,58,0,25,250,23,
   0,13,14,28,17,1,9,3,0,7,0,7,0,231,56,242,
   120,122,240,15,128,15,128,122,240,242,120,231,56,7,0,7,
   0,6,0,15,15,30,19,2,0,3,128,3,128,3,128,3,
@@ -54,4 +54,6 @@ const u8g_fntpgm_uint8_t u8g_font_timB24n[701] U8G_SECTION(".progmem.u8g_font_ti
   60,240,56,120,120,127,240,31,192,14,23,46,16,1,0,15,
   192,28,224,56,112,120,120,120,120,248,120,248,124,248,124,248,
   124,248,124,120,124,124,124,62,252,31,248,0,248,0,240,1,
-  240,1,224,3,192,7,128,15,0,60,0,224,0};
+  240,1,224,3,192,7,128,15,0,60,0,224,0,5,16,16,
+  11,3,0,112,248,248,248,112,0,0,0,0,0,0,112,248,
+  248,248,112};

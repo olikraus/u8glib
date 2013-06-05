@@ -2,7 +2,7 @@
   Fontname: -Adobe-Helvetica-Medium-R-Normal--34-240-100-100-P-176-ISO10646-1
   Copyright: Copyright (c) 1984, 1987 Adobe Systems Incorporated. All Rights Reserved. Copyright (c) 1988, 1991 Digital Equipment Corporation. All Rights Reserved.
   Capital A Height: 0, '1' Height: 24
-  Calculated Max Values w=17 h=24 x= 3 y=15 dx=19 dy= 0 ascent=26 len=48
+  Calculated Max Values w=17 h=24 x= 4 y=15 dx=19 dy= 0 ascent=26 len=48
   Font Bounding box     w=39 h=48 x=-5 y=-11
   Calculated Min Values           x= 0 y=-5 dx= 0 dy= 0
   Pure Font   ascent =24 descent= 0
@@ -10,8 +10,8 @@
   Max Font    ascent =26 descent=-5
 */
 #include "u8g.h"
-const u8g_fntpgm_uint8_t u8g_font_helvR24n[702] U8G_SECTION(".progmem.u8g_font_helvR24n") = {
-  0,39,48,251,245,24,0,0,0,0,42,57,0,26,251,24,
+const u8g_fntpgm_uint8_t u8g_font_helvR24n[726] U8G_FONT_SECTION("u8g_font_helvR24n") = {
+  0,39,48,251,245,24,0,0,0,0,42,58,0,26,251,24,
   0,10,11,22,13,1,15,12,0,12,0,76,128,237,192,127,
   128,63,0,30,0,63,0,115,128,225,192,64,128,17,16,48,
   19,1,1,1,192,0,1,192,0,1,192,0,1,192,0,1,
@@ -54,4 +54,6 @@ const u8g_fntpgm_uint8_t u8g_font_helvR24n[702] U8G_SECTION(".progmem.u8g_font_h
   120,60,63,248,31,240,7,192,15,24,48,18,1,0,7,192,
   31,240,63,248,120,124,112,60,240,28,224,30,224,14,224,14,
   224,14,224,30,224,30,112,62,127,254,63,238,15,206,0,14,
-  0,28,224,28,240,60,120,120,63,240,63,224,15,128};
+  0,28,224,28,240,60,120,120,63,240,63,224,15,128,3,18,
+  18,9,4,0,224,224,224,224,0,0,0,0,0,0,0,0,
+  0,0,224,224,224,224};

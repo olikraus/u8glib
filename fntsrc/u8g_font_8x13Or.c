@@ -10,7 +10,7 @@
   Max Font    ascent =11 descent=-2
 */
 #include "u8g.h"
-const u8g_fntpgm_uint8_t u8g_font_8x13Or[1029] U8G_SECTION(".progmem.u8g_font_8x13Or") = {
+const u8g_fntpgm_uint8_t u8g_font_8x13Or[1029] U8G_FONT_SECTION("u8g_font_8x13Or") = {
   1,8,13,0,254,9,1,98,2,206,32,127,254,11,254,9,
   254,13,0,128,50,41,137,64,64,64,64,128,128,128,0,128,
   40,67,131,144,144,144,3,119,135,36,36,126,36,252,72,72,

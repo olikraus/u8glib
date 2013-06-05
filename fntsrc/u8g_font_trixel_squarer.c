@@ -10,7 +10,7 @@
   Max Font    ascent = 6 descent=-2
 */
 #include "u8g.h"
-const u8g_fntpgm_uint8_t u8g_font_trixel_squarer[994] U8G_SECTION(".progmem.u8g_font_trixel_squarer") = {
+const u8g_fntpgm_uint8_t u8g_font_trixel_squarer[994] U8G_FONT_SECTION("u8g_font_trixel_squarer") = {
   0,5,9,0,254,5,1,91,2,177,32,127,254,6,254,5,
   254,0,0,0,1,0,0,1,5,5,2,0,0,128,128,128,
   0,128,3,2,2,4,0,3,160,160,5,5,5,6,0,255,

@@ -10,7 +10,7 @@
   Max Font    ascent =10 descent= 0
 */
 #include "u8g.h"
-const u8g_fntpgm_uint8_t u8g_font_robot_de_niror[1041] U8G_SECTION(".progmem.u8g_font_robot_de_niror") = {
+const u8g_fntpgm_uint8_t u8g_font_robot_de_niror[1041] U8G_FONT_SECTION("u8g_font_robot_de_niror") = {
   0,10,10,255,0,6,1,97,2,193,32,127,1,10,0,9,
   0,0,0,0,2,0,0,2,5,5,3,0,3,192,128,128,
   0,128,3,2,2,4,0,6,160,160,5,5,5,6,0,3,
