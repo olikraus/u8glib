@@ -194,7 +194,7 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
     else
       u8g_digital_write_sam_low(u8g_sam_data_pin);
     val <<= 1;
-    u8g_MicroDelay();	
+    //u8g_MicroDelay();	
     u8g_digital_write_sam_high(u8g_sam_clock_pin);
     u8g_MicroDelay();	
     u8g_digital_write_sam_low(u8g_sam_clock_pin);

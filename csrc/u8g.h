@@ -615,7 +615,8 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_SW_SPI u8g_com_arduino_sw_spi_fn
 #define U8G_COM_ST7920_SW_SPI u8g_com_arduino_st7920_spi_fn
 #elif defined(__arm__)   /* Arduino Due */
-#define U8G_COM_SW_SPI u8g_com_arduino_std_sw_spi_fn
+//#define U8G_COM_SW_SPI u8g_com_arduino_std_sw_spi_fn
+#define U8G_COM_SW_SPI u8g_com_arduino_sw_spi_fn
 #define U8G_COM_ST7920_SW_SPI u8g_com_arduino_st7920_spi_fn
 #endif
 #endif
