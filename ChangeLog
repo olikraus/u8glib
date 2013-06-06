@@ -114,6 +114,8 @@ u8glib ChangeLog
   * Support for HT1632: U8GLIB_HT1632_24X16 u8g(wr, data, cs);
   * Cleaned up several compiler warnings
   * Performance improvement for ST7920
+  * Added ":" to the "n"umeric variant of the fonts
+  
 
   
   

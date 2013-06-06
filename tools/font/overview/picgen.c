@@ -1362,6 +1362,7 @@ int main(void)
 #endif
 
 #ifdef OLI
+#endif
 
 
   pic_gen_font(u8g_font_10x20, "u8g_font_10x20", 14, "X11 Display Font");
@@ -1793,8 +1794,7 @@ int main(void)
  
   pic_gen_font(u8g_font_unifont_12_13, "u8g_font_unifont_12_13", 17, "Unifont");
 
-#endif
- pic_gen_font(u8g_font_u8glib_4, "u8g_font_u8glib_4", 10, "u8glib 4");
+  pic_gen_font(u8g_font_u8glib_4, "u8g_font_u8glib_4", 10, "u8glib 4");
   pic_gen_font(u8g_font_u8glib_4r, "u8g_font_u8glib_4r", 10, "u8glib 4");
 
 return 0;
