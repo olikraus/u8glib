@@ -145,7 +145,7 @@ ISO-8859-1 was incorporated as the first 256 code points of ISO/IEC 10646 and Un
 
 #define BDF2U8G_COMPACT_OUTPUT
 #define BDF2U8G_VERSION "1.01"
-#define VERBOSE
+//#define VERBOSE
 
 
 /*=== forward declaration ===*/
