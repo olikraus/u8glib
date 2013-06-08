@@ -31,29 +31,10 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
   else
     LED_GPIO->DATA &= ~(1 << LED_PIN);
 }
-  
-/*
-  Delay by the provided number of micro seconds.
-  "us" must be lower than half of the period time of the SysTick interrupt.
-  If SysTick interrupt is 1KHz (1ms), then us must be below < 500
-*/
-void delay_micro_seconds(uint16_t us)
-{
-  uint32_t sys_ticks;
-  uint32_t start_val, end_val;
 
-#ifdef F_CPU 
-  sys_ticks = F_CPU / 10000000UL * us;
-#else  
-  sys_ticks = SystemCoreClock;
-  sys_ticks /=10000000UL;
-  sys_ticks *= us;
-#endif
-  
-  if ( sys_ticks < 10 )
-    return;
-  if ( sys_ticks > SysTick->LOAD / 2 )
-    return;
+static void _delay_system_ticks(uint32_t sys_ticks)
+{
+  uint32_t start_val, end_val;
   
   start_val = SysTick->VAL;
   end_val = start_val;
@@ -74,7 +55,36 @@ void delay_micro_seconds(uint16_t us)
     while( start_val < SysTick->VAL || end_val > SysTick->VAL )
       ;
   }
-  
+}
+
+static void delay_system_ticks(uint32_t sys_ticks)
+{
+  uint32_t half_load = SysTick->LOAD / 2;
+  while ( sys_ticks > half_load )
+  {
+    sys_ticks -= half_load;
+    _delay_system_ticks(half_load);
+  }
+  _delay_system_ticks(sys_ticks);
+}
+
+
+/*
+  Delay by the provided number of micro seconds.
+*/
+void delay_micro_seconds(uint32_t us)
+{
+  uint32_t sys_ticks;
+  uint32_t start_val, end_val;
+
+#ifdef F_CPU 
+  sys_ticks = F_CPU / 10000000UL * us;
+#else  
+  sys_ticks = SystemCoreClock;
+  sys_ticks /=10000000UL;
+  sys_ticks *= us;
+#endif
+  delay_system_ticks(sys_ticks);  
 }
   
 
