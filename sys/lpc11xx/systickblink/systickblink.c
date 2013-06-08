@@ -32,11 +32,43 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
     LED_GPIO->DATA &= ~(1 << LED_PIN);
 }
   
+
+void delay_micro_seconds(uint16_t us)
+{
+  uint32_t sys_ticks;
+  uint32_t val;
+
+#ifdef F_CPU 
+  sys_ticks = F_CPU / 10000000UL * us;
+#else  
+  sys_ticks = SystemCoreClock;
+  sys_ticks /=10000000UL;
+  sys_ticks *= us;
+#endif
+  
+  val = SysTick->VAL;
+  sys_ticks+=val;
+  if ( sys_ticks >= SysTick->LOAD )		/* warning: could be too close to the LOAD value */
+  {
+    /* correct target time */
+    sys_ticks-=SysTick->LOAD;
+    
+    /* wait until overflow */
+    while( val < SysTick->VAL )
+      ;    
+  }
+    
+  /* wait until target time */
+  while( sys_ticks > SysTick->VAL )
+    ;
+  
+}
   
 
 void main()
 {
 	while (1)
 	{
+	  delay_micro_seconds(100);
 	}
 }
