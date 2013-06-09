@@ -30,7 +30,12 @@
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-  
+
+
+  void u8g_Delay(uint16_t val)		Delay by "val" milliseconds
+  void u8g_MicroDelay(void)		Delay be one microsecond
+  void u8g_10MicroDelay(void)	Delay by 10 microseconds
+
   
 */
 

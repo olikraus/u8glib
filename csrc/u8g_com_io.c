@@ -38,7 +38,14 @@
     U8G_ATOMIC_AND(ptr, val)
     U8G_ATOMIC_START();
     U8G_ATOMIC_END();
- 
+
+  uint8_t u8g_Pin(uint8_t port, uint8_t bitpos)						Convert to internal number: AVR: port*8+bitpos, ARM: port*16+bitpos
+  void u8g_SetPinOutput(uint8_t internal_pin_number)
+  void u8g_SetPinInput(uint8_t internal_pin_number)
+  void u8g_SetPinLevel(uint8_t internal_pin_number, uint8_t level)
+  uint8_t u8g_GetPinLevel(uint8_t internal_pin_number)
+
+
 */
 
 #include "u8g.h"
@@ -186,6 +193,7 @@ uint8_t u8g_GetPinLevel(uint8_t internal_pin_number)
 
 #else
 
+/* convert "port" and "bitpos" to internal pin number */
 uint8_t u8g_Pin(uint8_t port, uint8_t bitpos)
 {
   port <<= 3;
