@@ -56,7 +56,7 @@ static void _delay_system_ticks_sub(uint32_t sys_ticks)
   
   
   /* wait until interval is left */
-  if ( start_val >= end_val )		/* if there is now overflow, then this is true */
+  if ( start_val >= end_val )
   {
     for(;;)
     {
