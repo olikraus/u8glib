@@ -16,6 +16,8 @@
 #			create hex file, no upload
 #		make upload
 #			create and upload hex file
+#		make screen
+#			call unix screen utility (terminal emulator)
 #		make clean
 #			delete all generated files
 #
@@ -105,6 +107,10 @@ upload: $(DISNAME) $(HEXNAME) $(ELFNAME)
 #	$(FLASHTOOL) $(HEXNAME) $(FLASHPORT) 115200 12000
 	$(FLASHTOOL) $(HEXNAME) $(FLASHPORT) 38400 12000
 	$(SIZE) $(ELFNAME)
+
+.PHONY: screen
+screen:
+	screen $(FLASHPORT) 9600
 
 .PHONY: clean
 clean:
