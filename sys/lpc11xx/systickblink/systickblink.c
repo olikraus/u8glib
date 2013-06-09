@@ -12,8 +12,9 @@ void SystemInit()
   SystemCoreClock = F_CPU;
   
   /* SysTick is defined in core_cm0.h */
-  SysTick->CTRL = 7;   /* enable, generate interrupt, do not divide by 2 */
   SysTick->LOAD = (SystemCoreClock/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS) - 1;
+  SysTick->VAL = 0;
+  SysTick->CTRL = 7;   /* enable, generate interrupt, do not divide by 2 */
 }
 
 #define LED_GPIO	LPC_GPIO1

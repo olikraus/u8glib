@@ -14,6 +14,7 @@ void SystemInit()
   
   /* SysTick is defined in core_cm0.h */
   SysTick->LOAD = (SystemCoreClock/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS) - 1;
+  SysTick->VAL = 0;
   SysTick->CTRL = 7;   /* enable, generate interrupt, do not divide by 2 */
 }
 
