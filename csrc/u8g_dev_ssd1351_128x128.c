@@ -276,19 +276,22 @@ uint8_t u8g_dev_ssd1351_128x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 
 	case U8G_DEV_MSG_PAGE_NEXT:
 		{
-			int x;
+			int x, i;
 			u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 			uint8_t *ptr = pb->buf;
 
 			u8g_SetChipSelect(u8g, dev, 1);
 
-			for (x = 0; x < pb->width; x++)
+			for( i = 0; i < 8; i++ )
 			{
+			  for (x = 0; x < pb->width; x++)
+			  {
 				u8g_WriteByte(u8g, dev, u8g_ssd1351_get_r(*ptr));
 				u8g_WriteByte(u8g, dev, u8g_ssd1351_get_g(*ptr));
 				u8g_WriteByte(u8g, dev, u8g_ssd1351_get_b(*ptr));
 
 				ptr++;
+			  }
 			}
 
 			u8g_SetChipSelect(u8g, dev, 0);

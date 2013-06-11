@@ -65,6 +65,15 @@
 #  define USE_AVR_DELAY
 #elif defined(__18CXX)
 #  define USE_PIC18_DELAY
+#elif defined(__arm__)
+/* do not define anything, all procedures are expected to be defined outside u8glib */
+
+/*
+void u8g_Delay(uint16_t val);
+void u8g_MicroDelay(void);
+void u8g_10MicroDelay(void);
+*/
+
 #else
 #  define USE_DUMMY_DELAY
 #endif
