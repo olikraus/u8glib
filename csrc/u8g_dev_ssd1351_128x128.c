@@ -238,23 +238,49 @@ static const uint8_t u8g_dev_ssd1351_128x128_column_seq[] PROGMEM = {
 	U8G_ESC_END
 };
 
+#define RGB332_STREAM_BYTES 8
+static uint8_t u8g_ssd1351_stream_bytes[RGB332_STREAM_BYTES*3];
+
+void u8g_ssd1351_to_stream(uint8_t *ptr)
+{
+  uint8_t cnt = RGB332_STREAM_BYTES;
+  uint8_t val;
+  uint8_t *dest = u8g_ssd1351_stream_bytes;
+  for( cnt = 0; cnt < RGB332_STREAM_BYTES; cnt++ )
+  {
+      val = *ptr++;
+      *dest++ = ((val & 0xe0) >> 2);
+      *dest++ = ((val & 0x1c) << 1);
+      *dest++ = ((val & 0x03) << 4);
+  } 
+}
+
+
+#ifdef OBSOLETE
 // Convert the internal RGB 332 to R
 static uint8_t u8g_ssd1351_get_r(uint8_t colour)
 {
-	return ((colour & 0xe0) >> 5) * 36;
+	//return ((colour & 0xe0) >> 5) * 9;
+	//return ((colour & 0xe0) >> 5) * 8;
+	return ((colour & 0xe0) >> 2) ;
 }
 
 // Convert the internal RGB 332 to G
 static uint8_t u8g_ssd1351_get_g(uint8_t colour)
 {
-	return ((colour & 0x1c) >> 2) * 36;
+	//return ((colour & 0x1c) >> 2) * 9;
+	//return ((colour & 0x1c) >> 2) * 8;
+	return ((colour & 0x1c) << 1);
 }
 
 // Convert the internal RGB 332 to B
 static uint8_t u8g_ssd1351_get_b(uint8_t colour)
 {
-	return (colour & 0x03) * 85;
+	//return (colour & 0x03) * 21;
+	return (colour & 0x03) * 16;
 }
+#endif
+
 
 uint8_t u8g_dev_ssd1351_128x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -276,7 +302,8 @@ uint8_t u8g_dev_ssd1351_128x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 
 	case U8G_DEV_MSG_PAGE_NEXT:
 		{
-			int x, i;
+			u8g_uint_t x;
+			uint8_t i;
 			u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
 			uint8_t *ptr = pb->buf;
 
@@ -284,16 +311,27 @@ uint8_t u8g_dev_ssd1351_128x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 
 			for( i = 0; i < 8; i++ )
 			{
+			  
+			  /*
+			  uint8_t val;
 			  for (x = 0; x < pb->width; x++)
 			  {
-				u8g_WriteByte(u8g, dev, u8g_ssd1351_get_r(*ptr));
-				u8g_WriteByte(u8g, dev, u8g_ssd1351_get_g(*ptr));
-				u8g_WriteByte(u8g, dev, u8g_ssd1351_get_b(*ptr));
+				val = *ptr;
+				u8g_WriteByte(u8g, dev, u8g_ssd1351_get_r(val));
+				u8g_WriteByte(u8g, dev, u8g_ssd1351_get_g(val));
+				u8g_WriteByte(u8g, dev, u8g_ssd1351_get_b(val));
 
 				ptr++;
 			  }
+			  */
+			  
+			  for (x = 0; x < pb->width; x+=RGB332_STREAM_BYTES)
+			  {
+			    u8g_ssd1351_to_stream(ptr);
+			    u8g_WriteSequence(u8g, dev, RGB332_STREAM_BYTES*3, u8g_ssd1351_stream_bytes);
+			    ptr += RGB332_STREAM_BYTES;
+			  }
 			}
-
 			u8g_SetChipSelect(u8g, dev, 0);
 		}
 

@@ -85,6 +85,11 @@
   U8GLIB_DOGS102 u8g(13, 11, 10, 9);    STD SW SPI	FPS: Clip=9.5 Box=7.6  @=8.2 Pix=6.2	Size=15652
   U8GLIB_DOGS102 u8g(13, 11, 10, 9);    SW SPI	        FPS: Clip=19.1 Box=12.8  @=14.0 Pix=9.2	Size=15532
 
+
+  12 Jun 2013
+  SSD1351_128X128_332	SW SPI Clip=1.3 Box=0.7  @=0.9 Pix=0.4
+  SSD1351_128X128_332	HW SPI Clip=3.6 Box=1.1  @=1.5 Pix=0.5
+	      
 */
 
 
@@ -149,9 +154,11 @@
 //U8GLIB_T6963_240X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 14, 15, 17, 18, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7, cs=14, a0=15, wr=17, rd=18, reset=16
 //U8GLIB_T6963_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 14, 15, 17, 18, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7, cs=14, a0=15, wr=17, rd=18, reset=16
 //U8GLIB_HT1632_24X16 u8g(3, 2, 4);		// WR = 3, DATA = 2, CS = 4
+U8GLIB_SSD1351_128X128_332 u8g(10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
 
 #define SECONDS 10
 uint8_t color = 0;
+uint8_t draw_color = 1;
 
 void draw_set_screen(void) {
   // graphic commands to redraw the complete screen should be placed here  
@@ -163,7 +170,7 @@ void draw_clip_test(void) {
   u8g_uint_t i, j, k;
   char buf[3] = "AB";
   k = 0;
-  u8g.setColorIndex(1);
+  u8g.setColorIndex(draw_color);
   u8g.setFont(u8g_font_6x10);
   
   for( i = 0; i  < 6; i++ ) {
@@ -195,7 +202,7 @@ void draw_char(void) {
   char buf[2] = "@";
   u8g_uint_t i, j;
   // graphic commands to redraw the complete screen should be placed here  
-  u8g.setColorIndex(1);
+  u8g.setColorIndex(draw_color);
   u8g.setFont(u8g_font_6x10);
   j = 8;
   for(;;) {
@@ -215,7 +222,7 @@ void draw_char(void) {
 
 void draw_pixel(void) {
   u8g_uint_t x, y, w2, h2;
-  u8g.setColorIndex(1);
+  u8g.setColorIndex(draw_color);
   w2 = u8g.getWidth();
   h2 = u8g.getHeight();
   w2 /= 2;
@@ -261,7 +268,7 @@ const char *convert_FPS(uint16_t fps) {
 }
 
 void show_result(const char *s, uint16_t fps) {
-  u8g.setColorIndex(1);
+  u8g.setColorIndex(draw_color);
   u8g.setFont(u8g_font_8x13B);
   u8g.firstPage();  
   do {
@@ -273,6 +280,14 @@ void show_result(const char *s, uint16_t fps) {
 void setup(void) {
   // flip screen, if required
   // u8g.setRot180();
+  
+  // assign default color value
+  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) 
+    draw_color = 255;     // white
+  else if ( u8g.getMode() == U8G_MODE_GRAY2BIT )
+    draw_color = 3;         // max intensity
+  else if ( u8g.getMode() == U8G_MODE_BW )
+    draw_color = 1;         // pixel on
 }
 
 void loop(void) {

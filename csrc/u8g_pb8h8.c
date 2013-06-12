@@ -64,11 +64,14 @@ void u8g_pb8h8_Clear(u8g_pb_t *b)
   uint8_t *ptr = (uint8_t *)b->buf;
   uint8_t *end_ptr = ptr;
   uint8_t cnt = b->p.page_height;
+  end_ptr += b->width*cnt;
+  /*
   do
   {
     end_ptr += b->width;
     cnt--;
   } while( cnt > 0 );
+  */
   do
   {
     *ptr++ = 0;

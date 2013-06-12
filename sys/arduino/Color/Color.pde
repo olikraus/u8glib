@@ -1,8 +1,8 @@
 /*
 
-  HelloWorld.pde
+  Color.pde
   
-  "Hello World!" example code.
+  "Hello World!" example code with color.
   
   >>> Before compiling: Please remove comment from the constructor of the 
   >>> connected graphics display (see below).
@@ -102,6 +102,37 @@
 U8GLIB_SSD1351_128X128_332 u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
 
 void draw(void) {
+  
+  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
+    /* draw background (area is 128x128) */
+    u8g_uint_t w,h;
+    u8g_uint_t r, g, b;
+    w = 4;
+    h = 4;
+    for( b = 0; b < 4; b++ )
+      for( g = 0; g < 8; g++ )
+	for( r = 0; r < 8; r++ )
+	{
+	  u8g.setColorIndex((r<<5) |  (g<<2) | b );
+	  u8g.drawBox(g*w + b*w*8, r*h, w, h);
+	  u8g.drawBox(g*w + b*w*8, r*h+32, w, h);
+	  u8g.drawBox(g*w + b*w*8, r*h+64, w, h);
+	  u8g.drawBox(g*w + b*w*8, r*h+96, w, h);
+	}
+  }
+  
+  
+  // assign default color value
+  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
+    u8g.setColorIndex(255);     // white
+  }
+  else if ( u8g.getMode() == U8G_MODE_GRAY2BIT ) {
+    u8g.setColorIndex(3);         // max intensity
+  }
+  else if ( u8g.getMode() == U8G_MODE_BW ) {
+    u8g.setColorIndex(1);         // pixel on
+  }
+  
   // graphic commands to redraw the complete screen should be placed here  
   u8g.setFont(u8g_font_unifont);
   //u8g.setFont(u8g_font_osb21);
@@ -116,16 +147,6 @@ void setup(void) {
   // set SPI backup if required
   //u8g.setHardwareBackup(u8g_backup_avr_spi);
 
-  // assign default color value
-  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
-    u8g.setColorIndex(255);     // white
-  }
-  else if ( u8g.getMode() == U8G_MODE_GRAY2BIT ) {
-    u8g.setColorIndex(3);         // max intensity
-  }
-  else if ( u8g.getMode() == U8G_MODE_BW ) {
-    u8g.setColorIndex(1);         // pixel on
-  }
 }
 
 void loop(void) {
