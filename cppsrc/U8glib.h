@@ -115,7 +115,9 @@ class U8GLIB : public Print
     
     /* graphic primitives */
     void setColorEntry(uint8_t color_index, uint8_t r, uint8_t g, uint8_t b) { u8g_SetColorEntry(&u8g, color_index, r, g, b); }
-    void setHiColor(uint8_t rgb) { u8g_SetHiColor(&u8g, rgb); }
+    void setHiColor(uint16_t  rgb) { u8g_SetHiColor(&u8g, rgb); }
+    void setHiColorByRGB(uint8_t r, uint8_t g, uint8_t b) { u8g_SetHiColorByRGB(&u8g, r, g, b); }
+    
     void setColorIndex(uint8_t color_index) { u8g_SetColorIndex(&u8g, color_index); }
     uint8_t getColorIndex(void) { return u8g_GetColorIndex(&u8g); }
     
@@ -1006,6 +1008,18 @@ class U8GLIB_SSD1351_128X128_IDX : public U8GLIB
       : U8GLIB(&u8g_dev_ssd1351_128x128_idx_hw_spi, cs, a0, reset)
       { }
 };
+
+class U8GLIB_SSD1351_128X128_HICOLOR : public U8GLIB 
+{
+  public:
+    U8GLIB_SSD1351_128X128_HICOLOR(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128_hicolor_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1351_128X128_HICOLOR(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128_hicolor_hw_spi, cs, a0, reset)
+      { }
+};
+
 
 
 class U8GLIB_FLIPDISC_2X7 : public U8GLIB 

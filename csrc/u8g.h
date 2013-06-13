@@ -421,6 +421,9 @@ extern u8g_dev_t u8g_dev_ssd1351_128x128_332_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128_332_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128_idx_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128_idx_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1351_128x128_hicolor_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1351_128x128_hicolor_hw_spi;
+
 
 /* HT1632 */
 extern u8g_dev_t u8g_dev_ht1632_24x16;

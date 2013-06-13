@@ -343,9 +343,9 @@ uint8_t u8g_dev_ssd1351_128x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 	return u8g_dev_pb8h8_base_fn(u8g, dev, msg, arg);
 }
 
-uint8_t u8g_dev_ssd1351_128x128_r[256];
-uint8_t u8g_dev_ssd1351_128x128_g[256];
-uint8_t u8g_dev_ssd1351_128x128_b[256];
+static uint8_t u8g_dev_ssd1351_128x128_r[256];
+static uint8_t u8g_dev_ssd1351_128x128_g[256];
+static uint8_t u8g_dev_ssd1351_128x128_b[256];
 
 uint8_t u8g_dev_ssd1351_128x128_idx_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -400,6 +400,59 @@ uint8_t u8g_dev_ssd1351_128x128_idx_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 }
 
 
+uint8_t u8g_dev_ssd1351_128x128_hicolor_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_InitCom(u8g, dev);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1351_128x128_init_seq);
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_FIRST:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1351_128x128_column_seq);
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        uint8_t i, j;
+        uint8_t page_height;
+	uint8_t low;
+	uint8_t high;
+	uint8_t r, g, b;
+	
+        page_height = pb->p.page_y1;
+        page_height -= pb->p.page_y0;
+        page_height++;
+        for( j = 0; j < page_height; j++ )
+        {
+          for( i = 0; i < pb->width; i++ )
+          {
+	    low = ((uint8_t *)(pb->buf))[(i+j*WIDTH)*2];
+	    high = ((uint8_t *)(pb->buf))[(i+j*WIDTH)*2+1];
+	    
+	    r = high & ~7;
+	    b = low & 31;
+	    b <<= 3;
+	    g = high & 7;
+	    g <<= 3;
+	    g |= (low>>5)&7;
+	    g <<= 2;
+
+	    u8g_WriteByte(u8g, dev, r);
+	    u8g_WriteByte(u8g, dev, g);
+	    u8g_WriteByte(u8g, dev, b);	    
+          }
+        }
+      }
+      break;    /* continue to base fn */
+  }
+  return u8g_dev_pbxh16_base_fn(u8g, dev, msg, arg);
+}
+
+
 uint8_t u8g_dev_ssd1351_128x128_byte_buf[WIDTH*PAGE_HEIGHT] U8G_NOCOMMON ; 
 u8g_pb_t u8g_dev_ssd1351_128x128_byte_pb = { {PAGE_HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_ssd1351_128x128_byte_buf}; 
 
@@ -408,6 +461,13 @@ u8g_dev_t u8g_dev_ssd1351_128x128_332_hw_spi = { u8g_dev_ssd1351_128x128_332_fn,
 
 u8g_dev_t u8g_dev_ssd1351_128x128_idx_sw_spi = { u8g_dev_ssd1351_128x128_idx_fn, &u8g_dev_ssd1351_128x128_byte_pb, U8G_COM_SW_SPI };
 u8g_dev_t u8g_dev_ssd1351_128x128_idx_hw_spi = { u8g_dev_ssd1351_128x128_idx_fn, &u8g_dev_ssd1351_128x128_byte_pb, U8G_COM_HW_SPI };
+
+
+/* only half of the height, because two bytes are needed for one pixel */
+u8g_pb_t u8g_dev_ssd1351_128x128_hicolor_byte_pb = { {PAGE_HEIGHT, HEIGHT/2, 0, 0, 0},  WIDTH, u8g_dev_ssd1351_128x128_byte_buf}; 
+
+u8g_dev_t u8g_dev_ssd1351_128x128_hicolor_sw_spi = { u8g_dev_ssd1351_128x128_hicolor_fn, &u8g_dev_ssd1351_128x128_hicolor_byte_pb, U8G_COM_SW_SPI };
+u8g_dev_t u8g_dev_ssd1351_128x128_hicolor_hw_spi = { u8g_dev_ssd1351_128x128_hicolor_fn, &u8g_dev_ssd1351_128x128_hicolor_byte_pb, U8G_COM_HW_SPI };
 
 
 /*

@@ -99,7 +99,10 @@
 //U8GLIB_T6963_240X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 14, 15, 17, 18, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7, cs=14, a0=15, wr=17, rd=18, reset=16
 //U8GLIB_T6963_128X64 u8g(8, 9, 10, 11, 4, 5, 6, 7, 14, 15, 17, 18, 16); // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7, cs=14, a0=15, wr=17, rd=18, reset=16
 //U8GLIB_HT1632_24X16 u8g(3, 2, 4);		// WR = 3, DATA = 2, CS = 4
-U8GLIB_SSD1351_128X128_332 u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
+//U8GLIB_SSD1351_128X128_332 u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
+U8GLIB_SSD1351_128X128_HICOLOR u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
+
+
 
 void draw(void) {
   // graphic commands to redraw the complete screen should be placed here  
@@ -125,6 +128,9 @@ void setup(void) {
   }
   else if ( u8g.getMode() == U8G_MODE_BW ) {
     u8g.setColorIndex(1);         // pixel on
+  }
+  else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+    u8g.setHiColorByRGB((255,255,255);
   }
 }
 
