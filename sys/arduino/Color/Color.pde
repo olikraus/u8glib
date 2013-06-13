@@ -124,14 +124,23 @@ void draw(void) {
   else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
     /* draw background (area is 128x128) */
     u8g_uint_t r, g, b;
+    b =0;
     for( b = 0; b < 4; b++ )
       for( g = 0; g < 32; g++ )
 	for( r = 0; r < 32; r++ )
 	{
-	  u8g.setHiColorByRGB(r<<3, g<<3, b<<5 );
+	  /*
+	  u8g.setHiColorByRGB(r<<3, g<<3, 0 );
+	  u8g.drawPixel(g, r);
+	  */
+	  u8g.setHiColorByRGB(r<<3, g<<3, b<<4 );
 	  u8g.drawPixel(g + b*32, r);
-	  u8g.setHiColorByRGB(r<<3, g<<3, (b<<5)+64 );
+	  u8g.setHiColorByRGB(r<<3, g<<3, (b<<4)+64 );
 	  u8g.drawPixel(g + b*32, r+32);
+	  u8g.setHiColorByRGB(r<<3, g<<3, (b<<4)+128 );
+	  u8g.drawPixel(g + b*32, r+32+32);
+	  u8g.setHiColorByRGB(r<<3, g<<3, (b<<4)+128+64 );
+	  u8g.drawPixel(g + b*32, r+32+32+32);
 	}
   }
   
@@ -145,6 +154,9 @@ void draw(void) {
   }
   else if ( u8g.getMode() == U8G_MODE_BW ) {
     u8g.setColorIndex(1);         // pixel on
+  }
+  else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+    u8g.setHiColorByRGB(255,255,255);
   }
   
   // graphic commands to redraw the complete screen should be placed here  
