@@ -289,7 +289,7 @@ uint8_t u8g_dev_ssd1351_128x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 	switch(msg)
 	{
 	case U8G_DEV_MSG_INIT:
-		u8g_InitCom(u8g, dev);
+		u8g_InitCom(u8g, dev, U8G_SPI_CLK_CYCLE_50NS);
 		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1351_128x128_init_seq);
 		break;
 
@@ -354,7 +354,7 @@ uint8_t u8g_dev_ssd1351_128x128_idx_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 	switch(msg)
 	{
 	case U8G_DEV_MSG_INIT:
-		u8g_InitCom(u8g, dev);
+		u8g_InitCom(u8g, dev, U8G_SPI_CLK_CYCLE_50NS);
 		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1351_128x128_init_seq);
 		break;
 
@@ -405,7 +405,7 @@ uint8_t u8g_dev_ssd1351_128x128_hicolor_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
   switch(msg)
   {
     case U8G_DEV_MSG_INIT:
-      u8g_InitCom(u8g, dev);
+      u8g_InitCom(u8g, dev, U8G_SPI_CLK_CYCLE_50NS);
       u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1351_128x128_init_seq);
       break;
     case U8G_DEV_MSG_STOP:

@@ -681,7 +681,13 @@ defined(__18CXX) || defined(__PIC32MX)
 
 /*===============================================================*/
 /* com api */
-uint8_t u8g_InitCom(u8g_t *u8g, u8g_dev_t *dev);
+
+#define U8G_SPI_CLK_CYCLE_NONE 0
+#define U8G_SPI_CLK_CYCLE_50NS 1
+#define U8G_SPI_CLK_CYCLE_300NS 2
+#define U8G_SPI_CLK_CYCLE_400NS 3
+
+uint8_t u8g_InitCom(u8g_t *u8g, u8g_dev_t *dev, uint8_t clk_cycle_time);
 void u8g_StopCom(u8g_t *u8g, u8g_dev_t *dev);
 void u8g_EnableCom(u8g_t *u8g, u8g_dev_t *dev);         /* obsolete */
 void u8g_DisableCom(u8g_t *u8g, u8g_dev_t *dev);        /* obsolete */
