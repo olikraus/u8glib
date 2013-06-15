@@ -115,6 +115,7 @@ u8glib ChangeLog
   * Cleaned up several compiler warnings
   * Performance improvement for ST7920
   * Added ":" to the "n"umeric variant of the fonts
+  * Added additional argument u8g_InitCom(). Use U8G_SPI_CLK_CYCLE_NONE by default.
   
 
   
