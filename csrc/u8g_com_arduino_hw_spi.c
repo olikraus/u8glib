@@ -40,6 +40,31 @@
   ST7565		400ns 		  2.5 MHz
   ST7920		400ns
 
+  Arduino DUE
+  
+  PA25	MISO
+  PA26	MOSI
+  PA27	SCLK
+  
+  
+typedef struct {
+  WoReg SPI_CR;        (Spi Offset: 0x00) Control Register 
+  RwReg SPI_MR;        (Spi Offset: 0x04) Mode Register 
+  RoReg SPI_RDR;       (Spi Offset: 0x08) Receive Data Register 
+  WoReg SPI_TDR;       (Spi Offset: 0x0C) Transmit Data Register 
+  RoReg SPI_SR;        (Spi Offset: 0x10) Status Register 
+  WoReg SPI_IER;       (Spi Offset: 0x14) Interrupt Enable Register 
+  WoReg SPI_IDR;       (Spi Offset: 0x18) Interrupt Disable Register 
+  RoReg SPI_IMR;       (Spi Offset: 0x1C) Interrupt Mask Register 
+  RoReg Reserved1[4];
+  RwReg SPI_CSR[4];    (Spi Offset: 0x30) Chip Select Register 
+  RoReg Reserved2[41];
+  RwReg SPI_WPMR;      (Spi Offset: 0xE4) Write Protection Control Register 
+  RoReg SPI_WPSR;      (Spi Offset: 0xE8) Write Protection Status Register 
+} Spi;
+  
+  
+
 */
 
 #include "u8g.h"
