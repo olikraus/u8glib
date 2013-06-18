@@ -43,8 +43,8 @@
   Arduino DUE
   
   PA25	MISO
-  PA26	MOSI
-  PA27	SCLK
+  PA26	MOSI	75
+  PA27	SCLK	76
   
   
 typedef struct {
@@ -63,7 +63,64 @@ typedef struct {
   RoReg SPI_WPSR;      (Spi Offset: 0xE8) Write Protection Status Register 
 } Spi;
   
+  Power Management Controller (PMC)
+  arduino-1.5.2/hardware/arduino/sam/system/CMSIS/Device/ATMEL/sam3xa/include/instance/instance_pmc.h
+    - enable PIO
+      
+      REG_PMC_PCER0 = 1UL << ID_PIOA
+    - enable SPI
+      REG_PMC_PCER0 = 1UL << ID_SPI0
+    
+  Parallel Input/Output Controller (PIO)
+  arduino-1.5.2/hardware/arduino/sam/system/CMSIS/Device/ATMEL/sam3xa/include/instance/instance_pioa.h
+    - enable special function of the pin: disable PIO on A26 and A27:
+	REG_PIOA_PDR = 0x0c000000
+	PIOA->PIO_PDR = 0x0c000000
+
+  SPI
+    SPI0->SPI_CR = SPI_CR_SPIDIS
+    SPI0->SPI_CR = SPI_CR_SWRST ;
+    SPI0->SPI_CR = SPI_CR_SWRST ;
+    SPI0->SPI_CR = SPI_CR_SPIEN
   
+    Bit 0: Master Mode = 1 (active)
+    Bit 1: Peripheral Select = 0 (fixed)
+    Bit 2: Chip Select Decode Mode = 0 (direct)
+    Bit 4: Mode Fault Detection = 1 (disabled)
+    Bit 5: Wait Data Read = 0 (disabled) 
+    Bit 7: Loop Back Mode = 0 (disabled)
+    Bit 16-19: Peripheral Chip Select = 0 (chip select 0)    
+    SPI0->SPI_MR = SPI_MR_MSTR | SPI_MR_MODFDIS
+    
+    Bit 0: Clock Polarity = 0
+    Bit 1: Clock Phase = 0
+    Bit 4-7: Bits = 0 (8 Bit)
+    Bit 8-15: SCBR = 1
+    SPI0->SPI_CSR[0] = SPI_CSR_SCBR(1)		
+	SCBR / 84000000 > 50 / 1000000000 
+	SCBR / 84 > 5 / 100 
+	SCBR  > 50 *84 / 1000 --> SCBR=5
+	SCBR  > 300*84 / 1000 --> SCBR=26
+	SCBR  > 400*84 / 1000 --> SCBR=34
+	
+	
+
+  SPI
+     REG_SPI0_CR   
+     REG_SPI0_MR    
+     REG_SPI0_RDR   
+     REG_SPI0_TDR   
+     REG_SPI0_SR     
+     REG_SPI0_IER    
+     REG_SPI0_IDR    
+     REG_SPI0_IMR   
+     REG_SPI0_CSR   
+     REG_SPI0_WPMR 
+     REG_SPI0_WPSR
+
+	
+	
+	    
 
 */
 
