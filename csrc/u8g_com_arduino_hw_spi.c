@@ -329,7 +329,6 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       SPI0->SPI_CR = SPI_CR_SPIDIS;
       SPI0->SPI_CR = SPI_CR_SWRST;
       SPI0->SPI_CR = SPI_CR_SWRST;
-      SPI0->SPI_CR = SPI_CR_SPIEN;
       
       /* master mode, no fault detection, chip select 0 */
       SPI0->SPI_MR = SPI_MR_MSTR | SPI_MR_PCSDEC | SPI_MR_MODFDIS;
@@ -339,6 +338,7 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       /* 5 * 1000 / 84 = 58 ns */
       SPI0->SPI_CSR[0] = SPI_CSR_SCBR(255) | 1 ;
 
+      SPI0->SPI_CR = SPI_CR_SPIEN;
       
       
       break;
