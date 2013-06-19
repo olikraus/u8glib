@@ -595,6 +595,9 @@ defined(__18CXX) || defined(__PIC32MX)
 #elif defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_HW_SPI u8g_com_null_fn
 #define U8G_COM_ST7920_HW_SPI u8g_com_null_fn
+#elif defined(__arm__)   /* Arduino Due */
+#define U8G_COM_HW_SPI u8g_com_arduino_hw_spi_fn
+#define U8G_COM_ST7920_HW_SPI u8g_com_null_fn
 #endif
 #endif
 /* ==== HW SPI, not Arduino ====*/
