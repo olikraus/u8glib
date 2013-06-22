@@ -156,17 +156,26 @@
 //U8GLIB_HT1632_24X16 u8g(3, 2, 4);		// WR = 3, DATA = 2, CS = 4
 //U8GLIB_SSD1351_128X128_332 u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
 //U8GLIB_SSD1351_128X128_HICOLOR u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
-//U8GLIB_SSD1351_128X128_332 u8g(8, 9, 7); // Arduino UNO: SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
-//U8GLIB_SSD1351_128X128_332 u8g(76, 74, 8, 9, 7); // Arduino DUE: SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
-U8GLIB_SSD1351_128X128_HICOLOR u8g(8, 9, 7); // Arduino DUE, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+//U8GLIB_SSD1351_128X128_332 u8g(76, 75, 8, 9, 7); // Arduino DUE: SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+U8GLIB_SSD1351_128X128_332 u8g(8, 9, 7); // Arduino UNO: SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+//U8GLIB_SSD1351_128X128_HICOLOR u8g(8, 9, 7); // Arduino DUE, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+//U8GLIB_SSD1351_128X128_HICOLOR u8g(76, 75, 8, 9, 7); // Arduino DUE, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 
 #define SECONDS 10
-uint8_t color = 0;
+uint8_t flip_color = 0;
 uint8_t draw_color = 1;
 
 void draw_set_screen(void) {
   // graphic commands to redraw the complete screen should be placed here  
-  u8g.setColorIndex(color);
+  if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+    if ( flip_color == 0 ) 
+      u8g.setHiColorByRGB(0,0,0);
+    else
+      u8g.setHiColorByRGB(255,255,255);
+  }
+  else {
+    u8g.setColorIndex(flip_color);
+  }
   u8g.drawBox( 0, 0, u8g.getWidth(), u8g.getHeight() );
 }
 
@@ -174,7 +183,12 @@ void draw_clip_test(void) {
   u8g_uint_t i, j, k;
   char buf[3] = "AB";
   k = 0;
-  u8g.setColorIndex(draw_color);
+  if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+    u8g.setHiColorByRGB(255,255,255);
+  }
+  else {
+    u8g.setColorIndex(draw_color);
+  }
   u8g.setFont(u8g_font_6x10);
   
   for( i = 0; i  < 6; i++ ) {
@@ -206,7 +220,12 @@ void draw_char(void) {
   char buf[2] = "@";
   u8g_uint_t i, j;
   // graphic commands to redraw the complete screen should be placed here  
-  u8g.setColorIndex(draw_color);
+  if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+    u8g.setHiColorByRGB(255,255,255);
+  }
+  else {
+    u8g.setColorIndex(draw_color);
+  }
   u8g.setFont(u8g_font_6x10);
   j = 8;
   for(;;) {
@@ -226,7 +245,12 @@ void draw_char(void) {
 
 void draw_pixel(void) {
   u8g_uint_t x, y, w2, h2;
-  u8g.setColorIndex(draw_color);
+  if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+    u8g.setHiColorByRGB(255,255,255);
+  }
+  else {
+    u8g.setColorIndex(draw_color);
+  }
   w2 = u8g.getWidth();
   h2 = u8g.getHeight();
   w2 /= 2;
@@ -257,7 +281,7 @@ uint16_t picture_loop_with_fps(void (*draw_fn)(void)) {
       draw_fn();
     } while( u8g.nextPage() );
     FPS10++;
-    color = color ^ 1;
+    flip_color = flip_color ^ 1;
   } while( millis() < time );
   return FPS10;  
 }
@@ -272,7 +296,13 @@ const char *convert_FPS(uint16_t fps) {
 }
 
 void show_result(const char *s, uint16_t fps) {
-  u8g.setColorIndex(draw_color);
+  // assign default color value
+  if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+    u8g.setHiColorByRGB(255,255,255);
+  }
+  else {
+    u8g.setColorIndex(draw_color);
+  }
   u8g.setFont(u8g_font_8x13B);
   u8g.firstPage();  
   do {
@@ -292,6 +322,9 @@ void setup(void) {
     draw_color = 3;         // max intensity
   else if ( u8g.getMode() == U8G_MODE_BW )
     draw_color = 1;         // pixel on
+  else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+    u8g.setHiColorByRGB(255,255,255);
+  }
 }
 
 void loop(void) {

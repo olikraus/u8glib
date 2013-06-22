@@ -306,16 +306,6 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
     case U8G_COM_MSG_INIT:
       u8g_com_arduino_assign_pin_output_high(u8g);
       u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
-      /*
-      pinMode(PIN_SCK, OUTPUT);
-      digitalWrite(PIN_SCK, LOW);
-      pinMode(PIN_MOSI, OUTPUT);
-      digitalWrite(PIN_MOSI, LOW);
-      */
-      /* pinMode(PIN_MISO, INPUT); */
-
-      //pinMode(PIN_CS, OUTPUT);			/* system chip select for the atmega board */
-      //digitalWrite(PIN_CS, HIGH);
     
       /* Arduino Due specific code */
       
@@ -329,6 +319,8 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       SPI0->SPI_CR = SPI_CR_SPIDIS;
       SPI0->SPI_CR = SPI_CR_SWRST;
       SPI0->SPI_CR = SPI_CR_SWRST;
+      SPI0->SPI_CR = SPI_CR_SPIEN;
+      u8g_MicroDelay();
       
       /* master mode, no fault detection, chip select 0 */
       SPI0->SPI_MR = SPI_MR_MSTR | SPI_MR_PCSDEC | SPI_MR_MODFDIS;
@@ -336,28 +328,31 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       /* Polarity, Phase, 8 Bit data transfer, baud rate */
       /* x * 1000 / 84 --> clock cycle in ns */
       /* 5 * 1000 / 84 = 58 ns */
-      SPI0->SPI_CSR[0] = SPI_CSR_SCBR(255) | 1 ;
-
-      SPI0->SPI_CR = SPI_CR_SPIEN;
-      
-      
+      SPI0->SPI_CSR[0] = SPI_CSR_SCBR(5) | 1;
+      u8g_MicroDelay();      
       break;
     
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
+      u8g_MicroDelay();
       u8g_com_arduino_digital_write(u8g, U8G_PI_A0, arg_val);
+      u8g_MicroDelay();
       break;
 
     case U8G_COM_MSG_CHIP_SELECT:
       if ( arg_val == 0 )
       {
         /* disable */
+	u8g_MicroDelay();
         u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
+	u8g_MicroDelay();
       }
       else
       {
         /* enable */
         //u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
+	u8g_MicroDelay();
         u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
+	u8g_MicroDelay();
       }
       break;
       
@@ -368,6 +363,7 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
     
     case U8G_COM_MSG_WRITE_BYTE:
       u8g_spi_out(arg_val);
+      u8g_MicroDelay();
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
