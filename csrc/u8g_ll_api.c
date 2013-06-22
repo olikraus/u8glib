@@ -456,7 +456,15 @@ void u8g_SetHiColorByRGB(u8g_t *u8g, uint8_t r, uint8_t g, uint8_t b)
 
 void u8g_SetRGB(u8g_t *u8g, uint8_t r, uint8_t g, uint8_t b)
 {
-  if ( u8g->mode == U8G_MODE_HICOLOR )
+  if ( u8g->mode == U8G_MODE_R3G3B2 ) 
+  {
+    r &= 0x0e0;
+    g &= 0x0e0
+    g >>= 3;
+    b >>= 6;
+    u8g->arg_pixel.color = r | g | b;
+  }
+  else if ( u8g->mode == U8G_MODE_HICOLOR )
   {
     u8g_SetHiColorByRGB(u8g, r,g,b);
   }

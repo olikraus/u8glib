@@ -117,6 +117,7 @@ class U8GLIB : public Print
     void setColorEntry(uint8_t color_index, uint8_t r, uint8_t g, uint8_t b) { u8g_SetColorEntry(&u8g, color_index, r, g, b); }
     void setHiColor(uint16_t  rgb) { u8g_SetHiColor(&u8g, rgb); }
     void setHiColorByRGB(uint8_t r, uint8_t g, uint8_t b) { u8g_SetHiColorByRGB(&u8g, r, g, b); }
+    void setRGB(uint8_t r, uint8_t g, uint8_t b) { u8g_SetRGB(&u8g, r, g, b); }
     
     void setColorIndex(uint8_t color_index) { u8g_SetColorIndex(&u8g, color_index); }
     uint8_t getColorIndex(void) { return u8g_GetColorIndex(&u8g); }
