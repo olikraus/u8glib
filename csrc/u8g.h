@@ -1040,7 +1040,8 @@ void u8g_SetDefaultMidColor(u8g_t *u8g);
 
 
 void u8g_state_dummy_cb(uint8_t msg);
-void u8g_backup_avr_spi(uint8_t msg);		/* backup SPI state on atmel avr controller */
+void u8g_backup_spi(uint8_t msg);		/* backup SPI state controller */
+#define u8g_backup_avr_spi u8g_backup_spi
 
 void u8g_SetHardwareBackup(u8g_t *u8g, u8g_state_cb backup_cb);
 
