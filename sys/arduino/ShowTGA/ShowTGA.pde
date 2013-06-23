@@ -39,6 +39,7 @@
 */
 
 
+#include <SPI.h>
 #include <SD.h>
 #include "U8glib.h"
 
@@ -102,14 +103,15 @@
 //U8GLIB_HT1632_24X16 u8g(3, 2, 4);		// WR = 3, DATA = 2, CS = 4
 //U8GLIB_SSD1351_128X128_332 u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
 //U8GLIB_SSD1351_128X128_HICOLOR u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
-//U8GLIB_SSD1351_128X128_332 u8g(8, 9, 7); // HW SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 //U8GLIB_SSD1351_128X128_332 u8g(76, 75, 8, 9, 7); // Arduino DUE, SW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
-U8GLIB_SSD1351_128X128_HICOLOR u8g(76, 75, 8, 9, 7); // Arduino DUE, SW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+U8GLIB_SSD1351_128X128_332 u8g(8, 9, 7); // HW SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+//U8GLIB_SSD1351_128X128_HICOLOR u8g(76, 75, 8, 9, 7); // Arduino DUE, SW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 //U8GLIB_SSD1351_128X128_HICOLOR u8g(8, 9, 7); // Arduino DUE, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 
 
 
 const int sd_chip_select = 10; /* http://electronics.ilsoft.co.uk/ArduinoShield.aspx */
+uint8_t sd_is_ok = 0;
 
 File tga_file;
 uint16_t tga_width;
@@ -150,6 +152,8 @@ void tga_close(void)
 uint8_t tga_read_header(void)
 {
   uint8_t v, i;
+  tga_x = 0;                    /* reset draw position */
+  tga_y = 0;
   v = tga_read_byte();		/* Imgae ID field, must be 0 */
   if ( v != 0 ) return 0;
   v = tga_read_byte();		/* Color map type, must be 0 */
@@ -167,57 +171,106 @@ uint8_t tga_read_header(void)
   return 1;
 }
 
-uint8_t tga_pixel[3];
+#define TGA_PIX_BUF_SIZE 64
+uint8_t tga_pixel[3*TGA_PIX_BUF_SIZE];
 uint8_t tga_read_write_pixel(void)
 {
-  tga_pixel[0] = tga_read_byte();
-  tga_pixel[1] = tga_read_byte();
-  tga_pixel[2] = tga_read_byte();
-  u8g.setRGB(tga_pixel[0], tga_pixel[1], tga_pixel[2]);
-  u8g.drawPixel(tga_x, tga_y);
-  tga_x++;
-  if ( tga_x >= tga_width )
+  uint8_t i;
+  uint8_t *buf;
+
+    
+  buf = tga_pixel;
+  tga_file.read(tga_pixel, 3*TGA_PIX_BUF_SIZE);
+  for( i = 0; i < TGA_PIX_BUF_SIZE; i++ )
   {
-    tga_x = 0;
-    tga_y++;
-    if ( tga_y > tga_height )
-      return 0;
+    //tga_pixel[0] = tga_read_byte();
+    //tga_pixel[1] = tga_read_byte();
+    //tga_pixel[2] = tga_read_byte();
+    
+    //u8g.setRGB(tga_pixel[0], tga_pixel[1], tga_pixel[2]);
+    u8g.setRGB(buf[0], buf[1], buf[2]);
+    buf += 3;
+    u8g.drawPixel(tga_x, u8g.getHeight()-1-tga_y);
+    tga_x++;
+    if ( tga_x >= tga_width )
+    {
+      tga_x = 0;
+      tga_y++;
+      if ( tga_y > tga_height )
+        return 0;
+    }
   }
   return 1;
 }
 
 
+uint8_t pos = 0;
+
 
 
 void draw(void) 
 {
+  uint8_t file_is_ok = 0;
   if ( tga_open("test.tga") != 0 )
   {
-    tga_read_header();
-    while( tga_read_write_pixel() != 0 )
-      ;
+    if ( tga_read_header() != 0 )
+    {
+      while( tga_read_write_pixel() != 0 )
+        ;
+      file_is_ok = 1;
+    }
     tga_close();
   }
+  u8g.setRGB(255, 255, 255);
+  if ( sd_is_ok != 0 )
+    u8g.drawStr(0, 20, "SD ok");
+  else
+    u8g.drawStr(0, 20, "SD failed");
+  if ( file_is_ok != 0 )
+    u8g.drawStr(0, 40, "File ok");
+  else
+    u8g.drawStr(0, 40, "File failed");
 }
 
 void setup(void) {
+  Serial.begin(9600);
+  while (!Serial)
+    ; // wait for serial port to connect. Needed for Leonardo only
+    
+  Serial.println("Initializing OLED...");
+  u8g.begin();
+  u8g.setHardwareBackup(u8g_backup_spi);
   
-  SD.begin();
-  
+  Serial.println("Initializing SD card...");
+  if ( SD.begin(sd_chip_select) )
+    sd_is_ok = 1;
+  else
+    sd_is_ok = 0;
+    
+  u8g.setFont(u8g_font_7x13r);  
   // flip screen, if required
   // u8g.setRot180();
   
   // set SPI backup if required
-  //u8g.setHardwareBackup(u8g_backup_avr_spi);
 
 }
 
 void loop(void) {
+
+  switch(pos&3) {
+    case 0: u8g.undoRotation(); break;
+    case 1: u8g.setRot90(); break;
+    case 2: u8g.setRot180(); break;
+    case 3: u8g.setRot270(); break;
+  }
+
   // picture loop
   u8g.firstPage();  
   do {
     draw();
   } while( u8g.nextPage() );
+  pos++;
+  pos &=127;
   
   // rebuild the picture after some delay
   delay(1000);
