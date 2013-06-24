@@ -104,9 +104,9 @@
 //U8GLIB_SSD1351_128X128_332 u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
 //U8GLIB_SSD1351_128X128_HICOLOR u8g(13, 11, 10, 9, 8); // SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RESET = 8
 //U8GLIB_SSD1351_128X128_332 u8g(76, 75, 8, 9, 7); // Arduino DUE, SW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
-U8GLIB_SSD1351_128X128_332 u8g(8, 9, 7); // HW SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+//U8GLIB_SSD1351_128X128_332 u8g(8, 9, 7); // HW SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 //U8GLIB_SSD1351_128X128_HICOLOR u8g(76, 75, 8, 9, 7); // Arduino DUE, SW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
-//U8GLIB_SSD1351_128X128_HICOLOR u8g(8, 9, 7); // Arduino DUE, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+U8GLIB_SSD1351_128X128_HICOLOR u8g(8, 9, 7); // Arduino DUE, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 
 
 
@@ -183,12 +183,7 @@ uint8_t tga_read_write_pixel(void)
   tga_file.read(tga_pixel, 3*TGA_PIX_BUF_SIZE);
   for( i = 0; i < TGA_PIX_BUF_SIZE; i++ )
   {
-    //tga_pixel[0] = tga_read_byte();
-    //tga_pixel[1] = tga_read_byte();
-    //tga_pixel[2] = tga_read_byte();
-    
-    //u8g.setRGB(tga_pixel[0], tga_pixel[1], tga_pixel[2]);
-    u8g.setRGB(buf[0], buf[1], buf[2]);
+    u8g.setRGB(buf[2], buf[1], buf[1]);
     buf += 3;
     u8g.drawPixel(tga_x, u8g.getHeight()-1-tga_y);
     tga_x++;
@@ -248,11 +243,6 @@ void setup(void) {
     sd_is_ok = 0;
     
   u8g.setFont(u8g_font_7x13r);  
-  // flip screen, if required
-  // u8g.setRot180();
-  
-  // set SPI backup if required
-
 }
 
 void loop(void) {
