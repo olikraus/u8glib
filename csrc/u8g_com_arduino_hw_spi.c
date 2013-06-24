@@ -326,14 +326,34 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       SPI0->SPI_MR = SPI_MR_MSTR | SPI_MR_PCSDEC | SPI_MR_MODFDIS;
       
       /* Polarity, Phase, 8 Bit data transfer, baud rate */
-      /* x * 1000 / 84 --> clock cycle in ns */
-      /* 5 * 1000 / 84 = 58 ns */
-      SPI0->SPI_CSR[0] = SPI_CSR_SCBR(5) | 1;
+      /* x * 1000 / 84 --> clock cycle in ns 
+        5 * 1000 / 84 = 58 ns       
+	SCBR  > 50 *84 / 1000 --> SCBR=5
+	SCBR  > 300*84 / 1000 --> SCBR=26
+	SCBR  > 400*84 / 1000 --> SCBR=34
+      */
+      
+      if ( arg_val <= U8G_SPI_CLK_CYCLE_50NS )
+      {
+	SPI0->SPI_CSR[0] = SPI_CSR_SCBR(5) | 1;
+      }
+      else if ( arg_val <= U8G_SPI_CLK_CYCLE_300NS )
+      {
+	SPI0->SPI_CSR[0] = SPI_CSR_SCBR(26) | 1;
+      }
+      else if ( arg_val <= U8G_SPI_CLK_CYCLE_400NS )
+      {
+	SPI0->SPI_CSR[0] = SPI_CSR_SCBR(34) | 1;
+      }
+      else
+      {
+	SPI0->SPI_CSR[0] = SPI_CSR_SCBR(84) | 1;
+      }
+      
       u8g_MicroDelay();      
       break;
     
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      //u8g_MicroDelay();
       u8g_com_arduino_digital_write(u8g, U8G_PI_A0, arg_val);
       u8g_MicroDelay();
       break;
@@ -342,7 +362,6 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       if ( arg_val == 0 )
       {
         /* disable */
-	//u8g_MicroDelay();
         u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
 	u8g_MicroDelay();
       }
@@ -350,7 +369,6 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       {
         /* enable */
         //u8g_com_arduino_digital_write(u8g, U8G_PI_SCK, LOW);
-	//u8g_MicroDelay();
         u8g_com_arduino_digital_write(u8g, U8G_PI_CS, LOW);
 	u8g_MicroDelay();
       }
