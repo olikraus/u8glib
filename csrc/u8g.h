@@ -421,6 +421,8 @@ extern u8g_dev_t u8g_dev_ili9325d_320x240_8bit;
 /* SSD1351 OLED (breakout board from http://www.kickstarter.com/projects/ilsoftltd/colour-oled-breakout-board) */
 extern u8g_dev_t u8g_dev_ssd1351_128x128_332_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128_332_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1351_128x128_4x_332_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1351_128x128_4x_332_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128_idx_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128_idx_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128_hicolor_sw_spi;

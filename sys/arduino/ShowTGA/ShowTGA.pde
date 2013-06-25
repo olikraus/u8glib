@@ -236,6 +236,7 @@ void setup(void) {
   u8g.begin();
   u8g.setHardwareBackup(u8g_backup_spi);
   
+  pinMode(13, OUTPUT);
   Serial.println("Initializing SD card...");
   if ( SD.begin(sd_chip_select) )
     sd_is_ok = 1;
