@@ -4,6 +4,10 @@
   
   Display "test.tga" from root directory of an attached SD card
   
+  Notes: 
+  A) Minimum 4K SRAM required for this example, Arduino Mega2560 is fine
+  B) Due is instable and can not read SD after some time
+  
   >>> Before compiling: Please remove comment from the constructor of the 
   >>> connected graphics display (see below).
   
@@ -134,7 +138,7 @@ uint16_t tga_read_word(void)
 
 uint8_t tga_open(const char *name)
 {
-  tga_file = SD.open(name);
+  tga_file = SD.open(name, O_RDONLY);
   if ( tga_file )
     return 1;
   return 0;
@@ -183,7 +187,7 @@ uint8_t tga_read_write_pixel(void)
   tga_file.read(tga_pixel, 3*TGA_PIX_BUF_SIZE);
   for( i = 0; i < TGA_PIX_BUF_SIZE; i++ )
   {
-    u8g.setRGB(buf[2], buf[1], buf[1]);
+    u8g.setRGB(buf[2], buf[1], buf[0]);
     buf += 3;
     u8g.drawPixel(tga_x, u8g.getHeight()-1-tga_y);
     tga_x++;

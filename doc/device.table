@@ -1559,6 +1559,20 @@ impl. v1.11
 impl.
 :AVR
 impl.
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_pcd8544_84x48_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_PCD8544(cs, a0 [, reset])</tt>
+:Arduino
+impl
+:Arduino Due
+impl. v1.13
+:Chipkit
+impl.
+:AVR
+impl.
 ::
 :Controller
 TLS8204
@@ -1605,6 +1619,20 @@ SW SPI
 verified
 :Arduino Due
 impl. v1.11
+:Chipkit
+impl.
+:AVR
+impl.
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_pcf8812_96x65_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_PCF8812(cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Arduino Due
+impl. v1.13
 :Chipkit
 impl.
 :AVR
