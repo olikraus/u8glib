@@ -1009,19 +1009,22 @@ void bdf_aa_Do(void)
 void bdf_aa_Show(void)
 {
   int x,y;
-  for( y = 0; y < bdf_char_height+2*BDF_AA_OFFSET; y++ )
+  if ( bdf_font_format == 2 )
   {
-    for( x = 0; x < bdf_char_width+2*BDF_AA_OFFSET; x++ )
+    for( y = 0; y < bdf_char_height+2*BDF_AA_OFFSET; y++ )
     {
-      switch(bdf_aa_bitmap_line[y][x])
+      for( x = 0; x < bdf_char_width+2*BDF_AA_OFFSET; x++ )
       {
-	case 0: printf("."); break;
-	case 1: printf("-"); break;
-	case 2: printf("+"); break;
-	case 3: printf("#"); break;
+	switch(bdf_aa_bitmap_line[y][x])
+	{
+	  case 0: printf("."); break;
+	  case 1: printf("-"); break;
+	  case 2: printf("+"); break;
+	  case 3: printf("#"); break;
+	}
       }
+      printf("\n");
     }
-    printf("\n");
   }
 }
 
