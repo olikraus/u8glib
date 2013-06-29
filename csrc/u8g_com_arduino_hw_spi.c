@@ -362,7 +362,7 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
       if ( arg_val == 0 )
       {
         /* disable */
-	u8g_MicroDelay();
+	u8g_MicroDelay();		/* this delay is required to avoid that the display is switched off too early --> DOGS102 with DUE */
         u8g_com_arduino_digital_write(u8g, U8G_PI_CS, HIGH);
 	u8g_MicroDelay();
       }
