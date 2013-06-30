@@ -211,9 +211,9 @@ void u8g_extra_page(uint8_t a)
   }
   else
   {
-    u8g.drawStr( 0, 12, "setScake2x2");
+    u8g.drawStr( 0, 12, "setScale2x2");
     u8g.setScale2x2();
-    u8g.drawStr( 0, 6+a, "setScake2x2");
+    u8g.drawStr( 0, 6+a, "setScale2x2");
     u8g.undoScale();
   }
 }
