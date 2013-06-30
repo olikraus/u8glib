@@ -497,7 +497,15 @@ uint8_t u8g_GetDefaultForegroundColor(u8g_t *u8g)
 
 void u8g_SetDefaultForegroundColor(u8g_t *u8g)
 {
-  u8g_SetColorIndex(u8g, u8g_GetDefaultForegroundColor(u8g));
+  if ( u8g->mode == U8G_MODE_HICOLOR )
+  {
+    u8g->arg_pixel.color = 0x0ff;
+    u8g->arg_pixel.hi_color = 0x0ff;
+  }
+  else
+  {
+    u8g_SetColorIndex(u8g, u8g_GetDefaultForegroundColor(u8g));
+  }
 }
 
 uint8_t u8g_GetDefaultBackgroundColor(u8g_t *u8g)

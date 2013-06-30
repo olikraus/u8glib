@@ -104,7 +104,7 @@
 //U8GLIB_SSD1351_128X128_4X_332 u8g(76, 75, 8, 9, 7); // Arduino DUE: SW SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 //U8GLIB_SSD1351_128X128_4X_332 u8g(8, 9, 7); // Arduino : HW SPI Com: SCK = 13, MOSI = 11, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 //U8GLIB_SSD1351_128X128_HICOLOR u8g(76, 75, 8, 9, 7); // Arduino DUE, SW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
-//U8GLIB_SSD1351_128X128_HICOLOR u8g(8, 9, 7); // Arduino, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+U8GLIB_SSD1351_128X128_HICOLOR u8g(8, 9, 7); // Arduino, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 //U8GLIB_SSD1351_128X128_4X_HICOLOR u8g(76, 75, 8, 9, 7); // Arduino DUE, HW SPI Com, 4x Memory: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 //U8GLIB_SSD1351_128X128_4X_HICOLOR u8g(8, 9, 7); // Arduino, HW SPI Com, 4x Memory: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 
@@ -178,6 +178,32 @@ void u8g_ascii_2() {
   }
 }
 
+void u8g_extra_page(uint8_t a)
+{
+  if ( u8g.getMode() == U8G_MODE_HICOLOR || u8g.getMode() == U8G_MODE_R3G3B2) {
+    /* draw background (area is 128x128) */
+    u8g_uint_t r, g, b;
+    b = a << 5;
+    for( g = 0; g < 64; g++ )
+    {
+      for( r = 0; r < 64; r++ )
+      {
+	u8g.setRGB(r<<2, g<<2, b );
+	u8g.drawPixel(g, r);
+      }
+    }
+    u8g.setRGB(255,255,255);
+    u8g.drawStr( 66, 10, "Color Page");
+  }
+  else
+  {
+    u8g.drawStr( 0, 12, "setScake2x2");
+    u8g.setScale2x2();
+    u8g.drawStr( 0, 6+a, "setScake2x2");
+    u8g.undoScale();
+  }
+}
+
 
 uint8_t draw_state = 0;
 
@@ -191,6 +217,7 @@ void draw(void) {
     case 4: u8g_line(draw_state&7); break;
     case 5: u8g_ascii_1(); break;
     case 6: u8g_ascii_2(); break;
+    case 7: u8g_extra_page(draw_state&7); break;
   }
 }
 
@@ -199,15 +226,6 @@ void setup(void) {
   // flip screen, if required
   //u8g.setRot180();
 
-  // assign default color value
-  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) 
-    u8g.setColorIndex(255);     // white
-  else if ( u8g.getMode() == U8G_MODE_GRAY2BIT )
-    u8g.setColorIndex(3);         // max intensity
-  else if ( u8g.getMode() == U8G_MODE_BW )
-    u8g.setColorIndex(1);         // pixel on
-  
-  //u8g.setContrast(0x30);
   
   pinMode(13, OUTPUT);           
   digitalWrite(13, HIGH);  
@@ -223,7 +241,7 @@ void loop(void) {
   
   // increase the state
   draw_state++;
-  if ( draw_state >= 7*8 )
+  if ( draw_state >= 8*8 )
     draw_state = 0;
   
   // rebuild the picture after some delay
