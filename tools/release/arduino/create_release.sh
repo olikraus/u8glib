@@ -44,6 +44,9 @@ cp ../../../sys/arduino/Touch4WSetup/*.pde ./libraries/U8glib/examples/Touch4WSe
 cp ../../../sys/arduino/Touch4WTest/*.pde ./libraries/U8glib/examples/Touch4WTest/.
 # sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
 
+# rename to .ino
+find . -name "*.pde" -exec /bin/sh -c 'f={}; mv ${f} ${f%.*}.ino' \;
+
 
 chmod -R og=u libraries
 cd libraries 

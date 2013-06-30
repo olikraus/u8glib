@@ -109,14 +109,19 @@ u8glib ChangeLog
   * New C++ interface for ST7920 
 2013-03-24	v1.12	  Oliver Kraus <olikraus@gmail.com>
   * Added touch panel examples
-2013-xx-xx	v1.13	  Oliver Kraus <olikraus@gmail.com>
+2013-06-30	v1.13	  Oliver Kraus <olikraus@gmail.com>
   * Fixed missing "Arduino.h" in u8g_delay.c
-  * Support for HT1632: U8GLIB_HT1632_24X16 u8g(wr, data, cs);
+  * Disable interrupt for port/pin access (AVR), issue 19
+  * Support for HT1632: U8GLIB_HT1632_24X16 u8g(wr, data, cs), issue 165
+  * Support for SSD1351 OLED, issue 168
   * Cleaned up several compiler warnings
-  * Performance improvement for ST7920
-  * Added ":" to the "n"umeric variant of the fonts
+  * Fixed conflict with scheduler (Arduino Due), issue 155
+  * HW SPI for Arduino Due, issue 180
+  * Performance improvement for ST7920, issue 177
+  * Added ":" to the "n"umeric variant of the fonts, issue 166
   * Added additional argument u8g_InitCom(). Use U8G_SPI_CLK_CYCLE_NONE by default.
-  
+  * Added double buffer option for may ST7565 devices
+  * Tested with Arduino 1.0.5
 
   
   
