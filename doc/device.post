@@ -1,14 +1,16 @@
 
  * Currently unsupported
   * T6963 not supported by AVR, Chipkit (PIC32) and Arduino Due
-  * HW SPI not supported by Chipkit (PIC32) and Arduino Due
+  * HW SPI not supported by Chipkit (PIC32)
   * I2C not supported by Chipkit (PIC32) and Arduino Due
   * SBN1661/SED1520 not supported by AVR and Arduino Due
 
  * Mode
   * BW: Black and white mode, one bit per pixel.
   * 4L: Four gray levels, two bits per pixel
-
+  * 332: RGB mode with 3 bit for red and green and 2 bit for blue
+  * 64K: Hi-Color RGB mode with 5 bit for red, 6 bit for green and 5 bit for blue
+  
  * Com
   * HW SPI: Use pin definitions from the Arduino variant files
   * SW SPI: Use internal software SPI communication
@@ -19,8 +21,8 @@
  * Pin Names
   * *sck*: Clock 
   * *mosi*: Serial data
-  * *cs*, *cs1*, *cs2*: Chip select
-  * *a0*, *di*: Data/instruction register select, datasheet names usually are A0, DI or RS
+  * *cs*, *cs1*, *cs2*: Chip select, datasheet names: CS, CS1, CS2 or CE
+  * *a0*, *di*: Data/instruction register select, datasheet names:  A0, DI, CD or RS
   * *rw*: Read/write line
   * *en*: Read/write enable 
   * *d0* - *d7*: Parallel data

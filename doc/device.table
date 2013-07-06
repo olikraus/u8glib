@@ -1857,6 +1857,142 @@ impl. v1.09
 impl. v1.09
 ::
 :Controller
+SSD1351
+:Display/Size
+128x128
+:Mode
+332
+:Set Contrast
+yes
+:Page Size
+1024 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1351_128x128_332_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1351_128X128_332(sck, mosi, cs, a0 [, reset]) </tt>
+:Arduino
+verified v1.13
+:Arduino Due
+verified v1.13
+:Chipkit
+impl. v1.13
+:AVR
+impl. v1.13
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1351_128x128_332_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1351_128X128_332(cs, a0 [, reset]) </tt>
+:Arduino
+verified v1.13
+:Arduino Due
+verified v1.13
+:Chipkit
+impl. v1.13
+:AVR
+impl. v1.13
+::
+:Page Size
+4096 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1351_128x128_4X_332_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1351_128X128_4X_332(sck, mosi, cs, a0 [, reset]) </tt>
+:Arduino
+verified v1.13
+:Arduino Due
+verified v1.13
+:Chipkit
+impl. v1.13
+:AVR
+impl. v1.13
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1351_128x128_4X_332_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1351_128X128_4X_332(cs, a0 [, reset]) </tt>
+:Arduino
+verified v1.13
+:Arduino Due
+verified v1.13
+:Chipkit
+impl. v1.13
+:AVR
+impl. v1.13
+::
+:Mode
+64K
+:Set Contrast
+yes
+:Page Size
+1024 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1351_128x128_hicolor_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1351_128X128_HICOLOR(sck, mosi, cs, a0 [, reset]) </tt>
+:Arduino
+verified v1.13
+:Arduino Due
+verified v1.13
+:Chipkit
+impl. v1.13
+:AVR
+impl. v1.13
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1351_128x128_hicolor_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1351_128X128_HICOLOR(cs, a0 [, reset]) </tt>
+:Arduino
+verified v1.13
+:Arduino Due
+verified v1.13
+:Chipkit
+impl. v1.13
+:AVR
+impl. v1.13
+::
+:Page Size
+4096 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1351_128x128_4X_hicolor_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1351_128X128_4X_HICOLOR(sck, mosi, cs, a0 [, reset]) </tt>
+:Arduino
+verified v1.13
+:Arduino Due
+verified v1.13
+:Chipkit
+impl. v1.13
+:AVR
+impl. v1.13
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1351_128x128_4X_hicolor_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SSD1351_128X128_4X_HICOLOR(cs, a0 [, reset]) </tt>
+:Arduino
+verified v1.13
+:Arduino Due
+verified v1.13
+:Chipkit
+impl. v1.13
+:AVR
+impl. v1.13
+::
+:Controller
 HT1632
 :Display/Size
 24x16
