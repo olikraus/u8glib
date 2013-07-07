@@ -107,7 +107,7 @@ void u8g_backup_spi(uint8_t msg)
   }
 }
 
-#elif defined(__arm__)		// Arduino Due, maybe we should better check for __SAM3X8E__
+#elif defined(ARDUINO) && defined(__arm__)		// Arduino Due, maybe we should better check for __SAM3X8E__
 
 #include "sam.h"
 
