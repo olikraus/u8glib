@@ -89,7 +89,9 @@ SIZE:=$(GCCPATH)/bin/arm-none-eabi-size
 # Common flags
 COMMON_FLAGS = -DF_CPU=$(F_CPU) -mthumb -mcpu=$(MCPU)
 COMMON_FLAGS += -Wall -I. -I$(SYSINC) -I$(U8GPATH)
-COMMON_FLAGS += -Os -flto
+# default stack size is 0x0c00
+COMMON_FLAGS += -D__STACK_SIZE=0x0600
+COMMON_FLAGS += -Os -flto 
 COMMON_FLAGS += -ffunction-sections -fdata-sections
 # Assembler flags
 ASFLAGS:=$(COMMON_FLAGS) -D__STARTUP_CLEAR_BSS -D__START=main
