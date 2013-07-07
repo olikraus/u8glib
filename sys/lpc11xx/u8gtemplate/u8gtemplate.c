@@ -32,7 +32,6 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
 /*============================================================*/
 /* Generic ARM delay procedure, based on the system timer (SysTick) */
 
-
 /*
   Delay by the provided number of system ticks.
   The delay must be smaller than the RELOAD value.

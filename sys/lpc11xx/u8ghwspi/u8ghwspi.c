@@ -351,13 +351,34 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
 #define LED_GPIO	LPC_GPIO1
 #define LED_PIN 8			
 
+u8g_t u8g;
+
+
+void draw(void)
+{
+  u8g_SetFont(&u8g, u8g_font_6x10);
+  u8g_DrawStr(&u8g, 0, 15, "Hello World!");
+}
 
 void main()
 {
   volatile uint32_t i, cnt = 100000;
   LED_GPIO->DIR |= 1 << LED_PIN;	  
-  
+
   spi_init(50);
+  
+  //u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
+  u8g_InitComFn(&u8g, &u8g_dev_ssd1325_nhd27oled_bw_hw_spi, u8g_com_hw_spi_fn);
+  
+  for(;;)
+  {  
+    u8g_FirstPage(&u8g);
+    do
+    {
+      draw();
+    } while ( u8g_NextPage(&u8g) );
+    u8g_Delay(100);
+  }
   
   while (1)
   {
