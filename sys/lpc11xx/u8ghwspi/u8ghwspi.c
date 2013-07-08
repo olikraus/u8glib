@@ -252,13 +252,13 @@ void u8g_10MicroDelay(void)
 /* u8glib com procedure */
 
 #define A0_GPIO	LPC_GPIO1
-#define A0_PIN 	8
+#define A0_PIN 	1
 
 #define CS_GPIO	LPC_GPIO1
-#define CS_PIN 	8
+#define CS_PIN 	2
 
 #define RST_GPIO	LPC_GPIO1
-#define RST_PIN 	8
+#define RST_PIN 	0
 
 
 uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
@@ -269,6 +269,9 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
       break;
     
     case U8G_COM_MSG_INIT:
+      A0_GPIO->DIR |= 1 << A0_PIN;
+      CS_GPIO->DIR |= 1 << CS_PIN;
+      RST_GPIO->DIR |= 1 << RST_PIN;
       
       if ( arg_val <= U8G_SPI_CLK_CYCLE_50NS )
       {
@@ -370,20 +373,24 @@ void main()
   u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1325_nhd27oled_bw_hw_spi, u8g_com_hw_spi_fn);
   
+  
   for(;;)
-  {  
+  {
     u8g_FirstPage(&u8g);
     do
     {
       draw();
     } while ( u8g_NextPage(&u8g) );
+    LED_GPIO->DATA |= 1 << LED_PIN;
+    u8g_Delay(100);
+    LED_GPIO->DATA &= ~(1 << LED_PIN);
     u8g_Delay(100);
   }
   
   while (1)
   {
     for( i = 0; i < cnt; i++ ) 
-      spi_out(0x0a0);    
+      spi_out(0x0a0);
     LED_GPIO->DATA |= 1 << LED_PIN;
     for( i = 0; i < cnt; i++ )
       spi_out(0x0a0);

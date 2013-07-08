@@ -56,8 +56,8 @@ SYSINC:=../common
 
 # Directory for the linker script
 LDSCRIPTDIR:=../common
-# Name of the linker script
-LDSCRIPT:=lpc11xx.ld
+# Name of the linker script (must be the "keep" script, because the other script is not always working)
+LDSCRIPT:=lpc11xx_keep.ld
 
 
 #================================================
@@ -90,7 +90,7 @@ SIZE:=$(GCCPATH)/bin/arm-none-eabi-size
 COMMON_FLAGS = -DF_CPU=$(F_CPU) -mthumb -mcpu=$(MCPU)
 COMMON_FLAGS += -Wall -I. -I$(SYSINC) -I$(U8GPATH)
 # default stack size is 0x0c00
-COMMON_FLAGS += -D__STACK_SIZE=0x0600
+COMMON_FLAGS += -D__STACK_SIZE=0x0a00
 COMMON_FLAGS += -Os -flto 
 COMMON_FLAGS += -ffunction-sections -fdata-sections
 # Assembler flags
