@@ -58,6 +58,14 @@ typedef signed short int16_t;
 #include <avr/pgmspace.h>
 #endif 
 
+/* 
+  use the com interface directly on any systems which are not AVR or ARDUINO 
+*/
+#if defined(__AVR__) || defined(ARDUINO)
+#define U8G_WITH_PINLIST
+#endif
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -957,7 +965,9 @@ struct _u8g_t
   u8g_dev_arg_pixel_t arg_pixel;
   /* uint8_t color_index; */
 
+#ifdef U8G_WITH_PINLIST
   uint8_t pin_list[U8G_PIN_LIST_LEN];
+#endif
   
   u8g_state_cb state_cb;
   

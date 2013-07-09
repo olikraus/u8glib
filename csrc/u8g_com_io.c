@@ -221,6 +221,8 @@ uint8_t u8g_GetPinLevel(uint8_t internal_pin_number)
 #endif
 
 
+#if defined(U8G_WITH_PINLIST)
+
 void u8g_SetPIOutput(u8g_t *u8g, uint8_t pi)
 {
   uint8_t pin;
@@ -236,3 +238,14 @@ void u8g_SetPILevel(u8g_t *u8g, uint8_t pi, uint8_t level)
   if ( pin != U8G_PIN_NONE )
     u8g_SetPinLevel(pin, level);
 }
+
+#else  /* defined(U8G_WITH_PINLIST) */
+void u8g_SetPIOutput(u8g_t *u8g, uint8_t pi)
+{
+}
+
+void u8g_SetPILevel(u8g_t *u8g, uint8_t pi, uint8_t level)
+{
+}
+
+#endif /* defined(U8G_WITH_PINLIST) */
