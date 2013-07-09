@@ -166,7 +166,7 @@ void spi_init(uint32_t ns) __attribute__((noinline));
 void spi_init(uint32_t ns)
 {
   uint32_t cpol = 1;
-  uint32_t cpha = 0;
+  uint32_t cpha = 1;
   uint32_t cpsr;
   
   LPC_SYSCON->PRESETCTRL |= 1<<0;	/* de-asserted reset SSP0 */
@@ -179,6 +179,7 @@ void spi_init(uint32_t ns)
   LPC_IOCON->PIO0_9 = 1;			/* select MOSI0 at PIO0_9 */
   
   LPC_SSP0->CR1 = 0;								/* disable SPI, enable master mode */
+  LPC_SSP0->CR0 = 7 | (cpol << 6) | (cpha <<7); 		/* 8 bit, SPI mode, SCR = 1 (prescale) */
   LPC_SSP0->CR0 = 7 | (cpol << 6) | (cpha <<7); 		/* 8 bit, SPI mode, SCR = 1 (prescale) */
 
   /*  
@@ -269,6 +270,13 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
       break;
     
     case U8G_COM_MSG_INIT:
+
+      LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
+
+      LPC_IOCON->R_PIO1_0 = 1;			/* select GPIO mode */
+      LPC_IOCON->R_PIO1_1 = 1;			/* select GPIO mode */
+      LPC_IOCON->R_PIO1_2 = 1;			/* select GPIO mode */
+        
       A0_GPIO->DIR |= 1 << A0_PIN;
       CS_GPIO->DIR |= 1 << CS_PIN;
       RST_GPIO->DIR |= 1 << RST_PIN;
@@ -359,8 +367,30 @@ u8g_t u8g;
 
 void draw(void)
 {
-  u8g_SetFont(&u8g, u8g_font_6x10);
-  u8g_DrawStr(&u8g, 0, 15, "Hello World!");
+  if ( u8g_GetMode(&u8g) == U8G_MODE_HICOLOR || u8g_GetMode(&u8g) == U8G_MODE_R3G3B2) {
+    /* draw background (area is 128x128) */
+    u8g_uint_t r, g, b;
+    for( b = 0; b < 4; b++ )
+    {
+      for( g = 0; g < 32; g++ )
+      {
+	for( r = 0; r < 32; r++ )
+	{
+	  u8g_SetRGB(&u8g, r<<3, g<<3, b<<4 );
+	  u8g_DrawPixel(&u8g, g + b*32, r);
+	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+64 );
+	  u8g_DrawPixel(&u8g, g + b*32, r+32);
+	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128 );
+	  u8g_DrawPixel(&u8g, g + b*32, r+32+32);
+	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128+64 );
+	  u8g_DrawPixel(&u8g, g + b*32, r+32+32+32);
+	}
+      }
+    }
+    u8g_SetRGB(&u8g, 255,255,255);
+    u8g_SetFont(&u8g, u8g_font_unifont);
+    u8g_DrawStr(&u8g,  0, 22, "Hello World!");
+  }
 }
 
 void main()
@@ -368,11 +398,14 @@ void main()
   volatile uint32_t i, cnt = 100000;
   LED_GPIO->DIR |= 1 << LED_PIN;	  
 
+  A0_GPIO->DIR |= 1 << A0_PIN;
+  CS_GPIO->DIR |= 1 << CS_PIN;
+  RST_GPIO->DIR |= 1 << RST_PIN;
+  
   spi_init(50);
   
   u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1325_nhd27oled_bw_hw_spi, u8g_com_hw_spi_fn);
-  
   
   for(;;)
   {
@@ -382,8 +415,10 @@ void main()
       draw();
     } while ( u8g_NextPage(&u8g) );
     LED_GPIO->DATA |= 1 << LED_PIN;
+    //A0_GPIO->DATA |= 1 << A0_PIN;
     u8g_Delay(100);
     LED_GPIO->DATA &= ~(1 << LED_PIN);
+    //A0_GPIO->DATA &= ~(1 << A0_PIN);
     u8g_Delay(100);
   }
   

@@ -206,7 +206,12 @@ uint8_t u8g_Init(u8g_t *u8g, u8g_dev_t *dev)
 /* special init for pure ARM systems */
 uint8_t u8g_InitComFn(u8g_t *u8g, u8g_dev_t *dev, u8g_com_fnptr com_fn)
 {
+  uint8_t i;
   u8g_init_data(u8g);
+  
+  for( i = 0; i < U8G_PIN_LIST_LEN; i++ )
+    u8g->pin_list[i] = U8G_PIN_DUMMY;
+  
   u8g->dev = dev;
   
   /* replace the device procedure with a custom communication procedure */

@@ -918,6 +918,7 @@ typedef void (*u8g_state_cb)(uint8_t msg);
 #define U8G_PIN_LIST_LEN 14
 
 
+#define U8G_PIN_DUMMY 254
 #define U8G_PIN_NONE 255
 
 #define U8G_FONT_HEIGHT_MODE_TEXT 0
