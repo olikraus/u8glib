@@ -1,13 +1,75 @@
+/*
+  
+  u8ghwspi.c
+  
+  ARM U8g Example with HW SPI 
+
+  Universal 8bit Graphics Library
+  
+  Copyright (c) 2012, olikraus@gmail.com
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice, this list 
+    of conditions and the following disclaimer.
+    
+  * Redistributions in binary form must reproduce the above copyright notice, this 
+    list of conditions and the following disclaimer in the documentation and/or other 
+    materials provided with the distribution.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+
+*/
 
 #include "LPC11xx.h"
 #include "u8g.h"
 
+#define SYS_TICK_PERIOD_IN_MS 10
+
+
 /*========================================================================*/
 /* SystemInit */
 
-uint32_t SystemCoreClock;
+/* activate PLL for the int. RC osc. Assumes the IRC is already running */
+ void lpc11xx_set_irc_48mhz(void)
+ {
+   /* oscillator controll registor, no change needed for int. RC osc. */
+   LPC_SYSCON->SYSOSCCTRL = 0;		/* no bypass (bit 0), low freq range (bit 1), reset value is also 0 */
+   
+  LPC_SYSCON->SYSPLLCLKSEL = 0;		/* select PLL source, 0: IRC, 1: Sys osc */
+  LPC_SYSCON->SYSPLLCLKUEN = 0;	/* confirm change by writing 0 and 1 to SYSPLLCLKUEN */
+  LPC_SYSCON->SYSPLLCLKUEN = 1;
+  
+  LPC_SYSCON->SYSPLLCTRL = 3 || (1 << 5);	/* 48 Mhz, m = 4, p = 2 */
+  LPC_SYSCON->PDRUNCFG &= ~(1<<7); 	/* power-up PLL */
 
-#define SYS_TICK_PERIOD_IN_MS 10
+  while (!(LPC_SYSCON->SYSPLLSTAT & 1))
+    ;	/* wait for PLL lock */
+   
+  LPC_SYSCON->MAINCLKSEL = 3;				/* select PLL for main clock */
+  LPC_SYSCON->MAINCLKUEN = 0;				/* confirm change by writing 0 and 1 to MAINCLKUEN */
+  LPC_SYSCON->MAINCLKUEN = 1;	
+
+  LPC_SYSCON->SYSAHBCLKDIV = 1;			/* set AHB clock divider to 1 */
+}
+
+
+
+uint32_t SystemCoreClock;
 
 void SystemInit()
 {
