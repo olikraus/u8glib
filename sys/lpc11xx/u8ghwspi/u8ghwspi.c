@@ -55,7 +55,7 @@
   LPC_SYSCON->SYSPLLCLKUEN = 1;
   
   LPC_SYSCON->SYSPLLCTRL = 3 || (1 << 5);	/* 48 Mhz, m = 4, p = 2 */
-  LPC_SYSCON->PDRUNCFG &= ~(1<<7); 	/* power-up PLL */
+  LPC_SYSCON->PDRUNCFG &= ~(1UL<<7); 	/* power-up PLL */
 
   while (!(LPC_SYSCON->SYSPLLSTAT & 1))
     ;	/* wait for PLL lock */
@@ -73,8 +73,11 @@ uint32_t SystemCoreClock;
 
 void SystemInit()
 {
+    
   /* SystemInit() is called by the startup code */
-  /* according to system_LPC11xx.h it is expected, that the clock freq is set here */
+  lpc11xx_set_irc_48mhz();
+  
+  /* according to system_LPC11xx.h it is expected, that the clock freq is set int SystemInit() */
   SystemCoreClock = F_CPU;
   
   /* SysTick is defined in core_cm0.h */

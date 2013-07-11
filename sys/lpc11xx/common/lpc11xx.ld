@@ -13,7 +13,7 @@ MEMORY
   RAM (rwx) : ORIGIN = 0x10000000, LENGTH = 0x1000 /* 4K */
 }
 
-/* source: gcc-arm-none-eabi-4_7-2013q1/share/gcc-arm-none-eabi/samples/ldscripts/sections-nokeep.ld */
+/* source: gcc-arm-none-eabi-4_7-2013q1/share/gcc-arm-none-eabi/samples/ldscripts/sections.ld */
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.
@@ -50,8 +50,8 @@ SECTIONS
 		KEEP(*(.isr_vector))
 		*(.text*)
 
-		*(.init)
-		*(.fini)
+		KEEP(*(.init))
+		KEEP(*(.fini))
 
 		/* .ctors */
 		*crtbegin.o(.ctors)
@@ -69,7 +69,7 @@ SECTIONS
 
 		*(.rodata*)
 
-		*(.eh_frame*)
+		KEEP(*(.eh_frame*))
 	} > FLASH
 
 	.ARM.extab : 
@@ -95,25 +95,25 @@ SECTIONS
 		. = ALIGN(4);
 		/* preinit data */
 		PROVIDE_HIDDEN (__preinit_array_start = .);
-		*(.preinit_array)
+		KEEP(*(.preinit_array))
 		PROVIDE_HIDDEN (__preinit_array_end = .);
 
 		. = ALIGN(4);
 		/* init data */
 		PROVIDE_HIDDEN (__init_array_start = .);
-		*(SORT(.init_array.*))
-		*(.init_array)
+		KEEP(*(SORT(.init_array.*)))
+		KEEP(*(.init_array))
 		PROVIDE_HIDDEN (__init_array_end = .);
 
 
 		. = ALIGN(4);
 		/* finit data */
 		PROVIDE_HIDDEN (__fini_array_start = .);
-		*(SORT(.fini_array.*))
-		*(.fini_array)
+		KEEP(*(SORT(.fini_array.*)))
+		KEEP(*(.fini_array))
 		PROVIDE_HIDDEN (__fini_array_end = .);
 
-		*(.jcr)
+		KEEP(*(.jcr*))
 		. = ALIGN(4);
 		/* All data end */
 		__data_end__ = .;

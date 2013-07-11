@@ -41,7 +41,8 @@ U8GFONTPATH:=/home/kraus/src/u8g/u8glib/sfntsrc
 
 
 # The frequency of the target device
-F_CPU:=12000000
+#F_CPU:=12000000
+F_CPU:=48000000
 
 # The CPU architecture (will be used for -mcpu)
 MCPU:=cortex-m0
@@ -57,7 +58,7 @@ SYSINC:=../common
 # Directory for the linker script
 LDSCRIPTDIR:=../common
 # Name of the linker script (must be the "keep" script, because the other script is not always working)
-LDSCRIPT:=lpc11xx_keep.ld
+LDSCRIPT:=lpc11xx.ld
 
 
 #================================================
