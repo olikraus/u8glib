@@ -54,6 +54,7 @@ STARTUP:=$(GCCPATH)/share/gcc-arm-none-eabi/samples/startup/startup_ARMCM0.S
 
 # Include directory for the system include files
 SYSINC:=../common
+SYSSRC:=$(wildcard ../common/*.c)
 
 # Directory for the linker script
 LDSCRIPTDIR:=../common
@@ -78,7 +79,7 @@ ELFNAME:=$(TARGETNAME).elf
 HEXNAME:=$(TARGETNAME).hex
 DISNAME:=$(TARGETNAME).dis
 MAPNAME:=$(TARGETNAME).map
-OBJ:=$(SRC:.c=.o) $(U8GSRC:.c=.o) $(STARTUP:.S=.o)
+OBJ:=$(SRC:.c=.o) $(SYSSRC:.c=.o) $(U8GSRC:.c=.o) $(STARTUP:.S=.o)
 
 # Replace standard build tools by avr tools
 CC:=$(GCCPATH)/bin/arm-none-eabi-gcc
