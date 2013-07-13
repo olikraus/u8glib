@@ -54,10 +54,10 @@
 
 /* remove the definition for attiny */
 #if __AVR_ARCH__ == 2
-#undef U8G_ATMEGA_HW_SPI
+#undef U8G_ARDUINO_ATMEGA_HW_SPI
 #endif
 #if __AVR_ARCH__ == 25
-#undef U8G_ATMEGA_HW_SPI
+#undef U8G_ARDUINO_ATMEGA_HW_SPI
 #endif
 
 #endif

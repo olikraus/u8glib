@@ -131,6 +131,17 @@ typedef struct {
 #if defined(ARDUINO)
 
 #if defined(__AVR__)
+#define U8G_ARDUINO_ATMEGA_HW_SPI
+/* remove the definition for attiny */
+#if __AVR_ARCH__ == 2
+#undef U8G_ARDUINO_ATMEGA_HW_SPI
+#endif
+#if __AVR_ARCH__ == 25
+#undef U8G_ARDUINO_ATMEGA_HW_SPI
+#endif
+#endif
+
+#if defined(U8G_ARDUINO_ATMEGA_HW_SPI)
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -412,9 +423,9 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
 
 
 
-#else /* __AVR__ */
+#else /* U8G_ARDUINO_ATMEGA_HW_SPI */
 
-#endif /* __AVR__ */
+#endif /* U8G_ARDUINO_ATMEGA_HW_SPI */
 
 #else /* ARDUINO */
 
