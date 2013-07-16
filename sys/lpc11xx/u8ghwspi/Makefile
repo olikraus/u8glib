@@ -23,6 +23,15 @@
 #  	Display list make database: make -p -f/dev/null | less
 #
 #================================================
+# External tools
+
+# The base directory of gcc-arm-none-eabi
+GCCPATH:=~/src/arm/gcc-arm-none-eabi-4_7-2013q1
+
+# Flash Tool
+FLASHTOOL:=~/prg/lpc21isp/lpc21isp
+
+#================================================
 # Project Information
 
 # The name for the project
@@ -30,9 +39,6 @@ TARGETNAME:=u8ghwspi
 
 # The source files of the project
 SRC:=$(wildcard *.c)
-
-# The base directory of gcc-arm-none-eabi
-GCCPATH:=~/src/arm/gcc-arm-none-eabi-4_7-2013q1
 
 # U8glib path to c source files
 U8GPATH:=/home/kraus/src/u8g/u8glib/csrc
@@ -61,10 +67,7 @@ LDSCRIPTDIR:=../common
 # Name of the linker script (must be the "keep" script, because the other script is not always working)
 LDSCRIPT:=lpc11xx.ld
 
-
-#================================================
-# Flash tool
-FLASHTOOL:=~/prg/lpc21isp/lpc21isp
+# Uinx device of the USB-RS232 converter for the flash tool
 FLASHPORT:=/dev/ttyUSB0
 
 #================================================
