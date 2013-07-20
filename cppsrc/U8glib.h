@@ -68,6 +68,8 @@ class U8GLIB : public Print
       { }
     U8GLIB(u8g_dev_t *dev)
       { prepare(); u8g_Init(&u8g, dev); }
+    U8GLIB(u8g_dev_t *dev, u8g_com_fnptr com_fn)
+      { prepare(); u8g_InitComFn(&u8g, dev, com_fn); }
     U8GLIB(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset) 
       { initSPI(dev, sck, mosi, cs, a0, reset); }
     U8GLIB(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t reset) 
