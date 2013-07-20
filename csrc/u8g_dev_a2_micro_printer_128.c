@@ -86,4 +86,4 @@ uint8_t u8g_dev_a2_micro_printer_128_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
 }
 
 
-U8G_PB_DEV(u8g_dev_a2_micro_printer_128, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_a2_micro_printer_128_fn, U8G_COM_NONE);
+U8G_PB_DEV(u8g_dev_a2_micro_printer_128, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_a2_micro_printer_128_fn, u8g_com_null_fn);
