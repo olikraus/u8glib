@@ -121,20 +121,60 @@ uint8_t u8g_com_uart(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
       break;    
       
     case U8G_COM_MSG_WRITE_BYTE:
-      Serial1.print((int)arg_val);
+      //Serial1.print((int)arg_val);
+      Serial1.write(arg_val);
       break;
     
   }
   return 1;
 }
 
-U8GLIB u8g(&u8g_dev_a2_micro_printer_128, (u8g_com_fnptr)u8g_com_uart);
+//U8GLIB u8g(&u8g_dev_a2_micro_printer_240x240, (u8g_com_fnptr)u8g_com_uart);
+U8GLIB u8g(&u8g_dev_a2_micro_printer_192x120_ds, (u8g_com_fnptr)u8g_com_uart);
+
+void drawLogo(uint8_t d)
+{
+  u8g.setFont(u8g_font_gdr25r);
+  u8g.drawStr(0+d, 30+d, "U");
+  u8g.setFont(u8g_font_gdr30n);
+  u8g.drawStr90(23+d,10+d,"8");
+  u8g.setFont(u8g_font_gdr25r);
+  u8g.drawStr(53+d,30+d,"g");
+  
+  u8g.drawHLine(2+d, 35+d, 47);
+  u8g.drawVLine(45+d, 32+d, 12);
+}
+
+void drawURL(void)
+{
+  u8g.setFont(u8g_font_4x6);
+  if ( u8g.getHeight() < 59 )
+  {
+    u8g.drawStr(53,9,"code.google.com");
+    u8g.drawStr(77,18,"/p/u8glib");
+  }
+  else
+  {
+    u8g.drawStr(1,54,"code.google.com/p/u8glib");
+  }
+}
 
 void draw(void) {
   // graphic commands to redraw the complete screen should be placed here  
-  u8g.setFont(u8g_font_unifont);
+  //u8g.setFont(u8g_font_unifont);
   //u8g.setFont(u8g_font_osb21);
-  u8g.drawStr( 0, 22, "Hello World!");
+  
+  //u8g.drawStr( 0, 22, "Hello World!");
+  
+  drawLogo(0);
+  drawURL();
+  u8g.drawFrame(0,0,u8g.getWidth(), u8g.getHeight());
+  
+  u8g.setFont(u8g_font_gdr20r);
+  u8g.setPrintPos(0, 80);
+  u8g.print(u8g.getWidth(), DEC);
+  u8g.print("x");
+  u8g.print(u8g.getHeight(), DEC);
 }
 
 void setup(void) {
@@ -147,29 +187,16 @@ void setup(void) {
   //u8g.setHardwareBackup(u8g_backup_avr_spi);
 
   // assign default color value
-  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
-    u8g.setColorIndex(255);     // white
-  }
-  else if ( u8g.getMode() == U8G_MODE_GRAY2BIT ) {
-    u8g.setColorIndex(3);         // max intensity
-  }
-  else if ( u8g.getMode() == U8G_MODE_BW ) {
-    u8g.setColorIndex(1);         // pixel on
-  }
-  else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
-    u8g.setHiColorByRGB(255,255,255);
-  }
+  u8g.setColorIndex(1);         // pixel on
 }
 
 void loop(void) {
   // picture loop
   
-  /*
   u8g.firstPage();  
   do {
     draw();
   } while( u8g.nextPage() );
-  */
 
   Serial1.print("Hello U8glib!"); 
   Serial1.write('\n'); 

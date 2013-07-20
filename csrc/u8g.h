@@ -442,7 +442,8 @@ extern u8g_dev_t u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi;
 extern u8g_dev_t u8g_dev_ht1632_24x16;
 
 /* A2 Micro Printer */
-extern u8g_dev_t u8g_dev_a2_micro_printer_128;
+extern u8g_dev_t u8g_dev_a2_micro_printer_240x240;
+extern u8g_dev_t u8g_dev_a2_micro_printer_192x120_ds;
 
 /* u8g_virtual_screen.c  */
 extern u8g_dev_t u8g_dev_vs;
