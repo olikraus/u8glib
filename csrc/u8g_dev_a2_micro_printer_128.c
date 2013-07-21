@@ -43,6 +43,8 @@
 #define HEIGHT 128
 #define PAGE_HEIGHT 8
 
+#define LINE_DELAY 40
+
 
 uint8_t u8g_dev_a2_micro_printer_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
@@ -61,6 +63,13 @@ uint8_t u8g_dev_a2_micro_printer_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, voi
         
         y = pb->p.page_y0;
         ptr = pb->buf;
+
+	u8g_WriteByte(u8g, dev, 27);      /* ESC */
+	u8g_WriteByte(u8g, dev, 55 );      /* parameter command */
+	u8g_WriteByte(u8g, dev, 7);      /* Max printing dots,Unit(8dots),Default:7(64 dots) 8*(x+1)*/
+	u8g_WriteByte(u8g, dev, 160);      /* 3-255 Heating time,Unit(10us),Default:80(800us) */
+	u8g_WriteByte(u8g, dev, 20);      /* 0-255 Heating interval,Unit(10us),Default:2(20us)*/
+	
 	u8g_WriteByte(u8g, dev, 18);      /* DC2 */
 	u8g_WriteByte(u8g, dev, 42 );      /* *  */
 	u8g_WriteByte(u8g, dev, pb->p.page_height ); 
@@ -73,8 +82,17 @@ uint8_t u8g_dev_a2_micro_printer_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, voi
 	    u8g_WriteByte(u8g, dev, *ptr);
 	    ptr++;
 	  }
+	  u8g_Delay(LINE_DELAY);
           y++;
         }
+
+	/* set parameters back to their default values */
+	u8g_WriteByte(u8g, dev, 27);      /* ESC */
+	u8g_WriteByte(u8g, dev, 55 );      /* parameter command */
+	u8g_WriteByte(u8g, dev, 7);      /* Max printing dots,Unit(8dots),Default:7(64 dots) 8*(x+1)*/
+	u8g_WriteByte(u8g, dev, 80);      /* 3-255 Heating time,Unit(10us),Default:80(800us) */
+	u8g_WriteByte(u8g, dev, 2);      /* 0-255 Heating interval,Unit(10us),Default:2(20us)*/
+	
       }
       break;
   }
@@ -125,6 +143,12 @@ uint8_t u8g_dev_a2_micro_printer_double_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
 	//u8g_WriteByte(u8g, dev, 18);      /* DC2 */
 	//u8g_WriteByte(u8g, dev, 35 );      /* #  */
 	//u8g_WriteByte(u8g, dev, 0x0ff );      /* max  */
+
+	u8g_WriteByte(u8g, dev, 27);      /* ESC */
+	u8g_WriteByte(u8g, dev, 55 );      /* parameter command */
+	u8g_WriteByte(u8g, dev, 7);      /* Max printing dots,Unit(8dots),Default:7(64 dots) 8*(x+1)*/
+	u8g_WriteByte(u8g, dev, 160);      /* 3-255 Heating time,Unit(10us),Default:80(800us) */
+	u8g_WriteByte(u8g, dev, 20);      /* 0-255 Heating interval,Unit(10us),Default:2(20us)*/
 	
 	u8g_WriteByte(u8g, dev, 18);      /* DC2 */
 	u8g_WriteByte(u8g, dev, 42 );      /* *  */
@@ -140,6 +164,7 @@ uint8_t u8g_dev_a2_micro_printer_double_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
 	    u8g_WriteByte(u8g, dev, u8g_dev_expand4(*p2 & 15));
 	    p2++;
 	  }
+	  u8g_Delay(LINE_DELAY);
 	  p2 = ptr;
 	  for( j = 0; j < pb->width/8; j++ )
 	  {
@@ -147,9 +172,18 @@ uint8_t u8g_dev_a2_micro_printer_double_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
 	    u8g_WriteByte(u8g, dev, u8g_dev_expand4(*p2 & 15));
 	    p2++;
 	  }
+	  u8g_Delay(LINE_DELAY);
 	  ptr += pb->width/8;
           y++;
         }
+	
+	/* set parameters back to their default values */
+	u8g_WriteByte(u8g, dev, 27);      /* ESC */
+	u8g_WriteByte(u8g, dev, 55 );      /* parameter command */
+	u8g_WriteByte(u8g, dev, 7);      /* Max printing dots,Unit(8dots),Default:7(64 dots) 8*(x+1)*/
+	u8g_WriteByte(u8g, dev, 80);      /* 3-255 Heating time,Unit(10us),Default:80(800us) */
+	u8g_WriteByte(u8g, dev, 2);      /* 0-255 Heating interval,Unit(10us),Default:2(20us)*/
+	
       }
       break;
   }

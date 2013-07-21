@@ -129,8 +129,8 @@ uint8_t u8g_com_uart(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
   return 1;
 }
 
-//U8GLIB u8g(&u8g_dev_a2_micro_printer_240x240, (u8g_com_fnptr)u8g_com_uart);
-U8GLIB u8g(&u8g_dev_a2_micro_printer_192x120_ds, (u8g_com_fnptr)u8g_com_uart);
+U8GLIB u8g(&u8g_dev_a2_micro_printer_240x240, (u8g_com_fnptr)u8g_com_uart);
+//U8GLIB u8g(&u8g_dev_a2_micro_printer_192x120_ds, (u8g_com_fnptr)u8g_com_uart);
 
 void drawLogo(uint8_t d)
 {
