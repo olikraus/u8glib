@@ -344,7 +344,11 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
       if ( arg_val == 0 )
       {
         /* disable */
-	u8g_MicroDelay();		/* this delay is required to avoid that the display is switched off too early --> DOGS102 with DUE */
+	uint8_t i;
+	
+	/* this delay is required to avoid that the display is switched off too early --> DOGS102 with LPC1114 */
+	for( i = 0; i < 5; i++ )
+	  u8g_10MicroDelay();
 	CS_GPIO->DATA |= 1 << CS_PIN;
 	u8g_MicroDelay();
       }

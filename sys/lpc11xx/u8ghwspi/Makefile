@@ -57,6 +57,7 @@ MCPU:=cortex-m0
 # Usually this can be taken from
 # gcc-arm-none-eabi-4_7-2013q1/share/gcc-arm-none-eabi/samples/startup
 STARTUP:=$(GCCPATH)/share/gcc-arm-none-eabi/samples/startup/startup_ARMCM0.S
+# STARTUP:=../common/startup_lpc11xx.S
 
 # Include directory for the system include files
 SYSINC:=../common
@@ -118,8 +119,8 @@ all: $(DISNAME) $(HEXNAME)
 
 .PHONY: upload
 upload: $(DISNAME) $(HEXNAME) $(ELFNAME)
-#	$(FLASHTOOL) $(HEXNAME) $(FLASHPORT) 115200 12000
-	$(FLASHTOOL) $(HEXNAME) $(FLASHPORT) 38400 12000
+	$(FLASHTOOL) $(HEXNAME) $(FLASHPORT) 115200 12000
+#	$(FLASHTOOL) $(HEXNAME) $(FLASHPORT) 38400 12000
 	$(SIZE) $(ELFNAME)
 
 .PHONY: clean
