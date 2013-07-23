@@ -75,3 +75,12 @@ http://aprs.gids.nl/nmea/#gga
 
 http://aprs.gids.nl/nmea/#rmc
 
+===============================================
+
+Latitude
+  S --> negative
+  
+Longitude
+  W --> negative
+  
+data type: float  
