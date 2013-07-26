@@ -84,3 +84,32 @@ Longitude
   W --> negative
   
 data type: float  
+
+===============================================
+
+$GPRMC,220516,A,5133.82,N,00042.24,W,173.8,231.8,130694,004.2,W*70
+
+nmea character ring buffer
+  uint8_t buf[]
+  uint16_t start
+  uint16_t good_end
+  uint16_t end
+  uint8_t is_full
+  uint8_t sentence_cnt		number of complete sentences in the ring buffer
+  assert(good_end <= end)
+  empty if start==end
+  if not empty, then buf[start]  == '$'
+  
+
+
+crb_IsFull()				returns true, if the buffer is full. Chars can 
+						not be added. It is required to delete a NMEA sentence first
+					  
+crb_IsEmpty()				return true if the crb is empty
+
+crb_AddChar(uint8_t)		add a char to the buffer, no return value
+
+crb_DelSentence()			if sentence_cnt >= 1, delete the sentence at buf[start]
+
+
+
