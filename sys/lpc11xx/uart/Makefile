@@ -53,7 +53,7 @@ SYSINC:=../common
 # Directory for the linker script
 LDSCRIPTDIR:=../common
 # Name of the linker script
-LDSCRIPT:=lpc11xx_keep.ld
+LDSCRIPT:=lpc11xx.ld
 
 
 #================================================

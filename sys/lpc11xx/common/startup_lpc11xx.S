@@ -109,9 +109,12 @@ __isr_vector:
     .long    TIMER_32_1_Handler		/*!< 32-bit Timer1 Interrupt                          */
     .long    SSP0_Handler				/*!< SSP0 Interrupt                                   */
     .long    UART_Handler				/*!< UART Interrupt                                   */
+    .long    0                     /* Reserved */
+    .long    0                     /* Reserved */
     .long    ADC_Handler				/*!< A/D Converter Interrupt                          */
     .long    WDT_Handler				/*!< Watchdog timer Interrupt                         */  
     .long    BOD_Handler				/*!< Brown Out Detect(BOD) Interrupt                  */
+    .long    0                     /* Reserved */
     .long    EINT3_Handler			/*!< External Interrupt 3 Interrupt                   */
     .long    EINT2_Handler			/*!< External Interrupt 2 Interrupt                   */
     .long    EINT1_Handler			/*!< External Interrupt 1 Interrupt                   */

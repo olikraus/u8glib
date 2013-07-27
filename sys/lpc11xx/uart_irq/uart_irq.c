@@ -1,6 +1,6 @@
 /*
 
-  uart.c
+  uart_irq.c
   
   Implementation of 
     /share/gcc-arm-none-eabi/samples/src/retarget/retartet.c
@@ -40,8 +40,6 @@
 #include "LPC11xx.h"
 #include <stdio.h>
 
-
-
 /*============================================================*/
 /* LPC11xx UART */
 
@@ -61,7 +59,7 @@ void UARTInit(void)
   
   /*
     12MHz/9600				DLM=0,DLL=71,DIVADDVAL=1,MULVAL=10		<===
-    48MHz/9600				DLM=0,DLL=250,DIVADDVAL=1,MULVAL=4		<===
+    48MHz/9600				DLM=0,DLL=250,DIVADDVAL=1,MULVAL=4
     50MHz/9600				DLM=0,DLL=217,DIVADDVAL=5,MULVAL=10
 
     12MHz/38400			DLM=0,DLL=16,DIVADDVAL=2,MULVAL=9
@@ -78,9 +76,11 @@ void UARTInit(void)
   LPC_UART->LCR = 3;			/* 8 data bits, one stop bit, disable divider register */
   LPC_UART->FDR  = (10 /* mulval */ << 4) | 1 /* divaddval */;
   LPC_UART->IER = 0;			/* no interrupts */
-  LPC_UART->FCR = 1;			/* FIFO enable */
+  LPC_UART->FCR = 1;			/* FIFO enable, generate IRQ qith one char in the buffer */
   LPC_UART->MCR = 0;  
   LPC_UART->TER = 1<<7;			/* enable transmit */
+  LPC_UART->IER = 1;			/* enable receive data interrupt */
+  NVIC_EnableIRQ(UART_IRQn);
 }
 
 int UARTIsDataAvailable(void)
@@ -97,6 +97,20 @@ int UARTReadData(void)
   return -1;
 }
 
+volatile int16_t uart_data;
+void __attribute__ ((interrupt)) UART_Handler(void)
+{
+  uint32_t iir = LPC_UART->IIR;
+  if ( (iir & 1) == 0 )
+  {
+    while ( ( LPC_UART->LSR & 1 ) != 0 )
+    {
+      uart_data = LPC_UART->RBR;
+    }
+  }
+}
+
+
 void UARTSendData(int data)
 {
   while( (LPC_UART->LSR & (1<<5)) == 0 )
@@ -109,6 +123,8 @@ void UARTSendStr(const char *str)
   while( *str != '\0' )
     UARTSendData( (int)(unsigned char)*str++ );
 }
+
+
 
 
 /*============================================================*/
@@ -182,12 +198,14 @@ void main()
 {
   int c;
   printf("Hello World\r\n");
+  uart_data = 'x';
 
   for(;;)
   {
-    c = UARTReadData();
+    c = uart_data;
     if ( c >= 0 )
     {
+      uart_data = -1;
       blink();
       printf("%c\r\n", c);
     }
