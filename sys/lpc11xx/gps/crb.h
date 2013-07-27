@@ -1,5 +1,8 @@
 
 
+#ifndef _CRB_H
+#define _CRB_H
+
 
 #define CRB_LEN 256
 
@@ -15,3 +18,9 @@ struct _crb_stuct
   uint8_t curr_pos;
 };
 typedef struct _crb_stuct crb_t;
+
+int16_t crb_GetInit(crb_t *crb);
+int16_t crb_GetCurr(crb_t *crb);
+int16_t crb_GetNext(crb_t *crb);
+
+#endif

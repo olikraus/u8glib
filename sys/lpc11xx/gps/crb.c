@@ -1,4 +1,6 @@
-
+/*
+  char ring buffer 
+*/
 
 #include "crb.h"
 
@@ -91,6 +93,7 @@ void crb_AddChar(crb_t *crb, uint8_t c)
 int16_t crb_GetInit(crb_t *crb)
 {
   crb->curr_pos = crb->start;
+  return crb->buf[crb->curr_pos];
 }
 
 int16_t crb_GetCurr(crb_t *crb)
