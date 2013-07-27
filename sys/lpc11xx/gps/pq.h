@@ -49,6 +49,10 @@ struct _pq_struct
   uint8_t cnt;		/* entries in the queue */	
   crb_t crb;
   pq_interface_t interface;
+  
+  uint32_t processed_sentences;
+  uint32_t valid_gprmc;
+  uint32_t invalid_gprmc;
   pq_entry_t queue[PQ_LEN];
 };
 typedef struct _pq_struct pq_t;
@@ -56,12 +60,15 @@ typedef struct _pq_struct pq_t;
 void pq_Init(pq_t *pq);
 void pq_DeleteFirst(pq_t *pq);
 void pq_AddInterfaceValuesToQueue(pq_t *pq);
+pq_entry_t *pq_GetLatestEntry(pq_t *pq);
 void pq_ResetParser(pq_t *pq);
 int16_t pq_GetCurr(pq_t *pq);
 int16_t pq_GetNext(pq_t *pq);
 uint8_t pq_SkipSpace(pq_t *pq);
 uint8_t pq_GetNum(pq_t *pq, uint32_t *num, uint8_t *digit_cnt);
 uint8_t pq_GetFloat(pq_t *pq, gps_float_t *f);
+const char *pq_GetStr(pq_t *pq);
+uint8_t pq_ParseGPRMC(pq_t *pq);
 
 
 #endif 
