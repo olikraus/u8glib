@@ -3,57 +3,22 @@
   
 */
 
-#include <stdint.h>
-#include <float.h>
+#include <stddef.h>
+#include <string.h>
 #include "datecalc.h"
-#include "crb.h"
-
-typedef float gps_float_t;
-#define GPS_FLOAT_MAX	FLT_MAX
+#include "pq.h"
 
 
-struct _gps_pos_struct
+void pq_Init(pq_t *pq)
 {
-  gps_float latitude;
-  gps_float longitude;
-};
-typedef struct gps_pos_t;
+  memset(pq, 0, sizeof(pq_t));
+  crb_Init(&(pq->crb));
+}
 
-struct _pq_entry_struct
+void pq_AddStr(pq_t *pq, const char *str)
 {
-  gps_pos_t pos;
-  uint32_t timestamp;	/* seconds since 1.1.2000 */
-  uint16_t millisecond;	/* milliseconds of the timestamp */
-};
-typedef struct _pq_entry_struct pq_entry_t;
-
-struct _pq_interface_struct
-{
-  gps_pos_t pos;
-  gps_float speed_in_knots;
-  gps_float true_course;
-  gps_float magnetic_variation;
-  uint16_t year;
-  uint8_t month;
-  uint8_t day;
-  uint8_t hour;
-  uint8_t minute;
-  uint8_t second;
-  uint16_t millisecond;
-};
-typedef struct _pq_interface_struct pq_interface_t;
-
-#define PQ_LEN 16
-
-struct _pq_struct
-{
-  uint8_t cnt;		/* entries in the queue */	
-  crb_t crb;
-  pq_interface_t interface;
-  pq_entry_t queue[PQ_LEN];
-};
-typedef struct _pq_struct pq_t;
-
+  crb_AddStr(&(pq->crb), str);  
+}
 
 void pq_DeleteFirst(pq_t *pq)
 {
@@ -80,34 +45,87 @@ void pq_AddInterfaceValuesToQueue(pq_t *pq)
 
 /*===========================================*/
 
-void pq_SkipSpace(pq_t *pq)
+
+void pq_ResetParser(pq_t *pq)
+{
+  crb_GetInit(&(pq->crb));  
+}
+
+int16_t pq_GetCurr(pq_t *pq)
+{
+  return crb_GetCurr(&(pq->crb));
+}
+
+int16_t pq_GetNext(pq_t *pq)
+{
+  return crb_GetNext(&(pq->crb));
+}
+
+uint8_t pq_SkipSpace(pq_t *pq)
 {
   int16_t c;
-  c = crb_GetCurr(&(pq->crb));
+  c = pq_GetCurr(pq);
+  if ( c < 0 )
+    return 0;
   for(;;)
   {
     if ( c < 0 || c > 32 )
       break;
-    c = crb_GetNext(&(pq->crb))
+    c = pq_GetNext(pq);
   }
+  return 1;
 }
 
-void pq_GetNum(pq_t *pq, uint32_t *num, uin8_t *digit_cnt)
+
+uint8_t pq_GetNum(pq_t *pq, uint32_t *num, uint8_t *digit_cnt)
 {
   int16_t c;
-  pq_SkipSpace(pq);
-  *digit_cnt = 0;
+  if ( pq_SkipSpace(pq) == 0 )
+    return 0;
+  if ( digit_cnt != NULL )
+    *digit_cnt = 0;
   *num = 0L;
-  c = crb_GetCurr(&(pq->crb));
+  c = pq_GetCurr(pq);
+  if ( c < 0 )
+    return 0;
   for(;;)
   {
     if ( c < '0' || c > '9' )
       break;
     *num *= 10L;
     *num += c - '0';
-    *digit_cnt += 1;
-    c = crb_GetNext(&(pq->crb));
-    
+    if ( digit_cnt != NULL )
+      *digit_cnt += 1;
+    c = pq_GetNext(pq);
   }
+  return 1;
 }
+
+uint8_t pq_GetFloat(pq_t *pq, gps_float_t *f)
+{
+  uint8_t digit_cnt;
+  uint32_t num;
+  if ( pq_GetNum(pq, &num, NULL) == 0 )
+    return 0;
+  *f = (gps_float_t)num;
+  if ( pq_GetCurr(pq) == '.' )
+  {
+    pq_GetNext(pq);
+    if ( pq_GetNum(pq, &num, &digit_cnt) == 0 )
+      return 0;
+    
+    {
+      gps_float_t g;
+      g = (gps_float_t)num;
+      while( digit_cnt > 0 )
+      {
+	g /= (gps_float_t)10;
+	digit_cnt--;
+      }
+      *f += g;
+    }
+  }
+  return 1;
+}
+
 

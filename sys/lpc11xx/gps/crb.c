@@ -2,6 +2,8 @@
   char ring buffer 
 */
 
+#include <stddef.h>
+#include <string.h>
 #include "crb.h"
 
 void crb_Init(crb_t *crb)
@@ -84,8 +86,17 @@ void crb_AddChar(crb_t *crb, uint8_t c)
     crb->good_end = crb->end;
   }
   
-  crb->buf[new_end] = c;
+  crb->buf[crb->end] = c;
   crb->end = new_end;
+}
+
+void crb_AddStr(crb_t *crb, const char *str)
+{
+  while( *str != '\0' )
+  {
+    crb_AddChar(crb, *str);
+    str++;
+  }
 }
 
 /*================================*/
