@@ -51,6 +51,7 @@ struct _pq_struct
   pq_interface_t interface;
   
   uint32_t processed_sentences;
+  uint32_t processed_gprmc;
   uint32_t valid_gprmc;
   uint32_t invalid_gprmc;
   pq_entry_t queue[PQ_LEN];

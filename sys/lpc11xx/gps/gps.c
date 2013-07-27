@@ -2,7 +2,7 @@
   
   gps.c
   
-  ARM U8g Example with HW SPI 
+  ARM Based GPS Tracker 
 
   Universal 8bit Graphics Library
   
@@ -36,9 +36,107 @@
 */
 
 #include "u8g_lpc11xx.h"
+#include "pq.h"
 
 #define SYS_TICK_PERIOD_IN_MS 10
 
+/*============================================================*/
+pq_t pq;
+
+/*============================================================*/
+/* LPC11xx UART */
+
+void UARTInit(uint8_t is_48_mhz)
+{
+  LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
+  LPC_SYSCON->SYSAHBCLKCTRL |= 1<<12;	/* enable UART clock */
+  LPC_SYSCON->UARTCLKDIV = 1;			/* PCLK = Master Clock / 1 */
+  
+  /*
+    LPC1114:
+      TXD PIO1_7
+      RXD PIO1_6
+  */
+  LPC_IOCON->PIO1_6 = 1;		/* connect UART to RXD pin */
+  LPC_IOCON->PIO1_7 = 1;		/* connect UART to TXD pin */
+  
+  /*
+    12MHz/9600				DLM=0,DLL=71,DIVADDVAL=1,MULVAL=10		<===
+    48MHz/9600				DLM=0,DLL=250,DIVADDVAL=1,MULVAL=4
+    50MHz/9600				DLM=0,DLL=217,DIVADDVAL=5,MULVAL=10
+
+    12MHz/38400			DLM=0,DLL=16,DIVADDVAL=2,MULVAL=9
+    48MHz/38400			DLM=0,DLL=71,DIVADDVAL=1,MULVAL=10
+    50MHz/38400			DLM=0,DLL=46,DIVADDVAL=10,MULVAL=13
+
+    12MHz/115200			DLM=0,DLL=4,DIVADDVAL=5,MULVAL=8
+    48MHz/115200			DLM=0,DLL=22,DIVADDVAL=2,MULVAL=11
+    50MHz/115200			DLM=0,DLL=19,DIVADDVAL=3,MULVAL=7
+  */
+  LPC_UART->LCR = 3 | 128;		/* 8 data bits, one stop bit, enable divider register */
+  if ( is_48_mhz != 0 )
+    LPC_UART->DLL = 250 /* dll */;
+  else
+    LPC_UART->DLL = 71 /* dll */;
+  LPC_UART->DLM = 0;
+  LPC_UART->LCR = 3;			/* 8 data bits, one stop bit, disable divider register */
+  if ( is_48_mhz != 0 )
+    LPC_UART->FDR  = (4 /* mulval */ << 4) | 1 /* divaddval */;
+  else
+    LPC_UART->FDR  = (10 /* mulval */ << 4) | 1 /* divaddval */;
+  LPC_UART->IER = 0;			/* no interrupts */
+  LPC_UART->FCR = 1;			/* FIFO enable, generate IRQ qith one char in the buffer */
+  LPC_UART->MCR = 0;  
+  LPC_UART->TER = 1<<7;			/* enable transmit */
+  LPC_UART->IER = 1;			/* enable receive data interrupt */
+  NVIC_EnableIRQ(UART_IRQn);
+}
+
+int UARTIsDataAvailable(void)
+{
+  if ( ( LPC_UART->LSR & 1 ) != 0 )
+    return 1;
+  return 0;
+}
+
+int UARTReadData(void)
+{
+  if ( UARTIsDataAvailable() != 0 )
+    return LPC_UART->RBR;
+  return -1;
+}
+
+volatile int16_t uart_data;
+volatile int32_t uart_byte_cnt = 0;
+volatile int32_t uart_avg_byte_cnt = 0;
+void __attribute__ ((interrupt)) UART_Handler(void)
+{
+  uint32_t iir = LPC_UART->IIR;
+  if ( (iir & 1) == 0 )
+  {
+    while ( ( LPC_UART->LSR & 1 ) != 0 )
+    {
+      uart_byte_cnt++;
+      uart_data = LPC_UART->RBR;
+      pq_AddChar(&pq, (uint8_t)uart_data);
+      
+    }
+  }
+}
+
+
+void UARTSendData(int data)
+{
+  while( (LPC_UART->LSR & (1<<5)) == 0 )
+    ;
+  LPC_UART->THR = data;
+}
+
+void UARTSendStr(const char *str)
+{
+  while( *str != '\0' )
+    UARTSendData( (int)(unsigned char)*str++ );
+}
 
 /*========================================================================*/
 /* SystemInit */
@@ -48,9 +146,13 @@ uint32_t SystemCoreClock;
 
 void SystemInit()
 {    
-  
+ /* SystemInit() is called by the startup code */
+ 
+  /* init gps parser */  
+  pq_Init(&pq);
+
+  /* increase clock speed to max */
 #if F_CPU >= 48000000
-  /* SystemInit() is called by the startup code */
   lpc11xx_set_irc_48mhz();
 #endif
   
@@ -61,6 +163,14 @@ void SystemInit()
   SysTick->LOAD = (SystemCoreClock/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS) - 1;
   SysTick->VAL = 0;
   SysTick->CTRL = 7;   /* enable, generate interrupt, do not divide by 2 */
+
+  /* listen to gps device */
+  #if F_CPU >= 48000000
+  UARTInit(1);
+#else
+  UARTInit(0);  
+#endif
+ 
 }
 
 
@@ -68,10 +178,23 @@ void SystemInit()
 /* SysTick */
 
 volatile uint32_t sys_tick_irq_cnt=0;
+volatile uint32_t sys_tick_10s_cnt=0;
+volatile uint32_t sys_cnt_10s  = 0;
 
 void __attribute__ ((interrupt)) SysTick_Handler(void)
 {
   sys_tick_irq_cnt++;
+  
+  sys_tick_10s_cnt++;
+  if ( sys_tick_10s_cnt >= 1000 )
+  {
+    /* this will be executed every 10s */
+    sys_tick_10s_cnt = 0;
+    sys_cnt_10s++;
+    uart_avg_byte_cnt = uart_byte_cnt;
+    uart_avg_byte_cnt /= 10L;			/* characters per seconds */
+    uart_byte_cnt = 0;
+  }
 }
 
 /*========================================================================*/
@@ -182,30 +305,27 @@ u8g_t u8g;
 
 void draw(void)
 {
-  if ( u8g_GetMode(&u8g) == U8G_MODE_HICOLOR || u8g_GetMode(&u8g) == U8G_MODE_R3G3B2) {
-    /* draw background (area is 128x128) */
-    u8g_uint_t r, g, b;
-    for( b = 0; b < 4; b++ )
-    {
-      for( g = 0; g < 32; g++ )
-      {
-	for( r = 0; r < 32; r++ )
-	{
-	  u8g_SetRGB(&u8g, r<<3, g<<3, b<<4 );
-	  u8g_DrawPixel(&u8g, g + b*32, r);
-	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+64 );
-	  u8g_DrawPixel(&u8g, g + b*32, r+32);
-	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128 );
-	  u8g_DrawPixel(&u8g, g + b*32, r+32+32);
-	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128+64 );
-	  u8g_DrawPixel(&u8g, g + b*32, r+32+32+32);
-	}
-      }
-    }
-    u8g_SetRGB(&u8g, 255,255,255);
-    u8g_SetFont(&u8g, u8g_font_unifont);
-    u8g_DrawStr(&u8g,  0, 22, "Hello World!");
-  }
+  char buf[4] = "[ ]";
+  buf[1] = uart_data;
+  u8g_SetFont(&u8g, u8g_font_4x6r);
+  
+  u8g_DrawStr(&u8g,  0, 6, buf);
+  u8g_DrawStr(&u8g,  0, 6*2, "10s:");
+  u8g_DrawStr(&u8g,  38, 6*2, u8g_u16toa(sys_cnt_10s, 5));
+  u8g_DrawStr(&u8g,  0, 6*3, "UART RX:");
+  u8g_DrawStr(&u8g,  38, 6*3, u8g_u16toa(uart_avg_byte_cnt, 5));
+  
+  u8g_DrawStr(&u8g,  0, 6*4, "UART Buf:");
+  u8g_DrawStr(&u8g,  38, 6*4, u8g_u16toa(pq.crb.end, 4));
+  u8g_DrawStr(&u8g,  60, 6*4, u8g_u16toa(pq.crb.end, 4));
+  
+  u8g_DrawStr(&u8g,  0, 6*5, "Msg Cnt:");
+  u8g_DrawStr(&u8g,  38, 6*5, u8g_u16toa(pq.processed_sentences, 5));
+  u8g_DrawStr(&u8g,  0, 6*6, "RMC Cnt:");
+  u8g_DrawStr(&u8g,  38, 6*6, u8g_u16toa(pq.processed_gprmc, 5));
+  u8g_DrawStr(&u8g,  60, 6*6, u8g_u16toa(pq.invalid_gprmc, 5));
+  
+  
 }
 
 void main()
@@ -223,16 +343,16 @@ void main()
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1325_nhd27oled_bw_hw_spi, u8g_com_hw_spi_fn);
   u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_gps_board_fn);
-
+  u8g_SetRot180(&u8g);
 
   for(;;)
   {
     u8g_FirstPage(&u8g);
     do
     {
-    //  draw();
-      u8g_SetFont(&u8g, u8g_font_unifont);
-      u8g_DrawStr(&u8g,  0, 22+y, "Hello World!");
+      draw();
+      u8g_SetFont(&u8g, u8g_font_4x6);
+      u8g_DrawStr(&u8g,  0, 42+y, "Hello World!");
     } while ( u8g_NextPage(&u8g) );
     u8g_Delay(100);
     y++;
@@ -243,6 +363,7 @@ void main()
     LED_GPIO->DATA &= ~(1 << LED_PIN);
     u8g_Delay(100);
     */
+    pq_ParseSentence(&pq);
   }
   
   /*

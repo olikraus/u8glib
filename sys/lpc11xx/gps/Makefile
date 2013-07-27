@@ -56,8 +56,8 @@ MCPU:=cortex-m0
 # The name of the startup file which matches to the architecture (MCPU)
 # Usually this can be taken from
 # gcc-arm-none-eabi-4_7-2013q1/share/gcc-arm-none-eabi/samples/startup
-STARTUP:=$(GCCPATH)/share/gcc-arm-none-eabi/samples/startup/startup_ARMCM0.S
-# STARTUP:=../common/startup_lpc11xx.S
+# STARTUP:=$(GCCPATH)/share/gcc-arm-none-eabi/samples/startup/startup_ARMCM0.S
+STARTUP:=../common/startup_lpc11xx.S
 
 # Include directory for the system include files
 SYSINC:=../common

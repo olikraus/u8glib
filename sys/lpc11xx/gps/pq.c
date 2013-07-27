@@ -2,7 +2,6 @@
   position queue
   
 */
-
 #include <stddef.h>
 #include <string.h>
 #include "datecalc.h"
@@ -13,6 +12,11 @@ void pq_Init(pq_t *pq)
 {
   memset(pq, 0, sizeof(pq_t));
   crb_Init(&(pq->crb));
+}
+
+void pq_AddChar(pq_t *pq, uint8_t c)
+{
+  crb_AddChar(&(pq->crb), c);  
 }
 
 void pq_AddStr(pq_t *pq, const char *str)
@@ -273,7 +277,10 @@ uint8_t pq_ParseSentence(pq_t *pq)
   {
     if (  strcmp(s, "$GPRMC") == 0 )
     {
+      pq->processed_gprmc++;
+      
       result = pq_ParseGPRMC(pq);
+      
     }
   } 
   crb_DeleteSentence(&(pq->crb));
