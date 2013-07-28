@@ -31,8 +31,9 @@ void test_str(pq_t *pq)
 void test_gprmc(pq_t *pq)
 {
   pq_Init(pq);
-  pq_AddStr(pq, "$GPRMC,220516,      A,5133.82,N,00042.24,W,173.8,231.8,130694,004.2,W*70$");
-  pq_AddStr(pq, "$GPRMC,000204.036,V             ,  ,                ,   ,         ,         ,0.00     ,0.00  ,060180,,,X*99$");
+  pq_AddStr(pq, "$GPRMC,220516,      A,5133.82,N,00042.24   ,W,173.8,231.8,130694,004.2,W*70$");
+  //pq_AddStr(pq, "$GPRMC,191525,V  ,4764.0450,N,00918.3670,E,0.0    ,0.0     ,180409,0.4, E");
+  //pq_AddStr(pq, "$GPRMC,000204.036,V             ,  ,                   ,   ,0.00     ,0.00  ,060180,,,X*99$");
   pq_ResetParser(pq);
   printf("%s\n", pq_GetStr(pq));
   if ( pq_ParseGPRMC(pq) == 0 ) 
@@ -49,7 +50,7 @@ void test_gprmc(pq_t *pq)
 void test_gprmc2(pq_t *pq)
 {
   pq_Init(pq);
-  pq_AddStr(pq, "$GPRMC,000204.036,V,,,,,,0.00,0.00,060180,,,X*99$");
+  pq_AddStr(pq, "$GPRMC,000204.036,V,,,,,0.00,0.00,060180,,,X*99$");
   pq_ResetParser(pq);
   printf("%s\n", pq_GetStr(pq));
   if ( pq_ParseGPRMC(pq) == 0 ) 
@@ -75,7 +76,12 @@ void test_gpgga(pq_t *pq)
   }
   else
   {
-    printf("Latitude: %lf\n", (double)pq->interface.pos.latitude);
+    char s[16];
+
+    pg_FloatToDegreeMinutes(pq, pq->interface.pos.latitude);
+    pg_DegreeMinutesToStr(pq, 1, s);
+    
+    printf("Latitude: %lf %s\n", (double)pq->interface.pos.latitude, s);
     printf("GPS Quality: %d\n", (int)pq->gps_quality);
     printf("sat_cnt: %d\n", (int)pq->sat_cnt);
   }

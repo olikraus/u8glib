@@ -390,8 +390,8 @@ void main()
     u8g_FirstPage(&u8g);
     do
     {
-      //draw();
-      draw_crb();
+      draw();
+      //draw_crb();
     } while ( u8g_NextPage(&u8g) );
     for( y = 0; y < 20; y++ )
     {

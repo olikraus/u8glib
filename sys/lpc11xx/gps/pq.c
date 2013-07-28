@@ -139,6 +139,37 @@ uint8_t pq_GetFloat(pq_t *pq, gps_float_t *f)
   return 1;
 }
 
+uint8_t pq_GetLonLatFloat(pq_t *pq, gps_float_t *f)
+{
+  uint8_t digit_cnt;
+  uint32_t num;
+  uint32_t minutes;
+  gps_float_t fraction;
+  if ( pq_GetNum(pq, &num, NULL) == 0 )
+    return 0;
+  minutes = num % 100UL;
+  num /= 100UL;  
+  *f = (gps_float_t)num;
+  fraction = 0.0;
+  if ( pq_GetCurr(pq) == '.' )
+  {
+    pq_GetNext(pq);
+    if ( pq_GetNum(pq, &num, &digit_cnt) == 0 )
+      return 0;
+    fraction = (gps_float_t)num;
+    pq->digit_cnt = digit_cnt;
+    while( digit_cnt > 0 )
+    {
+      fraction /= (gps_float_t)10;
+      digit_cnt--;
+    }
+    fraction += (gps_float_t)minutes;
+    fraction /= (gps_float_t)60;
+    *f += fraction;
+  }
+  return 1;
+}
+
 /* read a small string, max 8 bytes, including '\0' */ 
 #define PQ_STR_MAX 8
 const char *pq_GetStr(pq_t *pq)
@@ -237,12 +268,12 @@ uint8_t pq_ParseGPRMC(pq_t *pq)
   if ( pq_CheckComma(pq) == 0 ) return 0;
   if ( pq_CheckTwoChars(pq, &is_valid, 'V', 'A') == 0 ) return 0;
   if ( pq_CheckComma(pq) == 0 ) return 0;
-  if ( pq_GetFloat(pq, &(pq->interface.pos.latitude)) == 0 ) return 0;
+  if ( pq_GetLonLatFloat(pq, &(pq->interface.pos.latitude)) == 0 ) return 0;
   if ( pq_CheckComma(pq) == 0 ) return 0;
   if ( pq_CheckTwoChars(pq, &is_south, 'N', 'S') == 0 ) return 0;
   if ( is_south != 0 ) pq->interface.pos.latitude = -pq->interface.pos.latitude;
   if ( pq_CheckComma(pq) == 0 ) return 0;
-  if ( pq_GetFloat(pq, &(pq->interface.pos.longitude)) == 0 ) return 0;
+  if ( pq_GetLonLatFloat(pq, &(pq->interface.pos.longitude)) == 0 ) return 0;
   if ( pq_CheckComma(pq) == 0 ) return 0;
   if ( pq_CheckTwoChars(pq, &is_west, 'E', 'W') == 0 ) return 0;
   if ( is_west != 0 ) pq->interface.pos.longitude = -pq->interface.pos.longitude;
@@ -303,12 +334,12 @@ uint8_t pq_ParseGPGGA(pq_t *pq)
   if ( pq_CheckComma(pq) == 0 ) return 0;
   if ( pq_GetFloat(pq, &time) == 0 ) return 0;
   if ( pq_CheckComma(pq) == 0 ) return 0;
-  if ( pq_GetFloat(pq, &(pq->interface.pos.latitude)) == 0 ) return 0;
+  if ( pq_GetLonLatFloat(pq, &(pq->interface.pos.latitude)) == 0 ) return 0;
   if ( pq_CheckComma(pq) == 0 ) return 0;
   if ( pq_CheckTwoChars(pq, &is_south, 'N', 'S') == 0 ) return 0;
   if ( is_south != 0 ) pq->interface.pos.latitude = -pq->interface.pos.latitude;
   if ( pq_CheckComma(pq) == 0 ) return 0;
-  if ( pq_GetFloat(pq, &(pq->interface.pos.longitude)) == 0 ) return 0;
+  if ( pq_GetLonLatFloat(pq, &(pq->interface.pos.longitude)) == 0 ) return 0;
   if ( pq_CheckComma(pq) == 0 ) return 0;
   if ( pq_CheckTwoChars(pq, &is_west, 'E', 'W') == 0 ) return 0;
   if ( is_west != 0 ) pq->interface.pos.longitude = -pq->interface.pos.longitude;
@@ -342,6 +373,8 @@ uint8_t pq_ParseGPGGA(pq_t *pq)
 }
 
 
+/* GPGSA, GPGSV */
+
 /* return 0 on parsing error */
 uint8_t pq_ParseSentence(pq_t *pq)
 {
@@ -349,6 +382,7 @@ uint8_t pq_ParseSentence(pq_t *pq)
   const char *s;
   if ( crb_IsSentenceAvailable(&(pq->crb)) == 0 )
     return 1;
+  pq_ResetParser(pq);
   s = pq_GetStr(pq);
   if ( s != NULL )
   {
@@ -356,13 +390,15 @@ uint8_t pq_ParseSentence(pq_t *pq)
     {
       pq->processed_gprmc++;
       result = pq_ParseGPRMC(pq);
-      pq->parser_error_gprmc++; 
+      if ( result == 0 )
+	pq->parser_error_gprmc++; 
     }
     else if (  strcmp(s, "$GPGGA") == 0 )
     {
       pq->processed_gpgga++;
       result = pq_ParseGPGGA(pq);
-      pq->parser_error_gpgga++; 
+      if ( result == 0 )
+	pq->parser_error_gpgga++; 
       
     }
     else
@@ -379,5 +415,81 @@ uint8_t pq_ParseSentence(pq_t *pq)
   return result;
 }
 
+/*
+  uint8_t pos_is_neg;	temp variable for gps_float_t conversion 
+  uint8_t pos_minutes;	temp variable for gps_float_t conversion 0..59 
+  uint16_t pos_fraction;	0...999 
+  uint16_t pos_degree;	temp variable for gps_float_t conversion 
+*/
+void pg_FloatToDegreeMinutes(pq_t *pq, gps_float_t f)
+{
+  float g;
+  pq->pos_is_neg = 0;
+  if ( f < (gps_float_t)0 )
+    f = -f;
+  f = GPS_MODF(f,&g);
+  pq->pos_degree = g;
+  f *=(gps_float_t)60;
+  f = GPS_MODF(f,&g);
+  pq->pos_minutes = g;
+  f *= (gps_float_t)1000;
+  pq->pos_fraction = f;  
+}
 
+static void pg_itoa(char *s, uint16_t x, uint8_t cnt)
+{
+  uint16_t c;
+  while( cnt > 0 )
+  {
+    cnt--;
+    c = x % 10;
+    c += '0';
+    s[cnt] = c;
+    x /= 10;
+  }
+}
 
+/*
+  copy internal 
+  uint8_t pos_is_neg;	temp variable for gps_float_t conversion 
+  uint8_t pos_minutes;	temp variable for gps_float_t conversion 0..59 
+  uint16_t pos_fraction;	0...999 
+  uint16_t pos_degree;	temp variable for gps_float_t conversion 
+  into a string
+  N ddd° mm.fff'   --> 14 chars, 15 with '\0'  
+*/
+void pg_DegreeMinutesToStr(pq_t *pq, uint8_t is_lat, char *s)
+{
+  uint8_t cnt;
+  if ( is_lat != 0 )
+  {
+    if ( pq->pos_is_neg != 0 )
+    {
+      s[0] = 'S';
+    }
+    else
+    {
+      s[0] = 'N';
+    }
+  }
+  else
+  {
+    if ( pq->pos_is_neg != 0 )
+    {
+      s[0] = 'W';
+    }
+    else
+    {
+      s[0] = 'E';
+    }
+  }
+  s[1] = ' ';
+  pg_itoa(s+2, pq->pos_degree, 3);
+  s[5] = '°';
+  s[6] = ' ';
+  pg_itoa(s+7, pq->pos_minutes, 2);
+  s[9] = '.';
+  pg_itoa(s+10, pq->pos_fraction, 3);
+  s[13] = '\'';
+  s[14] = '\0';
+}
