@@ -46,15 +46,23 @@ typedef struct _pq_interface_struct pq_interface_t;
 
 struct _pq_struct
 {
-  uint8_t cnt;		/* entries in the queue */	
   crb_t crb;
   pq_interface_t interface;
   
   uint32_t processed_sentences;
   uint32_t processed_gprmc;
+  uint32_t parser_error_gprmc;
   uint32_t valid_gprmc;
   uint32_t invalid_gprmc;
+  uint32_t processed_gpgga;
+  uint32_t parser_error_gpgga;
+  uint32_t valid_gpgga;
+  uint32_t invalid_gpgga;
+  uint8_t gps_quality;	/* GPS quality from GPGGA record */
+  uint8_t sat_cnt;	/* satellites in use (GPGGA record) */
+  uint8_t cnt;		/* entries in the queue */	
   pq_entry_t queue[PQ_LEN];
+  char last_unknown_msg[8];
 };
 typedef struct _pq_struct pq_t;
 
@@ -70,6 +78,8 @@ uint8_t pq_GetNum(pq_t *pq, uint32_t *num, uint8_t *digit_cnt);
 uint8_t pq_GetFloat(pq_t *pq, gps_float_t *f);
 const char *pq_GetStr(pq_t *pq);
 uint8_t pq_ParseGPRMC(pq_t *pq);
+uint8_t pq_ParseGPGGA(pq_t *pq);
+uint8_t pq_ParseSentence(pq_t *pq);
 
 
 #endif 

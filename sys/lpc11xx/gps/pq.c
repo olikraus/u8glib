@@ -180,6 +180,11 @@ uint8_t pq_CheckComma(pq_t *pq)
 /* return value is 0 if none has matched */
 uint8_t pq_CheckTwoChars(pq_t *pq, uint8_t *result, int16_t c1, int16_t c2)
 {
+  if ( pq_GetCurr(pq) == ',' || pq_GetCurr(pq) == '*' )
+  {
+    *result = 0;
+    return 1;
+  }
   if ( pq_CheckChar(pq, c1) != 0 )
   {
     *result = 0;
@@ -264,6 +269,78 @@ uint8_t pq_ParseGPRMC(pq_t *pq)
   return 1;
 }
 
+/*
+$GPGGA,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh
+1    = UTC of Position
+2    = Latitude
+3    = N or S
+4    = Longitude
+5    = E or W
+6    = GPS quality indicator (0=invalid; 1=GPS fix; 2=Diff. GPS fix)
+7    = Number of satellites in use [not those in view]
+8    = Horizontal dilution of position
+9    = Antenna altitude above/below mean sea level (geoid)
+10   = Meters  (Antenna height unit)
+11   = Geoidal separation (Diff. between WGS-84 earth ellipsoid and
+       mean sea level.  -=geoid is below WGS-84 ellipsoid)
+12   = Meters  (Units of geoidal separation)
+13   = Age in seconds since last update from diff. reference station
+14   = Diff. reference station ID#
+15   = Checksum
+*/
+uint8_t pq_ParseGPGGA(pq_t *pq)
+{
+  gps_float_t time;
+  uint32_t gps_quality;
+  uint32_t sat_cnt;
+  gps_float_t dilution;
+  gps_float_t altitude;
+  uint8_t is_south;
+  uint8_t is_west;
+  gps_float_t age;
+  uint32_t ref_sat;
+  
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_GetFloat(pq, &time) == 0 ) return 0;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_GetFloat(pq, &(pq->interface.pos.latitude)) == 0 ) return 0;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_CheckTwoChars(pq, &is_south, 'N', 'S') == 0 ) return 0;
+  if ( is_south != 0 ) pq->interface.pos.latitude = -pq->interface.pos.latitude;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_GetFloat(pq, &(pq->interface.pos.longitude)) == 0 ) return 0;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_CheckTwoChars(pq, &is_west, 'E', 'W') == 0 ) return 0;
+  if ( is_west != 0 ) pq->interface.pos.longitude = -pq->interface.pos.longitude;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_GetNum(pq, &gps_quality, NULL) == 0 ) return 0;  
+  pq->gps_quality = gps_quality;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_GetNum(pq, &sat_cnt, NULL) == 0 ) return 0;  
+  pq->sat_cnt = sat_cnt;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_GetFloat(pq, &dilution) == 0 ) return 0;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_GetFloat(pq, &altitude) == 0 ) return 0;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_CheckTwoChars(pq, &is_west, 'M', 'm') == 0 ) return 0;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_GetFloat(pq, &age) == 0 ) return 0;
+  if ( pq_CheckComma(pq) == 0 ) return 0;
+  if ( pq_GetNum(pq, &ref_sat, NULL) == 0 ) return 0;  
+  
+  if ( gps_quality != 0 )
+  {
+    pq_AddInterfaceValuesToQueue(pq);
+    pq->valid_gpgga++;
+  }
+  else
+  {
+    pq->invalid_gpgga++;
+  }
+  return 1;
+}
+
 
 /* return 0 on parsing error */
 uint8_t pq_ParseSentence(pq_t *pq)
@@ -278,9 +355,23 @@ uint8_t pq_ParseSentence(pq_t *pq)
     if (  strcmp(s, "$GPRMC") == 0 )
     {
       pq->processed_gprmc++;
-      
       result = pq_ParseGPRMC(pq);
+      pq->parser_error_gprmc++; 
+    }
+    else if (  strcmp(s, "$GPGGA") == 0 )
+    {
+      pq->processed_gpgga++;
+      result = pq_ParseGPGGA(pq);
+      pq->parser_error_gpgga++; 
       
+    }
+    else
+    {
+      if ( *s != '\0' )
+      {
+	strncpy(pq->last_unknown_msg, s, 8);
+	pq->last_unknown_msg[7] = '\0';
+      }
     }
   } 
   crb_DeleteSentence(&(pq->crb));

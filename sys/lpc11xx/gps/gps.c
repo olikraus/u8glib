@@ -303,6 +303,32 @@ uint8_t u8g_com_hw_spi_gps_board_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, vo
 u8g_t u8g;
 
 
+void draw_crb(void)
+{
+  uint16_t crb_pos, end_pos, disp_pos;
+  u8g_SetFont(&u8g, u8g_font_4x6r);
+  
+  crb_pos = pq.crb.start; 
+  end_pos = pq.crb.start; 
+  disp_pos = 0;
+  
+  while( disp_pos < CRB_LEN )
+  {
+    if ( (disp_pos >> 4) >= 9 )
+      break;
+    
+    u8g_DrawGlyph(&u8g, 5*(disp_pos & 15),  6+6*(disp_pos >> 4), pq.crb.buf[crb_pos]);
+    crb_pos++;
+    if ( crb_pos >= CRB_LEN )
+    {
+      crb_pos = 0;
+    }
+    if ( crb_pos == end_pos )
+      break;
+    disp_pos++;
+  }
+}
+
 void draw(void)
 {
   char buf[4] = "[ ]";
@@ -316,16 +342,30 @@ void draw(void)
   u8g_DrawStr(&u8g,  38, 6*3, u8g_u16toa(uart_avg_byte_cnt, 5));
   
   u8g_DrawStr(&u8g,  0, 6*4, "UART Buf:");
-  u8g_DrawStr(&u8g,  38, 6*4, u8g_u16toa(pq.crb.end, 4));
+  u8g_DrawStr(&u8g,  38, 6*4, u8g_u16toa(pq.crb.start, 4));
   u8g_DrawStr(&u8g,  60, 6*4, u8g_u16toa(pq.crb.end, 4));
   
   u8g_DrawStr(&u8g,  0, 6*5, "Msg Cnt:");
   u8g_DrawStr(&u8g,  38, 6*5, u8g_u16toa(pq.processed_sentences, 5));
+  
   u8g_DrawStr(&u8g,  0, 6*6, "RMC Cnt:");
-  u8g_DrawStr(&u8g,  38, 6*6, u8g_u16toa(pq.processed_gprmc, 5));
-  u8g_DrawStr(&u8g,  60, 6*6, u8g_u16toa(pq.invalid_gprmc, 5));
+  u8g_DrawStr(&u8g,  38, 6*6, u8g_u16toa(pq.processed_gprmc, 4));
+  u8g_DrawStr(&u8g,  56, 6*6, u8g_u16toa(pq.invalid_gprmc, 4));
+  u8g_DrawStr(&u8g,  74, 6*6, u8g_u16toa(pq.parser_error_gprmc, 4));
+
+  u8g_DrawStr(&u8g,  0, 6*7, "GGA Cnt:");
+  u8g_DrawStr(&u8g,  38, 6*7, u8g_u16toa(pq.processed_gpgga, 4));
+  u8g_DrawStr(&u8g,  56, 6*7, u8g_u16toa(pq.invalid_gpgga, 4));
+  u8g_DrawStr(&u8g,  74, 6*7, u8g_u16toa(pq.parser_error_gpgga, 4));
   
+  u8g_DrawStr(&u8g,  0, 6*8, "Sat:");
+  u8g_DrawStr(&u8g,  38, 6*8, u8g_u8toa(pq.sat_cnt, 3));
+  u8g_DrawStr(&u8g,  55, 6*8, "Quality:");
+  u8g_DrawStr(&u8g,  90, 6*8, u8g_u8toa(pq.gps_quality, 2));
   
+  u8g_DrawStr(&u8g,  0, 6*9, "Unknown:");
+  u8g_DrawStr(&u8g,  38, 6*9, pq.last_unknown_msg);
+
 }
 
 void main()
@@ -350,20 +390,14 @@ void main()
     u8g_FirstPage(&u8g);
     do
     {
-      draw();
-      u8g_SetFont(&u8g, u8g_font_4x6);
-      u8g_DrawStr(&u8g,  0, 42+y, "Hello World!");
+      //draw();
+      draw_crb();
     } while ( u8g_NextPage(&u8g) );
-    u8g_Delay(100);
-    y++;
-    y &= 15;
-    /*
-    LED_GPIO->DATA |= 1 << LED_PIN;
-    u8g_Delay(100);
-    LED_GPIO->DATA &= ~(1 << LED_PIN);
-    u8g_Delay(100);
-    */
-    pq_ParseSentence(&pq);
+    for( y = 0; y < 20; y++ )
+    {
+      u8g_Delay(100);
+      pq_ParseSentence(&pq);
+    }
   }
   
   /*

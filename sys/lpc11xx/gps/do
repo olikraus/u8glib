@@ -1,0 +1,1 @@
+gcc -g -I. pq.c crb.c test/test.c

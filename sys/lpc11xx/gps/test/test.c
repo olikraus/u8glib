@@ -31,7 +31,8 @@ void test_str(pq_t *pq)
 void test_gprmc(pq_t *pq)
 {
   pq_Init(pq);
-  pq_AddStr(pq, "$GPRMC,220516,A,5133.82,N,00042.24,W,173.8,231.8,130694,004.2,W*70$");
+  pq_AddStr(pq, "$GPRMC,220516,      A,5133.82,N,00042.24,W,173.8,231.8,130694,004.2,W*70$");
+  pq_AddStr(pq, "$GPRMC,000204.036,V             ,  ,                ,   ,         ,         ,0.00     ,0.00  ,060180,,,X*99$");
   pq_ResetParser(pq);
   printf("%s\n", pq_GetStr(pq));
   if ( pq_ParseGPRMC(pq) == 0 ) 
@@ -43,8 +44,41 @@ void test_gprmc(pq_t *pq)
     printf("Latitude: %lf\n", (double)pq->interface.pos.latitude);
     printf("Magnet Variation: %lf\n", (double)pq->interface.magnetic_variation);
   }
- 
-  
+}
+
+void test_gprmc2(pq_t *pq)
+{
+  pq_Init(pq);
+  pq_AddStr(pq, "$GPRMC,000204.036,V,,,,,,0.00,0.00,060180,,,X*99$");
+  pq_ResetParser(pq);
+  printf("%s\n", pq_GetStr(pq));
+  if ( pq_ParseGPRMC(pq) == 0 ) 
+  {
+    printf("2: $GPRMC Error\n");
+  }
+  else
+  {
+    printf("Latitude: %lf\n", (double)pq->interface.pos.latitude);
+    printf("Magnet Variation: %lf\n", (double)pq->interface.magnetic_variation);
+  }
+}
+
+void test_gpgga(pq_t *pq)
+{
+  pq_Init(pq);
+  pq_AddStr(pq, "$GPGGA,191410,4735.5634,N,00739.3538,E,1,04,4.4,351.5,M,48.0,M,,*45$");
+  pq_ResetParser(pq);
+  printf("%s\n", pq_GetStr(pq));
+  if ( pq_ParseGPGGA(pq) == 0 ) 
+  {
+    printf("$GPGGA Error\n");
+  }
+  else
+  {
+    printf("Latitude: %lf\n", (double)pq->interface.pos.latitude);
+    printf("GPS Quality: %d\n", (int)pq->gps_quality);
+    printf("sat_cnt: %d\n", (int)pq->sat_cnt);
+  }
 }
 
 void test_sentence(pq_t *pq)
@@ -99,6 +133,8 @@ void test_sentence(pq_t *pq)
 
 int main(void)
 {
+  test_gprmc2(&pq_obj);
+  test_gpgga(&pq_obj);
   test_sentence(&pq_obj);
   test_gprmc(&pq_obj);
   test_str(&pq_obj);
