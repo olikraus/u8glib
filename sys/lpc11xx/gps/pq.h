@@ -93,6 +93,7 @@ uint8_t pq_ParseSentence(pq_t *pq);
 
 void pg_FloatToDegreeMinutes(pq_t *pq, gps_float_t f);
 void pg_DegreeMinutesToStr(pq_t *pq, uint8_t is_lat, char *s);
+void pg_FloatToStr(gps_float_t f, char *s);
 
 
 #endif 

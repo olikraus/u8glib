@@ -368,6 +368,43 @@ void draw(void)
 
 }
 
+void picloop_gps_pos(void)
+{
+  char lat[16];
+  char lon[16];
+
+  char flat[12];
+  char flon[12];
+  
+  pg_FloatToDegreeMinutes(&pq, pq.interface.pos.latitude);
+  pg_DegreeMinutesToStr(&pq, 1, lat);
+  pg_FloatToStr(pq.interface.pos.latitude, flat);
+  
+  pg_FloatToDegreeMinutes(&pq, pq.interface.pos.longitude);
+  pg_DegreeMinutesToStr(&pq, 0, lon);
+  pg_FloatToStr(pq.interface.pos.longitude, flon);
+
+  
+
+    u8g_FirstPage(&u8g);
+    do
+    {
+      u8g_SetFont(&u8g, u8g_font_helvB10);
+      u8g_DrawStr(&u8g, 0, 15, lat);
+      u8g_DrawStr(&u8g, 0, 37, lon);
+      u8g_SetFont(&u8g, u8g_font_courB08r);
+      u8g_DrawStr(&u8g, 0, 15+8, flat);
+      u8g_DrawStr(&u8g, 0, 37+8, flon);
+      u8g_SetFont(&u8g, u8g_font_4x6r);
+      u8g_DrawStr(&u8g,  0, 60, "Sat:");
+      u8g_DrawStr(&u8g,  38, 60, u8g_u8toa(pq.sat_cnt, 3));
+      u8g_DrawStr(&u8g,  55, 60, "Quality:");
+      u8g_DrawStr(&u8g,  90, 60, u8g_u8toa(pq.gps_quality, 2));
+    } while ( u8g_NextPage(&u8g) );
+  
+}
+
+
 void main()
 {
   uint8_t c = 0;
@@ -387,13 +424,17 @@ void main()
 
   for(;;)
   {
+    picloop_gps_pos();
+
+/*    
     u8g_FirstPage(&u8g);
     do
     {
       draw();
       //draw_crb();
     } while ( u8g_NextPage(&u8g) );
-    for( y = 0; y < 20; y++ )
+*/
+    //for( y = 0; y < 20; y++ )
     {
       u8g_Delay(100);
       pq_ParseSentence(&pq);
