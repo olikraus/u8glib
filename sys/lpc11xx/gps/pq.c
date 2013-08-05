@@ -436,9 +436,11 @@ void pg_FloatToDegreeMinutes(pq_t *pq, gps_float_t f)
   pq->pos_fraction = f;  
 }
 
-static void pg_itoa(char *s, uint16_t x, uint8_t cnt)
+/* writes cnt + 1 chars to s, including '\0' */
+void pg_itoa(char *s, uint16_t x, uint8_t cnt)
 {
   uint16_t c;
+  s[cnt] = '\0';
   while( cnt > 0 )
   {
     cnt--;
@@ -447,6 +449,7 @@ static void pg_itoa(char *s, uint16_t x, uint8_t cnt)
     s[cnt] = c;
     x /= 10;
   }
+  
 }
 
 /*

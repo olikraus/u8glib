@@ -91,6 +91,7 @@ uint8_t pq_ParseGPRMC(pq_t *pq);
 uint8_t pq_ParseGPGGA(pq_t *pq);
 uint8_t pq_ParseSentence(pq_t *pq);
 
+void pg_itoa(char *s, uint16_t x, uint8_t cnt);
 void pg_FloatToDegreeMinutes(pq_t *pq, gps_float_t f);
 void pg_DegreeMinutesToStr(pq_t *pq, uint8_t is_lat, char *s);
 void pg_FloatToStr(gps_float_t f, char *s);

@@ -1,13 +1,13 @@
 /*
 
-  u8g_dev_a2_micro_printer_128.c
+  u8g_dev_a2_micro_printer_ds.c
 
   Use DC2 bitmap command of the A2 Micro panel termal printer
-  Height is 128 pixel
+  double stroke
 
   Universal 8bit Graphics Library
   
-  Copyright (c) 2011, olikraus@gmail.com
+  Copyright (c) 2013, olikraus@gmail.com
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, 
@@ -190,6 +190,10 @@ uint8_t u8g_dev_a2_micro_printer_double_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
   return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
 }
 
+#if defined(U8G_16BIT)
+U8G_PB_DEV(u8g_dev_a2_micro_printer_384x240, 384, 240, 8, u8g_dev_a2_micro_printer_fn, u8g_com_null_fn);
+#else
+U8G_PB_DEV(u8g_dev_a2_micro_printer_384x240, 240, 240, 8, u8g_dev_a2_micro_printer_fn, u8g_com_null_fn);
+#endif
 
-U8G_PB_DEV(u8g_dev_a2_micro_printer_240x240, 240, 240, 8, u8g_dev_a2_micro_printer_fn, u8g_com_null_fn);
 U8G_PB_DEV(u8g_dev_a2_micro_printer_192x120_ds, 192, 120, 8, u8g_dev_a2_micro_printer_double_fn, u8g_com_null_fn);

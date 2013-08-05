@@ -375,6 +375,15 @@ void picloop_gps_pos(void)
 
   char flat[12];
   char flon[12];
+  char speed[4];
+  char course[4];
+  
+  gps_float_t kmh;
+  
+  kmh = pq.interface.speed_in_knots * (gps_float_t)1.852;
+  pg_itoa(speed, (uint16_t)kmh, 3);
+
+  pg_itoa(course, (uint16_t)pq.interface.true_course, 3);
   
   pg_FloatToDegreeMinutes(&pq, pq.interface.pos.latitude);
   pg_DegreeMinutesToStr(&pq, 1, lat);
@@ -390,16 +399,23 @@ void picloop_gps_pos(void)
     do
     {
       u8g_SetFont(&u8g, u8g_font_helvB10);
-      u8g_DrawStr(&u8g, 0, 15, lat);
-      u8g_DrawStr(&u8g, 0, 37, lon);
-      u8g_SetFont(&u8g, u8g_font_courB08r);
-      u8g_DrawStr(&u8g, 0, 15+8, flat);
-      u8g_DrawStr(&u8g, 0, 37+8, flon);
+      u8g_DrawStr(&u8g, 0, 14, lat);
+      u8g_DrawStr(&u8g, 0, 36, lon);
+      u8g_SetFont(&u8g, u8g_font_helvR08r);
+      u8g_DrawStr(&u8g, 0, 14+9, flat);
+      u8g_DrawStr(&u8g, 0, 36+9, flon);
+      
       u8g_SetFont(&u8g, u8g_font_4x6r);
-      u8g_DrawStr(&u8g,  0, 60, "Sat:");
-      u8g_DrawStr(&u8g,  38, 60, u8g_u8toa(pq.sat_cnt, 3));
-      u8g_DrawStr(&u8g,  55, 60, "Quality:");
-      u8g_DrawStr(&u8g,  90, 60, u8g_u8toa(pq.gps_quality, 2));
+      
+      u8g_DrawStr(&u8g,  0, 55, "Km/h:");
+      u8g_DrawStr(&u8g,  20, 55, speed);
+      u8g_DrawStr(&u8g,  51, 55, "Course:");
+      u8g_DrawStr(&u8g,  80, 55, course);
+      
+      u8g_DrawStr(&u8g,  0, 62, "Sat:");
+      u8g_DrawStr(&u8g,  20, 62, u8g_u8toa(pq.sat_cnt, 3));
+      u8g_DrawStr(&u8g,  51, 62, "Quality:");
+      u8g_DrawStr(&u8g,  90, 62, u8g_u8toa(pq.gps_quality, 2));
     } while ( u8g_NextPage(&u8g) );
   
 }
