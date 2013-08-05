@@ -4,8 +4,6 @@
   
   Special example code for the A2 Mciro Printer (https://www.sparkfun.com/products/10438)
   
-  >>> Before compiling: Please remove comment from the constructor of the 
-  >>> connected graphics display (see below).
   
   Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
   
@@ -41,21 +39,16 @@
 
 #include "U8glib.h"
 
+// use this serial interface
+#define SERIAL Serial
+// #define SERIAL Serial1
 
-uint8_t u8g_com_uart(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
-{
-  switch(msg)
-  {
-    case U8G_COM_MSG_STOP:
-      break;
-    
-    case U8G_COM_MSG_INIT:
-      break;    
-      
+
+uint8_t u8g_com_uart(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr) {
+  switch(msg) {
     case U8G_COM_MSG_WRITE_BYTE:
-      Serial1.write(arg_val);
+      SERIAL.write(arg_val);
       break;
-    
   }
   return 1;
 }
@@ -63,13 +56,12 @@ uint8_t u8g_com_uart(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 // setup u8g object, please remove comment from one of the following constructor calls
 
 // half resolution
-//U8GLIB u8g(&u8g_dev_a2_micro_printer_192x120_ds, (u8g_com_fnptr)u8g_com_uart);
+U8GLIB u8g(&u8g_dev_a2_micro_printer_192x120_ds, (u8g_com_fnptr)u8g_com_uart);
 
 // full resolution, requires to uncomment U8G_16BIT in u8g.h
 //U8GLIB u8g(&u8g_dev_a2_micro_printer_384x240, (u8g_com_fnptr)u8g_com_uart);
 
-void drawLogo(uint8_t d)
-{
+void drawLogo(uint8_t d) {
   u8g.setFont(u8g_font_gdr25r);
   u8g.drawStr(0+d, 30+d, "U");
   u8g.setFont(u8g_font_gdr30n);
@@ -81,16 +73,13 @@ void drawLogo(uint8_t d)
   u8g.drawVLine(45+d, 32+d, 12);
 }
 
-void drawURL(void)
-{
+void drawURL(void) {
   u8g.setFont(u8g_font_4x6);
-  if ( u8g.getHeight() < 59 )
-  {
+  if ( u8g.getHeight() < 59 ) {
     u8g.drawStr(53,9,"code.google.com");
     u8g.drawStr(77,18,"/p/u8glib");
   }
-  else
-  {
+  else {
     u8g.drawStr(1,54,"code.google.com/p/u8glib");
   }
 }
@@ -102,15 +91,15 @@ void draw(void) {
   drawURL();
   u8g.drawFrame(0,0,u8g.getWidth(), u8g.getHeight());
   
-  u8g.setFont(u8g_font_gdr20r);
-  u8g.setPrintPos(0, 80);
+  u8g.setFont(u8g_font_helvR24r);
+  u8g.setPrintPos(0, 100);
   u8g.print(u8g.getWidth(), DEC);
   u8g.print("x");
   u8g.print(u8g.getHeight(), DEC);
 }
 
 void setup(void) {
-  Serial1.begin(19200);
+  SERIAL.begin(19200);
   
   // flip screen, if required
   // u8g.setRot180();
@@ -127,8 +116,8 @@ void loop(void) {
     draw();
   } while( u8g.nextPage() );
 
-  //Serial1.print("Hello U8glib!"); 
-  //Serial1.write('\n'); 
+  // send manual CR to the printer
+  SERIAL.write('\n'); 		
   
   // reprint the picture after 10 seconds
   delay(10000);

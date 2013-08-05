@@ -38,7 +38,7 @@
 #	mega2560	Arduino Mega2560
 #	mini			Arduino Mini
 #	lilypad328	LilyPad Arduino w/ ATmega328  
-BOARD:=mega2560
+BOARD:=uno
 
 # additional definitions
 DEFS:=-DU8G_16BIT=1
