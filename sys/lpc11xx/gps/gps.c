@@ -329,6 +329,8 @@ void draw_crb(void)
   }
 }
 
+#ifdef NOT_USED
+
 void draw(void)
 {
   char buf[4] = "[ ]";
@@ -420,6 +422,40 @@ void picloop_gps_pos(void)
   
 }
 
+#endif
+
+void picloop_gps_speed(void)
+{
+  char time[12];
+  char speed[4];
+  gps_float_t kmh;
+  kmh = pq.interface.speed_in_knots * (gps_float_t)1.852;
+  pg_itoa(speed, (uint16_t)kmh, 3);
+  pg_itoa(time, (pq.interface.hour + 2) % 24, 2);		/* ### convert to MESZ from UTC */
+  pg_itoa(time+3, pq.interface.minute, 2);
+  pg_itoa(time+6, pq.interface.second, 2);
+  time[2] = ':';
+  time[5] = ':';
+  time[8] = '\0';
+
+    u8g_FirstPage(&u8g);
+    do
+    {
+      u8g_SetFont(&u8g, u8g_font_helvB18r);
+      u8g_DrawStr(&u8g,  2, 22, time);
+      u8g_DrawStr(&u8g,  2, 50, speed);
+      u8g_SetFont(&u8g, u8g_font_helvR08r);
+      u8g_DrawStr(&u8g,  46, 50, "Km/h");
+      
+      u8g_SetFont(&u8g, u8g_font_4x6r);
+      u8g_DrawStr(&u8g,  0, 62, "Sat:");
+      u8g_DrawStr(&u8g,  20, 62, u8g_u8toa(pq.sat_cnt, 3));
+      u8g_DrawStr(&u8g,  51, 62, "Quality:");
+      u8g_DrawStr(&u8g,  90, 62, u8g_u8toa(pq.gps_quality, 2));
+      
+    } while ( u8g_NextPage(&u8g) );
+  
+}
 
 void main()
 {
@@ -440,7 +476,8 @@ void main()
 
   for(;;)
   {
-    picloop_gps_pos();
+    //picloop_gps_pos();
+    picloop_gps_speed();
 
 /*    
     u8g_FirstPage(&u8g);

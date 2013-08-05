@@ -322,6 +322,7 @@ $GPGGA,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh
 uint8_t pq_ParseGPGGA(pq_t *pq)
 {
   gps_float_t time;
+  uint32_t int_time;
   uint32_t gps_quality;
   uint32_t sat_cnt;
   gps_float_t dilution;
@@ -333,6 +334,12 @@ uint8_t pq_ParseGPGGA(pq_t *pq)
   
   if ( pq_CheckComma(pq) == 0 ) return 0;
   if ( pq_GetFloat(pq, &time) == 0 ) return 0;
+  int_time = time;
+  pq->interface.hour = int_time / 10000;
+  pq->interface.minute = ((uint32_t)(int_time / 100)) % 100;
+  pq->interface.second = ((uint32_t)int_time) % 100;
+  pq->interface.millisecond = 0;	/* not used */
+  
   if ( pq_CheckComma(pq) == 0 ) return 0;
   if ( pq_GetLonLatFloat(pq, &(pq->interface.pos.latitude)) == 0 ) return 0;
   if ( pq_CheckComma(pq) == 0 ) return 0;
