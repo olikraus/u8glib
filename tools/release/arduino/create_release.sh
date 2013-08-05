@@ -17,6 +17,7 @@ mkdir libraries/U8glib/examples/Menu
 mkdir libraries/U8glib/examples/Scale
 mkdir libraries/U8glib/examples/Touch4WSetup
 mkdir libraries/U8glib/examples/Touch4WTest
+mkdir libraries/U8glib/examples/A2Printer
 mkdir libraries/U8glib/utility
 cp ../../../ChangeLog ./libraries/U8glib/.
 cp ../../../license.txt ./libraries/U8glib/.
@@ -42,6 +43,7 @@ cp ../../../sys/arduino/Menu/*.pde ./libraries/U8glib/examples/Menu/.
 cp ../../../sys/arduino/Scale/*.pde ./libraries/U8glib/examples/Scale/.
 cp ../../../sys/arduino/Touch4WSetup/*.pde ./libraries/U8glib/examples/Touch4WSetup/.
 cp ../../../sys/arduino/Touch4WTest/*.pde ./libraries/U8glib/examples/Touch4WTest/.
+cp ../../../sys/arduino/A2Printer/*.pde ./libraries/U8glib/examples/A2Printer/.
 # sed -i 's|U8glib.h|utility/U8glib.h|g' ./libraries/U8glib/examples/HelloWorld/*.pde
 
 # rename to .ino
@@ -52,3 +54,4 @@ chmod -R og=u libraries
 cd libraries 
 zip -r ../u8glib_arduino_`../../print_release.sh`.zip *
 cd ..
+

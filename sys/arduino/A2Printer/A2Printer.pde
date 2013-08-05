@@ -40,14 +40,14 @@
 #include "U8glib.h"
 
 // use this serial interface
-#define SERIAL Serial
-// #define SERIAL Serial1
+#define PRINTER_SERIAL Serial
+// #define PRINTER_SERIAL Serial1
 
 
 uint8_t u8g_com_uart(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr) {
   switch(msg) {
     case U8G_COM_MSG_WRITE_BYTE:
-      SERIAL.write(arg_val);
+      PRINTER_SERIAL.write(arg_val);
       break;
   }
   return 1;
@@ -99,7 +99,7 @@ void draw(void) {
 }
 
 void setup(void) {
-  SERIAL.begin(19200);
+  PRINTER_SERIAL.begin(19200);
   
   // flip screen, if required
   // u8g.setRot180();
@@ -117,7 +117,7 @@ void loop(void) {
   } while( u8g.nextPage() );
 
   // send manual CR to the printer
-  SERIAL.write('\n'); 		
+  PRINTER_SERIAL.write('\n'); 		
   
   // reprint the picture after 10 seconds
   delay(10000);
