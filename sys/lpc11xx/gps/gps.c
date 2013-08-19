@@ -66,6 +66,7 @@ void BODSetThreshold(uint8_t level)
   NVIC_ClearPendingIRQ(BOD_IRQn);
   level &= 3;
   level <<= 2;
+  LPC_SYSCON->PDRUNCFG &= ~(1<<3);	/* disable power down BOD */
   LPC_SYSCON->BODCTRL = level;		/* threshold 2.80 */  
   if ( level > 0 )
     NVIC_EnableIRQ(BOD_IRQn);
@@ -83,7 +84,65 @@ void __attribute__ ((interrupt)) BOD_Handler(void)
   if ( battery_level >= 0 )
     BODSetThreshold(battery_level);
 }
+/*============================================================*/
+/* ADC */
 
+uint16_t ADCGetValue(uint8_t adc)
+{
+  uint32_t gdr;
+
+  LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
+  LPC_SYSCON->SYSAHBCLKCTRL |= 1<<13;	/* enable ADC clock */
+  LPC_SYSCON->PDRUNCFG &= ~(1<<4);	/* disable power down ADC */
+
+  adc &= 7;
+  
+  switch(adc)
+  {
+    case 0:
+      LPC_IOCON->R_PIO0_11 = 2;			/* ADC enable, Analog enable, disable pullup/pulldown */
+      break;
+    case 1:
+      LPC_IOCON->R_PIO1_0 = 2;			/* ADC enable, Analog enable, disable pullup/pulldown */
+      break;
+    case 2:
+      LPC_IOCON->R_PIO1_1 = 2;			/* ADC enable, Analog enable, disable pullup/pulldown */
+      break;
+    case 3:
+      LPC_IOCON->R_PIO1_2 = 2;			/* ADC enable, Analog enable, disable pullup/pulldown */
+      break;
+    case 4:
+      LPC_IOCON->SWDIO_PIO1_3 = 2;			/* ADC enable, Analog enable, disable pullup/pulldown */
+      break;
+    case 5:
+      LPC_IOCON->PIO1_4 = 1;				/* ADC enable, Analog enable, disable pullup/pulldown */
+      break;
+    default:
+      return 0;
+  }
+  
+  /*
+    select adc port
+    divide freq by 12 to get 4 Mhz at 48 Mhz system clock
+    use sw controlled mode
+    user 11 clocks per adc measure
+    start conversion now
+  */
+  LPC_ADC->CR = (1<<adc) | (12<<8) |(1<<26);
+  
+  /* wait for completion */
+  for(;;)
+  {
+    gdr = LPC_ADC->GDR
+    if ( gdr & (1UL<<31) != 0 )
+      break;
+  }
+  
+  LPC_SYSCON->PDRUNCFG |= 1<<4;	/* power down ADC */
+  LPC_SYSCON->SYSAHBCLKCTRL &= ~(1<<13);	/* disable ADC clock */
+  
+  return gdr>>6;
+}
 
 
 /*============================================================*/
