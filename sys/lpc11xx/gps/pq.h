@@ -76,6 +76,7 @@ struct _pq_struct
 typedef struct _pq_struct pq_t;
 
 void pq_Init(pq_t *pq);
+void pq_AddChar(pq_t *pq, uint8_t c);
 void pq_DeleteFirst(pq_t *pq);
 void pq_AddInterfaceValuesToQueue(pq_t *pq);
 pq_entry_t *pq_GetLatestEntry(pq_t *pq);

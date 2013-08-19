@@ -40,6 +40,52 @@
 
 #define SYS_TICK_PERIOD_IN_MS 10
 
+
+/*============================================================*/
+/* LPC11xx BOD Monitor: Try to guess external voltage with the BOD interrupts */
+/*
+*/
+
+/*
+  level 0: below 2.22 Volt
+  level 1: between 2.22 Volt and between 2.52 Volt
+  level 2: between 2.52 Volt and 2.80 Volt 
+  level 3: above 2.80 Volt 
+*/
+uint8_t battery_level;
+
+/* 
+  level 0: disable irq
+  level 1: 2.22 Volt 
+  level 2: 2.52 Volt 
+  level 3: 2.80 Volt 
+*/
+void BODSetThreshold(uint8_t level)
+{
+  NVIC_DisableIRQ(BOD_IRQn);
+  NVIC_ClearPendingIRQ(BOD_IRQn);
+  level &= 3;
+  level <<= 2;
+  LPC_SYSCON->BODCTRL = level;		/* threshold 2.80 */  
+  if ( level > 0 )
+    NVIC_EnableIRQ(BOD_IRQn);
+}
+
+void BODMonitorInit(void)
+{
+  battery_level = 3;
+  BODSetThreshold(battery_level);
+}
+
+
+void __attribute__ ((interrupt)) BOD_Handler(void)
+{
+  if ( battery_level >= 0 )
+    BODSetThreshold(battery_level);
+}
+
+
+
 /*============================================================*/
 pq_t pq;
 
@@ -109,6 +155,7 @@ int UARTReadData(void)
 volatile int16_t uart_data;
 volatile int32_t uart_byte_cnt = 0;
 volatile int32_t uart_avg_byte_cnt = 0;
+
 void __attribute__ ((interrupt)) UART_Handler(void)
 {
   uint32_t iir = LPC_UART->IIR;
@@ -171,6 +218,7 @@ void SystemInit()
   UARTInit(0);  
 #endif
  
+ BODMonitorInit();
 }
 
 
@@ -450,8 +498,12 @@ void picloop_gps_speed(void)
       u8g_SetFont(&u8g, u8g_font_4x6r);
       u8g_DrawStr(&u8g,  0, 62, "Sat:");
       u8g_DrawStr(&u8g,  20, 62, u8g_u8toa(pq.sat_cnt, 3));
+      /*
       u8g_DrawStr(&u8g,  51, 62, "Quality:");
       u8g_DrawStr(&u8g,  90, 62, u8g_u8toa(pq.gps_quality, 2));
+      */
+      u8g_DrawStr(&u8g,  51, 62, "Battery:");
+      u8g_DrawStr(&u8g,  90, 62, u8g_u8toa(battery_level, 1));
       
     } while ( u8g_NextPage(&u8g) );
   

@@ -2018,6 +2018,51 @@ n.a.
 n.a.
 ::
 :Controller
+A2 Micro Printer
+:Display/Size
+384x240
+:Mode
+BW
+:Set Contrast
+n.a.
+:Page Size
+384 Bytes
+:Com
+:Device
+<tt>u8g_dev_a2_micro_printer_384x240</tt>
+:C++ Constructor
+n.a.
+:Arduino
+impl. v1.14
+:Arduino Due
+impl. v1.14
+:Chipkit
+impl. v1.14
+:AVR
+impl. v1.14
+:Display/Size
+192x120
+:Mode
+BW
+:Set Contrast
+n.a.
+:Page Size
+192 Bytes
+:Com
+:Device
+<tt>u8g_dev_a2_micro_printer_192x120_ds</tt>
+:C++ Constructor
+n.a.
+:Arduino
+impl. v1.14
+:Arduino Due
+impl. v1.14
+:Chipkit
+impl. v1.14
+:AVR
+impl. v1.14
+::
+:Controller
 callback fn
 :Display/Size
 Flipdisk, 28x14
