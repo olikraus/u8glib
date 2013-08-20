@@ -90,6 +90,8 @@ void __attribute__ ((interrupt)) BOD_Handler(void)
 uint16_t ADCGetValue(uint8_t adc)
 {
   uint32_t gdr;
+  uint32_t d = 12*11;
+  uint8_t cnt;
 
   LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
   LPC_SYSCON->SYSAHBCLKCTRL |= 1<<13;	/* enable ADC clock */
@@ -123,25 +125,31 @@ uint16_t ADCGetValue(uint8_t adc)
   
   /*
     select adc port
-    divide freq by 12 to get 4 Mhz at 48 Mhz system clock
+    divide freq by d to get <4.5 Mhz at 48 Mhz system clock
     use sw controlled mode
     user 11 clocks per adc measure
     start conversion now
   */
-  LPC_ADC->CR = (1<<adc) | (12<<8) |(1<<26);
   
-  /* wait for completion */
-  for(;;)
+  
+  for ( cnt = 0; cnt < 4; cnt++ )
   {
-    gdr = LPC_ADC->GDR
-    if ( gdr & (1UL<<31) != 0 )
-      break;
+    LPC_ADC->CR = (1<<adc) | (d<<8) ;
+    LPC_ADC->CR |= (1<<24);
+    
+    /* wait for completion */
+    for(;;)
+    {
+      gdr = LPC_ADC->GDR;
+      if ( (gdr & (1UL<<31)) != 0 )
+	break;
+    }
   }
   
   LPC_SYSCON->PDRUNCFG |= 1<<4;	/* power down ADC */
   LPC_SYSCON->SYSAHBCLKCTRL &= ~(1<<13);	/* disable ADC clock */
   
-  return gdr>>6;
+  return (gdr>>6)&0x03ff;
 }
 
 
@@ -535,6 +543,8 @@ void picloop_gps_speed(void)
 {
   char time[12];
   char speed[4];
+  char adc[5];
+  uint16_t adcval;
   gps_float_t kmh;
   kmh = pq.interface.speed_in_knots * (gps_float_t)1.852;
   pg_itoa(speed, (uint16_t)kmh, 3);
@@ -544,6 +554,13 @@ void picloop_gps_speed(void)
   time[2] = ':';
   time[5] = ':';
   time[8] = '\0';
+  adcval = ADCGetValue(5);
+  /*
+  if ( adcval > 999 )
+    adcval = 999;
+  */
+  pg_itoa(adc, adcval, 4);
+  
 
     u8g_FirstPage(&u8g);
     do
@@ -557,12 +574,12 @@ void picloop_gps_speed(void)
       u8g_SetFont(&u8g, u8g_font_4x6r);
       u8g_DrawStr(&u8g,  0, 62, "Sat:");
       u8g_DrawStr(&u8g,  20, 62, u8g_u8toa(pq.sat_cnt, 3));
-      /*
-      u8g_DrawStr(&u8g,  51, 62, "Quality:");
-      u8g_DrawStr(&u8g,  90, 62, u8g_u8toa(pq.gps_quality, 2));
-      */
-      u8g_DrawStr(&u8g,  51, 62, "Battery:");
-      u8g_DrawStr(&u8g,  90, 62, u8g_u8toa(battery_level, 1));
+      
+      u8g_DrawStr(&u8g,  40, 62, "Bat:");
+      u8g_DrawStr(&u8g,  57, 62, adc);
+      
+      u8g_DrawStr(&u8g,  76, 62, "BOD:");
+      u8g_DrawStr(&u8g,  93, 62, u8g_u8toa(battery_level, 1));
       
     } while ( u8g_NextPage(&u8g) );
   
