@@ -90,8 +90,7 @@ void __attribute__ ((interrupt)) BOD_Handler(void)
 uint16_t ADCGetValue(uint8_t adc)
 {
   uint32_t gdr;
-  uint32_t d = 12*11;
-  uint8_t cnt;
+  uint32_t d = 12;
 
   LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
   LPC_SYSCON->SYSAHBCLKCTRL |= 1<<13;	/* enable ADC clock */
@@ -132,8 +131,6 @@ uint16_t ADCGetValue(uint8_t adc)
   */
   
   
-  for ( cnt = 0; cnt < 4; cnt++ )
-  {
     LPC_ADC->CR = (1<<adc) | (d<<8) ;
     LPC_ADC->CR |= (1<<24);
     
@@ -144,7 +141,6 @@ uint16_t ADCGetValue(uint8_t adc)
       if ( (gdr & (1UL<<31)) != 0 )
 	break;
     }
-  }
   
   LPC_SYSCON->PDRUNCFG |= 1<<4;	/* power down ADC */
   LPC_SYSCON->SYSAHBCLKCTRL &= ~(1<<13);	/* disable ADC clock */
@@ -409,6 +405,35 @@ uint8_t u8g_com_hw_spi_gps_board_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, vo
   return 1;
 }
 
+
+/*========================================================================*/
+/* m2tklib event source */
+
+/*
+uint8_t m2_es_arm(m2_p ep, uint8_t msg)
+{
+  
+  switch(msg)
+  {
+    case M2_ES_MSG_GET_KEY:
+      if ( ( LPC_GPIO0->DATA & (1<<1) ) == 0 ) 
+	return M2_KEY_NEXT;
+      if ( ( LPC_GPIO1->DATA & (1<<3) ) == 0 ) 
+	return M2_KEY_PREV;
+      if ( ( LPC_GPIO1->DATA & (1<<4) ) == 0 ) 
+	return M2_KEY_SELECT;
+      return M2_KEY_NONE;
+    case M2_ES_MSG_INIT:
+      LPC_GPIO0->DIR &= ~(1<<1);
+      LPC_GPIO1->DIR &= ~(1<<3);
+      LPC_GPIO1->DIR &= ~(1<<4);
+      return 0;
+  }
+  return 0;
+}
+*/
+
+
 /*========================================================================*/
 /* main */
 
@@ -544,7 +569,7 @@ void picloop_gps_speed(void)
   char time[12];
   char speed[4];
   char adc[5];
-  uint16_t adcval;
+  uint32_t adcval;
   gps_float_t kmh;
   kmh = pq.interface.speed_in_knots * (gps_float_t)1.852;
   pg_itoa(speed, (uint16_t)kmh, 3);
@@ -554,12 +579,14 @@ void picloop_gps_speed(void)
   time[2] = ':';
   time[5] = ':';
   time[8] = '\0';
-  adcval = ADCGetValue(5);
+  adcval = ADCGetValue(1);
   /*
   if ( adcval > 999 )
     adcval = 999;
   */
-  pg_itoa(adc, adcval, 4);
+  adcval *= 33;
+  adcval /= 0x0400;  
+  pg_itoa(adc, adcval, 3);
   
 
     u8g_FirstPage(&u8g);

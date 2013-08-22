@@ -44,6 +44,10 @@ SRC:=$(wildcard *.c)
 U8GPATH:=/home/kraus/src/u8g/u8glib/csrc
 # U8glib path to c source files
 U8GFONTPATH:=/home/kraus/src/u8g/u8glib/sfntsrc
+# M2tklib path to c source files
+M2PATH:=/home/kraus/src/m2/m2tklib/src
+# M2tklib path to dev files
+M2DEVPATH:=/home/kraus/src/m2/m2tklib/dev/u8glib
 
 
 # The frequency of the target device
@@ -77,13 +81,16 @@ FLASHPORT:=/dev/ttyUSB0
 # U8G Source files
 U8GSRC:=$(wildcard $(U8GPATH)/*.c) $(wildcard $(U8GFONTPATH)/*.c)
 
+# U8G Source files
+M2SRC:=$(wildcard $(M2PATH)/*.c) $(wildcard $(M2DEVPATH)/*.c)
+
 # Internal Variable Names
 LIBNAME:=$(TARGETNAME).a
 ELFNAME:=$(TARGETNAME).elf
 HEXNAME:=$(TARGETNAME).hex
 DISNAME:=$(TARGETNAME).dis
 MAPNAME:=$(TARGETNAME).map
-OBJ:=$(SRC:.c=.o) $(SYSSRC:.c=.o) $(U8GSRC:.c=.o) $(STARTUP:.S=.o)
+OBJ:=$(SRC:.c=.o) $(SYSSRC:.c=.o) $(U8GSRC:.c=.o) $(M2SRC:.c=.o) $(STARTUP:.S=.o)
 
 # Replace standard build tools by avr tools
 CC:=$(GCCPATH)/bin/arm-none-eabi-gcc
@@ -94,7 +101,7 @@ SIZE:=$(GCCPATH)/bin/arm-none-eabi-size
 
 # Common flags
 COMMON_FLAGS = -DF_CPU=$(F_CPU) -mthumb -mcpu=$(MCPU)
-COMMON_FLAGS += -Wall -I. -I$(SYSINC) -I$(U8GPATH)
+COMMON_FLAGS += -Wall -I. -I$(SYSINC) -I$(U8GPATH) -I$(M2PATH)
 # default stack size is 0x0c00
 COMMON_FLAGS += -D__STACK_SIZE=0x0a00
 COMMON_FLAGS += -Os -flto 
