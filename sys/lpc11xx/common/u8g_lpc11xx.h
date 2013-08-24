@@ -48,6 +48,7 @@ void delay_micro_seconds(uint32_t us);
 
 void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup) U8G_NOINLINE;
 void set_gpio(uint16_t pin, uint8_t level) U8G_NOINLINE;
+uint8_t get_gpio(uint16_t pin) U8G_NOINLINE;
 
 void spi_init(uint32_t ns) U8G_NOINLINE;
 void spi_out(uint8_t data);

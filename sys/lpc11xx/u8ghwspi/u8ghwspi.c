@@ -176,8 +176,7 @@ uint8_t u8g_com_hw_spi_gps_board_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, vo
 
 u8g_t u8g;
 
-
-void draw(void)
+void draw(uint8_t pos)
 {
   if ( u8g_GetMode(&u8g) == U8G_MODE_HICOLOR || u8g_GetMode(&u8g) == U8G_MODE_R3G3B2) {
     /* draw background (area is 128x128) */
@@ -202,13 +201,14 @@ void draw(void)
     u8g_SetRGB(&u8g, 255,255,255);
   }
   u8g_SetFont(&u8g, u8g_font_unifont);
-  u8g_DrawStr(&u8g,  0, 22, "Hello World!");
+  u8g_DrawStr(&u8g,  0, 22+pos, "Hello World!");
 }
 
 void main()
 {
   volatile uint32_t i, cnt = 100000;
-  LED_GPIO->DIR |= 1 << LED_PIN;	  
+  LED_GPIO->DIR |= 1 << LED_PIN;
+    uint8_t pos = 0;
 
   //spi_init(50);
   
@@ -224,12 +224,15 @@ void main()
     u8g_FirstPage(&u8g);
     do
     {
-      draw();
+      draw(pos);
     } while ( u8g_NextPage(&u8g) );
     LED_GPIO->DATA |= 1 << LED_PIN;
     u8g_Delay(100);
     LED_GPIO->DATA &= ~(1 << LED_PIN);
     u8g_Delay(100);
+    
+    pos++;
+    pos &= 15;
   }
   
 }
