@@ -74,6 +74,98 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
   sys_tick_irq_cnt++;
 }
 
+/*========================================================================*/
+
+#define A0_GPIO	LPC_GPIO0
+#define A0_PIN 	11
+
+#define CS_GPIO	LPC_GPIO0
+#define CS_PIN 	6
+
+#define RST_GPIO	LPC_GPIO0
+#define RST_PIN 	5
+
+
+uint8_t u8g_com_hw_spi_gps_board_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+{
+  switch(msg)
+  {
+    case U8G_COM_MSG_STOP:
+      break;
+    
+    case U8G_COM_MSG_INIT:
+
+      LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
+
+      spi_init(400);
+
+      LPC_IOCON->PIO0_5 = 1<<8;			/* select standard GPIO mode, disable I2C */
+      LPC_IOCON->PIO0_6 = 128+64;				/* select GPIO mode */
+      LPC_IOCON->R_PIO0_11 = 128+64+1;			/* select GPIO mode */
+        
+      A0_GPIO->DIR |= 1 << A0_PIN;
+      CS_GPIO->DIR |= 1 << CS_PIN;
+      RST_GPIO->DIR |= 1 << RST_PIN;
+      
+      u8g_MicroDelay();      
+      break;
+    
+    case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
+      u8g_10MicroDelay();
+      if ( arg_val != 0 )
+	  A0_GPIO->DATA |= 1 << A0_PIN;
+      else
+	  A0_GPIO->DATA &= ~(1 << A0_PIN);
+      u8g_10MicroDelay();
+     break;
+
+    case U8G_COM_MSG_CHIP_SELECT:
+      if ( arg_val == 0 )
+      {
+        /* disable */
+	uint8_t i;
+	
+	/* this delay is required to avoid that the display is switched off too early --> DOGS102 with LPC1114 */
+	for( i = 0; i < 5; i++ )
+	  u8g_10MicroDelay();
+	CS_GPIO->DATA |= 1 << CS_PIN;
+	u8g_MicroDelay();
+      }
+      else
+      {
+        /* enable */
+	CS_GPIO->DATA &= ~(1 << CS_PIN);
+	u8g_MicroDelay();
+      }
+      break;
+      
+    case U8G_COM_MSG_RESET:
+      if ( arg_val != 0 )
+	  RST_GPIO->DATA |= 1 << RST_PIN;
+      else
+	  RST_GPIO->DATA &= ~(1 << RST_PIN);
+      u8g_10MicroDelay();
+      break;
+      
+    case U8G_COM_MSG_WRITE_BYTE:
+      spi_out(arg_val);
+      u8g_MicroDelay();
+      break;
+    
+    case U8G_COM_MSG_WRITE_SEQ:
+    case U8G_COM_MSG_WRITE_SEQ_P:
+      {
+        register uint8_t *ptr = arg_ptr;
+        while( arg_val > 0 )
+        {
+          spi_out(*ptr++);
+          arg_val--;
+        }
+      }
+      break;
+  }
+  return 1;
+}
 
 
 /*========================================================================*/
@@ -108,9 +200,9 @@ void draw(void)
       }
     }
     u8g_SetRGB(&u8g, 255,255,255);
-    u8g_SetFont(&u8g, u8g_font_unifont);
-    u8g_DrawStr(&u8g,  0, 22, "Hello World!");
   }
+  u8g_SetFont(&u8g, u8g_font_unifont);
+  u8g_DrawStr(&u8g,  0, 22, "Hello World!");
 }
 
 void main()
@@ -118,12 +210,14 @@ void main()
   volatile uint32_t i, cnt = 100000;
   LED_GPIO->DIR |= 1 << LED_PIN;	  
 
-  spi_init(50);
+  //spi_init(50);
   
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_hicolor_hw_spi, u8g_com_hw_spi_fn);
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1325_nhd27oled_bw_hw_spi, u8g_com_hw_spi_fn);
-u8g_InitComFn(&u8g, &u8g_dev_st7565_dogm132_hw_spi, u8g_com_hw_spi_fn);
+  //u8g_InitComFn(&u8g, &u8g_dev_st7565_dogm132_hw_spi, u8g_com_hw_spi_fn);
+  u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_gps_board_fn);
+  //u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_fn);
 
   for(;;)
   {
@@ -138,23 +232,4 @@ u8g_InitComFn(&u8g, &u8g_dev_st7565_dogm132_hw_spi, u8g_com_hw_spi_fn);
     u8g_Delay(100);
   }
   
-  while (1)
-  {
-    for( i = 0; i < cnt; i++ ) 
-      ;
-    LED_GPIO->DATA |= 1 << LED_PIN;
-    for( i = 0; i < cnt; i++ )
-      ;
-    LED_GPIO->DATA &= ~(1 << LED_PIN);
-  }
-  
-  while (1)
-  {
-    for( i = 0; i < cnt; i++ ) 
-      spi_out(0x0a0);
-    LED_GPIO->DATA |= 1 << LED_PIN;
-    for( i = 0; i < cnt; i++ )
-      spi_out(0x0a0);
-    LED_GPIO->DATA &= ~(1 << LED_PIN);
-  }
 }

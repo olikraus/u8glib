@@ -34,6 +34,13 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
 
+
+  The following delay procedures must be implemented for u8glib:
+
+  void u8g_Delay(uint16_t val)		Delay by "val" milliseconds
+  void u8g_MicroDelay(void)		Delay be one microsecond
+  void u8g_10MicroDelay(void)	Delay by 10 microseconds
+
 */
 
 #include "u8g_lpc11xx.h"
@@ -62,6 +69,8 @@
   LPC_SYSCON->MAINCLKUEN = 1;	
 
   LPC_SYSCON->SYSAHBCLKDIV = 1;			/* set AHB clock divider to 1 */
+  
+  SystemCoreClock = 48000000UL;
 }
 
 /*========================================================================*/
@@ -219,7 +228,6 @@ void spi_init(uint32_t ns)
     CPSR = (SystemCoreClock/10000) * ns / 100000 
   */
   cpsr = SystemCoreClock;
-  cpsr = 48000000UL;
   cpsr /= 10000UL;
   cpsr *= ns;
   cpsr += 100000UL  - 1UL;		/* round up */
@@ -241,12 +249,58 @@ void spi_out(uint8_t data)
   LPC_SSP0->DR = data;
 }
 
+/*========================================================================*/
+/* generic gpio procedures (not required for u8glib) */
+
+struct _lpc_pin_info_struct
+{
+  __IO uint32_t *iocon_adr;
+  uint32_t iocon_gpio_value_no_pullup;
+  uint32_t iocon_gpio_value_pullup;		/* identical to iocon_gpio_value_no_pullup if there is no pullup */
+  uint8_t gpio_group;
+  uint8_t gpio_bit;
+  
+};
+typedef struct _lpc_pin_info_struct lpc_pin_info_struct;
+
+const lpc_pin_info_struct lpc11xx_pin[4*12] = 
+{
+  { &(LPC_IOCON->RESET_PIO0_0), 		128+64+1, 128+64+16+1, 0, 0 },
+  { &(LPC_IOCON->PIO0_1), 			128+64, 128+64+16, 0, 1 },
+  { &(LPC_IOCON->PIO0_2), 			128+64, 128+64+16, 0, 2 },
+  { &(LPC_IOCON->PIO0_3), 			128+64, 128+64+16, 0, 3 },
+  { &(LPC_IOCON->PIO0_4), 			256,  256, 0, 4 },
+  { &(LPC_IOCON->PIO0_5), 			256,  256, 0, 5 },  
+  { &(LPC_IOCON->PIO0_6), 			128+64, 128+64+16, 0, 6 },
+  { &(LPC_IOCON->PIO0_7), 			128+64, 128+64+16, 0, 7 },
+  { &(LPC_IOCON->PIO0_8), 			128+64, 128+64+16, 0, 8 },
+  { &(LPC_IOCON->PIO0_9), 			128+64, 128+64+16, 0, 9 },
+  { &(LPC_IOCON->SWCLK_PIO0_10), 	128+64+1, 128+64+16+1, 0, 10 },
+  { &(LPC_IOCON->R_PIO0_11),		128+64+1, 128+64+16+1, 0, 11 },  
+  { &(LPC_IOCON->R_PIO1_0), 			128+64+1, 128+64+16+1, 1, 0 },
+  { &(LPC_IOCON->R_PIO1_1), 			128+64+1, 128+64+16+1, 1, 1 },
+  { &(LPC_IOCON->R_PIO1_2), 			128+64+1, 128+64+16+1, 1, 2 },
+  { &(LPC_IOCON->SWDIO_PIO1_3), 	128+64+1, 128+64+16+1, 1, 3 },
+  { &(LPC_IOCON->PIO1_4), 			128+64, 128+64+16, 1, 4 },
+  { &(LPC_IOCON->PIO1_5), 			128+64, 128+64+16, 1, 5 },
+  { &(LPC_IOCON->PIO1_6), 			128+64, 128+64+16, 1, 6 },
+  { &(LPC_IOCON->PIO1_7), 			128+64, 128+64+16, 1, 7 },
+  { &(LPC_IOCON->PIO1_8), 			128+64, 128+64+16, 1, 8 },
+  { &(LPC_IOCON->PIO1_9), 			128+64, 128+64+16, 1, 9 },
+  { &(LPC_IOCON->PIO1_10), 			128+64, 128+64+16, 1, 10 },
+  { &(LPC_IOCON->PIO1_11), 			128+64, 128+64+16, 1, 11 },
+  
+  
+};
+
+
+
 
 
 
 /*========================================================================*/
 /*
-  The following delay procedures must be implemented
+  The following delay procedures must be implemented for u8glib
 
   void u8g_Delay(uint16_t val)		Delay by "val" milliseconds
   void u8g_MicroDelay(void)		Delay be one microsecond
@@ -276,6 +330,7 @@ void u8g_10MicroDelay(void)
   delay_micro_seconds(10);
 #endif
 }
+
 
 
 
@@ -310,6 +365,7 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
       A0_GPIO->DIR |= 1 << A0_PIN;
       CS_GPIO->DIR |= 1 << CS_PIN;
       RST_GPIO->DIR |= 1 << RST_PIN;
+
       
       if ( arg_val <= U8G_SPI_CLK_CYCLE_50NS )
       {
@@ -323,7 +379,7 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
       {
 	spi_init(400);
       }
-      else /* 1200ns */
+      else
       {
 	spi_init(1200);
       }
