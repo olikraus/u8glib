@@ -165,6 +165,122 @@ void delay_micro_seconds(uint32_t us)
   delay_system_ticks(sys_ticks);  
 }
 
+/*========================================================================*/
+/* generic gpio procedures (not required for u8glib) */
+
+struct _lpc_pin_info_struct
+{
+  uint16_t offset;
+  uint16_t iocon_gpio_value_no_pullup;
+  uint16_t iocon_gpio_value_pullup;		/* identical to iocon_gpio_value_no_pullup if there is no pullup */
+  uint8_t gpio_group;
+  uint8_t gpio_bit;
+  
+};
+typedef struct _lpc_pin_info_struct lpc_pin_info_struct;
+
+const lpc_pin_info_struct lpc11xx_pin[] = 
+{
+  { offsetof(LPC_IOCON_TypeDef,RESET_PIO0_0), 		128+64+1, 128+64+16+1, 0, 0 },
+  { offsetof(LPC_IOCON_TypeDef,PIO0_1), 			128+64, 128+64+16, 0, 1 },
+  { offsetof(LPC_IOCON_TypeDef,PIO0_2), 			128+64, 128+64+16, 0, 2 },
+  { offsetof(LPC_IOCON_TypeDef,PIO0_3), 			128+64, 128+64+16, 0, 3 },
+  { offsetof(LPC_IOCON_TypeDef,PIO0_4), 			256,  256, 0, 4 },
+  { offsetof(LPC_IOCON_TypeDef,PIO0_5), 			256,  256, 0, 5 },  
+  { offsetof(LPC_IOCON_TypeDef,PIO0_6), 			128+64, 128+64+16, 0, 6 },
+  { offsetof(LPC_IOCON_TypeDef,PIO0_7), 			128+64, 128+64+16, 0, 7 },
+  { offsetof(LPC_IOCON_TypeDef,PIO0_8), 			128+64, 128+64+16, 0, 8 },
+  { offsetof(LPC_IOCON_TypeDef,PIO0_9), 			128+64, 128+64+16, 0, 9 },
+  { offsetof(LPC_IOCON_TypeDef,SWCLK_PIO0_10), 	128+64+1, 128+64+16+1, 0, 10 },
+  { offsetof(LPC_IOCON_TypeDef,R_PIO0_11),		128+64+1, 128+64+16+1, 0, 11 },  
+  { 0, 									0, 0 , 0, 0 },
+  { 0, 									0, 0 , 0, 0 },
+  { 0, 									0, 0 , 0, 0 },
+  { 0, 									0, 0 , 0, 0 },
+  
+  { offsetof(LPC_IOCON_TypeDef,R_PIO1_0), 			128+64+1, 128+64+16+1, 1, 0 },
+  { offsetof(LPC_IOCON_TypeDef,R_PIO1_1), 			128+64+1, 128+64+16+1, 1, 1 },
+  { offsetof(LPC_IOCON_TypeDef,R_PIO1_2), 			128+64+1, 128+64+16+1, 1, 2 },
+  { offsetof(LPC_IOCON_TypeDef,SWDIO_PIO1_3), 	128+64+1, 128+64+16+1, 1, 3 },
+  { offsetof(LPC_IOCON_TypeDef,PIO1_4), 			128+64, 128+64+16, 1, 4 },
+  { offsetof(LPC_IOCON_TypeDef,PIO1_5), 			128+64, 128+64+16, 1, 5 },
+  { offsetof(LPC_IOCON_TypeDef,PIO1_6), 			128+64, 128+64+16, 1, 6 },
+  { offsetof(LPC_IOCON_TypeDef,PIO1_7), 			128+64, 128+64+16, 1, 7 },
+  { offsetof(LPC_IOCON_TypeDef,PIO1_8), 			128+64, 128+64+16, 1, 8 },
+  { offsetof(LPC_IOCON_TypeDef,PIO1_9), 			128+64, 128+64+16, 1, 9 },
+  { offsetof(LPC_IOCON_TypeDef,PIO1_10), 			128+64, 128+64+16, 1, 10 },
+  { offsetof(LPC_IOCON_TypeDef,PIO1_11), 			128+64, 128+64+16, 1, 11 },
+  { 0, 									0, 0 , 0, 0 },
+  { 0, 									0, 0 , 0, 0 },
+  { 0, 									0, 0 , 0, 0 },
+  { 0, 									0, 0 , 0, 0 },
+  
+  { offsetof(LPC_IOCON_TypeDef,PIO2_0), 			128+64, 128+64+16, 2, 0 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_1), 			128+64, 128+64+16, 2, 1 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_2), 			128+64, 128+64+16, 2, 2 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_3), 			128+64, 128+64+16, 2, 3 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_4), 			128+64, 128+64+16, 2, 4 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_5), 			128+64, 128+64+16, 2, 5 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_6), 			128+64, 128+64+16, 2, 6 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_7), 			128+64, 128+64+16, 2, 7 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_8), 			128+64, 128+64+16, 2, 8 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_9), 			128+64, 128+64+16, 2, 9 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_10), 			128+64, 128+64+16, 2, 10 },
+  { offsetof(LPC_IOCON_TypeDef,PIO2_11), 			0, 16, 2, 11 },
+  { 0, 									0, 0 , 0, 0 },
+  { 0, 									0, 0 , 0, 0 },
+  { 0, 									0, 0 , 0, 0 },
+  { 0, 									0, 0 , 0, 0 },
+  
+  { offsetof(LPC_IOCON_TypeDef,PIO3_0), 			128+64, 128+64+16, 3, 0 },
+  { offsetof(LPC_IOCON_TypeDef,PIO3_1), 			128+64, 128+64+16, 3, 1 },
+  { offsetof(LPC_IOCON_TypeDef,PIO3_2), 			128+64, 128+64+16, 3, 2 },
+  { offsetof(LPC_IOCON_TypeDef,PIO3_3), 			128+64, 128+64+16, 3, 3 },
+  { offsetof(LPC_IOCON_TypeDef,PIO3_4), 			128+64, 128+64+16, 3, 4 },
+  { offsetof(LPC_IOCON_TypeDef,PIO3_5), 			0, 16, 3, 5 },
+  
+};
+
+LPC_GPIO_TypeDef   *lpc11xx_gpio_base[4] = {LPC_GPIO0, LPC_GPIO1, LPC_GPIO2, LPC_GPIO3};
+
+
+void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup)
+{
+  uint32_t value;
+  LPC_GPIO_TypeDef   *gpio;
+  
+  if ( is_pullup == 0 )
+    value = lpc11xx_pin[pin].iocon_gpio_value_no_pullup;
+  else
+    value = lpc11xx_pin[pin].iocon_gpio_value_pullup;
+  *(__IO uint32_t *)(((char *)LPC_IOCON)+(size_t)(lpc11xx_pin[pin].offset)) = value;
+  
+  gpio = lpc11xx_gpio_base[pin >> 4];
+  
+  if ( is_output == 0 )
+    gpio->DIR &= ~( 1UL << (pin & 0x0f));
+  else
+    gpio->DIR |= ( 1UL << (pin & 0x0f));  
+}
+
+void set_gpio(uint16_t pin, uint8_t level)
+{
+  LPC_GPIO_TypeDef   *gpio;
+  gpio = lpc11xx_gpio_base[pin >> 4];
+  if ( level == 0 )
+  {
+    gpio->MASKED_ACCESS[1<<(pin & 0x0f)] = 0;
+    //gpio->DATA &= ~( 1UL << (pin & 0x0f));
+  }
+  else
+  {
+    gpio->MASKED_ACCESS[1<<(pin & 0x0f)] = ~0UL;
+    //gpio->DATA |= ( 1UL << (pin & 0x0f));  
+  }
+}
+
+
+
 
 /*========================================================================*/
 /* 
@@ -207,6 +323,11 @@ void spi_init(uint32_t ns)
   uint32_t cpol = 1;
   uint32_t cpha = 1;
   uint32_t cpsr;
+
+  set_gpio_mode(0, 0, 0);
+  set_gpio_mode(1, 0, 0);
+  set_gpio_mode(2, 0, 0);
+  set_gpio(2,  0);
   
   LPC_SYSCON->PRESETCTRL |= 1<<0;	/* de-asserted reset SSP0 */
   LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
@@ -250,55 +371,6 @@ void spi_out(uint8_t data)
 }
 
 /*========================================================================*/
-/* generic gpio procedures (not required for u8glib) */
-
-struct _lpc_pin_info_struct
-{
-  __IO uint32_t *iocon_adr;
-  uint32_t iocon_gpio_value_no_pullup;
-  uint32_t iocon_gpio_value_pullup;		/* identical to iocon_gpio_value_no_pullup if there is no pullup */
-  uint8_t gpio_group;
-  uint8_t gpio_bit;
-  
-};
-typedef struct _lpc_pin_info_struct lpc_pin_info_struct;
-
-const lpc_pin_info_struct lpc11xx_pin[4*12] = 
-{
-  { &(LPC_IOCON->RESET_PIO0_0), 		128+64+1, 128+64+16+1, 0, 0 },
-  { &(LPC_IOCON->PIO0_1), 			128+64, 128+64+16, 0, 1 },
-  { &(LPC_IOCON->PIO0_2), 			128+64, 128+64+16, 0, 2 },
-  { &(LPC_IOCON->PIO0_3), 			128+64, 128+64+16, 0, 3 },
-  { &(LPC_IOCON->PIO0_4), 			256,  256, 0, 4 },
-  { &(LPC_IOCON->PIO0_5), 			256,  256, 0, 5 },  
-  { &(LPC_IOCON->PIO0_6), 			128+64, 128+64+16, 0, 6 },
-  { &(LPC_IOCON->PIO0_7), 			128+64, 128+64+16, 0, 7 },
-  { &(LPC_IOCON->PIO0_8), 			128+64, 128+64+16, 0, 8 },
-  { &(LPC_IOCON->PIO0_9), 			128+64, 128+64+16, 0, 9 },
-  { &(LPC_IOCON->SWCLK_PIO0_10), 	128+64+1, 128+64+16+1, 0, 10 },
-  { &(LPC_IOCON->R_PIO0_11),		128+64+1, 128+64+16+1, 0, 11 },  
-  { &(LPC_IOCON->R_PIO1_0), 			128+64+1, 128+64+16+1, 1, 0 },
-  { &(LPC_IOCON->R_PIO1_1), 			128+64+1, 128+64+16+1, 1, 1 },
-  { &(LPC_IOCON->R_PIO1_2), 			128+64+1, 128+64+16+1, 1, 2 },
-  { &(LPC_IOCON->SWDIO_PIO1_3), 	128+64+1, 128+64+16+1, 1, 3 },
-  { &(LPC_IOCON->PIO1_4), 			128+64, 128+64+16, 1, 4 },
-  { &(LPC_IOCON->PIO1_5), 			128+64, 128+64+16, 1, 5 },
-  { &(LPC_IOCON->PIO1_6), 			128+64, 128+64+16, 1, 6 },
-  { &(LPC_IOCON->PIO1_7), 			128+64, 128+64+16, 1, 7 },
-  { &(LPC_IOCON->PIO1_8), 			128+64, 128+64+16, 1, 8 },
-  { &(LPC_IOCON->PIO1_9), 			128+64, 128+64+16, 1, 9 },
-  { &(LPC_IOCON->PIO1_10), 			128+64, 128+64+16, 1, 10 },
-  { &(LPC_IOCON->PIO1_11), 			128+64, 128+64+16, 1, 11 },
-  
-  
-};
-
-
-
-
-
-
-/*========================================================================*/
 /*
   The following delay procedures must be implemented for u8glib
 
@@ -310,6 +382,7 @@ const lpc_pin_info_struct lpc11xx_pin[4*12] =
 
 void u8g_Delay(uint16_t val)
 {
+    
   delay_micro_seconds(1000UL*(uint32_t)val);
 }
 

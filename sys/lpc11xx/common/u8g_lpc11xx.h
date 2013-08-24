@@ -45,6 +45,10 @@
 void lpc11xx_set_irc_48mhz(void) U8G_NOINLINE;
 void delay_system_ticks(uint32_t sys_ticks);
 void delay_micro_seconds(uint32_t us);
+
+void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup) U8G_NOINLINE;
+void set_gpio(uint16_t pin, uint8_t level) U8G_NOINLINE;
+
 void spi_init(uint32_t ns) U8G_NOINLINE;
 void spi_out(uint8_t data);
 uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
