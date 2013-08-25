@@ -178,7 +178,8 @@ typedef struct _lpc_pin_info_struct lpc_pin_info_struct;
 
 const lpc_pin_info_struct lpc11xx_pin_info[] = 
 {
-  { offsetof(LPC_IOCON_TypeDef,RESET_PIO0_0), 		128+64+1, 128+64+16+1},
+  /* { offsetof(LPC_IOCON_TypeDef,RESET_PIO0_0), 		128+64+1, 128+64+16+1},   port function disabled */
+  { offsetof(LPC_IOCON_TypeDef,RESET_PIO0_0), 		128+64+16, 128+64+16}, /* this will keep the reset function */
   { offsetof(LPC_IOCON_TypeDef,PIO0_1), 			128+64, 128+64+16},
   { offsetof(LPC_IOCON_TypeDef,PIO0_2), 			128+64, 128+64+16},
   { offsetof(LPC_IOCON_TypeDef,PIO0_3), 			128+64, 128+64+16},
@@ -245,7 +246,10 @@ void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup)
 {
   uint32_t value;
   LPC_GPIO_TypeDef   *gpio;
-  
+
+ LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
+
+   
   if ( is_pullup == 0 )
     value = lpc11xx_pin_info[pin].iocon_gpio_value_no_pullup;
   else
@@ -272,7 +276,7 @@ void set_gpio(uint16_t pin, uint8_t level)
   else
   {
     gpio->MASKED_ACCESS[1<<(pin)] = ~0UL;
-    //gpio->DATA |= ( 1UL << (pin);  
+    //gpio->DATA |= ( 1UL << (pin));  
   }
 }
 

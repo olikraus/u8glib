@@ -46,6 +46,8 @@ void lpc11xx_set_irc_48mhz(void) U8G_NOINLINE;
 void delay_system_ticks(uint32_t sys_ticks);
 void delay_micro_seconds(uint32_t us);
 
+
+#define PIN(base,bit) ((base)*16+(bit))
 void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup) U8G_NOINLINE;
 void set_gpio(uint16_t pin, uint8_t level) U8G_NOINLINE;
 uint8_t get_gpio(uint16_t pin) U8G_NOINLINE;
