@@ -74,105 +74,6 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
   sys_tick_irq_cnt++;
 }
 
-/*========================================================================*/
-
-#define A0_GPIO	LPC_GPIO0
-#define A0_PIN 	11
-
-#define CS_GPIO	LPC_GPIO0
-#define CS_PIN 	6
-
-#define RST_GPIO	LPC_GPIO0
-#define RST_PIN 	5
-
-
-uint8_t u8g_com_hw_spi_gps_board_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
-{
-  uint16_t pin_a0 = PIN(0,11);
-  uint16_t pin_cs = PIN(0,6);
-  uint16_t pin_rst = PIN(0,5);
-  
-  switch(msg)
-  {
-    case U8G_COM_MSG_STOP:
-      break;
-    
-    case U8G_COM_MSG_INIT:
-
-       if ( arg_val <= U8G_SPI_CLK_CYCLE_50NS )
-      {
-	spi_init(50);
-      }
-      else if ( arg_val <= U8G_SPI_CLK_CYCLE_300NS )
-      {
-	spi_init(300);
-      }
-      else if ( arg_val <= U8G_SPI_CLK_CYCLE_400NS )
-      {
-	spi_init(400);
-      }
-      else
-      {
-	spi_init(1200);
-      }
-
-      set_gpio_mode(pin_rst, 1, 0);		/* output, no pullup */
-      set_gpio_mode(pin_cs, 1, 0);		/* output, no pullup */
-      set_gpio_mode(pin_a0, 1, 0);		/* output, no pullup */
-
-      u8g_MicroDelay();      
-      break;
-    
-    case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      u8g_10MicroDelay();
-      set_gpio(pin_a0, arg_val);
-      u8g_10MicroDelay();
-     break;
-
-    case U8G_COM_MSG_CHIP_SELECT:
-      if ( arg_val == 0 )
-      {
-        /* disable */
-	uint8_t i;
-	
-	/* this delay is required to avoid that the display is switched off too early --> DOGS102 with LPC1114 */
-	for( i = 0; i < 5; i++ )
-	  u8g_10MicroDelay();
-	set_gpio(pin_cs, 1);
-      }
-      else
-      {
-        /* enable */
-	set_gpio(pin_cs, 0);
-      }
-      u8g_MicroDelay();
-      break;
-      
-    case U8G_COM_MSG_RESET:
-      set_gpio(pin_rst, arg_val);
-      u8g_10MicroDelay();
-      break;
-      
-    case U8G_COM_MSG_WRITE_BYTE:
-      spi_out(arg_val);
-      u8g_MicroDelay();
-      break;
-    
-    case U8G_COM_MSG_WRITE_SEQ:
-    case U8G_COM_MSG_WRITE_SEQ_P:
-      {
-        register uint8_t *ptr = arg_ptr;
-        while( arg_val > 0 )
-        {
-          spi_out(*ptr++);
-          arg_val--;
-        }
-      }
-      break;
-  }
-  return 1;
-}
-
 
 /*========================================================================*/
 /* main */
@@ -222,8 +123,8 @@ void main()
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1325_nhd27oled_bw_hw_spi, u8g_com_hw_spi_fn);
   //u8g_InitComFn(&u8g, &u8g_dev_st7565_dogm132_hw_spi, u8g_com_hw_spi_fn);
-  u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_gps_board_fn);
-  //u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_fn);
+  //u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_gps_board_fn);
+  u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_fn);
 
   for(;;)
   {

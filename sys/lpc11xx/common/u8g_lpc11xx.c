@@ -428,6 +428,18 @@ void u8g_10MicroDelay(void)
 
 uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
+  /* gps board */
+  uint16_t pin_a0 = PIN(0,11);
+  uint16_t pin_cs = PIN(0,6);
+  uint16_t pin_rst = PIN(0,5);
+
+  /* eval board */
+  /*
+  uint16_t pin_a0 = PIN(1,1);
+  uint16_t pin_cs = PIN(1,2);
+  uint16_t pin_rst = PIN(1,0);
+  */
+  
   switch(msg)
   {
     case U8G_COM_MSG_STOP:
@@ -435,18 +447,7 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
     
     case U8G_COM_MSG_INIT:
 
-      LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
-
-      LPC_IOCON->R_PIO1_0 = 1;			/* select GPIO mode */
-      LPC_IOCON->R_PIO1_1 = 1;			/* select GPIO mode */
-      LPC_IOCON->R_PIO1_2 = 1;			/* select GPIO mode */
-        
-      A0_GPIO->DIR |= 1 << A0_PIN;
-      CS_GPIO->DIR |= 1 << CS_PIN;
-      RST_GPIO->DIR |= 1 << RST_PIN;
-
-      
-      if ( arg_val <= U8G_SPI_CLK_CYCLE_50NS )
+       if ( arg_val <= U8G_SPI_CLK_CYCLE_50NS )
       {
 	spi_init(50);
       }
@@ -462,47 +463,41 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
       {
 	spi_init(1200);
       }
-      
+
+      set_gpio_mode(pin_rst, 1, 0);		/* output, no pullup */
+      set_gpio_mode(pin_cs, 1, 0);		/* output, no pullup */
+      set_gpio_mode(pin_a0, 1, 0);		/* output, no pullup */
+
       u8g_MicroDelay();      
       break;
     
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      if ( arg_val != 0 )
-	  A0_GPIO->DATA |= 1 << A0_PIN;
-      else
-	  A0_GPIO->DATA &= ~(1 << A0_PIN);
-      u8g_MicroDelay();
-      break;
+      u8g_10MicroDelay();
+      set_gpio(pin_a0, arg_val);
+      u8g_10MicroDelay();
+     break;
 
     case U8G_COM_MSG_CHIP_SELECT:
-#if defined(CS_GPIO)
       if ( arg_val == 0 )
       {
         /* disable */
 	uint8_t i;
-	
 	/* this delay is required to avoid that the display is switched off too early --> DOGS102 with LPC1114 */
 	for( i = 0; i < 5; i++ )
 	  u8g_10MicroDelay();
-	CS_GPIO->DATA |= 1 << CS_PIN;
-	u8g_MicroDelay();
+	set_gpio(pin_cs, 1);
       }
       else
       {
         /* enable */
-	CS_GPIO->DATA &= ~(1 << CS_PIN);
-	u8g_MicroDelay();
+	set_gpio(pin_cs, 0);
       }
-#endif
+      u8g_MicroDelay();
       break;
       
     case U8G_COM_MSG_RESET:
-#if defined(RST_GPIO)
-      if ( arg_val != 0 )
-	  RST_GPIO->DATA |= 1 << RST_PIN;
-      else
-	  RST_GPIO->DATA &= ~(1 << RST_PIN);
-#endif
+      set_gpio(pin_rst, arg_val);
+      u8g_10MicroDelay();
       break;
       
     case U8G_COM_MSG_WRITE_BYTE:

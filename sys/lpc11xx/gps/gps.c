@@ -281,7 +281,7 @@ void SystemInit()
   UARTInit(0);  
 #endif
  
- BODMonitorInit();
+  BODMonitorInit();
 }
 
 
