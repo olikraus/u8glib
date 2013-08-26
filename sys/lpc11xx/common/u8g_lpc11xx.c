@@ -45,6 +45,7 @@
 
 #include "u8g_lpc11xx.h"
 
+
 /*========================================================================*/
 /* system clock setup */
 
@@ -286,8 +287,7 @@ uint8_t get_gpio(uint16_t pin)
   pin &= 0x0f;
   if ( gpio->MASKED_ACCESS[1<<(pin)] == 0 )
     return 0;
-  return 1;
-  
+  return 1;  
 }
 
 

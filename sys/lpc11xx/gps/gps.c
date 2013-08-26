@@ -38,8 +38,6 @@
 #include "u8g_lpc11xx.h"
 #include "pq.h"
 
-#define SYS_TICK_PERIOD_IN_MS 10
-
 
 /*============================================================*/
 /* LPC11xx BOD Monitor: Try to guess external voltage with the BOD interrupts */
@@ -251,6 +249,7 @@ void UARTSendStr(const char *str)
 /*========================================================================*/
 /* SystemInit */
 
+#define SYS_TICK_PERIOD_IN_MS 10
 
 uint32_t SystemCoreClock;
 
@@ -258,9 +257,6 @@ void SystemInit()
 {    
  /* SystemInit() is called by the startup code */
  
-  /* init gps parser */  
-  pq_Init(&pq);
-
   /* increase clock speed to max */
 #if F_CPU >= 48000000
   lpc11xx_set_irc_48mhz();
@@ -273,15 +269,6 @@ void SystemInit()
   SysTick->LOAD = (SystemCoreClock/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS) - 1;
   SysTick->VAL = 0;
   SysTick->CTRL = 7;   /* enable, generate interrupt, do not divide by 2 */
-
-  /* listen to gps device */
-  #if F_CPU >= 48000000
-  UARTInit(1);
-#else
-  UARTInit(0);  
-#endif
- 
-  BODMonitorInit();
 }
 
 
@@ -617,8 +604,20 @@ void main()
   uint8_t c = 0;
   uint8_t y = 0;
   volatile uint32_t i, cnt = 100000;
-  LED_GPIO->DIR |= 1 << LED_PIN;	  
+  //LED_GPIO->DIR |= 1 << LED_PIN;	  
 
+  /* init gps parser */  
+  pq_Init(&pq);
+
+
+  /* listen to gps device */
+  #if F_CPU >= 48000000
+  UARTInit(1);
+#else
+  UARTInit(0);  
+#endif
+ 
+  BODMonitorInit();
 
 
   //spi_init(700);
@@ -626,7 +625,8 @@ void main()
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_hicolor_hw_spi, u8g_com_hw_spi_fn);
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1325_nhd27oled_bw_hw_spi, u8g_com_hw_spi_fn);
-  u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_gps_board_fn);
+  //u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_gps_board_fn);
+  u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_fn);		// nochmal testen
   u8g_SetRot180(&u8g);
 
   for(;;)
