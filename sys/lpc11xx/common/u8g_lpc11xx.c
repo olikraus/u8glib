@@ -34,12 +34,22 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
 
-
-  The following delay procedures must be implemented for u8glib:
+ 
+  The following delay procedures must be implemented for u8glib. This is done in this file:
 
   void u8g_Delay(uint16_t val)		Delay by "val" milliseconds
   void u8g_MicroDelay(void)		Delay be one microsecond
   void u8g_10MicroDelay(void)	Delay by 10 microseconds
+  
+  Additional requirements:
+  
+    1) Variable "SystemCoreClock" must be defined. This variable is accessed here.
+    2) SysTick must be enabled, but SysTick IRQ is not required. Any LOAD values are fine,
+      it is prefered to have at least 1ms
+
+  Optional:
+    If macro F_CPU is defined, then this value is used instead of SystemCoreClock
+
 
 */
 
@@ -50,6 +60,7 @@
 /* system clock setup */
 
 /* activate PLL for the int. RC osc. Assumes the IRC is already running */
+/* this procedure is not required for u8glib, but can be called from the init code */
  void lpc11xx_set_irc_48mhz(void)
  {
    /* oscillator controll registor, no change needed for int. RC osc. */
@@ -265,7 +276,7 @@ void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup)
     gpio->DIR |= ( 1UL << (pin & 0x0f));  
 }
 
-void set_gpio(uint16_t pin, uint8_t level)
+void set_gpio_level(uint16_t pin, uint8_t level)
 {
   LPC_GPIO_TypeDef  *gpio = lpc11xx_gpio_base[pin >> 4];
   pin &= 0x0f;
@@ -281,7 +292,7 @@ void set_gpio(uint16_t pin, uint8_t level)
   }
 }
 
-uint8_t get_gpio(uint16_t pin)
+uint8_t get_gpio_level(uint16_t pin)
 {
   LPC_GPIO_TypeDef  *gpio = lpc11xx_gpio_base[pin >> 4];
   pin &= 0x0f;
@@ -473,7 +484,7 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
     
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
       u8g_10MicroDelay();
-      set_gpio(pin_a0, arg_val);
+      set_gpio_level(pin_a0, arg_val);
       u8g_10MicroDelay();
      break;
 
@@ -485,18 +496,18 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
 	/* this delay is required to avoid that the display is switched off too early --> DOGS102 with LPC1114 */
 	for( i = 0; i < 5; i++ )
 	  u8g_10MicroDelay();
-	set_gpio(pin_cs, 1);
+	set_gpio_level(pin_cs, 1);
       }
       else
       {
         /* enable */
-	set_gpio(pin_cs, 0);
+	set_gpio_level(pin_cs, 0);
       }
       u8g_MicroDelay();
       break;
       
     case U8G_COM_MSG_RESET:
-      set_gpio(pin_rst, arg_val);
+      set_gpio_level(pin_rst, arg_val);
       u8g_10MicroDelay();
       break;
       
