@@ -37,42 +37,28 @@
 
 #include "u8g_lpc11xx.h"
 
-#define SYS_TICK_PERIOD_IN_MS 10
-
 
 /*========================================================================*/
-/* SystemInit */
+/* SystemInit & SysTick Interrupt */
+
+#define SYS_TICK_PERIOD_IN_MS 10
 
 uint32_t SystemCoreClock;
 
 void SystemInit()
 {    
   
-#if F_CPU >= 48000000
-  /* SystemInit() is called by the startup code */
-  lpc11xx_set_irc_48mhz();
-#endif
-  
-  /* according to system_LPC11xx.h it is expected, that the clock freq is set int SystemInit() */
-  SystemCoreClock = F_CPU;
+  init_system_clock();		/* SystemCoreClock will be set here */
   
   /* SysTick is defined in core_cm0.h */
   SysTick->LOAD = (SystemCoreClock/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS) - 1;
   SysTick->VAL = 0;
-  SysTick->CTRL = 7;   /* enable, generate interrupt, do not divide by 2 */
+  SysTick->CTRL = 7;   /* enable, generate interrupt (SysTick_Handler), do not divide by 2 */
 }
-
-
-/*========================================================================*/
-/* SysTick */
-
-volatile uint32_t sys_tick_irq_cnt=0;
 
 void __attribute__ ((interrupt)) SysTick_Handler(void)
 {
-  sys_tick_irq_cnt++;
 }
-
 
 /*========================================================================*/
 /* main */
@@ -112,9 +98,8 @@ void draw(uint8_t pos)
 
 void main()
 {
-  volatile uint32_t i, cnt = 100000;
   LED_GPIO->DIR |= 1 << LED_PIN;
-    uint8_t pos = 0;
+  uint8_t pos = 0;
 
   //spi_init(50);
   

@@ -46,23 +46,24 @@
     1) Variable "SystemCoreClock" must be defined. This variable is accessed here.
     2) SysTick must be enabled, but SysTick IRQ is not required. Any LOAD values are fine,
       it is prefered to have at least 1ms
-
-  Optional:
-    If macro F_CPU is defined, then this value is used instead of SystemCoreClock
-
-
+      Example:
+        SysTick->LOAD = (SystemCoreClock/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS) - 1;
+	SysTick->VAL = 0;
+	SysTick->CTRL = 7;   // enable, generate interrupt (SysTick_Handler), do not divide by 2
 */
 
 #include "u8g_lpc11xx.h"
 
 
 /*========================================================================*/
-/* system clock setup */
+/* system clock setup for LPC11xx*/
 
 /* activate PLL for the int. RC osc. Assumes the IRC is already running */
 /* this procedure is not required for u8glib, but can be called from the init code */
- void lpc11xx_set_irc_48mhz(void)
+ void init_system_clock(void)
  {
+   /* setup 48MHz for the LPC11xx */
+   
    /* oscillator controll registor, no change needed for int. RC osc. */
    LPC_SYSCON->SYSOSCCTRL = 0;		/* no bypass (bit 0), low freq range (bit 1), reset value is also 0 */
    
@@ -167,13 +168,9 @@ void delay_micro_seconds(uint32_t us)
 {
   uint32_t sys_ticks;
 
-#ifdef F_CPU 
-  sys_ticks = F_CPU / 1000000UL * us;
-#else  
   sys_ticks = SystemCoreClock;
   sys_ticks /=1000000UL;
   sys_ticks *= us;
-#endif
   delay_system_ticks(sys_ticks);  
 }
 
@@ -405,20 +402,12 @@ void u8g_Delay(uint16_t val)
 
 void u8g_MicroDelay(void)
 {
-#ifdef F_CPU 
-  _delay_system_ticks_sub(F_CPU / 1000000UL);
-#else
   delay_micro_seconds(1);
-#endif
 }
 
 void u8g_10MicroDelay(void)
 {
-#ifdef F_CPU 
-  _delay_system_ticks_sub(F_CPU / 100000UL);
-#else
   delay_micro_seconds(10);
-#endif
 }
 
 
@@ -426,16 +415,6 @@ void u8g_10MicroDelay(void)
 
 /*========================================================================*/
 /* u8glib com procedure */
-
-#define A0_GPIO	LPC_GPIO1
-#define A0_PIN 	1
-
-#define CS_GPIO	LPC_GPIO1
-#define CS_PIN 	2
-
-#define RST_GPIO	LPC_GPIO1
-#define RST_PIN 	0
-
 
 uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {

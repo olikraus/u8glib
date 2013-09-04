@@ -43,7 +43,7 @@
 #include "u8g.h"
 
 /* system helper procedures */
-void lpc11xx_set_irc_48mhz(void);	/* optional: can be called from init code */
+void init_system_clock(void);	/* optional: can be called from init code */
 
 void delay_system_ticks(uint32_t sys_ticks);	
 void delay_micro_seconds(uint32_t us);

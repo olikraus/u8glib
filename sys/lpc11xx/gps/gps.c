@@ -258,12 +258,7 @@ void SystemInit()
  /* SystemInit() is called by the startup code */
  
   /* increase clock speed to max */
-#if F_CPU >= 48000000
-  lpc11xx_set_irc_48mhz();
-#endif
-  
-  /* according to system_LPC11xx.h it is expected, that the clock freq is set int SystemInit() */
-  SystemCoreClock = F_CPU;
+  init_system_clock();		/* SystemCoreClock will be set here */
   
   /* SysTick is defined in core_cm0.h */
   SysTick->LOAD = (SystemCoreClock/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS) - 1;
@@ -611,11 +606,10 @@ void main()
 
 
   /* listen to gps device */
-  #if F_CPU >= 48000000
-  UARTInit(1);
-#else
-  UARTInit(0);  
-#endif
+  if ( SystemCoreClock >= 48000000 )
+    UARTInit(1);
+  else
+    UARTInit(0);  
  
   BODMonitorInit();
 

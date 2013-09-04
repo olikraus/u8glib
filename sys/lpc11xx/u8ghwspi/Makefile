@@ -46,10 +46,6 @@ U8GPATH:=/home/kraus/src/u8g/u8glib/csrc
 U8GFONTPATH:=/home/kraus/src/u8g/u8glib/sfntsrc
 
 
-# The frequency of the target device
-#F_CPU:=12000000
-F_CPU:=48000000
-
 # The CPU architecture (will be used for -mcpu)
 MCPU:=cortex-m0
 
@@ -93,7 +89,7 @@ OBJDUMP:=$(GCCPATH)/bin/arm-none-eabi-objdump
 SIZE:=$(GCCPATH)/bin/arm-none-eabi-size
 
 # Common flags
-COMMON_FLAGS = -DF_CPU=$(F_CPU) -mthumb -mcpu=$(MCPU)
+COMMON_FLAGS = -mthumb -mcpu=$(MCPU)
 COMMON_FLAGS += -Wall -I. -I$(SYSINC) -I$(U8GPATH)
 # default stack size is 0x0c00
 COMMON_FLAGS += -D__STACK_SIZE=0x0a00

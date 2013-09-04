@@ -50,10 +50,6 @@ M2PATH:=/home/kraus/src/m2/m2tklib/src
 M2DEVPATH:=/home/kraus/src/m2/m2tklib/dev/u8glib
 
 
-# The frequency of the target device
-#F_CPU:=12000000
-F_CPU:=48000000
-
 # The CPU architecture (will be used for -mcpu)
 MCPU:=cortex-m0
 
@@ -100,7 +96,7 @@ OBJDUMP:=$(GCCPATH)/bin/arm-none-eabi-objdump
 SIZE:=$(GCCPATH)/bin/arm-none-eabi-size
 
 # Common flags
-COMMON_FLAGS = -DF_CPU=$(F_CPU) -mthumb -mcpu=$(MCPU)
+COMMON_FLAGS = -mthumb -mcpu=$(MCPU)
 COMMON_FLAGS += -Wall -I. -I$(SYSINC) -I$(U8GPATH) -I$(M2PATH)
 # default stack size is 0x0c00
 COMMON_FLAGS += -D__STACK_SIZE=0x0a00
