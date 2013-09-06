@@ -62,7 +62,7 @@
 /* this procedure is not required for u8glib, but can be called from the init code */
  void init_system_clock(void)
  {
-   /* setup 48MHz for the LPC11xx */
+   /* setup 24MHz for the LPC122x (does not require additional wait states for the flash) */
    
    /* oscillator controll registor, no change needed for int. RC osc. */
    LPC_SYSCON->SYSOSCCTRL = 0;		/* no bypass (bit 0), low freq range (bit 1), reset value is also 0 */
@@ -71,7 +71,7 @@
   LPC_SYSCON->SYSPLLCLKUEN = 0;	/* confirm change by writing 0 and 1 to SYSPLLCLKUEN */
   LPC_SYSCON->SYSPLLCLKUEN = 1;
   
-  LPC_SYSCON->SYSPLLCTRL = 3 | (1 << 5);	/* 48 Mhz, m = 4, p = 2 */
+  LPC_SYSCON->SYSPLLCTRL = 1 | (3 << 5);	/* 48 Mhz, m = 2, p = 4 */
   LPC_SYSCON->PDRUNCFG &= ~(1UL<<7); 	/* power-up PLL */
 
   while (!(LPC_SYSCON->SYSPLLSTAT & 1))
@@ -83,7 +83,7 @@
 
   LPC_SYSCON->SYSAHBCLKDIV = 1;			/* set AHB clock divider to 1 */
   
-  SystemCoreClock = 48000000UL;
+  SystemCoreClock = 24000000UL;
 }
 
 /*========================================================================*/
