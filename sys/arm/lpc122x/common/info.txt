@@ -4,5 +4,5 @@ Controller specific files in this directory are from AN11069
 
 Todo
 - update irq vector table
-- gpio table
+- gpio table  --> done
 - spi procedire
