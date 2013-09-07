@@ -3,7 +3,7 @@
   u8g_arm.c
   
 
-  u8g utility procedures for LPC11xx
+  u8g utility procedures for LPC122x
 
   Universal 8bit Graphics Library
   
@@ -56,7 +56,7 @@
 
 
 /*========================================================================*/
-/* system clock setup for LPC11xx*/
+/* system clock setup for LPC122x */
 
 /* activate PLL for the int. RC osc. Assumes the IRC is already running */
 /* this procedure is not required for u8glib, but can be called from the init code */
@@ -180,75 +180,100 @@ void delay_micro_seconds(uint32_t us)
 struct _lpc_pin_info_struct
 {
   uint16_t offset;
-  uint16_t iocon_gpio_value_no_pullup;
-  uint16_t iocon_gpio_value_pullup;		/* identical to iocon_gpio_value_no_pullup if there is no pullup */
+  uint8_t iocon_gpio_value_no_pullup;
+  uint8_t iocon_gpio_value_pullup;		/* identical to iocon_gpio_value_no_pullup if there is no pullup */
 };
 typedef struct _lpc_pin_info_struct lpc_pin_info_struct;
 
 const lpc_pin_info_struct lpc11xx_pin_info[] = 
 {
-  /* { offsetof(LPC_IOCON_TypeDef,RESET_PIO0_0), 		128+64+1, 128+64+16+1},   port function disabled */
-  { offsetof(LPC_IOCON_TypeDef,RESET_PIO0_0), 		128+64+16, 128+64+16}, /* this will keep the reset function */
-  { offsetof(LPC_IOCON_TypeDef,PIO0_1), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO0_2), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO0_3), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO0_4), 			256,  256},
-  { offsetof(LPC_IOCON_TypeDef,PIO0_5), 			256,  256},  
-  { offsetof(LPC_IOCON_TypeDef,PIO0_6), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO0_7), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO0_8), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO0_9), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,SWCLK_PIO0_10), 	128+64+1, 128+64+16+1},
-  { offsetof(LPC_IOCON_TypeDef,R_PIO0_11),		128+64+1, 128+64+16+1},  
-  { 0, 									0, 0},
-  { 0, 									0, 0},
-  { 0, 									0, 0},
-  { 0, 									0, 0},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_0), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_1), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_2), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_3), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_4), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_5), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_6), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_7), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_8), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_9), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_10), 			128, 128},	/* no pullup available */
+  { offsetof(LPC_IOCON_TypeDef,PIO0_11), 			128, 128},	/* no pullup available */
+  { offsetof(LPC_IOCON_TypeDef,PIO0_12), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,RESET_PIO0_13), 		128+16, 128+16},  /* reset pin, disallow GPIO here, always keep pullup */
+  { offsetof(LPC_IOCON_TypeDef,PIO0_14), 		128, 128+16}, 
+  { offsetof(LPC_IOCON_TypeDef,PIO0_15), 		128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_16), 		128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_17), 		128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_18), 		128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_19), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_20), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_21), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_22), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_23), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_24), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,SWDIO_PIO0_25), 		128+6, 128+16+6},
+  { offsetof(LPC_IOCON_TypeDef,SWCLK_PIO0_26), 		128+6, 128+16+6},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_27), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_28), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO0_29), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,R_PIO0_30), 			128+1, 128+16+1},
+  { offsetof(LPC_IOCON_TypeDef,R_PIO0_31), 			128+1, 128+16+1},
   
-  { offsetof(LPC_IOCON_TypeDef,R_PIO1_0), 			128+64+1, 128+64+16+1},
-  { offsetof(LPC_IOCON_TypeDef,R_PIO1_1), 			128+64+1, 128+64+16+1},
-  { offsetof(LPC_IOCON_TypeDef,R_PIO1_2), 			128+64+1, 128+64+16+1},
-  { offsetof(LPC_IOCON_TypeDef,SWDIO_PIO1_3), 	128+64+1, 128+64+16+1},
-  { offsetof(LPC_IOCON_TypeDef,PIO1_4), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO1_5), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO1_6), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO1_7), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO1_8), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO1_9), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO1_10), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO1_11), 			128+64, 128+64+16},
+  { offsetof(LPC_IOCON_TypeDef,R_PIO1_0), 			128+1, 128+16+1},
+  { offsetof(LPC_IOCON_TypeDef,R_PIO1_1), 			128+1, 128+16+1},
+  { offsetof(LPC_IOCON_TypeDef,PIO1_2), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO1_3), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO1_4), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO1_5), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO1_6), 			128, 128+16},
   { 0, 									0, 0},
   { 0, 									0, 0},
   { 0, 									0, 0},
   { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+  { 0, 									0, 0},
+    
+  { offsetof(LPC_IOCON_TypeDef,PIO2_0), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_1), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_2), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_3), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_4), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_5), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_6), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_7), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_8), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_9), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_10), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_11), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_12), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_13), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_14), 			128, 128+16},
+  { offsetof(LPC_IOCON_TypeDef,PIO2_15), 			128, 128+16},
   
-  { offsetof(LPC_IOCON_TypeDef,PIO2_0), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_1), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_2), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_3), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_4), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_5), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_6), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_7), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_8), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_9), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_10), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO2_11), 			0, 16},
-  { 0, 									0, 0},
-  { 0, 									0, 0},
-  { 0, 									0, 0},
-  { 0, 									0, 0},
-  
-  { offsetof(LPC_IOCON_TypeDef,PIO3_0), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO3_1), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO3_2), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO3_3), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO3_4), 			128+64, 128+64+16},
-  { offsetof(LPC_IOCON_TypeDef,PIO3_5), 			0, 16},
   
 };
 
-LPC_GPIO_TypeDef   *lpc11xx_gpio_base[4] = {LPC_GPIO0, LPC_GPIO1, LPC_GPIO2, LPC_GPIO3};
+LPC_GPIO_TypeDef   *lpc11xx_gpio_base[4] = {LPC_GPIO0, LPC_GPIO1, LPC_GPIO2};
 
 
 void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup)
@@ -265,18 +290,18 @@ void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup)
     value = lpc11xx_pin_info[pin].iocon_gpio_value_pullup;
   *(__IO uint32_t *)(((char *)LPC_IOCON)+(size_t)(lpc11xx_pin_info[pin].offset)) = value;
   
-  gpio = lpc11xx_gpio_base[pin >> 4];
+  gpio = lpc11xx_gpio_base[pin >> 5];
   
   if ( is_output == 0 )
-    gpio->DIR &= ~( 1UL << (pin & 0x0f));
+    gpio->DIR &= ~( 1UL << (pin & 0x01f));
   else
-    gpio->DIR |= ( 1UL << (pin & 0x0f));  
+    gpio->DIR |= ( 1UL << (pin & 0x01f));  
 }
 
 void set_gpio_level(uint16_t pin, uint8_t level)
 {
   LPC_GPIO_TypeDef  *gpio = lpc11xx_gpio_base[pin >> 4];
-  pin &= 0x0f;
+  pin &= 0x01f;
   if ( level == 0 )
   {
     gpio->MASKED_ACCESS[1<<(pin)] = 0;
