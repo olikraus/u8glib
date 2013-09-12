@@ -269,6 +269,7 @@ extern u8g_dev_t u8g_dev_st7565_nhd_c12864_2x_hw_spi;
 extern u8g_dev_t u8g_dev_st7565_nhd_c12832_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_nhd_c12832_hw_spi;
 extern u8g_dev_t u8g_dev_st7565_nhd_c12832_parallel;
+extern u8g_dev_t u8g_dev_st7565_nhd_c12832_hw_usart_spi;
 
 /* Display: Displaytech 64128N */
 extern u8g_dev_t u8g_dev_st7565_64128n_sw_spi;
@@ -571,6 +572,7 @@ struct _u8g_dev_arg_irgb_t
 /* com driver */
 uint8_t u8g_com_null_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);               /* u8g_com_null.c */
 uint8_t u8g_com_arduino_std_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);        /* u8g_com_arduino_std_sw_spi.c */
+uint8_t u8g_com_arduino_hw_usart_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_hw_usart_spi.c */
 uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);        /* u8g_com_arduino_sw_spi.c */
 uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);          /* u8g_com_arduino_hw_spi.c */
 uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);  /* u8g_com_arduino_st7920_spi.c */
@@ -608,6 +610,9 @@ defined(__18CXX) || defined(__PIC32MX)
 #if defined(ARDUINO)
 #if defined(__AVR__)
 #define U8G_COM_HW_SPI u8g_com_arduino_hw_spi_fn
+#if defined(__AVR_ATmega32U4__)
+#define U8G_COM_HW_USART_SPI u8g_com_arduino_hw_usart_spi_fn
+#endif
 #define U8G_COM_ST7920_HW_SPI u8g_com_arduino_st7920_hw_spi_fn
 #elif defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_HW_SPI u8g_com_null_fn
@@ -628,6 +633,11 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_HW_SPI u8g_com_null_fn
 #define U8G_COM_ST7920_HW_SPI u8g_com_null_fn
 #endif
+
+#ifndef U8G_COM_HW_USART_SPI
+#define U8G_COM_HW_USART_SPI u8g_com_null_fn
+#endif
+
 
 /* ==== SW SPI, Arduino ====*/
 #if defined(ARDUINO)

@@ -289,6 +289,14 @@ class U8GLIB_NHD_C12832 : public U8GLIB
       { }
 };
 
+class U8GLIB_NHD_C12832_USART : public U8GLIB 
+{
+  public:
+    U8GLIB_NHD_C12832_USART(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_st7565_nhd_c12832_hw_usart_spi, cs, a0, reset)
+      { }
+};
+
 class U8GLIB_DOGM128 : public U8GLIB 
 {
   public:
