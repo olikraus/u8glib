@@ -107,7 +107,7 @@
 //U8GLIB_SSD1351_128X128_HICOLOR u8g(76, 75, 8, 9, 7); // Arduino DUE, SW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 //U8GLIB_SSD1351_128X128_HICOLOR u8g(8, 9, 7); // Arduino, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 //U8GLIB_SSD1351_128X128_4X_HICOLOR u8g(76, 75, 8, 9, 7); // Arduino DUE, HW SPI Com, 4x Memory: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
-U8GLIB_SSD1351_128X128_4X_HICOLOR u8g(8, 9, 7); // Arduino, HW SPI Com, 4x Memory: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
+//U8GLIB_SSD1351_128X128_4X_HICOLOR u8g(8, 9, 7); // Arduino, HW SPI Com, 4x Memory: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (http://electronics.ilsoft.co.uk/ArduinoShield.aspx)
 
 
 void draw(void) {
