@@ -1,0 +1,5 @@
+
+Flashtool: qstlink2
+CMSIS: http://www.st.com/web/en/catalog/tools/PF257884
+The following license apply to this folder and all its subfolders:
+http://www.st.com/st-web-ui/static/active/en/resource/legal/legal_agreement/license_agreement/software_license_agreement_image_v2.pdf
