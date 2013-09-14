@@ -62,10 +62,17 @@
 /* this procedure is not required for u8glib, but can be called from the init code */
  void init_system_clock(void)
  {
+   
+   /* do some simple startup tasks */
+  LPC_SYSCON->SYSMEMREMAP = 2;  
+  LPC_WWDT->MOD = 0;			/* disable watchdog */
+  LPC_SYSCON->INTNMI = 0x03f;	/* disable NMI */
+  
+      
    /* setup 24MHz for the LPC122x (does not require additional wait states for the flash) */
    
    /* oscillator controll registor, no change needed for int. RC osc. */
-   LPC_SYSCON->SYSOSCCTRL = 0;		/* no bypass (bit 0), low freq range (bit 1), reset value is also 0 */
+  LPC_SYSCON->SYSOSCCTRL = 0;		/* no bypass (bit 0), low freq range (bit 1), reset value is also 0 */
    
   LPC_SYSCON->SYSPLLCLKSEL = 0;		/* select PLL source, 0: IRC, 1: Sys osc */
   LPC_SYSCON->SYSPLLCLKUEN = 0;	/* confirm change by writing 0 and 1 to SYSPLLCLKUEN */
@@ -280,7 +287,7 @@ void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup)
 {
   uint32_t value;
   LPC_GPIO_Type   *gpio;
-
+  
   LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
 
    
@@ -300,10 +307,11 @@ void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup)
 
 void set_gpio_level(uint16_t pin, uint8_t level)
 {
+  
   /* assumes that pins are not affected by MASK register */
   LPC_GPIO_Type  *gpio = lpc11xx_gpio_base[pin >> 5];
   pin &= 0x01f;
-  if ( level == 0 )
+  if ( level != 0 )
   {
     gpio->SET = 1UL << (pin);
   }
@@ -317,7 +325,7 @@ uint8_t get_gpio_level(uint16_t pin)
 {
   LPC_GPIO_Type  *gpio = lpc11xx_gpio_base[pin >> 5];
   pin &= 0x01f;
-  if ( gpio->PIN & (1<<(pin)) == 0 )
+  if ( (gpio->PIN & (1<<(pin))) == 0 )
     return 0;
   return 1;  
 }
@@ -373,13 +381,17 @@ void spi_init(uint32_t ns)
   uint32_t cpha = 1;
   uint32_t cpsr;
 
-  LPC_SYSCON->PRESETCTRL |= 1<<0;	/* de-asserted reset SSP0 */
   LPC_SYSCON->SYSAHBCLKCTRL |= 1<<16;	/* enable IOCON clock */
   LPC_SYSCON->SYSAHBCLKCTRL |= 1<<11;	/* enable SSP0 clock  */
   LPC_SYSCON->SSPCLKDIV = 1;
-
+  
+  LPC_SYSCON->PRESETCTRL &= ~(1UL<<0);	/* reset SSP0 */
+  
   LPC_IOCON->PIO0_14 = 2;			/* select SCK at PIO0_14 */
   LPC_IOCON->PIO0_17 = 2;			/* select MOSI at PIO0_17 */
+  
+  LPC_SYSCON->PRESETCTRL |= 1UL<<0;	/* de-asserted reset SSP0 */
+
   
   LPC_SSP->CR1 = 0;								/* disable SPI, enable master mode */
   LPC_SSP->CR0 = 7 | (cpol << 6) | (cpha <<7); 		/* 8 bit, SPI mode, SCR = 1 (prescale) */
@@ -402,6 +414,22 @@ void spi_init(uint32_t ns)
   cpsr &= 0x0feUL;
   LPC_SSP->CPSR = cpsr;
   LPC_SSP->CR1 = 2;								/* enable SPI, (enable master mode) */
+
+  /*
+  for(;;)
+    spi_out(0x0f5);
+  */
+  /*
+  set_gpio_mode(PIN(1,0), 1, 0);	
+  for(;;)
+  {
+        set_gpio_level(PIN(1,0), 0);
+        set_gpio_level(PIN(1,0), 0);
+        set_gpio_level(PIN(1,0), 0);
+        set_gpio_level(PIN(1,0), 1);
+  }
+  */
+
 }
 
 void spi_out(uint8_t data)

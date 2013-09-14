@@ -47,8 +47,7 @@ uint32_t SystemCoreClock = 12000000;
 
 void SystemInit()
 {    
-  
-  //init_system_clock();		/* SystemCoreClock will be set here */
+  init_system_clock();		/* SystemCoreClock will be set here */
   
   /* SysTick is defined in core_cm0.h */
   SysTick->LOAD = (SystemCoreClock/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS) - 1;
@@ -107,6 +106,7 @@ void main()
   //u8g_InitComFn(&u8g, &u8g_dev_uc1701_dogs102_hw_spi, u8g_com_hw_spi_fn);
   
   //u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_hicolor_hw_spi, u8g_com_hw_spi_fn);
+  
   u8g_InitComFn(&u8g, &u8g_dev_st7565_nhd_c12832_hw_spi, u8g_com_hw_spi_fn);
 
   for(;;)
