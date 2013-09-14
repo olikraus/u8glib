@@ -145,6 +145,9 @@ class U8GLIB : public Print
     void drawCircle(u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t opt = U8G_DRAW_ALL) { u8g_DrawCircle(&u8g, x0, y0, rad, opt); }
     void drawDisc(u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rad, uint8_t opt = U8G_DRAW_ALL) { u8g_DrawDisc(&u8g, x0, y0, rad, opt); }
      
+    void drawEllipse(u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rx, u8g_uint_t ry, uint8_t opt = U8G_DRAW_ALL) { u8g_DrawEllipse(&u8g, x0, y0, rx, ry, opt); }
+    void drawFilledEllipse(u8g_uint_t x0, u8g_uint_t y0, u8g_uint_t rx, u8g_uint_t ry, uint8_t opt = U8G_DRAW_ALL) { u8g_DrawFilledEllipse(&u8g, x0, y0, rx, ry, opt); }    
+    
     /* bitmap handling */
     void drawBitmap(u8g_uint_t x, u8g_uint_t y, u8g_uint_t cnt, u8g_uint_t h, const uint8_t *bitmap) 
       { u8g_DrawBitmap(&u8g, x, y, cnt, h, bitmap); }
