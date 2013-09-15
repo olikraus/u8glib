@@ -43,8 +43,7 @@
   
   Additional requirements:
   
-    1) Variable "SystemCoreClock" must be defined. This variable is accessed here.
-    2) SysTick must be enabled, but SysTick IRQ is not required. Any LOAD values are fine,
+      SysTick must be enabled, but SysTick IRQ is not required. Any LOAD values are fine,
       it is prefered to have at least 1ms
       Example:
         SysTick->LOAD = (SystemCoreClock/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS) - 1;
@@ -57,6 +56,8 @@
 
 /*========================================================================*/
 /* system clock setup for LPC122x */
+
+uint32_t SystemCoreClock = 12000000;
 
 /* activate PLL for the int. RC osc. Assumes the IRC is already running */
 /* this procedure is not required for u8glib, but can be called from the init code */

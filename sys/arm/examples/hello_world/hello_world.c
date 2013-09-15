@@ -43,8 +43,6 @@
 
 #define SYS_TICK_PERIOD_IN_MS 10
 
-uint32_t SystemCoreClock = 12000000;
-
 void SystemInit()
 {    
   init_system_clock();		/* SystemCoreClock will be set here */
