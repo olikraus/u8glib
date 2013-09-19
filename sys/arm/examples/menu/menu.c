@@ -1,6 +1,8 @@
 /*
+
+  menu.c 
   
-  hello_world.c
+  Simple Menu for ATMEGA Controller
   
   >>> PLEASE UNCOMMENT DISPLAY TYPE IN THE MAIN PROCEDURE <<<
   
@@ -34,7 +36,7 @@
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-
+  
 */
 
 #include "u8g_arm.h"
@@ -64,37 +66,8 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
 
 u8g_t u8g;
 
-void draw(uint8_t pos)
-{
-  if ( u8g_GetMode(&u8g) == U8G_MODE_HICOLOR || u8g_GetMode(&u8g) == U8G_MODE_R3G3B2) {
-    /* draw background (area is 128x128) */
-    u8g_uint_t r, g, b;
-    for( b = 0; b < 4; b++ )
-    {
-      for( g = 0; g < 32; g++ )
-      {
-	for( r = 0; r < 32; r++ )
-	{
-	  u8g_SetRGB(&u8g, r<<3, g<<3, b<<4 );
-	  u8g_DrawPixel(&u8g, g + b*32, r);
-	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+64 );
-	  u8g_DrawPixel(&u8g, g + b*32, r+32);
-	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128 );
-	  u8g_DrawPixel(&u8g, g + b*32, r+32+32);
-	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128+64 );
-	  u8g_DrawPixel(&u8g, g + b*32, r+32+32+32);
-	}
-      }
-    }
-    u8g_SetRGB(&u8g, 255,255,255);
-  }
-  u8g_SetFont(&u8g, u8g_font_unifont);
-  u8g_DrawStr(&u8g,  0, 12+pos, "Hello World!");
-}
-
-void main()
-{
-  uint8_t pos = 0;
+void u8g_setup(void)
+{  
   /*
     Please uncomment one of the displays below
     Notes:
@@ -142,28 +115,135 @@ void main()
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1309_128x64_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1306_128x32_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1306_128x32_2x_hw_spi, u8g_com_hw_spi_fn);
-  // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
+  u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_332_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_hicolor_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi, u8g_com_hw_spi_fn);
   
   
+  /* setup input */
 
-  for(;;)
+}
+
+
+void sys_setup_keys(void)
+{
+  /* configure GPIO as input with pullup */
+  set_gpio_mode(PIN(1,4), 0, 1);
+  set_gpio_mode(PIN(1,5), 0, 1);
+}
+
+#define KEY_NONE 0
+#define KEY_PREV 1
+#define KEY_NEXT 2
+#define KEY_SELECT 3
+#define KEY_BACK 4
+
+uint8_t sys_get_key(void)
+{
+  uint8_t result = KEY_NONE;
+  if ( get_gpio_level(PIN(1,4)) != 0 )
+    result = KEY_PREV;
+  if ( get_gpio_level(PIN(1,5)) != 0 )
+    result = KEY_NEXT;
+  return result;
+}
+
+uint8_t sys_key_first = KEY_NONE;
+uint8_t sys_key_second = KEY_NONE;
+uint8_t sys_key_code = KEY_NONE;
+
+
+void sys_debounce_key(void) 
+{
+  sys_key_second = sys_key_first;
+  sys_key_first = sys_get_key();
+    
+  if ( sys_key_second == sys_key_first )
+    sys_key_code = sys_key_first;
+  else
+    sys_key_code = KEY_NONE;
+}
+
+
+#define MENU_ITEMS 4
+char *menu_strings[MENU_ITEMS] = { "First Line", "Second Item", "3333333", "abcdefg" };
+
+uint8_t menu_current = 0;
+uint8_t menu_redraw_required = 0;
+uint8_t last_key_code = KEY_NONE;
+
+void draw_menu(void) 
+{
+  uint8_t i, h;
+  u8g_uint_t w, d;
+
+  u8g_SetFont(&u8g, u8g_font_5x7);
+  u8g_SetFontRefHeightText(&u8g);
+  u8g_SetFontPosTop(&u8g);
+  
+  h = u8g_GetFontAscent(&u8g)-u8g_GetFontDescent(&u8g);
+  w = u8g_GetWidth(&u8g);
+  for( i = 0; i < MENU_ITEMS; i++ ) 
   {
-    /* picture loop */
-    u8g_FirstPage(&u8g);
-    do
+    d = (w-u8g_GetStrWidth(&u8g, menu_strings[i]))/2;
+    u8g_SetDefaultForegroundColor(&u8g);
+    if ( i == menu_current ) 
     {
-      draw(pos);
-    } while ( u8g_NextPage(&u8g) );
+      u8g_DrawBox(&u8g, 0, i*h+1, w, h);
+      u8g_SetDefaultBackgroundColor(&u8g);
+    }
+    u8g_DrawStr(&u8g, d, i*h, menu_strings[i]);
+  }
+}
+
+void update_menu(void) 
+{
+  if ( sys_key_code != KEY_NONE && last_key_code == sys_key_code ) 
+  {
+    return;
+  }
+  last_key_code = sys_key_code;
+  
+  switch ( sys_key_code ) 
+  {
+    case KEY_NEXT:
+      menu_current++;
+      if ( menu_current >= MENU_ITEMS )
+        menu_current = 0;
+      menu_redraw_required = 1;
+      break;
+    case KEY_PREV:
+      if ( menu_current == 0 )
+        menu_current = MENU_ITEMS;
+      menu_current--;
+      menu_redraw_required = 1;
+      break;
+  }
+}
+
+int main(void)
+{
+  sys_setup_keys();
+  u8g_setup();
+
+  menu_redraw_required = 1;
+  for(;;)
+  {  
     
-    /* refresh screen after some delay */
-    u8g_Delay(100);
+    sys_debounce_key();
     
-    /* update position */
-    pos++;
-    pos &= 15;
-  }  
+    if (  menu_redraw_required != 0 ) 
+    {
+      u8g_FirstPage(&u8g);
+      do
+      {
+        draw_menu();
+      } while ( u8g_NextPage(&u8g) );
+      menu_redraw_required = 0;
+    }
+
+    update_menu();
+  }
 }
 
