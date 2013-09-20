@@ -50,6 +50,8 @@ void delay_micro_seconds(uint32_t us);
 
 
 #define PIN(base,bit) ((base)*32+(bit))
+#define DEFAULT_KEY PIN(0,12)
+
 void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup) U8G_NOINLINE;
 void set_gpio_level(uint16_t pin, uint8_t level) U8G_NOINLINE;
 uint8_t get_gpio_level(uint16_t pin) U8G_NOINLINE;

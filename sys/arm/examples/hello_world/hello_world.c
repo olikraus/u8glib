@@ -66,28 +66,6 @@ u8g_t u8g;
 
 void draw(uint8_t pos)
 {
-  if ( u8g_GetMode(&u8g) == U8G_MODE_HICOLOR || u8g_GetMode(&u8g) == U8G_MODE_R3G3B2) {
-    /* draw background (area is 128x128) */
-    u8g_uint_t r, g, b;
-    for( b = 0; b < 4; b++ )
-    {
-      for( g = 0; g < 32; g++ )
-      {
-	for( r = 0; r < 32; r++ )
-	{
-	  u8g_SetRGB(&u8g, r<<3, g<<3, b<<4 );
-	  u8g_DrawPixel(&u8g, g + b*32, r);
-	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+64 );
-	  u8g_DrawPixel(&u8g, g + b*32, r+32);
-	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128 );
-	  u8g_DrawPixel(&u8g, g + b*32, r+32+32);
-	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128+64 );
-	  u8g_DrawPixel(&u8g, g + b*32, r+32+32+32);
-	}
-      }
-    }
-    u8g_SetRGB(&u8g, 255,255,255);
-  }
   u8g_SetFont(&u8g, u8g_font_unifont);
   u8g_DrawStr(&u8g,  0, 12+pos, "Hello World!");
 }
@@ -144,10 +122,11 @@ void main()
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1306_128x32_2x_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_332_hw_spi, u8g_com_hw_spi_fn);
-  // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_hicolor_hw_spi, u8g_com_hw_spi_fn);
+   u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_hicolor_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi, u8g_com_hw_spi_fn);
   
   
+  u8g_SetDefaultForegroundColor(&u8g);
 
   for(;;)
   {

@@ -121,7 +121,7 @@ void u8g_setup(void)
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi, u8g_com_hw_spi_fn);
   
   
-  /* setup input */
+  u8g_SetDefaultForegroundColor(&u8g);
 
 }
 
@@ -129,8 +129,8 @@ void u8g_setup(void)
 void sys_setup_keys(void)
 {
   /* configure GPIO as input with pullup */
-  set_gpio_mode(PIN(1,4), 0, 1);
-  set_gpio_mode(PIN(1,5), 0, 1);
+  set_gpio_mode(DEFAULT_KEY, 0, 1);
+  // set_gpio_mode(PIN(1,5), 0, 1);
 }
 
 #define KEY_NONE 0
@@ -142,10 +142,10 @@ void sys_setup_keys(void)
 uint8_t sys_get_key(void)
 {
   uint8_t result = KEY_NONE;
-  if ( get_gpio_level(PIN(1,4)) != 0 )
-    result = KEY_PREV;
-  if ( get_gpio_level(PIN(1,5)) != 0 )
+  if ( get_gpio_level(DEFAULT_KEY) != 0 )
     result = KEY_NEXT;
+  // if ( get_gpio_level(PIN(1,5)) != 0 )
+  //   result = KEY_PREV;
   return result;
 }
 

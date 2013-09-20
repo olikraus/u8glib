@@ -64,21 +64,70 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
 
 u8g_t u8g;
 
-void draw_color_box(void)
+/* select, which color background to use  */
+#define COLOR_BOX draw_color_box2
+
+void draw_color_box1(void)
 {
   u8g_uint_t w,h;
   u8g_uint_t r, g, b;
   
-  w = u8g_GetWidth(&u8g)/32;
-  h = u8g_GetHeight(&u8g)/8;
+  w = u8g_GetWidth(&u8g)/64;
+  h = u8g_GetHeight(&u8g)/32;
   for( b = 0; b < 4; b++ )
-    for( g = 0; g < 8; g++ )
-      for( r = 0; r < 8; r++ )
+    for( g = 0; g < 16; g++ )
+      for( r = 0; r < 32; r++ )
       {
-        u8g_SetColorIndex(&u8g, (r<<5) |  (g<<2) | b );
-        u8g_DrawBox(&u8g, g*w + b*w*8, r*h, w, h);
+	u8g_SetRGB(&u8g, r<<3, g<<4, b<<6);
+	u8g_DrawBox(&u8g, g*w + b*w*16, r*h, w, h);
+	  
       }
 }
+
+void draw_color_box2(void)
+{
+  u8g_uint_t w,h;
+  u8g_uint_t r, g, b;
+  
+  b = 1;
+  
+  w = u8g_GetWidth(&u8g)/64;
+  h = u8g_GetHeight(&u8g)/32;
+    for( g = 0; g < 16; g++ )
+      for( r = 0; r < 32; r++ )
+      {
+	u8g_SetRGB(&u8g, r<<3, g<<4, b<<6);
+	u8g_DrawBox(&u8g, g*w + 0*w*16, r*h, w, h);
+	u8g_DrawBox(&u8g, (16-1-g)*w + 1*w*16, r*h, w, h);
+	u8g_DrawBox(&u8g, g*w + 2*w*16, r*h, w, h);
+	u8g_DrawBox(&u8g, (16-1-g)*w + 3*w*16, r*h, w, h);
+	  
+      }
+}
+
+void draw_color_box3(void)
+{
+    u8g_uint_t r, g, b;
+    /* assumes 128x128 display */
+    for( b = 0; b < 4; b++ )
+    {
+      for( g = 0; g < 32; g++ )
+      {
+	for( r = 0; r < 32; r++ )
+	{
+	  u8g_SetRGB(&u8g, r<<3, g<<3, b<<4 );
+	  u8g_DrawPixel(&u8g, g + b*32, r);
+	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+64 );
+	  u8g_DrawPixel(&u8g, g + b*32, r+32);
+	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128 );
+	  u8g_DrawPixel(&u8g, g + b*32, r+32+32);
+	  u8g_SetRGB(&u8g, r<<3, g<<3, (b<<4)+128+64 );
+	  u8g_DrawPixel(&u8g, g + b*32, r+32+32+32);
+	}
+      }
+    }
+}
+
 
 void draw_logo(uint8_t d)
 {
@@ -112,15 +161,26 @@ void draw(void)
 {
   if ( u8g_GetMode(&u8g) == U8G_MODE_HICOLOR || u8g_GetMode(&u8g) == U8G_MODE_R3G3B2)
   {
-    draw_color_box();
+    COLOR_BOX();
   }
-  u8g_SetColorIndex(&u8g, 1);
-  if ( U8G_MODE_GET_BITS_PER_PIXEL(u8g_GetMode(&u8g)) > 1 ) 
+  if ( u8g_GetMode(&u8g) == U8G_MODE_HICOLOR || u8g_GetMode(&u8g) == U8G_MODE_R3G3B2)
   {
-    draw_logo(2);
-    u8g_SetColorIndex(&u8g, 2);
-    draw_logo(1);
-    u8g_SetColorIndex(&u8g, 3);
+      u8g_SetRGB(&u8g, 0x080, 0x040, 0);
+      draw_logo(2);
+      u8g_SetRGB(&u8g, 0x080, 0x080, 0);
+      draw_logo(1);
+      u8g_SetRGB(&u8g, 0x0ff, 0x0ff, 0);
+  }
+  else
+  {
+    u8g_SetColorIndex(&u8g, 1);
+    if ( U8G_MODE_GET_BITS_PER_PIXEL(u8g_GetMode(&u8g)) > 1 ) 
+    {
+      draw_logo(2);
+      u8g_SetColorIndex(&u8g, 2);
+      draw_logo(1);
+      u8g_SetColorIndex(&u8g, 3);
+    }
   }
   draw_logo(0);
   draw_url();
@@ -176,9 +236,9 @@ void main()
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1306_128x32_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1306_128x32_2x_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
-  u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_332_hw_spi, u8g_com_hw_spi_fn);
+  // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_332_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_hicolor_hw_spi, u8g_com_hw_spi_fn);
-  // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi, u8g_com_hw_spi_fn);
+  u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi, u8g_com_hw_spi_fn);
   
   
 
