@@ -35,7 +35,7 @@ FLASHTOOL:=~/prg/lpc21isp/lpc21isp
 # Project Information
 
 # The name for the project
-TARGETNAME:=hello_world
+TARGETNAME:=menu
 
 # The source files of the project
 SRC:=$(wildcard ../../examples/$(TARGETNAME)/*.c)

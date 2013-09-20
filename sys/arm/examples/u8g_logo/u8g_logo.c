@@ -237,8 +237,8 @@ void main()
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1306_128x32_2x_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_332_hw_spi, u8g_com_hw_spi_fn);
   // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_332_hw_spi, u8g_com_hw_spi_fn);
-  // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_hicolor_hw_spi, u8g_com_hw_spi_fn);
-  u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi, u8g_com_hw_spi_fn);
+  u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_hicolor_hw_spi, u8g_com_hw_spi_fn);
+  // u8g_InitComFn(&u8g, &u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi, u8g_com_hw_spi_fn);
   
   
 
