@@ -41,5 +41,20 @@ will compiler, link and upload the example
 
 Windows
 
+== Min-GW ==
+
+
+== ARM gcc ==
+
+From 
+  https://launchpad.net/gcc-arm-embedded/
+download and extract 
+  Windows installer
+Default path:  
+  /c/Program\ Files\ \(x86\)/GNU\ Tools\ ARM\ Embedded/4.7\ 2013q2/
+
+Makefile lib feature does not work...
+
 http://www.flashmagictool.com/
 http://www.nxp.com/documents/other/lpc2000_flash_isp_utility.zip
+
