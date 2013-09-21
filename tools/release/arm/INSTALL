@@ -33,6 +33,10 @@ Depending on your controller, do one of the following:
 
 == Compile U8g example ==
 
+Inside the folder of one of the examples:
+  make upload
+will compiler, link and upload the example
+
 
 
 Windows
