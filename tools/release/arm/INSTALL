@@ -1,0 +1,41 @@
+Linux/Ubuntu
+
+== ARM gcc ==
+
+From 
+  https://launchpad.net/gcc-arm-embedded/
+download and extract 
+  Linux installation tarball
+
+== LPC flash utility ==
+
+From
+  http://sourceforge.net/projects/lpc21isp/files/
+download, extract and compile (make)
+  lpc21isp tar file
+
+In the u8g example files, update the Makefile with the path to the 
+  ARM gcc	("GCCPATH" in the Makeilfe)
+and
+  LPC flash utility ("FLASHTOOL"  in the Makeilfe)
+
+== Prepare for target controller ==
+
+Depending on your controller, do one of the following:
+
+1) Target controller is named in this U8glib distribution
+    --> Nothing to do. Examples will directly work
+2) A member of the same controller family is available in the U8glib distribution
+    --> locate the *.ld script in the "common" folder and update the FLASH and RAM values
+3) If neither 1) or 2) is true for the target controller, one example subdirectory (e.g.
+    lpc1114 can be used as template. Usually you need to update/replace all files
+    in the common folder.
+
+== Compile U8g example ==
+
+
+
+Windows
+
+http://www.flashmagictool.com/
+http://www.nxp.com/documents/other/lpc2000_flash_isp_utility.zip
