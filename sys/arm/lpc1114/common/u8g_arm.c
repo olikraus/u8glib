@@ -295,12 +295,8 @@ uint8_t get_gpio_level(uint16_t pin)
   LPC_GPIO_TypeDef  *gpio = lpc11xx_gpio_base[pin >> 4];
   pin &= 0x0f;
   
-  if ( (gpio->DATA & ~( 1UL << (pin))) == 0 )
+  if ( (gpio->DATA & ( 1UL << (pin))) == 0 )
     return 0;
-  /*
-  if ( gpio->MASKED_ACCESS[1<<(pin)] == 0 )
-    return 0;
-  */
   return 1;  
 }
 
