@@ -22,6 +22,7 @@ cd ..
 
 chmod -R og+r u8g_arm
 cd u8g_arm 
+rm ../u8glib_arm_`../../print_release.sh`.zip
 zip -r ../u8glib_arm_`../../print_release.sh`.zip *
 cd ..
 
