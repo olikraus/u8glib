@@ -42,8 +42,6 @@ SRC:=$(wildcard *.c)
 
 # U8glib path to c source files
 U8GPATH:=../../src
-# U8glib path to c source files
-U8GFONTPATH:=../../src
 
 
 # The CPU architecture (will be used for -mcpu)
@@ -52,8 +50,8 @@ MCPU:=cortex-m0
 # The name of the startup file which matches to the architecture (MCPU)
 # Usually this can be taken from
 # gcc-arm-none-eabi-4_7-2013q1/share/gcc-arm-none-eabi/samples/startup
-STARTUP:=$(GCCPATH)/share/gcc-arm-none-eabi/samples/startup/startup_ARMCM0.S
-# STARTUP:=../common/startup_lpc11xx.S
+# STARTUP:=$(GCCPATH)/share/gcc-arm-none-eabi/samples/startup/startup_ARMCM0.S
+STARTUP:=$(wildcard ../common/*.S)
 
 # Include directory for the system include files
 SYSINC:=../common
@@ -71,7 +69,7 @@ FLASHPORT:=/dev/ttyUSB0
 # Main part of the Makefile starts here. Usually no changes are needed.
 
 # U8G Source files
-U8GSRC:=$(wildcard $(U8GPATH)/*.c) $(wildcard $(U8GFONTPATH)/*.c)
+U8GSRC:=$(wildcard $(U8GPATH)/*.c)
 
 # Internal Variable Names
 LIBNAME:=$(TARGETNAME).a

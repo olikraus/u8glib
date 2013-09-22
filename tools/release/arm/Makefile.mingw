@@ -29,7 +29,9 @@
 GCCPATH:=/c/Program\ Files\ \(x86\)/GNU\ Tools\ ARM\ Embedded/4.7\ 2013q2/
 
 # Flash Tool
-FLASHTOOL:=~/prg/lpc21isp/lpc21isp
+# FLASHTOOL:= /c/Program\ Files\ \(x86\)/Flash\ Magic/FlashMagic.exe
+FLASHTOOL:= /c/Program\ Files\ \(x86\)/Flash\ Magic/FM.exe
+FLASHMAGICDEVICE:=LPC1114/102
 
 #================================================
 # Project Information
@@ -42,8 +44,6 @@ SRC:=$(wildcard *.c)
 
 # U8glib path to c source files
 U8GPATH:=../../src
-# U8glib path to c source files
-U8GFONTPATH:=../../src
 
 
 # The CPU architecture (will be used for -mcpu)
@@ -53,7 +53,7 @@ MCPU:=cortex-m0
 # Usually this can be taken from
 # gcc-arm-none-eabi-4_7-2013q1/share/gcc-arm-none-eabi/samples/startup
 # STARTUP:=$(GCCPATH)/share/gcc-arm-none-eabi/samples/startup/startup_ARMCM0.S
-STARTUP:=../common/startup_lpc11xx.S
+STARTUP:=$(wildcard ../common/*.S)
 
 # Include directory for the system include files
 SYSINC:=../common
@@ -71,10 +71,9 @@ FLASHPORT:=/dev/ttyUSB0
 # Main part of the Makefile starts here. Usually no changes are needed.
 
 # U8G Source files
-U8GSRC:=$(wildcard $(U8GPATH)/*.c) $(wildcard $(U8GFONTPATH)/*.c)
+U8GSRC:=$(wildcard $(U8GPATH)/*.c)
 
 # Internal Variable Names
-LIBNAME:=$(TARGETNAME).a
 ELFNAME:=$(TARGETNAME).elf
 HEXNAME:=$(TARGETNAME).hex
 DISNAME:=$(TARGETNAME).dis
@@ -115,13 +114,12 @@ all: $(DISNAME) $(HEXNAME)
 
 .PHONY: upload
 upload: $(DISNAME) $(HEXNAME) $(ELFNAME)
-#	$(FLASHTOOL) $(HEXNAME) $(FLASHPORT) 115200 12000
-	$(FLASHTOOL) $(HEXNAME) $(FLASHPORT) 38400 12000
+	$(FLASHTOOL) HEXFILE\($(HEXNAME),NOCHECKSUMS,NOFILL,PROTECTISP\) COM\(1,38400\) DEVICE\($(FLASHMAGICDEVICE),12000000,0\)
 	$(SIZE) $(ELFNAME)
 
 .PHONY: clean
 clean:
-	$(RM) $(OBJ) $(HEXNAME) $(ELFNAME) $(LIBNAME) $(DISNAME) $(MAPNAME)
+	$(RM) $(OBJ) $(HEXNAME) $(ELFNAME) $(DISNAME) $(MAPNAME)
 
 # implicit rules
 .elf.hex:
