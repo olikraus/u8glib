@@ -155,5 +155,6 @@ SECTIONS
 	/* Check if data + heap + stack exceeds RAM limit */
 	ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
 	
-	ARM_checksum = -(__StackTop + Reset_Handler + NMI_Handler + HardFault_Handler + 6);
+	/* http://www.lpcware.com/content/forum/lpc1788-flash-signature-generation */
+	LPC_checksum = 0- (__StackTop + Reset_Handler + NMI_Handler + HardFault_Handler + 6);
 }

@@ -75,7 +75,7 @@ __isr_vector:
     .long    0                     /* MemManage_Handler */
     .long    0                     /* BusFault_Handler */
     .long    0                     /* UsageFault_Handler */
-    .long    ARM_checksum  /* Checksum */
+    .long    LPC_checksum  /* Checksum */
     .long    0                     /* Reserved */
     .long    0                     /* Reserved */
     .long    0                     /* Reserved */
