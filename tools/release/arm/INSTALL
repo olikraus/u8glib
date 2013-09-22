@@ -43,6 +43,16 @@ Windows
 
 == Min-GW ==
 
+Windows driver for the USB to UART convert.
+For FTDI devices, use the virtual com port (VCP) driver.
+Download and install:
+	http://www.ftdichip.com/Drivers/VCP.htm
+
+Flash tool: FlashMagic will work here:
+Download and install:
+	http://www.flashmagictool.com/
+
+
 
 == ARM gcc ==
 

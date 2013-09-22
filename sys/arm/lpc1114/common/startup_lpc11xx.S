@@ -72,10 +72,10 @@ __isr_vector:
     .long    Reset_Handler         /* Reset Handler */
     .long    NMI_Handler           /* NMI Handler */
     .long    HardFault_Handler     /* Hard Fault Handler */
-    .long    0                     /* Reserved */
-    .long    0                     /* Reserved */
-    .long    0                     /* Reserved */
-    .long    0                     /* Reserved */
+    .long    0                     /* MemManage_Handler */
+    .long    0                     /* BusFault_Handler */
+    .long    0                     /* UsageFault_Handler */
+    .long    ARM_checksum  /* Checksum */
     .long    0                     /* Reserved */
     .long    0                     /* Reserved */
     .long    0                     /* Reserved */
