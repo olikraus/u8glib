@@ -26,7 +26,8 @@
 # External tools
 
 # The base directory of gcc-arm-none-eabi
-GCCPATH:=~/src/arm/gcc-arm-none-eabi-4_7-2013q1
+# GCCPATH:=~/src/arm/gcc-arm-none-eabi-4_7-2013q1
+GCCPATH:=~/src/arm/gcc-arm-none-eabi-4_7-2013q2
 
 # Flash Tool
 FLASHTOOL:=~/prg/lpc21isp/lpc21isp
@@ -65,7 +66,7 @@ LDSCRIPTDIR:=../common
 LDSCRIPT:=lpc11xx.ld
 
 # Uinx device of the USB-RS232 converter for the flash tool
-FLASHPORT:=/dev/ttyUSB1
+FLASHPORT:=/dev/ttyUSB0
 
 #================================================
 # Main part of the Makefile starts here. Usually no changes are needed.
