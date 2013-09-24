@@ -66,5 +66,6 @@ Default path:
 Makefile lib feature does not work...
 
 http://www.flashmagictool.com/
-http://www.nxp.com/documents/other/lpc2000_flash_isp_utility.zip
+Enable "Erase blocks used by flashfile"
+
 
