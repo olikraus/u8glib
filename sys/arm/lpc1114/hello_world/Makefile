@@ -84,6 +84,7 @@ OBJ:=$(SRC:.c=.o) $(SYSSRC:.c=.o) $(U8GSRC:.c=.o) $(STARTUP:.S=.o)
 
 # Replace standard build tools by avr tools
 CC:=$(GCCPATH)/bin/arm-none-eabi-gcc
+AS:=$(GCCPATH)/bin/arm-none-eabi-gcc
 AR:=$(GCCPATH)/bin/arm-none-eabi-ar
 OBJCOPY:=$(GCCPATH)/bin/arm-none-eabi-objcopy
 OBJDUMP:=$(GCCPATH)/bin/arm-none-eabi-objdump
