@@ -43,6 +43,7 @@ Windows
 
 == Min-GW ==
 
+
 Windows driver for the USB to UART convert.
 For FTDI devices, use the virtual com port (VCP) driver.
 Download and install:
@@ -68,4 +69,6 @@ Makefile lib feature does not work...
 http://www.flashmagictool.com/
 Enable "Erase blocks used by flashfile"
 
-
+make instead of mingw:
+http://gnuwin32.sourceforge.net/packages/make.htm
+Download "Complete package, except sources"
