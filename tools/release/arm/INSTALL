@@ -104,9 +104,9 @@ Start "cmd.exe"
 
 cd c:\u8g\lpc1114\hello_world\
 
+"c:\Program Files (x86)\GnuWin32\bin\make.exe" -f Makefile.gnuwin32
 
-
-
+Expect some delay during linking phase.
 
 
 

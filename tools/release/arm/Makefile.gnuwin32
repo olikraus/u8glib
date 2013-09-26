@@ -1,0 +1,145 @@
+#
+#  Generic and Simple GNU ARM Makefile (gnuwin32)
+#  for http://gnuwin32.sourceforge.net/packages/make.htm
+#
+#  Desinged for the gnu-arm-none-eabi tool chain
+#
+#  "c:\Program Files (x86)\GnuWin32\bin\make.exe"
+#
+# 	Features
+#		- create hex file
+#		- create assembler listing (.dis)
+#
+#	Limitations
+#		- only C-files supported
+#		- no automatic dependency checking (call 'make clean' if any .h files are changed)
+#
+#	Targets:
+#		make
+#			create hex file, no upload
+#		make upload
+#			create and upload hex file
+#		make clean
+#			delete all generated files
+#
+#  Note:
+#  	Display list make database: make -p -f/dev/null | less
+#
+#================================================
+# External tools
+
+# The base directory of gcc-arm-none-eabi
+# GCCPATH:=c:\Program\ Files\ \(x86\)/GNU\ Tools\ ARM\ Embedded/4.7\ 2013q2/
+GCCPATH:="c:\Program Files (x86)\GNU Tools ARM Embedded\4.7 2013q2"
+
+# Flash Tool
+# FLASHTOOL:= /c/Program\ Files\ \(x86\)/Flash\ Magic/FlashMagic.exe
+FLASHTOOL:= /c/Program\ Files\ \(x86\)/Flash\ Magic/FM.exe
+FLASHMAGICDEVICE:=LPC1114/102
+
+#================================================
+# Project Information
+
+# The name for the project
+TARGETNAME:=$(firstword $(basename $(wildcard *.c)))
+
+# The source files of the project
+SRC:=$(wildcard *.c)
+
+# U8glib path to c source files
+U8GPATH:=../../src
+
+
+# The CPU architecture (will be used for -mcpu)
+MCPU:=cortex-m0
+
+# The name of the startup file which matches to the architecture (MCPU)
+# Usually this can be taken from
+# gcc-arm-none-eabi-4_7-2013q1/share/gcc-arm-none-eabi/samples/startup
+# STARTUP:=$(GCCPATH)/share/gcc-arm-none-eabi/samples/startup/startup_ARMCM0.S
+STARTUP:=$(wildcard ../common/*.S)
+
+# Include directory for the system include files
+SYSINC:=../common
+SYSSRC:=$(wildcard ../common/*.c)
+
+# Directory for the linker script
+LDSCRIPTDIR:=../common
+# Name of the linker script (must be the "keep" script, because the other script is not always working)
+LDSCRIPT:=$(wildcard ../common/*.ld)
+
+# Uinx device of the USB-RS232 converter for the flash tool
+FLASHPORT:=/dev/ttyUSB0
+
+#================================================
+# Main part of the Makefile starts here. Usually no changes are needed.
+
+# U8G Source files
+U8GSRC:=$(wildcard $(U8GPATH)/*.c)
+
+# Internal Variable Names
+ELFNAME:=$(TARGETNAME).elf
+HEXNAME:=$(TARGETNAME).hex
+DISNAME:=$(TARGETNAME).dis
+MAPNAME:=$(TARGETNAME).map
+OBJ:=$(SRC:.c=.o) $(SYSSRC:.c=.o) $(U8GSRC:.c=.o) $(STARTUP:.S=.o)
+
+# Replace standard build tools by avr tools
+CC:=$(GCCPATH)\bin\arm-none-eabi-gcc
+AR:=$(GCCPATH)\bin\arm-none-eabi-ar
+AS:=$(GCCPATH)\bin\arm-none-eabi-gcc
+OBJCOPY:=$(GCCPATH)\bin\arm-none-eabi-objcopy
+OBJDUMP:=$(GCCPATH)\bin\arm-none-eabi-objdump
+SIZE:=$(GCCPATH)\bin\arm-none-eabi-size
+
+# Common flags
+COMMON_FLAGS = -mthumb -mcpu=$(MCPU)
+COMMON_FLAGS += -Wall -I. -I$(SYSINC) -I$(U8GPATH)
+# default stack size is 0x0c00
+COMMON_FLAGS += -D__STACK_SIZE=0x0a00
+COMMON_FLAGS += -Os -flto 
+COMMON_FLAGS += -ffunction-sections -fdata-sections
+# Assembler flags
+ASFLAGS:=$(COMMON_FLAGS) -D__STARTUP_CLEAR_BSS -D__START=main
+# C flags
+CFLAGS:=$(COMMON_FLAGS) -std=gnu99
+# LD flags
+GC:=-Wl,--gc-sections
+MAP:=-Wl,-Map=$(MAPNAME)
+LFLAGS:=$(COMMON_FLAGS) $(GC) $(MAP)
+LDLIBS:=--specs=nano.specs -lc -lc -lnosys -L$(LDSCRIPTDIR) -T $(LDSCRIPT)
+
+# Additional Suffixes
+.SUFFIXES: .elf .hex .dis
+
+# Targets
+.PHONY: all
+all: $(DISNAME) $(HEXNAME)
+	$(SIZE) $(ELFNAME)
+
+.PHONY: upload
+upload: $(DISNAME) $(HEXNAME) $(ELFNAME)
+	$(FLASHTOOL) HEXFILE\($(HEXNAME),NOCHECKSUMS,FILL,PROTECTISP\) COM\(5,38400\) DEVICE\($(FLASHMAGICDEVICE),12.000,0\)
+	$(SIZE) $(ELFNAME)
+
+.PHONY: clean
+clean:
+	$(RM) $(OBJ) $(HEXNAME) $(ELFNAME) $(DISNAME) $(MAPNAME)
+
+# implicit rules
+.S.o:
+	$(PREPROCESS.S) $(COMMON_FLAGS) $(patsubst %.s,%.S,$<) > tmp.s
+	$(COMPILE.s) -c -o $@ tmp.s
+	del tmp.s
+
+.elf.hex:
+	@$(OBJCOPY) -O ihex $< $@
+
+# explicit rules
+$(ELFNAME): $(OBJ) 
+	$(LINK.o) $(LFLAGS) $(OBJ) $(LDLIBS) -o $@
+
+$(DISNAME): $(ELFNAME)
+	$(OBJDUMP) -S $< > $@
+
+	
