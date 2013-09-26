@@ -38,58 +38,23 @@ Inside the folder of one of the examples:
 will compiler, link and upload the example
 
 
+== Windows (Min-GW) ==
 
-Windows
+Download and install mingw and msys (http://www.mingw.org/).
 
-== Min-GW ==
-
+From 
+  https://launchpad.net/gcc-arm-embedded/
+download and extract 
+  Windows installer
+Default path:
+  /c/Program\ Files\ \(x86\)/GNU\ Tools\ ARM\ Embedded/xxxxxxx/
 
 Windows driver for the USB to UART converter.
 For FTDI devices, use the virtual com port (VCP) driver.
 Download and install:
 	http://www.ftdichip.com/Drivers/VCP.htm
 
-Flash tool: FlashMagic will work here:
-Download and install:
-	http://www.flashmagictool.com/
-
-
-
-== ARM gcc ==
-
-From 
-  https://launchpad.net/gcc-arm-embedded/
-download and extract 
-  Windows installer
-Default path:  
-  /c/Program\ Files\ \(x86\)/GNU\ Tools\ ARM\ Embedded/4.7\ 2013q2/
-
-Makefile lib feature does not work...
-
-http://www.flashmagictool.com/
-Enable "Erase blocks used by flashfile"
-
-make instead of mingw:
-http://gnuwin32.sourceforge.net/packages/make.htm
-Download "Complete package, except sources"
-
-
-== Windows (gnu make) ==
-
-From
-	http://gnuwin32.sourceforge.net/packages/make.htm
-download
-	setup 
-for make ("Complete package, except sources")
-The rest of this sections assumes, that make has been installed at the default location.
-
-From 
-  https://launchpad.net/gcc-arm-embedded/
-download and extract the
-  Windows installer
-The rest of this sections assumes, that gcc-arm-embedded has been installed at the default location.
-
-In order to flash the ARM controller via UART interface attached to a FTDI USB/UART converter,
+To flash the ARM controller via UART interface (attached to a FTDI USB/UART converter),
 download and install the virtual com port (VCP) driver:
 	http://www.ftdichip.com/Drivers/VCP.htm
 
@@ -97,8 +62,47 @@ The flash procedure can be done with "flashmagic".
 Download and install:
 	http://www.flashmagictool.com/
 
+Unzip u8glib for ARM controller into an empty folder (c:\u8g)
 
-Unzip u8glib for ARM controller into en empty folder (c:\u8g).
+cd /c/u8g/lpc1114/hello_world
+
+Update the path to gcc-arm-embedded in Makefile.mingw.
+
+make 
+
+Expect some delay during linking phase. The .hex file is placed in the same directory.
+Call flashmagic
+- select the correct uC, 
+- load the .hex file, 
+- enable "Erase blocks used by flashfile" and
+- put the uC into programming mode (pull ISP pin low and reset the uC)
+before starting the flash procedure.
+
+
+== Windows (gnu make) ==
+
+From
+	http://gnuwin32.sourceforge.net/packages/make.htm
+download and execute
+	setup 
+for "make" ("Complete package, except sources")
+The rest of this sections assumes, that make has been installed at the default location.
+
+From 
+  https://launchpad.net/gcc-arm-embedded/
+download and execute the
+  Windows installer
+The rest of this sections assumes, that gcc-arm-embedded has been installed at the default location.
+
+To flash the ARM controller via UART interface (attached to a FTDI USB/UART converter),
+download and install the virtual com port (VCP) driver:
+	http://www.ftdichip.com/Drivers/VCP.htm
+
+The flash procedure can be done with "flashmagic".
+Download and install:
+	http://www.flashmagictool.com/
+
+Unzip u8glib for ARM controller into an empty folder (c:\u8g).
 
 Start "cmd.exe" 
 
@@ -106,7 +110,14 @@ cd c:\u8g\lpc1114\hello_world\
 
 "c:\Program Files (x86)\GnuWin32\bin\make.exe" -f Makefile.gnuwin32
 
-Expect some delay during linking phase.
+Expect some delay during linking phase. The .hex file is placed in the same directory.
+Call flashmagic
+- select the correct uC, 
+- load the .hex file, 
+- enable "Erase blocks used by flashfile" and
+- put the uC into programming mode (pull ISP pin low and reset the uC)
+before starting the flash procedure.
+
 
 
 

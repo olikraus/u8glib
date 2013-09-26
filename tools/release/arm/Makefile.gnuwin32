@@ -18,13 +18,54 @@
 #		make
 #			create hex file, no upload
 #		make upload
-#			create and upload hex file
+#			create and upload hex file (does not reliably work, use the flashmagic GUI)
 #		make clean
 #			delete all generated files
 #
 #  Note:
 #  	Display list make database: make -p -f/dev/null | less
 #
+#================================================
+#
+#  Instructions
+#  
+#  From
+#  	http://gnuwin32.sourceforge.net/packages/make.htm
+#  download and execute
+#  	setup 
+#  for "make" ("Complete package, except sources")
+#  The rest of this sections assumes, that make has been installed at the default location.
+#  
+#  From 
+#    https://launchpad.net/gcc-arm-embedded/
+#  download and execute the
+#    Windows installer
+#  The rest of this sections assumes, that gcc-arm-embedded has been installed at the default location.
+#  
+#  In order to flash the ARM controller via UART interface (attached to a FTDI USB/UART converter),
+#  download and install the virtual com port (VCP) driver:
+#  	http://www.ftdichip.com/Drivers/VCP.htm
+#  
+#  The flash procedure can be done with "flashmagic".
+#  Download and install:
+#  	http://www.flashmagictool.com/
+#  
+#  Unzip u8glib for ARM controller into an empty folder (c:\u8g).
+#  
+#  Start "cmd.exe" 
+#  
+#  cd c:\u8g\lpc1114\hello_world\
+#  
+#  "c:\Program Files (x86)\GnuWin32\bin\make.exe" -f Makefile.gnuwin32
+#  
+#  Expect some delay during linking phase. The .hex file is placed in the same directory.
+#  Call flashmagic
+#  - select the correct uC, 
+#  - load the .hex file, 
+#  - enable "Erase blocks used by flashfile" and
+#  - put your uC into programming mode (pull ISP pin low and reset the device)
+#  before starting the flash procedure.
+#  
 #================================================
 # External tools
 
