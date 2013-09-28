@@ -1,13 +1,127 @@
-Linux/Ubuntu
 
-== ARM gcc ==
+INSTALL Instructions for u8glib ARM release
+
+
+Section 1: Generic Install Instruction
+Section 2: NXP LPC Install Instructions
+
+
+
+============================================================
+= Generic Install Instruction =
+
+For NXP LPC devices, see below.
+
+
+== Linux/Ubuntu ==
 
 From 
   https://launchpad.net/gcc-arm-embedded/
 download and extract 
   Linux installation tarball
 
-== LPC flash utility ==
+== Windows ==
+
+From 
+  https://launchpad.net/gcc-arm-embedded/
+download and extract 
+  Windows installer
+
+== Prepare for target controller ==
+
+To modify the existing examples for another arm controller, 
+start with any of the examples for the LPC. 
+
+You need to 
+- update u8g_arm.c
+- provide a suitable *.ld file
+
+u8g_arm.c must implement the following functions:
+  void u8g_Delay(uint16_t val)		Delay by "val" milliseconds
+  void u8g_MicroDelay(void)		Delay be one microsecond
+  void u8g_10MicroDelay(void)		Delay by 10 microseconds
+
+Additionally, u8glib requires a low level procedure to communicate with the display:
+  uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+
+Depending on the argument "msg", arg_val and arg_ptr have different meanings.
+
+msg == U8G_COM_MSG_STOP
+  Expected action:
+    Shut down display (not used at the moment)
+  arg_val:
+    not used
+  arg_ptr:
+    not used
+  
+msg == U8G_COM_MSG_INIT
+  Expected action:
+    Setup and init the display. "arg_val" contains a hint about the possible SPI speed.
+  arg_val: 
+    U8G_SPI_CLK_CYCLE_50NS, U8G_SPI_CLK_CYCLE_300NS, U8G_SPI_CLK_CYCLE_400NS, U8G_SPI_CLK_CYCLE_NONE
+    U8G_SPI_CLK_CYCLE_NONE has the largest value.
+  arg_ptr:
+    not used
+    
+msg == U8G_COM_MSG_ADDRESS
+  Expected action:
+    Set the address line (or data/instruction input) of the display. 
+  arg_val: 
+    0: low level
+    1: high level
+  arg_ptr:
+    not used
+
+msg == U8G_COM_MSG_CHIP_SELECT
+  Expected action:
+    Enable the controller chip.
+  arg_val:
+    0: no controller enabled
+    1: enable 1st controller
+    2: enable 2nd controller
+    3: enable 3rd controller
+  arg_ptr:
+    not used
+
+msg == U8G_COM_MSG_RESET
+  Expected action:
+    Set level for the reset input of the display.
+  arg_val: 
+    0: low level
+    1: high level
+  arg_ptr:
+    not used
+
+msg == U8G_COM_MSG_WRITE_BYTE
+  Expected action:
+    Send single byte to the display.
+  arg_val: 
+    Value, that should be sent to the display.
+  arg_ptr:
+    not used
+
+msg == U8G_COM_MSG_WRITE_SEQ
+msg == U8G_COM_MSG_WRITE_SEQ_P
+  Expected action:
+    Send a sequence of bytes to the display.
+  arg_val: 
+    Number of bytes to sent
+  arg_ptr:
+    Pointer to the memory location of the first value.
+    For AVR controller, the memory location can be in 
+    flash (message U8G_COM_MSG_WRITE_SEQ_P),
+    
+
+
+============================================================
+= NXP LPC Install Instructions =
+
+== Linux/Ubuntu ==
+
+From 
+  https://launchpad.net/gcc-arm-embedded/
+download and extract 
+  Linux installation tarball
 
 From
   http://sourceforge.net/projects/lpc21isp/files/
@@ -24,12 +138,13 @@ and
 Depending on your controller, do one of the following:
 
 1) Target controller is named in this U8glib distribution
-    --> Nothing to do. Examples will directly work
+    --> Nothing to do. Examples will work
 2) A member of the same controller family is available in the U8glib distribution
     --> locate the *.ld script in the "common" folder and update the FLASH and RAM values
 3) If neither 1) or 2) is true for the target controller, one example subdirectory (e.g.
     lpc1114 can be used as template. Usually you need to update/replace all files
-    in the common folder.
+    in the common folder. See also the generic instruction in the first section of this 
+    document.
 
 == Compile U8g example ==
 
