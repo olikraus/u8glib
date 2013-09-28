@@ -122,8 +122,9 @@ u8glib ChangeLog
   * Added additional argument u8g_InitCom(). Use U8G_SPI_CLK_CYCLE_NONE by default.
   * Added double buffer option for many ST7565 devices
   * Tested with Arduino 1.0.5
-
-  
+2013-xx-xx	v1.14	  Oliver Kraus <olikraus@gmail.com>
+  * Support for ARM controller
+  * ...
   
   
   

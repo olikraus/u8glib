@@ -10,6 +10,7 @@ rm -rf u8g_arm
 mkdir u8g_arm
 cd u8g_arm
 cp ../INSTALL .
+cp ../../../../ChangeLog .
 mkdir src
 cd src
 cp ../../../../../csrc/*.[hc] .
