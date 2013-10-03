@@ -45,6 +45,8 @@ static const uint8_t u8g_dev_dogs102_init_seq[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
   U8G_ESC_CS(1),             /* enable chip */
+  
+  0x0e2,            		/* soft reset */
   0x040,		                /* set display start line to 0 */
   0x0a1,		                /* ADC set to reverse */
   0x0c0,		                /* common output mode */
