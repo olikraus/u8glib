@@ -32,7 +32,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -64,7 +64,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -99,7 +99,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -130,7 +130,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -170,7 +170,7 @@ HW SPI
 :Arduino
 impl.
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -217,7 +217,7 @@ HW SPI
 :Arduino
 impl.
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -272,7 +272,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -319,7 +319,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -372,7 +372,7 @@ HW SPI
 :Arduino
 impl.
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -419,7 +419,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -473,7 +473,7 @@ HW SPI
 :Arduino
 impl. (v1.10)
 :Arduino Due
-impl. v1.11
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -526,7 +526,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -557,7 +557,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -594,7 +594,7 @@ HW SPI
 :Arduino
 impl.
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -625,7 +625,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -665,7 +665,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -696,7 +696,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -735,7 +735,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -766,7 +766,7 @@ HW SPI
 :Arduino
 verified  v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -803,7 +803,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -834,7 +834,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -871,7 +871,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -902,7 +902,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -939,7 +939,7 @@ HW SPI
 :Arduino
 verified, v1.08
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -970,7 +970,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -1007,7 +1007,7 @@ HW SPI
 :Arduino
 verified v1.09
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -1038,7 +1038,7 @@ HW SPI
 :Arduino
 impl. v1.13
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -1075,7 +1075,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -1112,7 +1112,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -1432,7 +1432,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -1463,7 +1463,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -1498,7 +1498,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -1529,7 +1529,7 @@ HW SPI
 :Arduino
 verified
 :Arduino Due
-n.a.
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -1568,7 +1568,7 @@ HW SPI
 :Arduino
 impl
 :Arduino Due
-impl. v1.13
+v1.14
 :Chipkit
 impl.
 :AVR
@@ -1618,7 +1618,7 @@ SW SPI
 :Arduino
 verified
 :Arduino Due
-impl. v1.11
+v1.14
 :Chipkit
 impl.
 :AVR
@@ -1632,7 +1632,7 @@ HW SPI
 :Arduino
 impl.
 :Arduino Due
-impl. v1.13
+v1.14
 :Chipkit
 impl.
 :AVR
