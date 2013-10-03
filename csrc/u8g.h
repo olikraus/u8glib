@@ -439,7 +439,7 @@ extern u8g_dev_t u8g_dev_ssd1351_128x128_hicolor_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128_4x_hicolor_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi;
 
-/* SSD1351 OLED (Freetronic, GPIOs set to high level) */
+/* SSD1351 OLED (Freetronics, GPIOs set to high level) */
 extern u8g_dev_t u8g_dev_ssd1351_128x128gh_332_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128gh_332_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128gh_4x_332_sw_spi;

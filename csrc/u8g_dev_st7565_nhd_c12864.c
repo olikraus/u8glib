@@ -162,7 +162,7 @@ uint8_t u8g_dev_st7565_nhd_c12864_2x_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
         u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7565_nhd_c12864_data_start);    
         u8g_WriteByte(u8g, dev, 0x0b0 | (2*pb->p.page+1)); /* select current page (ST7565R) */
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
-	u8g_WriteSequence(u8g, dev, pb->width, pb->buf+pb->width);
+	u8g_WriteSequence(u8g, dev, pb->width, (uint8_t *)(pb->buf)+pb->width);
         u8g_SetChipSelect(u8g, dev, 0);
       }
       break;

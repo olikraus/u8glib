@@ -1032,10 +1032,10 @@ class U8GLIB_SSD1351_128X128_4X_332 : public U8GLIB
 class U8GLIB_SSD1351_128X128GH_332 : public U8GLIB 
 {
   public:
-    U8GLIB_SSD1351_128X128gh_332(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+    U8GLIB_SSD1351_128X128GH_332(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
       : U8GLIB(&u8g_dev_ssd1351_128x128gh_332_sw_spi, sck, mosi, cs, a0, reset)
       { }
-    U8GLIB_SSD1351_128X128gh_332(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+    U8GLIB_SSD1351_128X128GH_332(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
       : U8GLIB(&u8g_dev_ssd1351_128x128gh_332_hw_spi, cs, a0, reset)
       { }
 };
@@ -1043,10 +1043,10 @@ class U8GLIB_SSD1351_128X128GH_332 : public U8GLIB
 class U8GLIB_SSD1351_128X128GH_4X_332 : public U8GLIB 
 {
   public:
-    U8GLIB_SSD1351_128X128gh_4X_332(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+    U8GLIB_SSD1351_128X128GH_4X_332(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
       : U8GLIB(&u8g_dev_ssd1351_128x128gh_4x_332_sw_spi, sck, mosi, cs, a0, reset)
       { }
-    U8GLIB_SSD1351_128X128gh_4X_332(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+    U8GLIB_SSD1351_128X128GH_4X_332(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
       : U8GLIB(&u8g_dev_ssd1351_128x128gh_4x_332_hw_spi, cs, a0, reset)
       { }
 };
@@ -1081,6 +1081,28 @@ class U8GLIB_SSD1351_128X128_4X_HICOLOR : public U8GLIB
       { }
     U8GLIB_SSD1351_128X128_4X_HICOLOR(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
       : U8GLIB(&u8g_dev_ssd1351_128x128_4x_hicolor_hw_spi, cs, a0, reset)
+      { }
+};
+
+class U8GLIB_SSD1351_128X128GH_HICOLOR : public U8GLIB 
+{
+  public:
+    U8GLIB_SSD1351_128X128GH_HICOLOR(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128gh_hicolor_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1351_128X128GH_HICOLOR(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128gh_hicolor_hw_spi, cs, a0, reset)
+      { }
+};
+
+class U8GLIB_SSD1351_128X128GH_4X_HICOLOR : public U8GLIB 
+{
+  public:
+    U8GLIB_SSD1351_128X128GH_4X_HICOLOR(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128gh_4x_hicolor_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1351_128X128GH_4X_HICOLOR(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1351_128x128gh_4x_hicolor_hw_spi, cs, a0, reset)
       { }
 };
 

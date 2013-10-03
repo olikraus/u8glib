@@ -49,7 +49,7 @@
 #include "u8g.h"
 
 
-#if defined(ARDUINO) && define(__AVR_ATtiny85__)
+#if defined(ARDUINO) && defined(__AVR_ATtiny85__)
 
 #if ARDUINO < 100 
 #include <WProgram.h>
