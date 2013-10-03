@@ -5,10 +5,12 @@ mkdir libraries/U8glib/examples
 mkdir libraries/U8glib/examples/HelloWorld
 mkdir libraries/U8glib/examples/Bitmap
 mkdir libraries/U8glib/examples/Console
+mkdir libraries/U8glib/examples/Color
 mkdir libraries/U8glib/examples/U8gLogo
 mkdir libraries/U8glib/examples/Rotation
 mkdir libraries/U8glib/examples/PrintTest
 mkdir libraries/U8glib/examples/F
+mkdir libraries/U8glib/examples/FPS
 mkdir libraries/U8glib/examples/TextRotX
 mkdir libraries/U8glib/examples/XBM
 mkdir libraries/U8glib/examples/Chess
@@ -31,10 +33,12 @@ cp ../../../sfntsrc/*.c ./libraries/U8glib/utility/.
 cp ../../../sys/arduino/HelloWorld/*.pde ./libraries/U8glib/examples/HelloWorld/.
 cp ../../../sys/arduino/Bitmap/*.pde ./libraries/U8glib/examples/Bitmap/.
 cp ../../../sys/arduino/Console/*.pde ./libraries/U8glib/examples/Console/.
+cp ../../../sys/arduino/Color/*.pde ./libraries/U8glib/examples/Color/.
 cp ../../../sys/arduino/U8gLogo/*.pde ./libraries/U8glib/examples/U8gLogo/.
 cp ../../../sys/arduino/Rotation/*.pde ./libraries/U8glib/examples/Rotation/.
 cp ../../../sys/arduino/PrintTest/*.pde ./libraries/U8glib/examples/PrintTest/.
 cp ../../../sys/arduino/F/*.pde ./libraries/U8glib/examples/F/.
+cp ../../../sys/arduino/FPS/*.pde ./libraries/U8glib/examples/FPS/.
 cp ../../../sys/arduino/TextRotX/*.pde ./libraries/U8glib/examples/TextRotX/.
 cp ../../../sys/arduino/XBM/*.pde ./libraries/U8glib/examples/XBM/.
 cp ../../../sys/arduino/Chess/*.pde ./libraries/U8glib/examples/Chess/.
