@@ -122,9 +122,14 @@ u8glib ChangeLog
   * Added additional argument u8g_InitCom(). Use U8G_SPI_CLK_CYCLE_NONE by default.
   * Added double buffer option for many ST7565 devices
   * Tested with Arduino 1.0.5
-2013-xx-xx	v1.14	  Oliver Kraus <olikraus@gmail.com>
+2013-10-03	v1.14	  Oliver Kraus <olikraus@gmail.com>
   * Support for ARM controller
-  * ...
+  * Support for the A2 micro printer  (issue 191)
+  * Ellipse drawing primitive (issue 187)
+  * Added software reset for UC1701
+  * Fixed compiler warning (issue 196)
+  * Support for Freetronics SSD1351 OLED  (issue 195)
+  * Several other fixes and improvements
   
   
   
