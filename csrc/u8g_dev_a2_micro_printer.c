@@ -39,10 +39,6 @@
 
 #include "u8g.h"
 
-#define WIDTH 240
-#define HEIGHT 128
-#define PAGE_HEIGHT 8
-
 #define LINE_DELAY 40
 
 
@@ -192,8 +188,12 @@ uint8_t u8g_dev_a2_micro_printer_double_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
 
 #if defined(U8G_16BIT)
 U8G_PB_DEV(u8g_dev_a2_micro_printer_384x240, 384, 240, 8, u8g_dev_a2_micro_printer_fn, u8g_com_null_fn);
+U8G_PB_DEV(u8g_dev_a2_micro_printer_192x360_ds, 192, 360, 8, u8g_dev_a2_micro_printer_double_fn, u8g_com_null_fn);
+U8G_PB_DEV(u8g_dev_a2_micro_printer_192x720_ds, 192, 720, 8, u8g_dev_a2_micro_printer_double_fn, u8g_com_null_fn);
 #else
 U8G_PB_DEV(u8g_dev_a2_micro_printer_384x240, 240, 240, 8, u8g_dev_a2_micro_printer_fn, u8g_com_null_fn);
+U8G_PB_DEV(u8g_dev_a2_micro_printer_192x360_ds, 192, 240, 8, u8g_dev_a2_micro_printer_double_fn, u8g_com_null_fn);
+U8G_PB_DEV(u8g_dev_a2_micro_printer_192x720_ds, 192, 240, 8, u8g_dev_a2_micro_printer_double_fn, u8g_com_null_fn);
 #endif
 
 U8G_PB_DEV(u8g_dev_a2_micro_printer_192x120_ds, 192, 120, 8, u8g_dev_a2_micro_printer_double_fn, u8g_com_null_fn);

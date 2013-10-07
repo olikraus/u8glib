@@ -455,6 +455,8 @@ extern u8g_dev_t u8g_dev_ht1632_24x16;
 /* A2 Micro Printer */
 extern u8g_dev_t u8g_dev_a2_micro_printer_384x240;
 extern u8g_dev_t u8g_dev_a2_micro_printer_192x120_ds;
+extern u8g_dev_t u8g_dev_a2_micro_printer_192x360_ds;
+extern u8g_dev_t u8g_dev_a2_micro_printer_192x720_ds;
 
 /* u8g_virtual_screen.c  */
 extern u8g_dev_t u8g_dev_vs;
