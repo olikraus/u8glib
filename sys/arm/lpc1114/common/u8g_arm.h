@@ -60,6 +60,33 @@ void spi_init(uint32_t ns) U8G_NOINLINE;
 void spi_out(uint8_t data);
 uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
 
+/* lpc11xx_i2c.c */
+struct _i2c_struct
+{  
+  /* INPUT */
+  uint8_t adr;			/* slave address */
+  /* the following value should be set to 1 in most cases */
+  /* however, a second transmit follows, then this might be set to 0 */
+  uint8_t is_send_stop;
+  uint32_t data_cnt;		/* number of bytes to transfer */
+  uint8_t *data_buf;		/* pointer to the data */
+
+  /* INTERNAL VARIABLES */
+  uint32_t data_pos;		/* current byte to transmit */
+  uint8_t err_state;		/* state in which the error occured */
+  uint8_t err_code;		/* set to one for bus error */
+  uint8_t state;			/* internal state */
+  uint32_t timeout_cnt;	/* timeout counter */
+};
+typedef struct _i2c_struct i2c_struct;
+
+#define I2C_ERR_NONE 0
+#define I2C_ERR_BUS 1
+#define I2C_ERR_TIMEOUT 2
+
+uint8_t i2c_send_data(i2c_struct *i2c, uint8_t adr, uint32_t cnt, uint8_t *buf, uint8_t send_stop);
+uint8_t i2c_receive_data(i2c_struct *i2c, uint8_t adr, uint32_t cnt, uint8_t *buf, uint8_t send_stop);
+
 #endif
 
 
