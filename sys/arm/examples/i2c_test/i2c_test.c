@@ -150,18 +150,16 @@ void main()
       draw(pos);
     } while ( u8g_NextPage(&u8g) );
 
-    /*
-    if ( i2c_send_3byte(&i2c, 0x050, test_cnt >> 8, test_cnt & 255, test_cnt & 255, 1) != 0 )
+    if ( i2c_send_3byte(&i2c, 0x050, test_cnt >> 8, test_cnt & 255, 255 - (test_cnt & 255), 1) != 0 )
     {
       u8g_Delay(20);
+      if ( i2c_send_2byte(&i2c, 0x050, test_cnt >> 8, test_cnt & 255, 0) != 0 )
+      {
+	i2c_receive_data(&i2c, 0x050, 1, i2c_buf, 1);
+      }
     }
-    */
 
     
-    if ( i2c_send_2byte(&i2c, 0x050, test_cnt >> 8, test_cnt & 255, 1) != 0 )
-    {
-      i2c_receive_data(&i2c, 0x050, 1, i2c_buf, 1);
-    }
     test_cnt++;
     
     /* refresh screen after some delay */

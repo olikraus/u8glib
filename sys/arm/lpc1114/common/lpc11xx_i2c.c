@@ -110,8 +110,8 @@ static void i2c_step(i2c_struct *i2c)
 	  if ( i2c->is_send_stop != 0 )
 	  {
 	    LPC_I2C->CONSET = 0x010;		/* set STO flag */
-	    LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
 	  }
+	  LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
 	  i2c->state = I2C_STATE_NONE;
 	}
 	else
@@ -177,8 +177,8 @@ static void i2c_step(i2c_struct *i2c)
 	  if ( i2c->is_send_stop != 0 )
 	  {
 	    LPC_I2C->CONSET = 0x010;		/* set STO flag */
-	    LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
 	  }
+	  LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
 	  i2c->state = I2C_STATE_NONE;
 	}
 	else
