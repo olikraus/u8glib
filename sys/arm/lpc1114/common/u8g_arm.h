@@ -73,10 +73,11 @@ struct _i2c_struct
 
   /* INTERNAL VARIABLES */
   uint32_t data_pos;		/* current byte to transmit */
+  uint32_t timeout_cnt;	/* timeout counter */
+  uint8_t err_hw_stat;	/* last hw stat, that was seen */
   uint8_t err_state;		/* state in which the error occured */
   uint8_t err_code;		/* set to one for bus error */
   uint8_t state;			/* internal state */
-  uint32_t timeout_cnt;	/* timeout counter */
 };
 typedef struct _i2c_struct i2c_struct;
 
@@ -86,6 +87,8 @@ typedef struct _i2c_struct i2c_struct;
 
 uint8_t i2c_send_data(i2c_struct *i2c, uint8_t adr, uint32_t cnt, uint8_t *buf, uint8_t send_stop);
 uint8_t i2c_receive_data(i2c_struct *i2c, uint8_t adr, uint32_t cnt, uint8_t *buf, uint8_t send_stop);
+uint8_t i2c_send_2byte(i2c_struct *i2c, uint8_t adr, uint8_t b1, uint8_t b2, uint8_t send_stop);
+uint8_t i2c_send_3byte(i2c_struct *i2c, uint8_t adr, uint8_t b1, uint8_t b2, uint8_t b3, uint8_t send_stop);
 
 #endif
 

@@ -34,15 +34,17 @@ void i2c_clear_error(i2c_struct *i2c)
 {
   i2c->err_code = I2C_ERR_NONE;
   i2c->err_state = I2C_STATE_NONE;
+  i2c->err_hw_stat = 0x0ff;
 }
 
 static void _i2c_error_sub(i2c_struct *i2c)
 {
   i2c->err_state = i2c->state;
+  i2c->err_hw_stat = LPC_I2C->STAT;
   LPC_I2C->CONCLR = 0x004;		/* clear AA bit */
-  LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
   LPC_I2C->CONCLR = 0x020;		/* clear STA bit */
   LPC_I2C->CONSET = 0x010;		/* set STO flag */
+  LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
   i2c->state = I2C_STATE_ERROR;
 }
 
@@ -66,22 +68,23 @@ static void i2c_step(i2c_struct *i2c)
     case I2C_STATE_MT_GENERATE_START:
       i2c_hw_init();
       i2c_clear_error(i2c);
-      LPC_I2C->CONCLR = 0x004;		/* clear AA bit */ 
-      LPC_I2C->CONSET = 0x020;		/* generate start condition */
     
       i2c->data_pos = 0;
       i2c->timeout_cnt = 0;
       i2c->state = I2C_STATE_MT_WAIT_START;
+    
+      LPC_I2C->CONCLR = 0x004;		/* clear AA bit */ 
+      LPC_I2C->CONSET = 0x020;		/* generate start condition */
       break;
     case I2C_STATE_MT_WAIT_START:
       if ( stat == 0x08 ||  stat == 0x10 )
       {
 	/* start condition successful, transmit slave address */
-	LPC_I2C->DAT = (i2c->adr << 1 ) | 0;
-	LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
-	LPC_I2C->CONCLR = 0x020;		/* clear STA bit */ 
 	i2c->timeout_cnt = 0;
 	i2c->state = I2C_STATE_MT_WAIT_SLA;
+	LPC_I2C->CONCLR = 0x020;		/* clear STA bit */ 
+	LPC_I2C->DAT = (i2c->adr << 1 ) | 0;
+	LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
       }
       else if ( stat == 0x020 || stat == 0x038 )
       {
@@ -105,12 +108,16 @@ static void i2c_step(i2c_struct *i2c)
 	{
 	  /* generate stop condition */
 	  if ( i2c->is_send_stop != 0 )
+	  {
 	    LPC_I2C->CONSET = 0x010;		/* set STO flag */
+	    LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
+	  }
 	  i2c->state = I2C_STATE_NONE;
 	}
 	else
 	{
 	  LPC_I2C->DAT = i2c->data_buf[i2c->data_pos];
+	  LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
 	  i2c->data_pos++;
 	  i2c->timeout_cnt = 0;
 	  i2c->state = I2C_STATE_MT_WAIT_DATA;
@@ -132,21 +139,21 @@ static void i2c_step(i2c_struct *i2c)
     case I2C_STATE_MR_GENERATE_START:
       i2c_hw_init();
       i2c_clear_error(i2c);
-      LPC_I2C->CONSET = 0x020;		/* generate start condition */
-      LPC_I2C->CONCLR = 0x004;		/* clear AA bit */ 
       i2c->data_pos = 0;
       i2c->timeout_cnt = 0;
-      i2c->state = I2C_STATE_ERROR;
+      i2c->state = I2C_STATE_MR_WAIT_START;
+      LPC_I2C->CONSET = 0x020;		/* generate start condition */
+      LPC_I2C->CONCLR = 0x004;		/* clear AA bit */ 
       break;
     case I2C_STATE_MR_WAIT_START:
       if ( stat == 0x08 ||  stat == 0x10 )
       {
 	/* start condition successful, transmit slave address */
-	LPC_I2C->DAT = (i2c->adr << 1 ) | 0;
-	LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
-	LPC_I2C->CONCLR = 0x020;		/* clear STA bit */ 
 	i2c->timeout_cnt = 0;
 	i2c->state = I2C_STATE_MR_WAIT_SLA;
+	LPC_I2C->DAT = (i2c->adr << 1 ) | 1;
+	LPC_I2C->CONCLR = 0x020;		/* clear STA bit */ 
+	LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
       }
       else if ( stat == 0x020 || stat == 0x038 )
       {
@@ -163,12 +170,15 @@ static void i2c_step(i2c_struct *i2c)
       break;      
     case I2C_STATE_MR_WAIT_SLA:
     case I2C_STATE_MR_WAIT_DATA:
-      if ( stat == 0x40 )
+      if ( stat == 0x40 || stat == 0x50 || stat == 0x58 )
       {
 	if ( i2c->data_pos >= i2c->data_cnt )
 	{
 	  if ( i2c->is_send_stop != 0 )
+	  {
 	    LPC_I2C->CONSET = 0x010;		/* set STO flag */
+	    LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
+	  }
 	  i2c->state = I2C_STATE_NONE;
 	}
 	else
@@ -182,7 +192,6 @@ static void i2c_step(i2c_struct *i2c)
 	  {
 	    LPC_I2C->CONSET = 0x004;		/* set AA bit */ 
 	  }
-	  LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
 	  LPC_I2C->CONCLR = 0x020;		/* clear STA bit */
 	  
 	  if ( i2c->state != I2C_STATE_MR_WAIT_SLA )
@@ -191,6 +200,7 @@ static void i2c_step(i2c_struct *i2c)
 	    i2c->data_pos++;
 	  }
 	  i2c->state = I2C_STATE_MR_WAIT_DATA;
+	  LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
 	}
       }
       else if ( stat == 0x038 || stat == 0x048 )
@@ -288,4 +298,23 @@ uint8_t i2c_receive_data(i2c_struct *i2c, uint8_t adr, uint32_t cnt, uint8_t *bu
   i2c->state = I2C_STATE_MR_GENERATE_START;
   return i2c_do(i2c);
 }
+ 
 
+uint8_t i2c_send_2byte(i2c_struct *i2c, uint8_t adr, uint8_t b1, uint8_t b2, uint8_t send_stop)
+{
+  uint8_t buf[2];
+  buf[0] = b1;
+  buf[1] = b2;
+  
+  return i2c_send_data(i2c, adr, 2, buf, send_stop);
+}
+
+uint8_t i2c_send_3byte(i2c_struct *i2c, uint8_t adr, uint8_t b1, uint8_t b2, uint8_t b3, uint8_t send_stop)
+{
+  uint8_t buf[2];
+  buf[0] = b1;
+  buf[1] = b2;
+  buf[2] = b3;
+  
+  return i2c_send_data(i2c, adr, 3, buf, send_stop);
+}

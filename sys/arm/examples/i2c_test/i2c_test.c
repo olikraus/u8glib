@@ -65,7 +65,7 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
 u8g_t u8g;
 uint16_t test_cnt = 0;
 
-uint8_t i2c_buf[2] = { 0x0aa, 0x0aa };
+uint8_t i2c_buf[2] = { 0x0ab, 0x0aa };
 
 i2c_struct i2c;
 
@@ -73,11 +73,14 @@ void draw(uint8_t pos)
 {
   u8g_SetFont(&u8g, u8g_font_5x7r);
   u8g_DrawStr(&u8g,   0, 7, "TestCnt:");
-  u8g_DrawStr(&u8g,  80, 7, u8g_u16toa(test_cnt, 4));
+  u8g_DrawStr(&u8g,  60, 7, u8g_u16toa(test_cnt, 4));
   u8g_DrawStr(&u8g,   0, 7+8, "ErrState:");
-  u8g_DrawStr(&u8g,  80, 7+8, u8g_u8toa(i2c.err_state, 2));
+  u8g_DrawStr(&u8g,  60, 7+8, u8g_u8toa(i2c.err_state, 2));
   u8g_DrawStr(&u8g,   0, 7+16, "ErrCode:");
-  u8g_DrawStr(&u8g,  80, 7+16, u8g_u8toa(i2c.err_code, 2));
+  u8g_DrawStr(&u8g,  60, 7+16, u8g_u8toa(i2c.err_code, 2));
+  u8g_DrawStr(&u8g,   0, 7+24, "HW State:");
+  u8g_DrawStr(&u8g,  60, 7+24, u8g_u8toa(i2c.err_hw_stat, 3));
+  u8g_DrawStr(&u8g,  90, 7+24, u8g_u8toa(i2c_buf[0], 3));
 }
 
 void main()
@@ -147,11 +150,22 @@ void main()
       draw(pos);
     } while ( u8g_NextPage(&u8g) );
 
-    i2c_send_data(&i2c, 0x055, 0, i2c_buf, 1);
+    /*
+    if ( i2c_send_3byte(&i2c, 0x050, test_cnt >> 8, test_cnt & 255, test_cnt & 255, 1) != 0 )
+    {
+      u8g_Delay(20);
+    }
+    */
+
+    
+    if ( i2c_send_2byte(&i2c, 0x050, test_cnt >> 8, test_cnt & 255, 1) != 0 )
+    {
+      i2c_receive_data(&i2c, 0x050, 1, i2c_buf, 1);
+    }
     test_cnt++;
     
     /* refresh screen after some delay */
-    u8g_Delay(100);
+    u8g_Delay(480);
     
     /* update position */
     pos++;
