@@ -40,7 +40,7 @@ void show(void)
     if ( (i % 64) == 0 ) printf("\n");
     
   }
-  //printf("\n");
+  printf("\n");
 }
 
 uint8_t a1 = 20;
@@ -243,7 +243,7 @@ void check(uint8_t b1, uint8_t b2)
   clear();
   line(a1, a2, 1);
   line(b1, b2, 2);
-  // show();
+  show();
   intersection = is_array_intersection();
   p = conditionpattern(b1, b2); 
   pla[p] |= intersection+1;

@@ -6,6 +6,12 @@
   http://developer.gnome.org/gtk3/stable/GtkImage.html
   
   http://developer.gnome.org/gdk-pixbuf/unstable//gdk-pixbuf-The-GdkPixbuf-Structure.html#GdkPixbuf
+  https://developer.gnome.org/gdk-pixbuf/stable/
+  
+  https://developer.gnome.org/gdk-pixbuf/stable/gdk-pixbuf-Image-Data-in-Memory.html#gdk-pixbuf-new-from-data
+
+  Idea: Use "gdk_pixbuf_new_from_data" to create a GdkPixbuf. Then create the widget with "gtk_image_new_from_pixbuf"
+  
 */
 
 #include <gtk/gtk.h>
