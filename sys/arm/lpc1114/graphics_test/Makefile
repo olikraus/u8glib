@@ -65,7 +65,7 @@ LDSCRIPTDIR:=../common
 LDSCRIPT:=lpc11xx.ld
 
 # Uinx device of the USB-RS232 converter for the flash tool
-FLASHPORT:=/dev/ttyUSB1
+FLASHPORT:=/dev/ttyUSB0
 
 #================================================
 # Main part of the Makefile starts here. Usually no changes are needed.

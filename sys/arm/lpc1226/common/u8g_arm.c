@@ -472,20 +472,21 @@ void u8g_10MicroDelay(void)
 /*========================================================================*/
 /* u8glib com procedure */
 
+/* gps board */
+/*
+uint16_t u8g_pin_a0 = PIN(0,11);
+uint16_t u8g_pin_cs = PIN(0,6);
+uint16_t u8g_pin_rst = PIN(0,5);
+*/
+
+/* eval board */
+uint16_t u8g_pin_a0 = PIN(1,1);
+uint16_t u8g_pin_cs = PIN(1,2);
+uint16_t u8g_pin_rst = PIN(1,0);
+
+
 uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
-  /* gps board */
-  /*
-  uint16_t pin_a0 = PIN(0,11);
-  uint16_t pin_cs = PIN(0,6);
-  uint16_t pin_rst = PIN(0,5);
-  */
-
-  /* eval board */
-  uint16_t pin_a0 = PIN(1,1);
-  uint16_t pin_cs = PIN(1,2);
-  uint16_t pin_rst = PIN(1,0);
-  
   switch(msg)
   {
     case U8G_COM_MSG_STOP:
@@ -510,16 +511,16 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
 	spi_init(1200);
       }
 
-      set_gpio_mode(pin_rst, 1, 0);		/* output, no pullup */
-      set_gpio_mode(pin_cs, 1, 0);		/* output, no pullup */
-      set_gpio_mode(pin_a0, 1, 0);		/* output, no pullup */
+      set_gpio_mode(u8g_pin_rst, 1, 0);		/* output, no pullup */
+      set_gpio_mode(u8g_pin_cs, 1, 0);		/* output, no pullup */
+      set_gpio_mode(u8g_pin_a0, 1, 0);		/* output, no pullup */
 
       u8g_MicroDelay();      
       break;
     
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
       u8g_10MicroDelay();
-      set_gpio_level(pin_a0, arg_val);
+      set_gpio_level(u8g_pin_a0, arg_val);
       u8g_10MicroDelay();
      break;
 
@@ -531,18 +532,18 @@ uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_pt
 	/* this delay is required to avoid that the display is switched off too early --> DOGS102 with LPC1114 */
 	for( i = 0; i < 5; i++ )
 	  u8g_10MicroDelay();
-	set_gpio_level(pin_cs, 1);
+	set_gpio_level(u8g_pin_cs, 1);
       }
       else
       {
         /* enable */
-	set_gpio_level(pin_cs, 0);
+	set_gpio_level(u8g_pin_cs, 0);
       }
       u8g_MicroDelay();
       break;
       
     case U8G_COM_MSG_RESET:
-      set_gpio_level(pin_rst, arg_val);
+      set_gpio_level(u8g_pin_rst, arg_val);
       u8g_10MicroDelay();
       break;
       

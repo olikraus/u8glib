@@ -58,6 +58,10 @@ uint8_t get_gpio_level(uint16_t pin) U8G_NOINLINE;
 
 void spi_init(uint32_t ns) U8G_NOINLINE;
 void spi_out(uint8_t data);
+
+extern uint16_t u8g_pin_a0;
+extern uint16_t u8g_pin_cs;
+extern uint16_t u8g_pin_rst;
 uint8_t u8g_com_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
 
 /* lpc11xx_i2c.c */
