@@ -284,7 +284,7 @@ uint8_t u8g_dev_ssd1322_nhd31oled_2x_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
 	uint8_t *p = pb->buf;
 	u8g_uint_t cnt;
 	cnt = pb->width;
-	cnt >>= 3;
+	cnt >>= 2;    /* 23 Oct 2013, changed to 2 */
 
 	for( i = 0; i < pb->p.page_height; i++ )
 	{
