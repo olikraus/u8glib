@@ -69,6 +69,30 @@ static const uint8_t u8g_dev_pcd8544_init_seq[] PROGMEM = {
   U8G_ESC_END                /* end of sequence */
 };
 
+
+static const uint8_t u8g_dev_pcd8544_sleep_on[] PROGMEM = {
+  U8G_ESC_ADR(0),           	/* instruction mode */
+  U8G_ESC_CS(1),             	/* enable chip */
+  
+  0x020,		                /* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
+  0x00c,		                /* display on, normal */
+  U8G_ESC_CS(1),             	/* disable chip */
+  U8G_ESC_END                	/* end of sequence */
+};
+
+static const uint8_t u8g_dev_pcd8544_sleep_off[] PROGMEM = {
+  U8G_ESC_ADR(0),           	/* instruction mode */
+  U8G_ESC_CS(1),             	/* enable chip */
+  0x020,		                /* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
+  0x008,		                /* display blank */
+  0x024,		                /* power down (PD=1), horizontal increment (V=0), enter normal command set (H=0) */
+  
+  U8G_ESC_DLY(50),       	/* delay 50 ms */
+  U8G_ESC_CS(1),             	/* disable chip */
+  U8G_ESC_END                	/* end of sequence */
+};
+
+
 uint8_t u8g_dev_pcd8544_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
@@ -100,6 +124,12 @@ uint8_t u8g_dev_pcd8544_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       u8g_WriteByte(u8g, dev, 0x021);        /* command mode, extended function set */
       u8g_WriteByte(u8g, dev, 0x080 | ( (*(uint8_t *)arg) >> 1 ) );
       u8g_SetChipSelect(u8g, dev, 0);
+      return 1;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_pcd8544_sleep_on);    
+      return 1;
+    case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_pcd8544_sleep_off);    
       return 1;
   }
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
