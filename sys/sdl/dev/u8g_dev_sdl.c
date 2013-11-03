@@ -206,12 +206,15 @@ void u8g_sdl_start(void)
   Uint32 color = SDL_MapRGB( u8g_sdl_screen->format, 0, 0, 0 );
   /* http://www.libsdl.org/cgi/docwiki.cgi/SDL_FillRect */
   SDL_FillRect(u8g_sdl_screen, NULL, color);
+  
+  /*
   u8g_sdl_set_pixel(0,0,3);
   u8g_sdl_set_pixel(10,0,3);
   u8g_sdl_set_pixel(20,0,3);
   u8g_sdl_set_pixel(30,0,3);
   u8g_sdl_set_pixel(40,0,3);
   u8g_sdl_set_pixel(50,0,3);
+  */
 }
 
 void u8g_sdl_end(void)
@@ -445,6 +448,13 @@ uint8_t u8g_dev_sdl_2bit_double_mem_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 
 uint8_t u8g_dev_sdl_8bit_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
+  /*
+  if ( msg == U8G_DEV_MSG_INIT )
+  {
+      u8g_sdl_init_R3G3B2();
+  }
+  return 1;
+  */
   
   switch(msg)
   {
