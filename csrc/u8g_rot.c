@@ -40,7 +40,12 @@ uint8_t u8g_dev_rot90_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 uint8_t u8g_dev_rot180_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 uint8_t u8g_dev_rot270_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg);
 
-u8g_dev_t u8g_dev_rot = { u8g_dev_rot90_fn, NULL, NULL };
+uint8_t u8g_dev_rot_dummy_fn(void *u8g, void *dev, uint8_t msg, void *arg)
+{
+  return 0;
+}
+
+u8g_dev_t u8g_dev_rot = { u8g_dev_rot_dummy_fn, NULL, NULL };
 
 
 void u8g_UndoRotation(u8g_t *u8g)

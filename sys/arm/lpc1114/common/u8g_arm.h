@@ -72,6 +72,8 @@ struct _i2c_struct
   /* the following value should be set to 1 in most cases */
   /* however, a second transmit follows, then this might be set to 0 */
   uint8_t is_send_stop;
+  uint32_t pre_data_cnt;
+  uint8_t *pre_data_buf;
   uint32_t data_cnt;		/* number of bytes to transfer */
   uint8_t *data_buf;		/* pointer to the data */
 
@@ -90,6 +92,7 @@ typedef struct _i2c_struct i2c_struct;
 #define I2C_ERR_TIMEOUT 2
 
 uint8_t i2c_send_data(i2c_struct *i2c, uint8_t adr, uint32_t cnt, uint8_t *buf, uint8_t send_stop);
+uint8_t i2c_send_pre_data(i2c_struct *i2c, uint8_t adr, uint32_t pre_cnt, uint8_t *pre_buf, uint32_t cnt, uint8_t *buf);
 uint8_t i2c_receive_data(i2c_struct *i2c, uint8_t adr, uint32_t cnt, uint8_t *buf, uint8_t send_stop);
 uint8_t i2c_send_2byte(i2c_struct *i2c, uint8_t adr, uint8_t b1, uint8_t b2, uint8_t send_stop);
 uint8_t i2c_send_3byte(i2c_struct *i2c, uint8_t adr, uint8_t b1, uint8_t b2, uint8_t b3, uint8_t send_stop);

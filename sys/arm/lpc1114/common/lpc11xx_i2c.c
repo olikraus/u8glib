@@ -104,7 +104,7 @@ static void i2c_step(i2c_struct *i2c)
       if ( stat == 0x018 ||  stat == 0x028 )
       {
 	/* slave available or byte has been transmitted, transmit another byte */
-	if ( i2c->data_pos >= i2c->data_cnt )
+	if ( i2c->data_pos >= i2c->pre_data_cnt + i2c->data_cnt )
 	{
 	  /* generate stop condition */
 	  if ( i2c->is_send_stop != 0 )
@@ -116,7 +116,14 @@ static void i2c_step(i2c_struct *i2c)
 	}
 	else
 	{
-	  LPC_I2C->DAT = i2c->data_buf[i2c->data_pos];
+	  if ( i2c->data_pos < i2c->pre_data_cnt )
+	  {
+	    LPC_I2C->DAT = i2c->pre_data_buf[i2c->data_pos];
+	  }
+	  else
+	  {
+	    LPC_I2C->DAT = i2c->data_buf[i2c->data_pos-i2c->pre_data_cnt];
+	  }
 	  LPC_I2C->CONCLR = 0x008;		/* clear SI bit */ 
 	  i2c->data_pos++;
 	  i2c->timeout_cnt = 0;
@@ -260,8 +267,25 @@ uint8_t i2c_send_data(i2c_struct *i2c, uint8_t adr, uint32_t cnt, uint8_t *buf, 
 {
   i2c->adr = adr;
   i2c->is_send_stop = send_stop;
+  i2c->pre_data_cnt = 0;
+  i2c->pre_data_buf = NULL;
   i2c->data_cnt = cnt;
   i2c->data_buf = buf;
+  
+  i2c_clear_error(i2c);  
+  i2c->state = I2C_STATE_MT_GENERATE_START;
+  return i2c_do(i2c);
+}
+
+uint8_t i2c_send_pre_data(i2c_struct *i2c, uint8_t adr, uint32_t pre_cnt, uint8_t *pre_buf, uint32_t cnt, uint8_t *buf)
+{
+  i2c->adr = adr;
+  i2c->is_send_stop = 1;
+  i2c->pre_data_cnt = pre_cnt;
+  i2c->pre_data_buf = pre_buf;
+  i2c->data_cnt = cnt;
+  i2c->data_buf = buf;
+  
   i2c_clear_error(i2c);  
   i2c->state = I2C_STATE_MT_GENERATE_START;
   return i2c_do(i2c);
@@ -294,6 +318,8 @@ uint8_t i2c_receive_data(i2c_struct *i2c, uint8_t adr, uint32_t cnt, uint8_t *bu
   i2c->is_send_stop = send_stop;
   i2c->data_cnt = cnt;
   i2c->data_buf = buf;
+  i2c->pre_data_cnt = 0;
+  i2c->pre_data_buf = NULL;
   i2c_clear_error(i2c);  
   i2c->state = I2C_STATE_MR_GENERATE_START;
   return i2c_do(i2c);
