@@ -44,11 +44,14 @@
 static const uint8_t u8g_dev_uc1608_240x64_init_seq[] PROGMEM = {
   U8G_ESC_CS(1),             /* disable chip (UC1608 has positive logic for CS) */
   U8G_ESC_ADR(0),           /* instruction mode */
-  U8G_ESC_RST(1),           /* do reset low pulse with (1*16)+2 milliseconds */
-  U8G_ESC_CS(0),             /* enable chip */
+  U8G_ESC_RST(1),           /* do reset low pulse with (15*16)+2 milliseconds */
   
+  
+  U8G_ESC_CS(0),             /* enable chip */
   0x0e2,            		/* soft reset */
-  U8G_ESC_DLY(200),       /* delay 200 ms */
+  
+  U8G_ESC_DLY(100),       /* delay 100 ms */
+  U8G_ESC_DLY(100),       /* delay 100 ms */
 #if HEIGHT <= 96
   0x023,				/* Bit 0/1: Temp compenstation, Bit 2: Multiplex Rate 0=96, 1=128 */
 #else
@@ -57,9 +60,13 @@ static const uint8_t u8g_dev_uc1608_240x64_init_seq[] PROGMEM = {
 #endif  
   0x0c8,		                /* Map control, Bit 3: MY=1, Bit 2: MX=0, Bit 0: MSF =0 */
   0x0e8,		                /* LCD bias Bits 0/1: 00=10.7 01=10.3, 10=12.0, 11=12.7*/
+  
   0x081,		                /* set contrast (bits 0..5) and gain (bits 6/7) */
-  0x040,		                /* ECR24064-1: 0x040*/
-  0x02f,		                /* power on, Bit 2 PC2=1 (internal charge pump), Bits 0/1: cap of panel*/  
+  0x014,		                /* ECR24064-1 default: 0x040*/
+  
+  0x02f,		                /* power on, Bit 2 PC2=1 (internal charge pump), Bits 0/1: cap of panel */  
+  U8G_ESC_DLY(50),         /* delay 50 ms */
+  
   0x040,		                /* set display start line to 0 */
   0x090,		                /* no fixed lines */
   0x089,		                /* RAM access control  */
@@ -68,7 +75,6 @@ static const uint8_t u8g_dev_uc1608_240x64_init_seq[] PROGMEM = {
   0x0a4,		                /* normal display  */
   0x0a5,		                /* display all points, ST7565, UC1610 */
   U8G_ESC_DLY(100),       /* delay 100 ms */
-  U8G_ESC_DLY(100),       /* delay 100 ms */
   0x0a4,		                /* normal display */
   U8G_ESC_CS(1),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
@@ -76,8 +82,8 @@ static const uint8_t u8g_dev_uc1608_240x64_init_seq[] PROGMEM = {
 
 static const uint8_t u8g_dev_uc1608_240x64_data_start[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
-  U8G_ESC_CS(1),             /* enable chip */
-  0x010,		/* set upper 4 bit of the col adr to 0 (UC1608)  /
+  U8G_ESC_CS(0),             /* enable chip */
+  0x010,		/* set upper 4 bit of the col adr to 0 (UC1608)  */
   0x000,		/* set lower 4 bit of the col adr to 0 */      
   U8G_ESC_END                /* end of sequence */
 };
@@ -100,15 +106,15 @@ uint8_t u8g_dev_uc1608_240x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
         if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
           return 0;
-        u8g_SetChipSelect(u8g, dev, 0);
+        u8g_SetChipSelect(u8g, dev, 1);
       }
       break;
     case U8G_DEV_MSG_CONTRAST:
-      u8g_SetChipSelect(u8g, dev, 1);
+      u8g_SetChipSelect(u8g, dev, 0);
       u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
       u8g_WriteByte(u8g, dev, 0x081);
-      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 2);
-      u8g_SetChipSelect(u8g, dev, 0);      
+      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 2);	/* set contrast from, keep gain at 0 */
+      u8g_SetChipSelect(u8g, dev, 1);      
       return 1;
   }
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
