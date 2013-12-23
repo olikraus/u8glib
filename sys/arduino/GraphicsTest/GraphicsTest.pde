@@ -53,7 +53,7 @@
 //U8GLIB_NHD31OLED_2X_GR u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9, 8);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-U8GLIB_DOGM128 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_DOGM128 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM128_2X u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_ST7920_128X64_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
 //U8GLIB_ST7920_128X64_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
@@ -160,6 +160,15 @@ void u8g_line(uint8_t a) {
   u8g.drawLine(7+a*4, 10, 100, 55);
 }
 
+void u8g_triangle(uint8_t a) {
+  uint16_t offset = a;
+  u8g.drawStr( 0, 0, "drawTriangle");
+  u8g.drawTriangle(14,7, 45,30, 10,40);
+  u8g.drawTriangle(14+offset,7-offset, 45+offset,30-offset, 57+offset,10-offset);
+  u8g.drawTriangle(57+offset*2,10, 45+offset*2,30, 86+offset*2,53);
+  u8g.drawTriangle(10+offset,40+offset, 45+offset,30+offset, 86+offset,53+offset);
+}
+
 void u8g_ascii_1() {
   char s[2] = " ";
   uint8_t x, y;
@@ -213,7 +222,6 @@ void u8g_extra_page(uint8_t a)
     u8g.setColorIndex(3);
     u8g.drawBox(0+2*a, 4+2*a, 64-4*a, 32-4*a);
     u8g.drawBox(78, 20, 4, 12);
-    
   }
   else
   {
@@ -235,9 +243,10 @@ void draw(void) {
     case 2: u8g_r_frame(draw_state&7); break;
     case 3: u8g_string(draw_state&7); break;
     case 4: u8g_line(draw_state&7); break;
-    case 5: u8g_ascii_1(); break;
-    case 6: u8g_ascii_2(); break;
-    case 7: u8g_extra_page(draw_state&7); break;
+    case 5: u8g_triangle(draw_state&7); break;
+    case 6: u8g_ascii_1(); break;
+    case 7: u8g_ascii_2(); break;
+    case 8: u8g_extra_page(draw_state&7); break;
   }
 }
 
@@ -261,7 +270,7 @@ void loop(void) {
   
   // increase the state
   draw_state++;
-  if ( draw_state >= 8*8 )
+  if ( draw_state >= 9*8 )
     draw_state = 0;
   
   // rebuild the picture after some delay

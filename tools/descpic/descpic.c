@@ -1077,10 +1077,49 @@ void draw_scale(u8g_t *u8g)
   u8g_UndoScale(u8g);					// IMPORTANT: Switch back to normal mode
 }
 
+void draw_triangle(u8g_t *u8g)
+{
+  u8g_uint_t ox, oy, w, h;
+  ox = 80;
+  oy = 80;
+  w = 128;
+  h = 64;
+
+  u8g_SetDefaultForegroundColor(u8g);
+  draw_common(u8g, ox, oy, w, h);
+
+  u8g_DrawTriangle(u8g, ox+14,oy+9, ox+45,oy+32, ox+9,oy+42);
+
+  u8g_DrawTriangle(u8g, ox+14,oy+55, ox+45,oy+32+1, ox+9,oy+42+1);
+  
+  
+  u8g_SetFont(u8g, u8g_font_6x13);
+  u8g_SetFontRefHeightText(u8g);
+  u8g_SetFontPosTop(u8g);
+
+  u8g_SetFont(u8g, u8g_font_6x10);
+  
+  u8g_DrawStr(u8g, ox+14-51, oy+9+4, "(14,9)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+14-1, oy+9);
+  u8g_DrawCursor(u8g);
+
+  u8g_DrawStr(u8g, ox+9-51, oy+43+4, "(9,43)");
+  u8g_SetCursorStyle(u8g, 144);
+  u8g_SetCursorPos(u8g, ox+9-1, oy+43);
+  u8g_DrawCursor(u8g);
+
+  u8g_DrawStr(u8g, ox+45+17, oy+32+4, "(45,32)");
+  u8g_SetCursorStyle(u8g, 142);
+  u8g_SetCursorPos(u8g, ox+45+1, oy+32);
+  u8g_DrawCursor(u8g);
+
+}
+
 
 int main(void)
 {
-  
+
   create_picture(draw_hello_world, "hello_world");
   create_picture(draw_display, "display");
   create_picture(draw_text_abc, "text_abc");
@@ -1132,6 +1171,7 @@ int main(void)
   
   
   create_picture_rot90(draw_text_abc_rot90, "rot90");
+  create_picture(draw_triangle, "triangle");
   
   return 0;
 }
