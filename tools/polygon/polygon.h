@@ -47,7 +47,6 @@
 #include <stdint.h>
 
 typedef int16_t pg_word_t;
-typedef int32_t pg_dword_t;
 
 #ifdef __GNUC__
 #define PG_NOINLINE __attribute__((noinline))

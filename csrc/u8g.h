@@ -1262,6 +1262,63 @@ void u8g_EnableCursor(u8g_t *u8g);
 void u8g_DisableCursor(u8g_t *u8g);
 void u8g_DrawCursor(u8g_t *u8g);
 
+/* u8g_polygon.c */
+
+typedef int16_t pg_word_t;
+
+#define PG_NOINLINE U8G_NOINLINE
+
+struct pg_point_struct
+{
+  pg_word_t x;
+  pg_word_t y;
+};
+
+typedef struct _pg_struct pg_struct;	/* forward declaration */
+
+struct pg_edge_struct
+{
+  pg_word_t x_direction;	/* 1, if x2 is greater than x1, -1 otherwise */
+  pg_word_t height;
+  pg_word_t current_x_offset;
+  pg_word_t error_offset;
+  
+  /* --- line loop --- */
+  pg_word_t current_y;
+  pg_word_t max_y;
+  pg_word_t current_x;
+  pg_word_t error;
+
+  /* --- outer loop --- */
+  uint8_t (*next_idx_fn)(pg_struct *pg, uint8_t i);
+  uint8_t curr_idx;
+};
+
+/* maximum number of points in the polygon */
+/* can be redefined, but highest possible value is 254 */
+#define PG_MAX_POINTS 6
+
+/* index numbers for the pge structures below */
+#define PG_LEFT 0
+#define PG_RIGHT 1
+
+
+struct _pg_struct
+{
+  struct pg_point_struct list[PG_MAX_POINTS];
+  uint8_t cnt;
+  uint8_t is_min_y_not_flat;
+  pg_word_t total_scan_line_cnt;
+  struct pg_edge_struct pge[2];	/* left and right line draw structures */
+};
+
+void pg_ClearPolygonXY(pg_struct *pg);
+void pg_AddPolygonXY(pg_struct *pg, u8g_t *u8g, int16_t x, int16_t y);
+void pg_DrawPolygon(pg_struct *pg, u8g_t *u8g);
+void u8g_ClearPolygonXY(void);
+void u8g_AddPolygonXY(u8g_t *u8g, int16_t x, int16_t y);
+void u8g_DrawPolygon(u8g_t *u8g);
+void u8g_DrawTriangle(u8g_t *u8g, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
 
 
 /*===============================================================*/
