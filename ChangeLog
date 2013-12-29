@@ -130,7 +130,9 @@ u8glib ChangeLog
   * Fixed compiler warning (issue 196)
   * Support for Freetronics SSD1351 OLED  (issue 195)
   * Several other fixes and improvements
-  
+2013-xx-xx	v1.15	  Oliver Kraus <olikraus@gmail.com>
+  * Fixed issue with more than one ST7920 controller (SW SPI)
+  * Added "drawTriangle"
   
   
   
