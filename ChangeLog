@@ -133,7 +133,7 @@ u8glib ChangeLog
 2013-xx-xx	v1.15	  Oliver Kraus <olikraus@gmail.com>
   * Fixed issue with more than one ST7920 controller (SW SPI)
   * Added "drawTriangle"
-  
+  * Added support for UC1608 (issue 214)
   
   
   
