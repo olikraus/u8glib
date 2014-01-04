@@ -285,7 +285,7 @@ uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void
 
 /* #elif defined(__18CXX) || defined(__PIC32MX) */
 
-#elif defined(__arm__)		// Arduino Due, maybe we should better check for __SAM3X8E__
+#elif defined(__SAM3X8E__)		// Arduino Due, maybe we should better check for __SAM3X8E__
 
 #include <Arduino.h> 
 

@@ -161,7 +161,7 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
 
 /*=========================================================*/
 /* Arduino Due */
-#elif defined(__arm__)
+#elif defined(__SAM3X8E__)
 
 /* Due */
 
