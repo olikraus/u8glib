@@ -15,6 +15,8 @@ mkdir src
 cd src
 cp ../../../../../csrc/*.[hc] .
 cp ../../../../../sfntsrc/*.[hc] .
+rm u8g_com_arduino*.c
+rm u8g_com_atmega*.c
 cd ..
 cd ..
 ./sub_create.sh	lpc1114
