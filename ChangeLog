@@ -130,10 +130,13 @@ u8glib ChangeLog
   * Fixed compiler warning (issue 196)
   * Support for Freetronics SSD1351 OLED  (issue 195)
   * Several other fixes and improvements
-2013-xx-xx	v1.15	  Oliver Kraus <olikraus@gmail.com>
-  * Fixed issue with more than one ST7920 controller (SW SPI)
+2014-xx-xx	v1.15	  Oliver Kraus <olikraus@gmail.com>
+  * Fixed issue with more than one SPI controller (SW SPI, issue 227)
   * Added "drawTriangle"
   * Added support for UC1608 (issue 214)
+  * SW SPI support for Teensy 3 (issue 230)
+  
+  
   
   
   

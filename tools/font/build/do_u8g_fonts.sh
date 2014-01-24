@@ -254,6 +254,22 @@ echo "adobe symb"
 ../bdf2u8g/bdf2u8g ../bdf/symb24.bdf u8g_font_symb24 u8g_font_symb24.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/symb24.bdf u8g_font_symb24r u8g_font_symb24r.c > /dev/null
 
+echo "profont"
+../bdf2u8g/bdf2u8g ../bdf/profont10.bdf u8g_font_profont10 u8g_font_profont10.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/profont10.bdf u8g_font_profont10r u8g_font_profont10r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/profont11.bdf u8g_font_profont11 u8g_font_profont11.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/profont11.bdf u8g_font_profont11r u8g_font_profont11r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/profont12.bdf u8g_font_profont12 u8g_font_profont12.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/profont12.bdf u8g_font_profont12r u8g_font_profont12r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/profont15.bdf u8g_font_profont15 u8g_font_profont15.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/profont15.bdf u8g_font_profont15r u8g_font_profont15r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/profont17.bdf u8g_font_profont17 u8g_font_profont17.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/profont17.bdf u8g_font_profont17r u8g_font_profont17r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/profont22.bdf u8g_font_profont22 u8g_font_profont22.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/profont22.bdf u8g_font_profont22r u8g_font_profont22r.c > /dev/null
+../bdf2u8g/bdf2u8g ../bdf/profont29.bdf u8g_font_profont29 u8g_font_profont29.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/profont29.bdf u8g_font_profont29r u8g_font_profont29r.c > /dev/null
+
 
 echo "contributed"
 ../bdf2u8g/bdf2u8g  -b 32 -e 127  ../bdf/freedoomr25n.bdf u8g_font_freedoomr25n u8g_font_freedoomr25n.c > /dev/null

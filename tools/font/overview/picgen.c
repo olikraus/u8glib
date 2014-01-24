@@ -1362,7 +1362,6 @@ int main(void)
 #endif
 
 #ifdef OLI
-#endif
 
 
   pic_gen_font(u8g_font_10x20, "u8g_font_10x20", 14, "X11 Display Font");
@@ -1796,8 +1795,30 @@ int main(void)
 
   pic_gen_font(u8g_font_u8glib_4, "u8g_font_u8glib_4", 10, "u8glib 4");
   pic_gen_font(u8g_font_u8glib_4r, "u8g_font_u8glib_4r", 10, "u8glib 4");
+#endif
 
-return 0;
+  pic_gen_font(u8g_font_profont10, "u8g_font_profont10", 10, "ProFont");
+  pic_gen_font(u8g_font_profont10r, "u8g_font_profont10r", 10, "ProFont");
+
+  pic_gen_font(u8g_font_profont11, "u8g_font_profont11", 10, "ProFont");
+  pic_gen_font(u8g_font_profont11r, "u8g_font_profont11r", 10, "ProFont");
+
+  pic_gen_font(u8g_font_profont12, "u8g_font_profont12", 10, "ProFont");
+  pic_gen_font(u8g_font_profont12r, "u8g_font_profont12r", 10, "ProFont");
+
+  pic_gen_font(u8g_font_profont15, "u8g_font_profont15", 10, "ProFont");
+  pic_gen_font(u8g_font_profont15r, "u8g_font_profont15r", 10, "ProFont");
+
+  pic_gen_font(u8g_font_profont17, "u8g_font_profont17", 12, "ProFont");
+  pic_gen_font(u8g_font_profont17r, "u8g_font_profont17r", 12, "ProFont");
+
+  pic_gen_font(u8g_font_profont22, "u8g_font_profont22", 15, "ProFont");
+  pic_gen_font(u8g_font_profont22r, "u8g_font_profont22r", 15, "ProFont");
+
+  pic_gen_font(u8g_font_profont29, "u8g_font_profont29", 18, "ProFont");
+  pic_gen_font(u8g_font_profont29r, "u8g_font_profont29r", 18, "ProFont");
+
+  return 0;
 }
 
 
