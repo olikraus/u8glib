@@ -196,7 +196,7 @@ verified
 :Com
 SW SPI
 :Device
-<tt>u8g_dev_ssd1325_nhd27oled_2x_gr_sw_spi</tt>
+<tt>u8g_dev_ssd1327_96x96_2x_gr_sw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_SSD1327_96X96_2X_GR(sck, mosi, cs, a0 [, reset])</tt>
 :Arduino
@@ -211,7 +211,7 @@ impl.
 :Com
 HW SPI
 :Device
-<tt>u8g_dev_ssd1325_nhd27oled_2x_gr_hw_spi</tt>
+<tt>u8g_dev_ssd1327_96x96_2x_gr_hw_spi</tt>
 :C++ Constructor
 <tt>U8GLIB_SSD1327_96X96_2X_GR(cs, a0 [, reset])</tt>
 :Arduino
@@ -233,6 +233,45 @@ I2C
 impl.
 :Arduino Due
 n.a.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Controller
+SSD1322
+:Display/Size
+NHD-3.12-25664, 256x64
+:Mode
+4L
+:Set Contrast
+yes
+:Page Size
+256 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ssd1322_nhd31oled_gr_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD31OLED_GR(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Arduino Due
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ssd1322_nhd31oled_gr_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_NHD31OLED_GR(cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Arduino Due
+v1.14
 :Chipkit
 n.a.
 :AVR
@@ -631,7 +670,6 @@ n.a.
 :AVR
 impl. v1.13
 ::
-::
 :Controller
 UC1601
 :Display/Size
@@ -701,6 +739,76 @@ v1.14
 n.a.
 :AVR
 impl. v1.13
+::
+:Controller
+UC1608
+:Display/Size
+240x64
+:Mode
+BW
+:Set Contrast
+yes
+:Page Size
+240 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_uc1608_240x64_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_UC1608_240X64(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl. v1.15
+:Arduino Due
+impl. v1.15
+:Chipkit
+impl. v1.15
+:AVR
+impl. v1.15
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_uc1608_240x64_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_UC1608_240X64(cs, a0 [, reset])</tt>
+:Arduino
+impl. v1.15
+:Arduino Due
+impl. v1.15
+:Chipkit
+n.a.
+:AVR
+impl. v1.15
+::
+:Page Size
+256 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_uc1608_240x64_2x_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_UC1608_240X64_2X(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl. v1.15
+:Arduino Due
+impl. v1.15
+:Chipkit
+impl. v1.15
+:AVR
+impl. v1.15
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_uc1608_240x64_2x_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_UC1608_240X64_2X(cs, a0 [, reset])</tt>
+:Arduino
+impl. v1.15
+:Arduino Due
+impl. v1.15
+:Chipkit
+n.a.
+:AVR
+impl. v1.15
 ::
 :Controller
 ST7565
