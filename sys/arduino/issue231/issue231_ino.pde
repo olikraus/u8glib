@@ -4,8 +4,10 @@
 // IMPORTANT NOTE: The following list is incomplete. The complete list of supported 
 // devices with all constructor calls is here: http://code.google.com/p/u8glib/wiki/device
 
+U8GLIB_DOGM128 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+
 //HW DIP 2&4 ON 1&3 OFF
-U8GLIB_DOGM128_2X u8g(40, 38, 39);
+//U8GLIB_DOGM128_2X u8g(40, 38, 39);
 //U8GLIB_DOGM128 u8g(40, 38, 39);
 //SW DIP 1&3 ON 2&4 OFF
 //U8GLIB_DOGM128 u8g(33, 34, 40, 38, 39);
@@ -17,7 +19,7 @@ U8GLIB_DOGM128_2X u8g(40, 38, 39);
 //Inside you'll find the defines for the resolution and the databits naming
 #include "BaseBody.xbm"
 //In this file, I didn't renamed the names of the array and the resolutin defines, soI kept pic_width, pic_height and pic_bits
-#include "BaseBody48.xbm"
+#include "BaseBody64.xbm"
 //This is the same picture of BaseBody but resized with an H multiple of 8, so it works. 
 //IMPORTANT, I don't have one now but I'll provide you ASAP: the BMP files begin with the vertical column filled with a black pixel in case of photoshop.
 //IF i don't shift the image in the canvas to the right of one pixel, the first column become the last, keeping the image integer in the overall but not for the first column.
@@ -77,6 +79,7 @@ void loop(void) {
   // picture loop
   u8g.firstPage();  
   do {
+    draw_state = 4;
     draw();
   } while( u8g.nextPage() );
   // increase the state
