@@ -61,10 +61,10 @@
 
 #if defined(__AVR__)
 
-uint8_t u8g_bitData, u8g_bitNotData;
-uint8_t u8g_bitClock, u8g_bitNotClock;
-volatile uint8_t *u8g_outData;
-volatile uint8_t *u8g_outClock;
+static uint8_t u8g_bitData, u8g_bitNotData;
+static uint8_t u8g_bitClock, u8g_bitNotClock;
+static volatile uint8_t *u8g_outData;
+static volatile uint8_t *u8g_outClock;
 
 static void u8g_com_arduino_init_shift_out(uint8_t dataPin, uint8_t clockPin)
 {
