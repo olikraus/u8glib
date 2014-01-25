@@ -131,10 +131,13 @@ u8glib ChangeLog
   * Support for Freetronics SSD1351 OLED  (issue 195)
   * Several other fixes and improvements
 2014-xx-xx	v1.15	  Oliver Kraus <olikraus@gmail.com>
+  * Fixed a bug with the rotation procs:  Occupied too much flash ROM (issue 219)
   * Fixed issue with more than one SPI controller (SW SPI, issue 227)
-  * Added "drawTriangle"
+  * Added "drawTriangle" (issue 226)
   * Added support for UC1608 (issue 214)
+  * Added ProFont family of fonts (issue  234)
   * SW SPI support for Teensy 3 (issue 230)
+  * Removed Arduino/AVR specific files from ARM port (issue 209)
   
   
   
