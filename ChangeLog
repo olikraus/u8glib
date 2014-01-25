@@ -130,7 +130,7 @@ u8glib ChangeLog
   * Fixed compiler warning (issue 196)
   * Support for Freetronics SSD1351 OLED  (issue 195)
   * Several other fixes and improvements
-2014-xx-xx	v1.15	  Oliver Kraus <olikraus@gmail.com>
+2014-01-25	v1.15	  Oliver Kraus <olikraus@gmail.com>
   * Fixed a bug with the rotation procs:  Occupied too much flash ROM (issue 219)
   * Fixed issue with more than one SPI controller (SW SPI, issue 227)
   * Added "drawTriangle" (issue 226)
