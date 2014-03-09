@@ -14,7 +14,9 @@
  * Com
   * HW SPI: Use pin definitions from the Arduino variant files
   * SW SPI: Use internal software SPI communication
-  * I2C: Use hardware I2C/TWI 
+  * I2C: Use hardware I2C/TWI. The following options are supported:
+   * {{{U8G_I2C_OPT_NONE}}}: Normal TWI operation.
+   * {{{U8G_I2C_OPT_NO_ACK}}}: U8glib will ignore ACK (for those devices which do not send ACK, Available with v1.16)
   * 8Bit: 8 bit parallel communication with {{{digitalWrite}}}
   * 8Bit Fast: 8 bit parallel communication with {{{digitalPinToPort}}} 
 

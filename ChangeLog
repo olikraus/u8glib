@@ -138,7 +138,8 @@ u8glib ChangeLog
   * Added ProFont family of fonts (issue  234)
   * SW SPI support for Teensy 3 (issue 230)
   * Removed Arduino/AVR specific files from ARM port (issue 209)
-  
+2014-xx-xx	v1-16	  Oliver Kraus <olikraus@gmail.com>
+  * Added support for display which does not send I2C ACK (issue 239)
   
   
   
