@@ -420,6 +420,11 @@ extern u8g_dev_t u8g_dev_ssd1306_128x32_2x_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x32_2x_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x32_2x_i2c;
 
+/* OLED 60x32 Display with LD7032 Controller */
+extern u8g_dev_t u8g_dev_ld7032_60x32_sw_spi;
+extern u8g_dev_t u8g_dev_ld7032_60x32_hw_spi;
+extern u8g_dev_t u8g_dev_ld7032_60x32_parallel;
+
 /* experimental 65K TFT with st7687 controller */
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi;
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_8bit;

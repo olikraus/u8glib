@@ -38,7 +38,8 @@
 
 #include "u8g.h"
 
-#define WIDTH 128
+/* define width as 64, so that it is devidable by 8 */
+#define WIDTH 64
 #define HEIGHT 32
 #define PAGE_HEIGHT 8
 
@@ -163,10 +164,7 @@ static const uint8_t u8g_dev_ld7032_60x32_data_start[] PROGMEM = {
 static const uint8_t u8g_dev_ld7032_60x32_sleep_on[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
-  0x0ac,		/* static indicator off */
-  0x000,		                /* indicator register set (not sure if this is required) */
-  0x0ae,		/* display off */      
-  0x0a5,		/* all points on */      
+  /* ... */
   U8G_ESC_CS(1),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
 };
@@ -174,8 +172,7 @@ static const uint8_t u8g_dev_ld7032_60x32_sleep_on[] PROGMEM = {
 static const uint8_t u8g_dev_ld7032_60x32_sleep_off[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
   U8G_ESC_CS(1),             /* enable chip */
-  0x0a4,		/* all points off */      
-  0x0af,		/* display on */      
+  /* ... */
   U8G_ESC_DLY(50),       /* delay 50 ms */
   U8G_ESC_CS(1),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
@@ -195,7 +192,9 @@ uint8_t u8g_dev_ld7032_60x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *a
       {
         u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
         u8g_WriteEscSeqP(u8g, dev, u8g_dev_ld7032_60x32_data_start);    
-        u8g_WriteByte(u8g, dev, 0x0b0 | pb->p.page); /* select current page (ST7565R) */
+        u8g_WriteByte(u8g, dev, pb->p.page_y0); /* y start */
+	u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
+	u8g_WriteByte(u8g, dev, 0x008);
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
         if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
           return 0;
@@ -216,7 +215,7 @@ uint8_t u8g_dev_ld7032_60x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *a
       u8g_WriteEscSeqP(u8g, dev, u8g_dev_ld7032_60x32_sleep_off);    
       return 1;
   }
-  return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
+  return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
 }
 
 U8G_PB_DEV(u8g_dev_ld7032_60x32_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ld7032_60x32_fn, U8G_COM_SW_SPI);
