@@ -38,7 +38,7 @@
 
 #include "u8g.h"
 
-/* define width as 64, so that it is devidable by 8 */
+/* define width as 64, so that it is a multiple of 8 */
 #define WIDTH 64
 #define HEIGHT 32
 #define PAGE_HEIGHT 8
@@ -54,12 +54,12 @@ static const uint8_t u8g_dev_ld7032_60x32_init_seq[] PROGMEM = {
   U8G_ESC_ADR(0),           /* instruction mode */
   0x002,				/* Dot Matrix Display ON/OFF */
   U8G_ESC_ADR(1),           /* data mode */
-  0x000,				/* ON */
+  0x001,				/* ON */
   
   U8G_ESC_ADR(0),           /* instruction mode */
   0x014,				/* Dot Matrix Display Stand-by ON/OFF */
   U8G_ESC_ADR(1),           /* data mode */
-  0x001,				/* ON */
+  0x000,				/* ON */
 
   U8G_ESC_ADR(0),           /* instruction mode */
   0x01a,				/* Dot Matrix Frame Rate */
@@ -128,6 +128,13 @@ static const uint8_t u8g_dev_ld7032_60x32_init_seq[] PROGMEM = {
   U8G_ESC_ADR(1),           /* data mode */
   0x000,				/* 2.8V */
 
+  U8G_ESC_ADR(0),           /* instruction mode */
+  0x002,				/* Dot Matrix Display ON/OFF */
+  U8G_ESC_ADR(1),           /* data mode */
+  0x001,				/* ON */
+
+  U8G_ESC_ADR(0),           /* instruction mode */
+  0x008,				/* write data */
 
   U8G_ESC_CS(0),             /* disable chip */
   U8G_ESC_END                /* end of sequence */
