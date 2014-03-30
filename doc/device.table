@@ -1644,6 +1644,45 @@ n.a.
 impl.
 ::
 :Controller
+LD7032
+:Display/Size
+60x32
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+64 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_ld7032_60x32_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_LD7032_60x32(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified v1.16
+:Arduino Due
+impl. v1.16
+:Chipkit
+impl. v1.16
+:AVR
+impl. v1.16
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_ld7032_60x32_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_LD7032_60x32(cs, a0 [, reset])</tt>
+:Arduino
+impl. v1.16
+:Arduino Due
+impl. v1.16
+:Chipkit
+impl. v1.16
+:AVR
+impl. v1.16
+::
+:Controller
 PCD8544
 :Display/Size
 84x48
