@@ -480,6 +480,108 @@ n.a.
 impl.  v1.13
 ::
 :Controller
+SH1106
+:Display/Size
+128x64
+:Mode
+BW
+:Set Contrast
+no
+:Page Size
+128 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_sh1106_128x64_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SH1106_128X64(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Arduino Due
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_sh1106_128x64_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SH1106_128X64(cs, a0 [, reset])</tt>
+:Arduino
+verified
+:Arduino Due
+impl.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Com
+I2C
+:Device
+<tt>u8g_dev_sh1106_128x64_i2c</tt>
+:C++ Constructor
+<tt>U8GLIB_SH1106_128X64(U8G_I2C_OPT_NONE)</tt>
+:Arduino
+verified
+:Arduino Due
+n.a.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Page Size
+256 Bytes
+:Com
+SW SPI
+:Device
+<tt>u8g_dev_sh1106_128x64_2x_sw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SH1106_128X64_2X(sck, mosi, cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Arduino Due
+impl.
+:Chipkit
+impl.
+:AVR
+impl.
+::
+:Com
+HW SPI
+:Device
+<tt>u8g_dev_sh1106_128x64_2x_hw_spi</tt>
+:C++ Constructor
+<tt>U8GLIB_SH1106_128X64_2X(cs, a0 [, reset])</tt>
+:Arduino
+impl.
+:Arduino Due
+impl.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Com
+I2C
+:Device
+<tt>u8g_dev_sh1106_128x64_2x_i2c</tt>
+:C++ Constructor
+<tt>U8GLIB_SH1106_128X64_2X(U8G_I2C_OPT_NONE)</tt>
+:Arduino
+impl.
+:Arduino Due
+n.a.
+:Chipkit
+n.a.
+:AVR
+impl.
+::
+:Controller
 SSD1309
 :Display/Size
 128x64

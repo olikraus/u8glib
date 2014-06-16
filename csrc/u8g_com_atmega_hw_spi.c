@@ -93,6 +93,7 @@ uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
 
       u8g_SetPIOutput(u8g, U8G_PI_CS);
       u8g_SetPIOutput(u8g, U8G_PI_A0);
+      u8g_SetPIOutput(u8g, U8G_PI_RESET);
       
       U8G_ATOMIC_START();
       
