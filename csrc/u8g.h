@@ -335,6 +335,7 @@ extern u8g_dev_t u8g_dev_lc7981_320x64_8bit;
 
 /* T6963, all t6963 devices have double page (2x) */
 extern u8g_dev_t u8g_dev_t6963_240x128_8bit;
+extern u8g_dev_t u8g_dev_t6963_128x128_8bit;
 extern u8g_dev_t u8g_dev_t6963_240x64_8bit;
 extern u8g_dev_t u8g_dev_t6963_128x64_8bit;
 

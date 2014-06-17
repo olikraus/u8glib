@@ -1034,6 +1034,15 @@ class U8GLIB_T6963_240X128 : public U8GLIB
       { }
 };
 
+class U8GLIB_T6963_128X128 : public U8GLIB 
+{
+  public:
+    U8GLIB_T6963_128X128(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
+        uint8_t cs, uint8_t a0, uint8_t wr, uint8_t rd, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_t6963_128x128_8bit, d0, d1, d2, d3, d4, d5, d6, d7, cs, a0, wr, rd, reset)
+      { }
+};
+
 class U8GLIB_T6963_240X64 : public U8GLIB 
 {
   public:
