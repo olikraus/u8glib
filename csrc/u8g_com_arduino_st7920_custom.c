@@ -170,13 +170,13 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
 
 /* default interface, Arduino DUE (__arm__) */
 
-uint8_t u8g_data_pin;
-uint8_t u8g_clock_pin;
+uint8_t u8g_data_custom_pin;
+uint8_t u8g_clock_custom_pin;
 
 static void u8g_com_arduino_init_shift_out(uint8_t dataPin, uint8_t clockPin)
 {
-  u8g_data_pin = dataPin;
-  u8g_clock_pin = clockPin;
+  u8g_data_custom_pin = dataPin;
+  u8g_clock_custom_pin = clockPin;
 }
 
 static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
@@ -185,15 +185,15 @@ static void u8g_com_arduino_do_shift_out_msb_first(uint8_t val)
   do
   {
     if ( val & 128 )
-	digitalWrite(u8g_data_pin, HIGH);
+	digitalWrite(u8g_data_custom_pin, HIGH);
     else
-	digitalWrite(u8g_data_pin, LOW);
+	digitalWrite(u8g_data_custom_pin, LOW);
     val <<= 1;
     //u8g_MicroDelay();
-    digitalWrite(u8g_clock_pin, LOW);
+    digitalWrite(u8g_clock_custom_pin, LOW);
     cnt--;
     u8g_MicroDelay();
-    digitalWrite(u8g_clock_pin, HIGH);
+    digitalWrite(u8g_clock_custom_pin, HIGH);
     u8g_MicroDelay();    
   } while( cnt != 0 );
 }
