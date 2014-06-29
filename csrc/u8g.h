@@ -403,6 +403,10 @@ extern u8g_dev_t u8g_dev_ssd1306_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x64_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x64_i2c;
 
+extern u8g_dev_t u8g_dev_ssd1306_adafruit_128x64_sw_spi;
+extern u8g_dev_t u8g_dev_ssd1306_adafruit_128x64_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1306_adafruit_128x64_i2c;
+
 extern u8g_dev_t u8g_dev_ssd1306_128x64_2x_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x64_2x_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1306_128x64_2x_i2c;

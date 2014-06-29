@@ -173,8 +173,9 @@ static const uint8_t u8g_dev_ssd1306_128x64_univision_init_seq[] PROGMEM = {
 //#define u8g_dev_ssd1306_128x64_init_seq u8g_dev_ssd1306_128x64_univision_init_seq
 //#define u8g_dev_ssd1306_128x64_init_seq u8g_dev_ssd1306_128x64_adafruit1_init_seq
 // 26. Apr 2014: in this thead: http://forum.arduino.cc/index.php?topic=234930.msg1696754;topicseen#msg1696754
-// it is mentiond, that adafruit2_init_seq works better
+// it is mentiond, that adafruit2_init_seq works better --> this will be used by the ssd1306_adafruit device
 //#define u8g_dev_ssd1306_128x64_init_seq u8g_dev_ssd1306_128x64_adafruit2_init_seq
+
 #define u8g_dev_ssd1306_128x64_init_seq u8g_dev_ssd1306_128x64_adafruit3_init_seq
 
 
@@ -213,6 +214,37 @@ static const uint8_t u8g_dev_ssd13xx_sleep_off[] PROGMEM = {
 };
 
 uint8_t u8g_dev_ssd1306_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_InitCom(u8g, dev, U8G_SPI_CLK_CYCLE_300NS);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1306_128x64_adafruit2_init_seq);
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1306_128x64_data_start);    
+        u8g_WriteByte(u8g, dev, 0x0b0 | pb->p.page); /* select current page (SSD1306) */
+        u8g_SetAddress(u8g, dev, 1);           /* data mode */
+        if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
+          return 0;
+        u8g_SetChipSelect(u8g, dev, 0);
+      }
+      break;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd13xx_sleep_on);    
+      return 1;
+    case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd13xx_sleep_off);    
+      return 1;
+  }
+  return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
+}
+
+uint8_t u8g_dev_ssd1306_adafruit_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
   {
@@ -349,9 +381,17 @@ uint8_t u8g_dev_sh1106_128x64_2x_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, voi
   return u8g_dev_pb16v1_base_fn(u8g, dev, msg, arg);
 }
 
+
+
+
 U8G_PB_DEV(u8g_dev_ssd1306_128x64_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1306_128x64_fn, U8G_COM_SW_SPI);
 U8G_PB_DEV(u8g_dev_ssd1306_128x64_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1306_128x64_fn, U8G_COM_HW_SPI);
 U8G_PB_DEV(u8g_dev_ssd1306_128x64_i2c, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1306_128x64_fn, U8G_COM_SSD_I2C);
+
+U8G_PB_DEV(u8g_dev_ssd1306_adafruit_128x64_sw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1306_adafruit_128x64_fn, U8G_COM_SW_SPI);
+U8G_PB_DEV(u8g_dev_ssd1306_adafruit_128x64_hw_spi, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1306_adafruit_128x64_fn, U8G_COM_HW_SPI);
+U8G_PB_DEV(u8g_dev_ssd1306_adafruit_128x64_i2c, WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_ssd1306_adafruit_128x64_fn, U8G_COM_SSD_I2C);
+
 
 uint8_t u8g_dev_ssd1306_128x64_2x_buf[WIDTH*2] U8G_NOCOMMON ; 
 u8g_pb_t u8g_dev_ssd1306_128x64_2x_pb = { {16, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_ssd1306_128x64_2x_buf}; 
