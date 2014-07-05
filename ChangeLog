@@ -138,11 +138,12 @@ u8glib ChangeLog
   * Added ProFont family of fonts (issue  234)
   * SW SPI support for Teensy 3 (issue 230)
   * Removed Arduino/AVR specific files from ARM port (issue 209)
-2014-06-29	v1.16	  Oliver Kraus <olikraus@gmail.com>
+2014-07-05	v1.16	  Oliver Kraus <olikraus@gmail.com>
   * Added support for LD7032 60x32 OLED
   * Added support for SSD1306 OLED, which does not send I2C ACK (issue 239)
   * Added support for SH1106 128x64 OLED
   * Added support for T6963 128x128 displays
+  * Added U8GLIB_SSD1306_ADAFRUIT_128X64 constructor
   
   
   
