@@ -153,14 +153,19 @@ echo "adobe courR"
 echo "adobe helvB"
 ../bdf2u8g/bdf2u8g ../bdf/helvB08.bdf u8g_font_helvB08 u8g_font_helvb08.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB08.bdf u8g_font_helvB08r u8g_font_helvb08r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvB08.bdf u8g_font_helvB08n u8g_font_helvb08n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvB10.bdf u8g_font_helvB10 u8g_font_helvb10.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB10.bdf u8g_font_helvB10r u8g_font_helvb10r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvB10.bdf u8g_font_helvB10n u8g_font_helvb10n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvB12.bdf u8g_font_helvB12 u8g_font_helvb12.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB12.bdf u8g_font_helvB12r u8g_font_helvb12r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvB12.bdf u8g_font_helvB12n u8g_font_helvb12n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvB14.bdf u8g_font_helvB14 u8g_font_helvb14.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB14.bdf u8g_font_helvB14r u8g_font_helvb14r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvB14.bdf u8g_font_helvB14n u8g_font_helvb14n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvB18.bdf u8g_font_helvB18 u8g_font_helvb18.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB18.bdf u8g_font_helvB18r u8g_font_helvb18r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvB18.bdf u8g_font_helvB18n u8g_font_helvb18n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvB24.bdf u8g_font_helvB24 u8g_font_helvb24.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvB24.bdf u8g_font_helvB24r u8g_font_helvb24r.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvB24.bdf u8g_font_helvB24n u8g_font_helvb24n.c > /dev/null
