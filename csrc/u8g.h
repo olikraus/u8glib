@@ -1758,14 +1758,19 @@ extern const u8g_fntpgm_uint8_t u8g_font_courR24n[] U8G_FONT_SECTION("u8g_font_c
 
 extern const u8g_fntpgm_uint8_t u8g_font_helvB08[] U8G_FONT_SECTION("u8g_font_helvB08");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB08r[] U8G_FONT_SECTION("u8g_font_helvB08r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvB08n[] U8G_FONT_SECTION("u8g_font_helvB08n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB10[] U8G_FONT_SECTION("u8g_font_helvB10");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB10r[] U8G_FONT_SECTION("u8g_font_helvB10r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvB10n[] U8G_FONT_SECTION("u8g_font_helvB10n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB12[] U8G_FONT_SECTION("u8g_font_helvB12");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB12r[] U8G_FONT_SECTION("u8g_font_helvB12r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvB12n[] U8G_FONT_SECTION("u8g_font_helvB12n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB14[] U8G_FONT_SECTION("u8g_font_helvB14");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB14r[] U8G_FONT_SECTION("u8g_font_helvB14r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvB14n[] U8G_FONT_SECTION("u8g_font_helvB14n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB18[] U8G_FONT_SECTION("u8g_font_helvB18");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB18r[] U8G_FONT_SECTION("u8g_font_helvB18r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvB18n[] U8G_FONT_SECTION("u8g_font_helvB18n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB24[] U8G_FONT_SECTION("u8g_font_helvB24");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB24r[] U8G_FONT_SECTION("u8g_font_helvB24r");
 extern const u8g_fntpgm_uint8_t u8g_font_helvB24n[] U8G_FONT_SECTION("u8g_font_helvB24n");
