@@ -104,6 +104,18 @@ uint8_t u8g_dev_pcf8812_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
         if ( u8g_pb_WriteBuffer(pb, u8g, dev) == 0 )
           return 0;
+
+	  /*  mirrored output, not tested
+	{
+	  uint8_t i = pb->width;
+	  while( i > 0 )
+	  {
+	    i--;
+	    u8g_WriteByte(u8g, dev, pb->buf[i] );
+	  }
+	}
+	*/
+	
         u8g_SetChipSelect(u8g, dev, 0);
       }
       break;
