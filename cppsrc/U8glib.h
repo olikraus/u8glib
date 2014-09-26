@@ -476,6 +476,14 @@ class U8GLIB_UC1608_240X64_2X : public U8GLIB
 };
 
 
+class U8GLIB_UC1611_DOGM240 : public U8GLIB
+{
+  public:
+    U8GLIB_UC1611_DOGM240(uint8_t options = U8G_I2C_OPT_NONE)
+      : U8GLIB(&u8g_dev_uc1611_dogm240_i2c, options)
+      {}
+};
+
 class U8GLIB_ST7920_128X64 : public U8GLIB 
 {
   public:

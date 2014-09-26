@@ -54,19 +54,23 @@
 
 #include "u8g.h"
 
-#define I2C_SLA		(0x3c*2)
-//#define I2C_CMD_MODE	0x080
-#define I2C_CMD_MODE	0x000
-#define I2C_DATA_MODE	0x040
-
 #if defined(U8G_WITH_PINLIST)
+
+//#define DOGM240I2C //use this symbol to enable dogm240 i2c addressing
+
+#ifndef DOGM240I2C //dont use dogm240 specific addressing, if symbol is undefined
+
+#define I2C_SLA         (0x3c*2)
+//#define I2C_CMD_MODE  0x080
+#define I2C_CMD_MODE    0x000
+#define I2C_DATA_MODE   0x040
 
 uint8_t u8g_com_arduino_ssd_start_sequence(u8g_t *u8g)
 {
   /* are we requested to set the a0 state? */
   if ( u8g->pin_list[U8G_PI_SET_A0] == 0 )
-    return 1;	
-  
+    return 1;
+
   /* setup bus, might be a repeated start */
   if ( u8g_i2c_start(I2C_SLA) == 0 )
     return 0;
@@ -80,11 +84,37 @@ uint8_t u8g_com_arduino_ssd_start_sequence(u8g_t *u8g)
     if ( u8g_i2c_send_byte(I2C_DATA_MODE) == 0 )
       return 0;
   }
-  
-  
+
   u8g->pin_list[U8G_PI_SET_A0] = 0;
   return 1;
 }
+
+#else /* DOGM240I2C --- we have to use the dogm240 specific i2c adressing */
+
+#define DOGM240_SLA_CMD  (0x38*2)
+#define DOGM240_SLA_DATA (0x39*2)
+
+uint8_t u8g_com_arduino_ssd_start_sequence(u8g_t *u8g)
+{
+  /* are we requested to set the a0 state? */
+  if ( u8g->pin_list[U8G_PI_SET_A0] == 0 )
+    return 1;
+
+  if ( u8g->pin_list[U8G_PI_A0_STATE] == 0 )
+  {
+    if ( u8g_i2c_start(DOGM240_SLA_CMD) == 0 )
+      return 0;
+  }
+  else
+  {
+    if ( u8g_i2c_start(DOGM240_SLA_DATA) == 0 )
+      return 0;
+  }
+
+  u8g->pin_list[U8G_PI_SET_A0] = 0;
+  return 1;
+}
+#endif /* DOGM240I2C */
 
 uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
