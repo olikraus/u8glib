@@ -1,6 +1,6 @@
 /*
   
-  u8g_com_arduino_ssd_i2c.c
+  u8g_com_arduino_uc_i2c.c
 
   com interface for arduino (AND atmega) and the SSDxxxx chip (SOLOMON) variant 
   I2C protocol 
@@ -56,29 +56,23 @@
 
 #if defined(U8G_WITH_PINLIST)
 
+#define DOGM240_SLA_CMD  (0x38*2)
+#define DOGM240_SLA_DATA (0x39*2)
 
-#define I2C_SLA         (0x3c*2)
-//#define I2C_CMD_MODE  0x080
-#define I2C_CMD_MODE    0x000
-#define I2C_DATA_MODE   0x040
-
-uint8_t u8g_com_arduino_ssd_start_sequence(u8g_t *u8g)
+uint8_t u8g_com_arduino_uc_start_sequence(u8g_t *u8g)
 {
   /* are we requested to set the a0 state? */
   if ( u8g->pin_list[U8G_PI_SET_A0] == 0 )
     return 1;
 
-  /* setup bus, might be a repeated start */
-  if ( u8g_i2c_start(I2C_SLA) == 0 )
-    return 0;
   if ( u8g->pin_list[U8G_PI_A0_STATE] == 0 )
   {
-    if ( u8g_i2c_send_byte(I2C_CMD_MODE) == 0 )
+    if ( u8g_i2c_start(DOGM240_SLA_CMD) == 0 )
       return 0;
   }
   else
   {
-    if ( u8g_i2c_send_byte(I2C_DATA_MODE) == 0 )
+    if ( u8g_i2c_start(DOGM240_SLA_DATA) == 0 )
       return 0;
   }
 
@@ -86,7 +80,7 @@ uint8_t u8g_com_arduino_ssd_start_sequence(u8g_t *u8g)
   return 1;
 }
 
-uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_arduino_uc_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   switch(msg)
   {
@@ -123,7 +117,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 
     case U8G_COM_MSG_WRITE_BYTE:
       //u8g->pin_list[U8G_PI_SET_A0] = 1;
-      if ( u8g_com_arduino_ssd_start_sequence(u8g) == 0 )
+      if ( u8g_com_arduino_uc_start_sequence(u8g) == 0 )
 	return u8g_i2c_stop(), 0;
       if ( u8g_i2c_send_byte(arg_val) == 0 )
 	return u8g_i2c_stop(), 0;
@@ -132,7 +126,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
     
     case U8G_COM_MSG_WRITE_SEQ:
       //u8g->pin_list[U8G_PI_SET_A0] = 1;
-      if ( u8g_com_arduino_ssd_start_sequence(u8g) == 0 )
+      if ( u8g_com_arduino_uc_start_sequence(u8g) == 0 )
 	return u8g_i2c_stop(), 0;
       {
         register uint8_t *ptr = arg_ptr;
@@ -148,7 +142,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 
     case U8G_COM_MSG_WRITE_SEQ_P:
       //u8g->pin_list[U8G_PI_SET_A0] = 1;
-      if ( u8g_com_arduino_ssd_start_sequence(u8g) == 0 )
+      if ( u8g_com_arduino_uc_start_sequence(u8g) == 0 )
 	return u8g_i2c_stop(), 0;
       {
         register uint8_t *ptr = arg_ptr;
@@ -174,7 +168,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 	i2c_state = 0;
       }
 
-      if ( u8g_com_arduino_ssd_start_sequence(arg_val) == 0 )
+      if ( u8g_com_arduino_uc_start_sequence(arg_val) == 0 )
 	return 0;
     
       /* setup bus, might be a repeated start */
@@ -203,7 +197,7 @@ uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 
 #else  /* defined(U8G_WITH_PINLIST) */
 
-uint8_t u8g_com_arduino_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+uint8_t u8g_com_arduino_uc_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   return 1;
 }

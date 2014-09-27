@@ -110,5 +110,5 @@ uint8_t u8g_dev_uc1611_dogm240_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void 
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }
 
-U8G_PB_DEV(u8g_dev_uc1611_dogm240_i2c , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_uc1611_dogm240_fn, U8G_COM_SSD_I2C);
+U8G_PB_DEV(u8g_dev_uc1611_dogm240_i2c , WIDTH, HEIGHT, PAGE_HEIGHT, u8g_dev_uc1611_dogm240_fn, U8G_COM_UC_I2C);
 
