@@ -39,7 +39,7 @@
 #define _CPP_U8GLIB
 
 #include <Print.h>
-#include "utility/u8g.h"
+#include "u8g.h"
 
 #define ARDUINO 200
 
