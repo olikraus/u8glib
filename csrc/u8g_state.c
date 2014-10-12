@@ -107,6 +107,14 @@ void u8g_backup_spi(uint8_t msg)
   }
 }
 
+#elif defined (U8G_RASPBERRY_PI)
+
+#include <stdio.h>
+
+void u8g_backup_spi(uint8_t msg) {
+  printf("u8g_backup_spi %d\r\n",msg);
+}
+
 #elif defined(ARDUINO) && defined(__SAM3X8E__)		// Arduino Due, maybe we should better check for __SAM3X8E__
 
 #include "sam.h"

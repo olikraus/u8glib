@@ -38,7 +38,7 @@
 
 #include "u8g.h"
 
-#define U8G_I2C_WITH_NO_ACK
+//#define U8G_I2C_WITH_NO_ACK
 
 static uint8_t u8g_i2c_err_code;
 static uint8_t u8g_i2c_opt;		/* U8G_I2C_OPT_NO_ACK */
@@ -242,6 +242,60 @@ void twi_send(uint8_t adr, uint8_t data1, uint8_t data2)
   u8g_i2c_stop();
 }
 */
+
+#elif defined(U8G_RASPBERRY_PI)
+
+#include <wiringPi.h>
+#include <wiringPiI2C.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+
+#define I2C_SLA         0x3c
+
+static int fd=-1;
+static uint8_t i2cMode = 0;
+
+void u8g_i2c_init(uint8_t options) {
+   u8g_i2c_clear_error();
+   u8g_i2c_opt = options;
+
+   if (wiringPiSetup() == -1) {
+      printf("wiringPi-Error\n");
+      exit(1);
+   }
+
+   fd = wiringPiI2CSetup(I2C_SLA);
+   if (fd < 0) {
+      printf ("Unable to open I2C device 0: %s\n", strerror (errno)) ;
+      exit (1) ;
+   }
+   //u8g_SetPIOutput(u8g, U8G_PI_RESET);
+   //u8g_SetPIOutput(u8g, U8G_PI_A0);
+}
+uint8_t u8g_i2c_start(uint8_t sla) {
+   u8g_i2c_send_mode(0);
+
+   return 1;
+}
+
+void u8g_i2c_stop(void) {
+}
+
+uint8_t u8g_i2c_send_mode(uint8_t mode) {
+   i2cMode = mode;
+} 
+
+uint8_t u8g_i2c_send_byte(uint8_t data) {
+   wiringPiI2CWriteReg8(fd, i2cMode, data);
+
+   return 1;
+}
+
+uint8_t u8g_i2c_wait(uint8_t mask, uint8_t pos)
+{
+  return 1;
+}
 
 #else
 

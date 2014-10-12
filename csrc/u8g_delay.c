@@ -61,6 +61,8 @@
 #  else
 #    define USE_ARDUINO_DELAY
 #  endif
+#elif defined(U8G_RASPBERRY_PI)
+#  define USE_RASPBERRYPI_DELAY
 #elif defined(__AVR__)
 #  define USE_AVR_DELAY
 #elif defined(__18CXX)
@@ -81,6 +83,26 @@ void u8g_10MicroDelay(void);
 
 
 /*==== Part 2: Definition of the delay procedures ====*/
+
+/*== Raspberry Pi Delay ==*/
+#if defined (USE_RASPBERRYPI_DELAY)
+#include <wiringPi.h>
+//#include "/usr/local/include/wiringPi.h"
+void u8g_Delay(uint16_t val) {
+   //delay(val);
+   //usleep((uint32_t)val*(uint32_t)1000);
+   delayMicroseconds((uint32_t)val*(uint32_t)1000);
+}
+void u8g_MicroDelay(void)
+{
+   usleep(1);
+}
+void u8g_10MicroDelay(void)
+{
+   usleep(10);
+}
+#endif
+
 
 /*== AVR Delay ==*/
 

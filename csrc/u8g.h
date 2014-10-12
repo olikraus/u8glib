@@ -64,6 +64,7 @@ typedef signed short int16_t;
 #if defined(__AVR__) || defined(ARDUINO)
 #define U8G_WITH_PINLIST
 #endif
+#define U8G_WITH_PINLIST
 
 
 #ifdef __cplusplus
@@ -636,6 +637,9 @@ uint8_t u8g_com_atmega_st7920_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val
 uint8_t u8g_com_atmega_st7920_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
 uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);    /* u8g_com_atmega_parallel.c */
 
+uint8_t u8g_com_raspberrypi_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);                /* u8g_com_rasperrypi_hw_spi.c */
+uint8_t u8g_com_raspberrypi_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);		/* u8g_com_raspberrypi_ssd_i2c.c */
+
 
 /* 
   Translation of system specific com drives to generic com names
@@ -651,6 +655,17 @@ uint8_t u8g_com_atmega_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, voi
 defined(__18CXX) || defined(__PIC32MX)  
 
 */
+
+/* ==== HW SPI, Raspberry PI ====*/
+#if defined(U8G_RASPBERRY_PI)
+#define U8G_COM_HW_SPI u8g_com_raspberrypi_hw_spi_fn
+#define U8G_COM_SW_SPI u8g_com_null_fn
+
+/* I'm sure there must be some mad reason for needing this */
+#define U8G_COM_ST7920_SW_SPI u8g_com_null_fn
+#define U8G_COM_ST7920_HW_SPI u8g_com_null_fn
+#endif
+
 /* ==== HW SPI, Arduino ====*/
 #if defined(ARDUINO)
 #if defined(__AVR__)
@@ -686,7 +701,6 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_HW_SPI u8g_com_null_fn
 #define U8G_COM_ST7920_HW_SPI u8g_com_null_fn
 #endif
-
 #ifndef U8G_COM_HW_USART_SPI
 #define U8G_COM_HW_USART_SPI u8g_com_null_fn
 #endif
@@ -760,6 +774,13 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_SSD_I2C u8g_com_arduino_ssd_i2c_fn
 #endif
 #endif
+
+#ifndef U8G_COM_SSD_I2C
+#if defined(U8G_RASPBERRY_PI)
+#define U8G_COM_SSD_I2C u8g_com_raspberrypi_ssd_i2c_fn
+#endif
+#endif
+
 #ifndef U8G_COM_SSD_I2C
 #define U8G_COM_SSD_I2C u8g_com_null_fn
 #endif
@@ -1388,6 +1409,7 @@ void u8g_i2c_init(uint8_t options) U8G_NOINLINE;		/* use U8G_I2C_OPT_NONE as opt
 uint8_t u8g_i2c_wait(uint8_t mask, uint8_t pos) U8G_NOINLINE;
 uint8_t u8g_i2c_start(uint8_t sla) U8G_NOINLINE;
 uint8_t u8g_i2c_send_byte(uint8_t data) U8G_NOINLINE;
+uint8_t u8g_i2c_send_mode(uint8_t mode) U8G_NOINLINE;
 void u8g_i2c_stop(void) U8G_NOINLINE;
 
 

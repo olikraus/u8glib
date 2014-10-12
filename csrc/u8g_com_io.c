@@ -191,6 +191,28 @@ uint8_t u8g_GetPinLevel(uint8_t internal_pin_number)
   return 0;
 }
 
+#elif defined(U8G_RASPBERRY_PI)
+
+#include <wiringPi.h>
+//#include "/usr/local/include/wiringPi.h"
+
+void u8g_SetPinOutput(uint8_t internal_pin_number) {
+   pinMode(internal_pin_number, OUTPUT);
+}
+
+void u8g_SetPinInput(uint8_t internal_pin_number) {
+   pinMode(internal_pin_number, INPUT);
+}
+
+void u8g_SetPinLevel(uint8_t internal_pin_number, uint8_t level) {
+   digitalWrite(internal_pin_number, level);
+}
+
+uint8_t u8g_GetPinLevel(uint8_t internal_pin_number) {
+   return digitalRead(internal_pin_number);
+}
+
+
 #else
 
 /* convert "port" and "bitpos" to internal pin number */
