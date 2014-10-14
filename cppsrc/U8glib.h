@@ -41,8 +41,6 @@
 #include <Print.h>
 #include "u8g.h"
 
-#define ARDUINO 200
-
 
 class U8GLIB : public Print
 {
@@ -91,8 +89,7 @@ class U8GLIB : public Print
 #if defined(ARDUINO) && ARDUINO >= 100
     size_t write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); return 1;}
 #else
-    size_t write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); return 1;}
-    //void write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); }
+    void write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); }
 #endif
     
      /* screen rotation */
