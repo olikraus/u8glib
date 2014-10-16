@@ -1,0 +1,26 @@
+
+lpc1114
+  U8glib example for the NXP LPC1114 controller.
+  Valid also for LPC11xx, but lpc11xx.ld must be updated
+
+lpc1226
+  U8glib example for the NXP LPC1114 controller.
+  Valid also for LPC122x, but lpc122x.ld must be updated
+
+
+Support for any other ARM controller
+  1) Find core CMSIS and controller specific register definition files
+  2) Update u8g_arm.c (can be derived from existing u8g_arm.c)
+  3) Create ld script (can be derived from lpc11xx.ld)
+  
+=============
+
+lpc810
+  Example based on the lpcopen library (Copyright(C) NXP Semiconductors).
+  Use directory 
+    "lpc_chip_8xx_lib"
+  from file
+    lpcopen_2_01_lpcxpresso_nxp_lpcxpresso_812.zip
+  from location
+    http://www.lpcware.com/content/nxpfile/lpcopen-software-development-platform-lpc8xx-packages
+
