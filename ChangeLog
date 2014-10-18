@@ -144,7 +144,8 @@ u8glib ChangeLog
   * Added support for SH1106 128x64 OLED
   * Added support for T6963 128x128 displays
   * Added U8GLIB_SSD1306_ADAFRUIT_128X64 constructor
-  
+2014-xx-xx	v1.17	  Oliver Kraus <olikraus@gmail.com>
+  * Added U8GLIB_UC1611_DOGM240 constructor
   
   
   
