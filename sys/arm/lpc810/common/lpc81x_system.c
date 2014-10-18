@@ -26,8 +26,8 @@
 
 */
 
-#define SYS_CORE_CLOCK 12000000UL
-#define SYS_TICK_PERIOD_IN_MS 50
+#include "chip.h"
+
 
 
 /*=======================================================================*/
@@ -103,77 +103,8 @@ void delay_system_ticks(uint32_t sys_ticks)
   _delay_system_ticks_sub(sys_ticks);
 }
 
-/*
-  Delay by the provided number of micro seconds.
-  Limitation: "us" * System-Freq in MHz must now overflow in 32 bit.
-  Values between 0 and 1.000.000 (1 second) are ok.
-*/
-void delay_micro_seconds(uint32_t us)
-{
-  uint32_t sys_ticks;
-
-  sys_ticks = SYS_CORE_CLOCK / 1000000UL;
-  sys_ticks *= us;
-  delay_system_ticks(sys_ticks);  
-}
 
 
-/*=======================================================================*/
-/* system procedures and sys tick master task */
-
-volatile uint32_t sys_tick_irq_cnt=0;
-
-
-/*
-  all controller activity is done in the sys tick handler.
-    - calculate battery condition (derived from the required step up cycles)
-    - check the mode button for beeing pressed
-    - handle flashing of the external LEDs
-*/
-void __attribute__ ((interrupt)) SysTick_Handler(void)
-{
-  sys_tick_irq_cnt++;
-  
-}
-
-/*
-  setup the hardware and start interrupts.
-  called by "Reset_Handler"
-*/
-int __attribute__ ((noinline)) main(void)
-{
-
-  /* half second startup delay with 50ms sys tick (counts down in SysTick_Handler)*/
-  startup_delay = 10;		
-  
-  /* set systick and start systick interrupt */
-  SysTick_Config(SYS_CORE_CLOCK/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS);
-  
-  /* turn on GPIO */
-  Chip_GPIO_Init(LPC_GPIO_PORT);
-
-  /* disable SWCLK and SWDIO, after reset this has been activated */
-  Chip_SWM_DisableFixedPin(2);
-  Chip_SWM_DisableFixedPin(3);
-  
-  
-  /* turn on IOCON */
-  Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_IOCON);
-  
-  /* turn on switch matrix */
-  Chip_SWM_Init();
-  
-  /* activate analog comperator */
-  Chip_ACMP_Init(LPC_CMP);
-
-  
-  /* enter sleep mode: Reduce from 1.4mA to 0.8mA with 12MHz */  
-  while (1)
-  {
-    SCB->SCR |= (1UL << SCB_SCR_SLEEPONEXIT_Pos);		/* enter sleep mode after interrupt */ 
-    Chip_PMU_SleepState(LPC_PMU);						/* enter sleep mode now */
-  }
-}
 
 /*=======================================================================*/
 /* 
