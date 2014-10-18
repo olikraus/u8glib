@@ -3,7 +3,7 @@
   startup_lpc81x.c
 
   Startup Code for the LPC81x ARM Controller.
-  No assemply file required.
+  No assembly file required.
 
   Copyright (C) 2014  olikraus@gmail.com
 
