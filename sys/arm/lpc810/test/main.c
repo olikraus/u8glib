@@ -47,9 +47,6 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
 int __attribute__ ((noinline)) main(void)
 {
 
-  /* half second startup delay with 50ms sys tick (counts down in SysTick_Handler)*/
-  startup_delay = 10;		
-  
   /* set systick and start systick interrupt */
   SysTick_Config(SYS_CORE_CLOCK/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS);
   

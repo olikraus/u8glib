@@ -119,6 +119,8 @@ void delay_system_ticks(uint32_t sys_ticks)
 #endif
 unsigned char arm_stack_area[__STACK_SIZE] __attribute__ ((section(".stack"))) __attribute__ ((aligned(8)));
 
+/* declaration of the main procedure to avoid the gcc warning */
+int main(void);
 
 /*=======================================================================*/
 /* isr system procedures */
@@ -176,6 +178,10 @@ void __attribute__ ((interrupt)) __attribute__ ((noreturn)) Reset_Handler(void)
   for(;;)
     ;
 }
+
+/* declare the SysTick_Handler only. It must be defined in the user code */
+void __attribute__ ((interrupt)) SysTick_Handler(void);
+
 
 /* "NMI_Handler" is used in the ld script to calculate the checksum */
 void __attribute__ ((interrupt)) NMI_Handler(void)
