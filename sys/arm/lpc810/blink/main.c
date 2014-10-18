@@ -53,10 +53,9 @@ int __attribute__ ((noinline)) main(void)
   /* turn on GPIO */
   Chip_GPIO_Init(LPC_GPIO_PORT);
 
-  /* disable SWCLK and SWDIO, after reset this has been activated */
+  /* disable SWCLK and SWDIO, after reset, boot code may activate this */
   Chip_SWM_DisableFixedPin(2);
   Chip_SWM_DisableFixedPin(3);
-  
   
   /* turn on IOCON */
   Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_IOCON);
@@ -66,6 +65,17 @@ int __attribute__ ((noinline)) main(void)
   
   /* activate analog comperator */
   Chip_ACMP_Init(LPC_CMP);
+
+  /* let LED on pin 4 of the DIP8 blink */
+  Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);  
+  
+  for(;;)
+  {
+    Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
+    delay_micro_seconds(500000UL);
+    Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
+    delay_micro_seconds(500000UL);
+  }
 
   
   /* enter sleep mode: Reduce from 1.4mA to 0.8mA with 12MHz */  
