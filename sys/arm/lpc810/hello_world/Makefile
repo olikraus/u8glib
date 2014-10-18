@@ -36,7 +36,7 @@ FLASHTOOL:=~/prg/lpc21isp/lpc21isp
 # Project Information
 
 # The name for the project
-TARGETNAME:=blink
+TARGETNAME:=hello_world
 
 # The source files of the project
 SRC:=$(wildcard *.c)
@@ -51,6 +51,10 @@ SYSSRC:=$(wildcard ../lpc_chip_8xx_lib/src/*.c)
 # Include directory for the common include files
 COMMONINC:=../common
 COMMONSRC:=$(wildcard ../common/*.c)
+
+# Include directory for u8glib
+U8GINC:=../../../../csrc/
+U8GSRC:=$(wildcard ../../../../csrc/*.c) $(wildcard ../../../../sfntsrc/*.c)
 
 # Directory for the linker script
 LDSCRIPTDIR:=../common/.
@@ -69,7 +73,7 @@ ELFNAME:=$(TARGETNAME).elf
 HEXNAME:=$(TARGETNAME).hex
 DISNAME:=$(TARGETNAME).dis
 MAPNAME:=$(TARGETNAME).map
-OBJ:=$(SRC:.c=.o) $(SYSSRC:.c=.o) $(COMMONSRC:.c=.o)
+OBJ:=$(SRC:.c=.o) $(SYSSRC:.c=.o) $(COMMONSRC:.c=.o) $(U8GSRC:.c=.o)
 
 # Replace standard build tools by avr tools
 CC:=$(GCCPATH)/bin/arm-none-eabi-gcc
@@ -80,7 +84,7 @@ SIZE:=$(GCCPATH)/bin/arm-none-eabi-size
 
 # Common flags
 COMMON_FLAGS = -mthumb -mcpu=$(MCPU)
-COMMON_FLAGS += -Wall -I. -I$(SYSINC) -I$(COMMONINC)
+COMMON_FLAGS += -Wall -I. -I$(SYSINC) -I$(COMMONINC) -I$(U8GINC)
 # define stack size (defaults to 0x0100)  
 # COMMON_FLAGS += -D__STACK_SIZE=0x0100
 # define constant for lpcopen library
