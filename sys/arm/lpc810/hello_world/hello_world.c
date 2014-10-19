@@ -101,6 +101,55 @@ void u8g_10MicroDelay(void)
 /*=======================================================================*/
 /* lpc810 i2c */
 
+/*
+taken from AN11329
+*/
+typedef struct
+{
+  __IO uint32_t  CFG;			  /* 0x00 */
+  __IO uint32_t  STAT;
+  __IO uint32_t  INTENSET;
+  __O  uint32_t  INTENCLR;
+  __IO uint32_t  TIMEOUT;		/* 0x10 */
+  __IO uint32_t  DIV;
+  __IO uint32_t  INTSTAT;
+       uint32_t  Reserved0[1];  
+  __IO uint32_t  MSTCTL;			  /* 0x20 */
+  __IO uint32_t  MSTTIME;
+  __IO uint32_t  MSTDAT;
+       uint32_t  Reserved1[5];
+  __IO uint32_t  SLVCTL;			  /* 0x40 */
+  __IO uint32_t  SLVDAT;
+  __IO uint32_t  SLVADR0;
+  __IO uint32_t  SLVADR1;
+  __IO uint32_t  SLVADR2;			  /* 0x50 */
+  __IO uint32_t  SLVADR3;
+  __IO uint32_t  SLVQUAL0;
+       uint32_t  Reserved2[9];
+  __I  uint32_t  MONRXDAT;			/* 0x80 */		
+} LPC_I2C_TypeDef;
+
+#define LPC_I2C               ((LPC_I2C_TypeDef    *) LPC_I2C_BASE   )
+
+#define  I2C_CFG_MSTEN (0x1)
+#define  I2C_CFG_SLVEN (0x2)
+#define  I2C_STAT_MSTPENDING (0x1)
+#define  I2C_STAT_MSTSTATE (0xe)
+#define  I2C_STAT_MSTST_IDLE (0x0)
+#define  I2C_STAT_MSTST_RX (0x2)
+#define  I2C_STAT_MSTST_TX (0x4)
+#define  I2C_STAT_MSTST_NACK_ADDR (0x6)
+#define  I2C_STAT_MSTST_NACK_TX (0x8)
+#define  I2C_STAT_SLVPENDING (0x100)
+#define  I2C_STAT_SLVSTATE (0x600)
+#define  I2C_STAT_SLVST_ADDR (0x000)
+#define  I2C_STAT_SLVST_RX (0x200)
+#define  I2C_STAT_SLVST_TX (0x400)
+#define  I2C_MSTCTL_MSTCONTINUE (0x1)
+#define  I2C_MSTCTL_MSTSTART (0x2)
+#define  I2C_MSTCTL_MSTSTOP (0x4)
+#define  I2C_SLVCTL_SLVCONTINUE (0x1)
+#define  I2C_SLVCTL_SLVNACK (0x2)
 
 static uint8_t lpc81x_i2c_err_code;
 static uint8_t lpc81x_i2c_opt;		/* U8G_I2C_OPT_NO_ACK */
