@@ -137,6 +137,7 @@ typedef struct
 #define  I2C_STAT_MSTSTATE (0xe)
 #define  I2C_STAT_MSTST_IDLE (0x0)
 #define  I2C_STAT_MSTST_RX (0x2)
+              
 #define  I2C_STAT_MSTST_TX (0x4)
 #define  I2C_STAT_MSTST_NACK_ADDR (0x6)
 #define  I2C_STAT_MSTST_NACK_TX (0x8)
@@ -151,63 +152,82 @@ typedef struct
 #define  I2C_SLVCTL_SLVCONTINUE (0x1)
 #define  I2C_SLVCTL_SLVNACK (0x2)
 
-static uint8_t lpc81x_i2c_err_code;
-static uint8_t lpc81x_i2c_opt;		/* U8G_I2C_OPT_NO_ACK */
-
-/*
-  position values
-    1: start condition
-    2: sla transfer
-*/
-static uint8_t lpc81x_i2c_err_pos;
-
-
-void lpc81x_i2c_clear_error(void)
+uint8_t __attribute__ ((noinline))  lpc81x_i2c_wait(void)
 {
-  lpc81x_i2c_err_code = U8G_I2C_ERR_NONE;
-  lpc81x_i2c_err_pos = 0;
+  while(!(LPC_I2C->STAT & I2C_STAT_MSTPENDING))
+    ;
+  return 1;
 }
-
-uint8_t  lpc81x_i2c_get_error(void)
-{
-  return lpc81x_i2c_err_code;
-}
-
-uint8_t lpc81x_i2c_get_err_pos(void)
-{
-  return lpc81x_i2c_err_pos;
-}
-
-static void lpc81x_i2c_set_error(uint8_t code, uint8_t pos)
-{
-  if ( lpc81x_i2c_err_code > 0 )
-    return;
-  lpc81x_i2c_err_code |= code;
-  lpc81x_i2c_err_pos = pos;
-}
-
 
 void lpc81x_i2c_init(uint8_t options)
 {
-  lpc81x_i2c_clear_error();
+   Chip_I2C_Init();
+  
+  LPC_I2C->DIV = 30;		/* 12 MHz / 30 = 400KHz , not sure, user manual not clear */
+  LPC_I2C->MSTTIME = 0;		/* Low / High = 2 clocks each, 400KHz / 4 = 100KHz */
+  
+  
+  /* code from the lpc810 user manual */
+  LPC_I2C->CFG = I2C_CFG_MSTEN;
+  
+  lpc81x_i2c_wait();
+  
+  /* I2C_STAT_MSTSTATE = 0x0e, bits 1,2 & 3 */
+  /* I2C_STAT_MSTST_IDLE = 0 */
+  /* result not checked, idle is assumed */
+  /*
+  if ((LPC_I2C->STAT & I2C_STAT_MSTSTATE) != I2C_STAT_MSTST_IDLE) 
+    return 0;
+  */
 }
 
-uint8_t lpc81x_i2c_wait(uint8_t mask, uint8_t pos)
+void lpc81x_i2c_deinit(uint8_t options)
 {
-  return 1;
+   Chip_I2C_DeInit();
 }
+
 
 uint8_t lpc81x_i2c_start(uint8_t sla)
 {
+  LPC_I2C->MSTDAT = (sla << 1) | 0; // address and 0 for RWn bit
+  LPC_I2C->MSTCTL = I2C_MSTCTL_MSTSTART; // 0x02, send start
+  
+  lpc81x_i2c_wait();
+  
+  /* I2C_STAT_MSTS_TX = 0x04 */
+  /* The state is either I2C_STAT_MSTS_TX or I2C_STAT_MSTST_NACK_ADDR */
+  /* For the SSD1306 it is better to ignore this */
+  /*
+  if((LPC_I2C->STAT & I2C_STAT_MSTSTATE) != I2C_STAT_MSTS_TX)
+    return 0;
+  */
   return 1;
 }
+
 uint8_t lpc81x_i2c_send_byte(uint8_t data)
 {
+  LPC_I2C->MSTDAT = data; // send data
+  LPC_I2C->MSTCTL = I2C_MSTCTL_MSTCONTINUE; // 0x01, continue transaction
+  
+  lpc81x_i2c_wait();
+  
+  /* I2C_STAT_MSTS_TX = 0x04 */
+  /* The state is either I2C_STAT_MSTS_TX or I2C_STAT_MSTST_NACK_TX */
+  /* For the SSD1306 it is better to ignore this */
+  /*
+  if ((LPC_I2C->STAT & I2C_STAT_MSTSTATE) != I2C_STAT_MSTS_TX) 
+    return 0;
+  */
   return 1;
 }
 
 void lpc81x_i2c_stop(void)
 {
+  LPC_I2C->MSTCTL = I2C_MSTCTL_MSTSTOP; // send stop
+  
+  lpc81x_i2c_wait();
+  
+  // if((LPC_I2C->STAT & I2C_STAT_MSTSTATE) != I2C_STAT_MSTST_IDLE) abort();
 }
 
 
