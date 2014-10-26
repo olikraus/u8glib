@@ -99,6 +99,158 @@ void u8g_10MicroDelay(void)
 }
 
 /*=======================================================================*/
+/* generic  i2c (http://en.wikipedia.org/wiki/I%C2%B2C) */
+/* SCL: 0_3 */
+/* SDA: 0_0 */
+
+
+uint8_t i2c_started = 0;
+
+void i2c_delay(void)
+{
+  /* should be at least 4 */
+  /* should be 5 for 100KHz transfer speed */
+  
+  delay_micro_seconds(5);
+}
+
+uint8_t i2c_read_scl(void)
+{
+  Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 3);
+  return Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 3);
+}
+
+void i2c_clear_scl(void)
+{
+  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO3);	
+  //Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
+  Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 3);
+  Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
+}
+
+uint8_t i2c_read_sda(void)
+{
+  Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 3);
+  return Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 3);
+  
+}
+
+void i2c_clear_sda(void)
+{
+  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO3);	
+  //Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
+  Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 3);
+  Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
+}
+
+void i2c_start(void) 
+{
+  if ( i2c_started != 0 ) 
+  { 
+    /* if already started: do restart */
+    i2c_read_sda();	/* SDA = 1 */
+    i2c_delay();
+    i2c_read_scl();
+    /* clock stretching is not done */
+    /* while (i2c_read_scl() == 0)   ; */
+    i2c_delay();		/* another delay, just to be sure... */
+  }
+  i2c_read_sda();
+  /*
+  if (i2c_read_sda() == 0) 
+  {
+    // do something because arbitration is lost
+  }
+  */
+  /* send the start condition, both lines go from 1 to 0 */
+  i2c_clear_sda();
+  i2c_delay();
+  i2c_clear_scl();
+  i2c_started = 1;
+}
+
+
+void i2c_stop(void)
+{
+  /* set SDA to 0 */
+  i2c_clear_sda();  
+  i2c_delay();
+  
+  /* now release all lines */
+  i2c_read_scl();
+  /* clock stretching is not done */
+  /* while (i2c_read_scl() == 0)   ; */
+  i2c_delay();		/* another delay, just to be sure... */
+  
+  /* set SDA to 1 */
+  i2c_read_sda();
+  /*
+  if (i2c_read_sda() == 0) 
+  {
+    // do something because arbitration is lost
+  }
+  */
+  i2c_delay();
+  i2c_started = 0;
+}
+
+void i2c_write_bit(uint8_t val) 
+{
+  if (val)
+    i2c_read_sda();
+  else
+    i2c_clear_sda();
+  
+  i2c_delay();
+  i2c_read_scl();
+  /* clock stretching is not done */
+  /* while (i2c_read_scl() == 0)   ; */
+
+  /* validation is skipped, because this will be the only master */  
+  /* If SDA is high, check that nobody else is driving SDA */
+  /*
+  if (val && i2c_read_sda() == 0) 
+  {
+    arbitration_lost();
+  }
+  */
+  i2c_delay();
+  i2c_clear_scl();
+}
+
+uint8_t i2c_read_bit(void) 
+{
+  uint8_t val;
+  /* do not drive SDA */
+  i2c_read_sda();
+  i2c_delay();
+  i2c_read_scl();
+  /* clock stretching is not done */
+  /* while (i2c_read_scl() == 0)   ; */
+  
+  i2c_delay();	/* may not be required... */
+  val = i2c_read_sda();
+  i2c_delay();
+  i2c_clear_scl();
+  return val;
+}
+
+uint8_t i2c_write_byte(uint8_t b)
+{
+  uint8_t i = 8;
+  do
+  {
+    i2c_write_bit(b & 128);
+    b <<= 1;
+    i--;
+  } while ( i != 0 );
+  /* read ack from client */
+  /* 0: ack was given by client */
+  /* 1: nothing happend during ack cycle */  
+  return i2c_read_bit();
+}
+
+/*=======================================================================*/
 /* lpc810 i2c */
 
 /*
@@ -154,8 +306,16 @@ typedef struct
 
 uint8_t __attribute__ ((noinline))  lpc81x_i2c_wait(void)
 {
+  volatile static unsigned long cnt;
+  cnt = 0;
   while(!(LPC_I2C->STAT & I2C_STAT_MSTPENDING))
-    ;
+  {    
+    cnt++;
+    if ( cnt > 100000UL )
+    {
+      return 0;      
+    }
+  }
   return 1;
 }
 
@@ -163,7 +323,8 @@ void lpc81x_i2c_init(uint8_t options)
 {
    Chip_I2C_Init();
   
-  LPC_I2C->DIV = 30;		/* 12 MHz / 30 = 400KHz , not sure, user manual not clear */
+  //LPC_I2C->DIV = 30;		/* 12 MHz / 30 = 400KHz , not sure, user manual not clear */
+  LPC_I2C->DIV = 30*8;		
   LPC_I2C->MSTTIME = 0;		/* Low / High = 2 clocks each, 400KHz / 4 = 100KHz */
   
   
@@ -243,7 +404,7 @@ void lpc81x_i2c_stop(void)
 uint8_t u8g_a0_state;
 uint8_t u8g_set_a0;
 
-static uint8_t u8g_com_ssd_start_sequence(u8g_t *u8g)
+static uint8_t lpc810_u8g_com_ssd_start_sequence(u8g_t *u8g)
 {
   /* are we requested to set the a0 state? */
   if ( u8g_set_a0 == 0 )
@@ -267,7 +428,28 @@ static uint8_t u8g_com_ssd_start_sequence(u8g_t *u8g)
   return 1;
 }
 
-uint8_t u8g_com_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+static void u8g_com_ssd_start_sequence(u8g_t *u8g)
+{
+  /* are we requested to set the a0 state? */
+  if ( u8g_set_a0 == 0 )
+    return;
+
+  i2c_start();
+  i2c_write_byte(I2C_SLA<<1);		// address and 0 for RWn bit
+  
+  if ( u8g_a0_state == 0 )
+  {
+    i2c_write_byte(I2C_CMD_MODE);
+  }
+  else
+  {
+    i2c_write_byte(I2C_DATA_MODE);
+  }
+
+  u8g_set_a0 = 0;
+}
+
+uint8_t lpc810_u8g_com_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
 {
   switch(msg)
   {
@@ -304,7 +486,7 @@ uint8_t u8g_com_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_p
 
     case U8G_COM_MSG_WRITE_BYTE:
       //u8g_set_a0 = 1;
-      if ( u8g_com_ssd_start_sequence(u8g) == 0 )
+      if ( lpc810_u8g_com_ssd_start_sequence(u8g) == 0 )
 	return lpc81x_i2c_stop(), 0;
       if ( lpc81x_i2c_send_byte(arg_val) == 0 )
 	return lpc81x_i2c_stop(), 0;
@@ -313,7 +495,7 @@ uint8_t u8g_com_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_p
     
     case U8G_COM_MSG_WRITE_SEQ:
       //u8g_set_a0 = 1;
-      if ( u8g_com_ssd_start_sequence(u8g) == 0 )
+      if ( lpc810_u8g_com_ssd_start_sequence(u8g) == 0 )
 	return lpc81x_i2c_stop(), 0;
       {
         register uint8_t *ptr = arg_ptr;
@@ -329,7 +511,7 @@ uint8_t u8g_com_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_p
 
     case U8G_COM_MSG_WRITE_SEQ_P:
       //u8g_set_a0 = 1;
-      if ( u8g_com_ssd_start_sequence(u8g) == 0 )
+      if ( lpc810_u8g_com_ssd_start_sequence(u8g) == 0 )
 	return lpc81x_i2c_stop(), 0;
       {
         register uint8_t *ptr = arg_ptr;
@@ -344,6 +526,67 @@ uint8_t u8g_com_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_p
       // lpc81x_i2c_stop();
       break;
       
+    case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
+      u8g_a0_state = arg_val;
+      u8g_set_a0 = 1;		/* force a0 to set again */
+    
+      break;
+  }
+  return 1;
+}
+
+uint8_t u8g_com_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+{
+  switch(msg)
+  {
+    case U8G_COM_MSG_INIT:
+      //u8g_com_arduino_digital_write(u8g, U8G_PI_SCL, HIGH);
+      //u8g_com_arduino_digital_write(u8g, U8G_PI_SDA, HIGH);
+      //u8g_a0_state = 0;       /* inital RS state: unknown mode */
+    
+      break;
+    
+    case U8G_COM_MSG_STOP:
+      break;
+
+    case U8G_COM_MSG_RESET:
+     break;
+      
+    case U8G_COM_MSG_CHIP_SELECT:
+      u8g_a0_state = 0;
+      u8g_set_a0 = 1;		/* force a0 to set again, also forces start condition */
+      if ( arg_val == 0 )
+      {
+        /* disable chip, send stop condition */
+	i2c_stop();
+     }
+      else
+      {
+        /* enable, do nothing: any byte writing will trigger the i2c start */
+      }
+      break;
+
+    case U8G_COM_MSG_WRITE_BYTE:
+      //u8g_set_a0 = 1;
+      u8g_com_ssd_start_sequence(u8g);
+      i2c_write_byte(arg_val);
+      break;
+    
+    case U8G_COM_MSG_WRITE_SEQ_P:
+    case U8G_COM_MSG_WRITE_SEQ:
+      //u8g_set_a0 = 1;
+      u8g_com_ssd_start_sequence(u8g);
+      {
+        register uint8_t *ptr = arg_ptr;
+        while( arg_val > 0 )
+        {
+	  i2c_write_byte(*ptr++);
+          arg_val--;
+        }
+      }
+      // lpc81x_i2c_stop();
+      break;
+
     case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
       u8g_a0_state = arg_val;
       u8g_set_a0 = 1;		/* force a0 to set again */
@@ -423,11 +666,14 @@ void u8g_main()
   for(;;)
   {
     /* picture loop */
+    Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
     u8g_FirstPage(&u8g);
     do
     {
       draw(pos);
     } while ( u8g_NextPage(&u8g) );
+    
+    Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
     
     /* refresh screen after some delay */
     u8g_Delay(100);
@@ -468,19 +714,58 @@ int __attribute__ ((noinline)) main(void)
   /* let LED on pin 4 of the DIP8 blink */
   Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);  
   
+  /* configure I2C pins */
+  /* use IOCON pin position macros, IOCON_PIO0 = 0_0,  IOCON_PIO1 = 0_1, etc */
+  Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO0,PIN_MODE_INACTIVE);	/* no pullup/-down */
+  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO0);	
+  Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO3,PIN_MODE_INACTIVE);	/* no pullup/-down */
+  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO3);	
   
-  u8g_main();
+  /* I2C modes are only available for the I2C Pins 10 & 11*/
+  /* Chip_IOCON_PinSetI2CMode(LPC_IOCON,IOCON_PIO10,0);	*/
+  /* Chip_IOCON_PinSetI2CMode(LPC_IOCON,IOCON_PIO11,0);	*/
+  
+  /* connect I2C to GPIO Pins */
+  /* use plain pin numbers: 0_0 = 0, 0_1 = 1, etc */
+  //Chip_SWM_MovablePinAssign(SWM_I2C_SCL_IO, 3);	/* 0_3 */
+  //Chip_SWM_MovablePinAssign(SWM_I2C_SDA_IO, 0);	/* 0_0 */
+
+  delay_micro_seconds(100000UL);
+
+  //lpc81x_i2c_init(0);
+  
+  //u8g_main();
     
-  /*
+     
+       
   for(;;)
   {
-    Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
-    delay_micro_seconds(500000UL);
-    Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
-    delay_micro_seconds(500000UL);
-  }
-  */
 
+    Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
+    i2c_start();
+    i2c_write_byte(0x055);
+    i2c_stop();
+    
+    delay_micro_seconds(5000UL);
+    
+    Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
+    i2c_start();
+    i2c_write_byte(0x055);
+    i2c_stop();
+    
+    delay_micro_seconds(5000UL);
+  }
+  
+  
+  for(;;)
+  {
+    Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
+    i2c_clear_scl();
+    delay_micro_seconds(100UL);
+    Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
+    i2c_read_scl();
+    delay_micro_seconds(100UL);
+  }
   
   /* enter sleep mode: Reduce from 1.4mA to 0.8mA with 12MHz */  
   while (1)
