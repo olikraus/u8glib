@@ -130,17 +130,17 @@ void i2c_clear_scl(void)
 
 uint8_t i2c_read_sda(void)
 {
-  Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 3);
-  return Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 3);
+  Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 0);
+  return Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 0);
   
 }
 
 void i2c_clear_sda(void)
 {
-  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO3);	
-  //Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
-  Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 3);
-  Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
+  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO0);	
+  //Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 0);
+  Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 0);
+  Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 0);
 }
 
 void i2c_start(void) 
@@ -435,7 +435,7 @@ static void u8g_com_ssd_start_sequence(u8g_t *u8g)
     return;
 
   i2c_start();
-  i2c_write_byte(I2C_SLA<<1);		// address and 0 for RWn bit
+  i2c_write_byte(I2C_SLA);		// address and 0 for RWn bit
   
   if ( u8g_a0_state == 0 )
   {
@@ -604,7 +604,7 @@ u8g_t u8g;
 
 void draw(uint8_t pos)
 {
-  u8g_SetFont(&u8g, u8g_font_6x10r);
+  u8g_SetFont(&u8g, u8g_font_5x8r);
   u8g_DrawStr(&u8g,  0, 12+pos, "Hello World!");
 }
 
@@ -734,38 +734,35 @@ int __attribute__ ((noinline)) main(void)
 
   //lpc81x_i2c_init(0);
   
-  //u8g_main();
+  u8g_main();
     
      
-       
   for(;;)
   {
 
     Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
     i2c_start();
-    i2c_write_byte(0x055);
+    i2c_write_byte(0x00f);
+    i2c_write_byte(0x00f);
+    i2c_write_byte(0x00f);
+    i2c_write_byte(0x00f);
+    i2c_write_byte(0x00f);
     i2c_stop();
     
-    delay_micro_seconds(5000UL);
+    //delay_micro_seconds(5000UL);
     
     Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
     i2c_start();
-    i2c_write_byte(0x055);
+    i2c_write_byte(0x00f);
+    i2c_write_byte(0x00f);
+    i2c_write_byte(0x00f);
+    i2c_write_byte(0x00f);
+    i2c_write_byte(0x00f);
     i2c_stop();
     
-    delay_micro_seconds(5000UL);
+    //delay_micro_seconds(5000UL);
   }
   
-  
-  for(;;)
-  {
-    Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
-    i2c_clear_scl();
-    delay_micro_seconds(100UL);
-    Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
-    i2c_read_scl();
-    delay_micro_seconds(100UL);
-  }
   
   /* enter sleep mode: Reduce from 1.4mA to 0.8mA with 12MHz */  
   while (1)
