@@ -2,7 +2,7 @@
     
   startup_lpc81x.c
 
-  Startup Code for the LPC81x ARM Controller.
+  System & U8glib Code for the LPC81x ARM Controller.
   No assembly file required.
 
   Universal 8bit Graphics Library
@@ -41,7 +41,7 @@
 */
 
 #include "chip.h"
-
+#include "lpc81x_system.h"
 
 
 /*=======================================================================*/
@@ -115,6 +115,314 @@ void delay_system_ticks(uint32_t sys_ticks)
     _delay_system_ticks_sub(load4);
   }
   _delay_system_ticks_sub(sys_ticks);
+}
+
+
+
+
+/*=======================================================================*/
+/* delay */
+
+/*
+  Delay by the provided number of micro seconds.
+  Limitation: "us" * System-Freq in MHz must now overflow in 32 bit.
+  Values between 0 and 1.000.000 (1 second) are ok.
+*/
+void delay_micro_seconds(uint32_t us)
+{
+  uint32_t sys_ticks;
+
+  sys_ticks = SYS_CORE_CLOCK / 1000000UL;
+  sys_ticks *= us;
+  delay_system_ticks(sys_ticks);  
+}
+
+
+/*=======================================================================*/
+/* system procedures and sys tick master task */
+
+volatile uint32_t sys_tick_irq_cnt=0;
+
+
+void __attribute__ ((interrupt)) SysTick_Handler(void)
+{
+  sys_tick_irq_cnt++;
+  
+}
+
+
+/*=======================================================================*/
+/* u8g delay procedures */
+
+void u8g_Delay(uint16_t val)
+{
+    
+  delay_micro_seconds(1000UL*(uint32_t)val);
+}
+
+void u8g_MicroDelay(void)
+{
+  delay_micro_seconds(1);
+}
+
+void u8g_10MicroDelay(void)
+{
+  delay_micro_seconds(10);
+}
+
+/*=======================================================================*/
+/* generic  i2c (http://en.wikipedia.org/wiki/I%C2%B2C) */
+/* SCL: 0_3 */
+/* SDA: 0_0 */
+
+
+uint8_t i2c_started = 0;
+
+void i2c_delay(void)
+{
+  /* should be at least 4 */
+  /* should be 5 for 100KHz transfer speed */
+  
+  delay_micro_seconds(5);
+}
+
+void __attribute__ ((noinline)) i2c_init(void)
+{
+  Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO0,PIN_MODE_INACTIVE);	/* no pullup/-down */
+  Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO3,PIN_MODE_INACTIVE);	/* no pullup/-down */
+  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO3);	
+  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO0);	
+  Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
+  Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 0);
+}
+
+uint8_t __attribute__ ((noinline)) i2c_read_scl(void)
+{
+  Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 3);
+  return Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 3);
+}
+
+void __attribute__ ((noinline)) i2c_clear_scl(void)
+{
+  /* set open collector and drive low */
+  //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 3);
+  //LPC_GPIO_PORT->DIR[0] &= ~(1UL << 3);
+  LPC_GPIO_PORT->DIR[0] |= 1UL << 3;
+
+}
+
+uint8_t __attribute__ ((noinline)) i2c_read_sda(void)
+{
+  Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 0);
+  return Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 0);  
+}
+
+void __attribute__ ((noinline)) i2c_clear_sda(void)
+{
+  /* set open collector and drive low */
+  Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 0);
+}
+
+void __attribute__ ((noinline)) i2c_start(void) 
+{
+  if ( i2c_started != 0 ) 
+  { 
+    /* if already started: do restart */
+    i2c_read_sda();	/* SDA = 1 */
+    i2c_delay();
+    i2c_read_scl();
+    /* clock stretching is not done */
+    /* while (i2c_read_scl() == 0)   ; */
+    i2c_delay();		/* another delay, just to be sure... */
+  }
+  i2c_read_sda();
+  /*
+  if (i2c_read_sda() == 0) 
+  {
+    // do something because arbitration is lost
+  }
+  */
+  /* send the start condition, both lines go from 1 to 0 */
+  i2c_clear_sda();
+  i2c_delay();
+  i2c_clear_scl();
+  i2c_started = 1;
+}
+
+
+void __attribute__ ((noinline)) i2c_stop(void)
+{
+  /* set SDA to 0 */
+  i2c_clear_sda();  
+  i2c_delay();
+  
+  /* now release all lines */
+  i2c_read_scl();
+  /* clock stretching is not done */
+  /* while (i2c_read_scl() == 0)   ; */
+  i2c_delay();		/* another delay, just to be sure... */
+  
+  /* set SDA to 1 */
+  i2c_read_sda();
+  /*
+  if (i2c_read_sda() == 0) 
+  {
+    // do something because arbitration is lost
+  }
+  */
+  i2c_delay();
+  i2c_started = 0;
+}
+
+void i2c_write_bit(uint8_t val) 
+{
+  if (val)
+    i2c_read_sda();
+  else
+    i2c_clear_sda();
+  
+  i2c_delay();
+  i2c_read_scl();
+  /* clock stretching is not done */
+  /* while (i2c_read_scl() == 0)   ; */
+
+  /* validation is skipped, because this will be the only master */  
+  /* If SDA is high, check that nobody else is driving SDA */
+  /*
+  if (val && i2c_read_sda() == 0) 
+  {
+    arbitration_lost();
+  }
+  */
+  i2c_delay();
+  i2c_clear_scl();
+}
+
+uint8_t i2c_read_bit(void) 
+{
+  uint8_t val;
+  /* do not drive SDA */
+  i2c_read_sda();
+  i2c_delay();
+  i2c_read_scl();
+  /* clock stretching is not done */
+  /* while (i2c_read_scl() == 0)   ; */
+  
+  i2c_delay();	/* may not be required... */
+  val = i2c_read_sda();
+  i2c_delay();
+  i2c_clear_scl();
+  return val;
+}
+
+uint8_t i2c_write_byte(uint8_t b)
+{
+  uint8_t i = 8;
+  do
+  {
+    i2c_write_bit(b & 128);
+    b <<= 1;
+    i--;
+  } while ( i != 0 );
+  /* read ack from client */
+  /* 0: ack was given by client */
+  /* 1: nothing happend during ack cycle */  
+  return i2c_read_bit();
+}
+
+/*=======================================================================*/
+/* u8glib com callback */
+
+
+#define I2C_SLA         (0x3c*2)
+//#define I2C_CMD_MODE  0x080
+#define I2C_CMD_MODE    0x000
+#define I2C_DATA_MODE   0x040
+
+uint8_t u8g_a0_state;
+uint8_t u8g_set_a0;
+
+static void u8g_com_ssd_start_sequence(u8g_t *u8g)
+{
+  /* are we requested to set the a0 state? */
+  if ( u8g_set_a0 == 0 )
+    return;
+
+  i2c_start();
+  i2c_write_byte(I2C_SLA);		// address and 0 for RWn bit
+  
+  if ( u8g_a0_state == 0 )
+  {
+    i2c_write_byte(I2C_CMD_MODE);
+  }
+  else
+  {
+    i2c_write_byte(I2C_DATA_MODE);
+  }
+
+  u8g_set_a0 = 0;
+}
+
+uint8_t u8g_com_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
+{
+  switch(msg)
+  {
+    case U8G_COM_MSG_INIT:
+      //u8g_com_arduino_digital_write(u8g, U8G_PI_SCL, HIGH);
+      //u8g_com_arduino_digital_write(u8g, U8G_PI_SDA, HIGH);
+      //u8g_a0_state = 0;       /* inital RS state: unknown mode */
+    
+      i2c_init();
+      break;
+    
+    case U8G_COM_MSG_STOP:
+      break;
+
+    case U8G_COM_MSG_RESET:
+     break;
+      
+    case U8G_COM_MSG_CHIP_SELECT:
+      u8g_a0_state = 0;
+      u8g_set_a0 = 1;		/* force a0 to set again, also forces start condition */
+      if ( arg_val == 0 )
+      {
+        /* disable chip, send stop condition */
+	i2c_stop();
+     }
+      else
+      {
+        /* enable, do nothing: any byte writing will trigger the i2c start */
+      }
+      break;
+
+    case U8G_COM_MSG_WRITE_BYTE:
+      //u8g_set_a0 = 1;
+      u8g_com_ssd_start_sequence(u8g);
+      i2c_write_byte(arg_val);
+      break;
+    
+    case U8G_COM_MSG_WRITE_SEQ_P:
+    case U8G_COM_MSG_WRITE_SEQ:
+      //u8g_set_a0 = 1;
+      u8g_com_ssd_start_sequence(u8g);
+      {
+        register uint8_t *ptr = arg_ptr;
+        while( arg_val > 0 )
+        {
+	  i2c_write_byte(*ptr++);
+          arg_val--;
+        }
+      }
+      // lpc81x_i2c_stop();
+      break;
+
+    case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
+      u8g_a0_state = arg_val;
+      u8g_set_a0 = 1;		/* force a0 to set again */
+    
+      break;
+  }
+  return 1;
 }
 
 
