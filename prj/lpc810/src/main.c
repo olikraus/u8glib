@@ -40,6 +40,7 @@
 
 #include "chip.h"
 #include "sys.h"
+#include "oled.h"
 
 
 #define SYS_CORE_CLOCK 12000000UL
@@ -76,6 +77,8 @@ int __attribute__ ((noinline)) main(void)
 
   /* let LED on pin 4 of the DIP8 blink */
   Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);  
+  
+  oled_init();
   
   for(;;)
   {

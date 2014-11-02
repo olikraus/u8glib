@@ -1,8 +1,8 @@
 /*
     
-  startup_lpc81x.h
+  sys.h
 
-  System & U8g Code for the LPC81x ARM Controller.
+  System Code for the LPC81x ARM Controller.
   No assembly file required.
 
   Universal 8bit Graphics Library
@@ -45,11 +45,20 @@
 #ifndef _LPC81X_SYSTEM_H
 #define _LPC81X_SYSTEM_H
 
+#include "stdint.h"
+
+
 #define SYS_CORE_CLOCK 12000000UL
 #define SYS_TICK_PERIOD_IN_MS 50
 
 
 void delay_system_ticks(uint32_t sys_ticks);
 void delay_micro_seconds(uint32_t us);
+
+void i2c_init(void);
+void i2c_start(void) ;
+void i2c_stop(void);
+uint8_t i2c_write_byte(uint8_t b);
+
 
 #endif
