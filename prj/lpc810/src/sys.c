@@ -183,7 +183,7 @@ static void i2c_delay(void)
   /* should be at least 4 */
   /* should be 5 for 100KHz transfer speed */
   
-  delay_micro_seconds(5);
+  delay_micro_seconds(6);
 }
 
 void __attribute__ ((noinline)) i2c_init(void)
@@ -194,6 +194,7 @@ void __attribute__ ((noinline)) i2c_init(void)
   Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO0);	
   Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
   Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 0);
+  i2c_delay();
 }
 
 uint8_t __attribute__ ((noinline)) i2c_read_scl(void)

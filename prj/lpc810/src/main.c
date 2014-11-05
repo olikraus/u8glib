@@ -78,10 +78,11 @@ int __attribute__ ((noinline)) main(void)
   /* let LED on pin 4 of the DIP8 blink */
   Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);  
   
-  oled_init();
   
   for(;;)
   {
+    oled_init();
+    
     Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
     delay_micro_seconds(500000UL);
     Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    

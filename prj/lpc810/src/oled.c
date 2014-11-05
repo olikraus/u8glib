@@ -26,20 +26,19 @@ oled_t oled_o;
   precondition: cnt must be > 0 
   
 */
-void __attribute__ ((noinline)) oled_send_cmd_seq(uint32_t cnt, const uint8_t *cmd)
+void __attribute__ ((noinline)) oled_send_seq(uint32_t mode, uint32_t cnt, const uint8_t *cmd)
 {
   
   i2c_start();
-  i2c_write_byte(*cmd);
-  i2c_write_byte(I2C_SLA);		// address and 0 for RWn bit  
-  i2c_write_byte(I2C_CMD_MODE);
+  i2c_write_byte(I2C_SLA);		// address and 0 for RWn bit    
+  i2c_write_byte(mode);		// write mode byte
   do
   {
     i2c_write_byte(*cmd);
     cmd++;
     cnt--;
   }while( cnt > 0 );
-  i2c_stop();
+  // i2c_stop();
 }
 
 /*
@@ -79,9 +78,27 @@ static const uint8_t oled_shutdown_seq[] =
   0x0ae,				/* display off, sleep mode */
 };
 
+uint8_t oled_start_page_seq[] = 
+{
+ 0x010,		/* set upper 4 bit of the col adr to 0 */
+  0x000,		/* SSD1306: 0, SH1106. 2, set lower 4 bit of the col adr  */
+  0x0b0,		/* select page 0 */
+};
+
+static const uint8_t oled_test_seq[] = 
+{
+  0x0ff,
+  0x0ff,
+  0x0ff,
+  
+  0x00f,
+  0x00f,
+  0x00f,
+ };
 
 
-void __attribute__ ((noinline)) oled_set_pixel(oled_t *oled, uint32_t x, uint32_t y)
+
+void __attribute__ ((noinline)) oled_draw_pixel(oled_t *oled, uint32_t x, uint32_t y)
 {
   uint8_t *ptr = oled->oled_display_page;
   uint8_t mask;
@@ -98,6 +115,16 @@ void __attribute__ ((noinline)) oled_set_pixel(oled_t *oled, uint32_t x, uint32_
   *ptr |= mask;
 }
 
+void oled_draw_hline(oled_t *oled, uint32_t x, uint32_t y, uint32_t cnt)
+{
+  while( cnt > 0 )
+  {
+    oled_draw_pixel(oled, x,y);
+    cnt--;
+    x++;
+  }
+}
+
 void __attribute__ ((noinline)) oled_clear_page(oled_t *oled)
 {
   uint32_t i = WIDTH;
@@ -107,7 +134,6 @@ void __attribute__ ((noinline)) oled_clear_page(oled_t *oled)
     i--;
     oled->oled_display_page[i] = 0;
   } while( i != 0 );
-  
 }
 
 void oled_start_page(oled_t *oled)
@@ -118,24 +144,35 @@ void oled_start_page(oled_t *oled)
 
 int oled_next_page(oled_t *oled)
 {
-  oled->page_start+=8;
+  
+  oled_start_page_seq[2] = 0x0b0 | (oled->page_start>>3);
+  delay_micro_seconds(100);
+  oled_send_seq(I2C_CMD_MODE, sizeof(oled_start_page_seq), oled_start_page_seq);
+  delay_micro_seconds(100);
+  oled_send_seq(I2C_DATA_MODE, WIDTH, oled->oled_display_page);
   oled_clear_page(oled);
-  return oled->page_start >= HEIGHT;
+  
+  oled->page_start+=8;
+  return oled->page_start <= HEIGHT;
 }
-
 
 
 void __attribute__ ((noinline)) oled_init(void)
 {
   i2c_init();
   
-  oled_send_cmd_seq(sizeof(oled_init_seq), oled_init_seq);
-  oled_send_cmd_seq(sizeof(oled_shutdown_seq), oled_shutdown_seq);  
+  oled_send_seq(I2C_CMD_MODE, sizeof(oled_init_seq), oled_init_seq);
+  
+  oled_send_seq(I2C_CMD_MODE, sizeof(oled_start_page_seq), oled_start_page_seq);
+  oled_send_seq(I2C_DATA_MODE, sizeof(oled_test_seq), oled_test_seq);
+  
+  
   oled_start_page(&oled_o);
   do
   {
-    oled_set_pixel(&oled_o, 10, 10);
-    oled_set_pixel(&oled_o, 11, 11);
+    oled_draw_hline(&oled_o, 0,5,60);
+    oled_draw_hline(&oled_o, 0,5+8,60);
   }
   while( oled_next_page(&oled_o) );
+  
 }
