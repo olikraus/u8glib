@@ -562,10 +562,139 @@ int bd_last_0 = 0;
 int bd_last_1 = 0;
 int bd_is_first = 1;
 
-void bd_out_bits(int cnt, int val)
+int bd_out_byte_pos;
+int bd_out_bit_pos;
+#define BD_OUT_BUF_LEN 1024
+unsigned char bd_out_buf[BD_OUT_BUF_LEN];
+
+
+int bd_decode_byte_pos;
+int bd_decode_bit_pos;
+
+unsigned char bd_get_bits(unsigned char *ptr, int cnt)
 {
+  unsigned char val;
+  //printf(" %d/%d byte=%02x ", bd_decode_byte_pos, bd_decode_bit_pos, ptr[bd_decode_byte_pos]);
+  
+  val = ptr[bd_decode_byte_pos];
+  val >>= bd_decode_bit_pos;
+  //printf(" val=%02x", val);
+  if ( bd_decode_bit_pos + cnt < 8 )
+  {
+    //printf(" val&=%02x", (1<<cnt) - 1);
+    val &= (1<<cnt) - 1;
+    bd_decode_bit_pos += cnt;
+  }
+  else if ( bd_decode_bit_pos + cnt == 8 )
+  {
+    bd_decode_bit_pos = 0;
+    bd_decode_byte_pos++;
+  }
+  else
+  {
+    bd_decode_byte_pos++;
+    val |= ptr[bd_decode_byte_pos] << 8-bd_decode_bit_pos;
+    //printf(" val|=%02x", ptr[bd_decode_byte_pos] << 8-bd_decode_bit_pos);
+    bd_decode_bit_pos += cnt;
+    bd_decode_bit_pos -= 8;
+    val &= (1<<cnt) - 1;
+    //printf(" val&=%02x", (1<<cnt) - 1);
+  }
+  return val;
 }
 
+//bd_test_decode(bd_out_buf)
+
+//bdf_char_width
+void bd_test_decode(unsigned char *ptr)
+{
+  int x, y;
+  int a, b;
+  int i;
+  unsigned repeat;
+  
+  bd_decode_byte_pos = 0;
+  bd_decode_bit_pos = 0;
+  x = 0;
+  y = 0;
+  
+  for(;;)
+  {
+    a = bd_get_bits(ptr, bd_bits_per_0);
+    b = bd_get_bits(ptr, bd_bits_per_1);
+    do
+    {
+      for( i = 0; i < a; i++ )
+      {
+	printf(" .");
+	x++;
+	if ( x >= bdf_char_width )
+	{
+	  x = 0;
+	  y++;
+	  printf("\n");
+	}
+      }
+
+      for( i = 0; i < b; i++ )
+      {
+	printf(" #");
+	x++;
+	if ( x >= bdf_char_width )
+	{
+	  x = 0;
+	  y++;
+	  printf("\n");
+	}
+      }
+      
+      repeat =  bd_get_bits(ptr, 1);
+    } while( repeat != 0 );
+    
+    if ( y >= bdf_line_bm_line )
+      break;
+  }
+}
+
+
+void bd_out_bits(int cnt, int val)
+{
+  int i;
+  printf("|");
+  for( i = 0; i < cnt; i++)
+  {
+    printf("%c", ((val>>(cnt-1-i))&1) ? '1' : '0' );
+  }
+  printf("|");
+  
+  bd_out_buf[bd_out_byte_pos] |= (val << bd_out_bit_pos);
+  
+  if ( bd_out_bit_pos+cnt >= 8 )
+  {
+    printf(" {%02x ", bd_out_buf[bd_out_byte_pos]);
+    for( i = 0; i < 8; i++ )
+    {
+      printf("%c", ((bd_out_buf[bd_out_byte_pos]>>(8-1-i))&1) ? '1' : '0' );
+    }
+    printf("}");
+    
+    val >>= 8-bd_out_bit_pos;
+    bd_out_byte_pos++;
+    bd_out_buf[bd_out_byte_pos] |= val;
+    
+    bd_out_bit_pos+=cnt;
+    bd_out_bit_pos-=8;
+    
+  }
+  else
+  {
+    bd_out_bit_pos+=cnt;
+  }
+  
+  
+}
+
+  
 void bd_rle(int a, int b, int is_expand)
 {
   if ( bd_is_first == 0 && bd_last_0 == a && bd_last_1 == b )
@@ -576,6 +705,11 @@ void bd_rle(int a, int b, int is_expand)
   }
   else
   {   
+    if ( is_expand )
+      printf(" [%02x, %02x]", a, b);
+    else
+      printf(" (%02x, %02x)", a, b);
+    
     if ( bd_is_first == 0 )
       bd_out_bits(1, 0);
     bd_out_bits(bd_bits_per_0, a);
@@ -585,10 +719,6 @@ void bd_rle(int a, int b, int is_expand)
     bd_bitcnt++;
     bd_bitcnt +=bd_bits_per_0;
     bd_bitcnt +=bd_bits_per_1;
-    if ( is_expand )
-      printf(" [%02x, %02x]", a, b);
-    else
-      printf(" (%02x, %02x)", a, b);
     bd_last_0 = a;
     bd_last_1 = b;
   }
@@ -633,6 +763,12 @@ void bd_compress(void)
   bd_chg_cnt = 0;
   bd_bitcnt = 0;
   bd_is_first = 1;
+
+  bd_out_byte_pos = 0;
+  bd_out_bit_pos = 0;
+  
+  for( i = 0; i < BD_OUT_BUF_LEN; i++ )
+    bd_out_buf[i] = 0;
   
   for( y = 0; y < bdf_line_bm_line; y++ )
   {
@@ -701,6 +837,9 @@ void bd_compress(void)
     bd_expand(bd_list[i], bd_list[i+1]);
   }
   printf("bd_max_len = %d, bd_chg_cnt = %d, (bdf_char_width+7)/8*bdf_line_bm_line = %d, bytes = %d\n", bd_max_len, bd_chg_cnt, (bdf_char_width+7)/8*bdf_line_bm_line, (bd_bitcnt+7)/8);
+    printf("\n");
+  printf("%02x %02x %02x\n", bd_out_buf[0], bd_out_buf[1], bd_out_buf[2]);
+  bd_test_decode(bd_out_buf);
     printf("\n");
 }
 
