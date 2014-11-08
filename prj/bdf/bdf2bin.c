@@ -10,19 +10,6 @@
     http://www.fontspace.com/010bus
 
 
-  http://en.wikipedia.org/wiki/Unicode_typeface
-      da könnten auch ein paar fonts dabei sein, die die m2tklib sonderzeichen beinhalten:
-      Caslon Roman              http://en.wikipedia.org/wiki/Caslon_Roman
-      Charis Sil                http://en.wikipedia.org/wiki/Charis_SIL
-      DejaVu Sans       http://en.wikipedia.org/wiki/DejaVu_fonts
-      Doulos            http://en.wikipedia.org/wiki/Doulos_SIL 
-      Free Serif        http://en.wikipedia.org/wiki/FreeSerif          http://ftp.gnu.org/gnu/freefont/
-            --> keine box, aber es gibt pfeile/invertierte pfeile und kreise für m2tklib
-      Gentium Plus ????    http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=Gentium_download#02b091ae
-            --> keine graphic
-      GNU Unifont       http://en.wikipedia.org/wiki/GNU_Unifont, http://unifoundry.com/unifont.html
-        
-      Titus cyberbit Basic      http://en.wikipedia.org/wiki/TITUS_Cyberbit_Basic
 
   fonts
     Gentium
@@ -490,6 +477,7 @@ int bdf_delta_min_y;
 
 int bdf_glyph_data_len;
 int bdf_glyph_data_max_len;
+int bdf_glyph_cnt = 0;
 
 int bdf_encoding;
 
@@ -996,7 +984,7 @@ void bdf_ClearGlyphBuffer(void)
 
 void bdf_PutGlyph(void)
 {
-  int len;
+  int len, i;
   int y, x;
   
   
@@ -1041,7 +1029,6 @@ void bdf_PutGlyph(void)
     if ( bdf_requested_encoding != bdf_encoding )
       return;
 
-    
     assert( bdf_line_bm_line == bdf_char_height);
 
     bdf_ShowGlyph();
@@ -1049,15 +1036,6 @@ void bdf_PutGlyph(void)
     len = bd_compress(5,5);
     
     bdf_UpdateMax();
-    
-    if ( bdf_font_format <= 1 )
-    {
-      len = (bdf_char_width + 7)/8 * bdf_char_height;
-    }
-    else
-    {
-      len = (bdf_char_width+2*BDF_AA_OFFSET + 3)/4 * (bdf_char_height+2*BDF_AA_OFFSET);
-    }
     
     if ( len > 255 )
     {
@@ -1069,94 +1047,25 @@ void bdf_PutGlyph(void)
     bdf_glyph_data_len = len;
 
   /*
-    format 0 and format 2
     glyph information 
     offset
-    0             BBX width                                       unsigned
-    1             BBX height                                      unsigned
-    2             data size                                          unsigned    (BBX width + 7)/8 * BBX height
-    3             DWIDTH                                          signed
-    4             BBX xoffset                                    signed
-    5             BBX yoffset                                    signed
+    0             encoding                                       unsigned
+    1             BBX width                                       unsigned
+    2             BBX height                                      unsigned
+    3             data size                                          unsigned
+    4             DWIDTH                                          signed
+    5             BBX xoffset                                    signed
+    6             BBX yoffset                                    signed
   */
     
-    if ( bdf_font_format == 0  )
-    {
+      data_Put(bdf_encoding);    
       data_Put(bdf_char_width);
       data_Put(bdf_char_height);
       data_Put(bdf_glyph_data_len);
       data_Put(bdf_delta_x);
       data_Put(bdf_char_x);
       data_Put(bdf_char_y);
-      //data_Put(bdf_encoding);
       bdf_is_encoding_successfully_done = 1;
-    }
-    else if ( bdf_font_format == 2 )
-    {
-      data_Put(bdf_char_width+2*BDF_AA_OFFSET);
-      data_Put(bdf_char_height+2*BDF_AA_OFFSET);
-      data_Put(bdf_glyph_data_len);
-      data_Put(bdf_delta_x);
-      data_Put(bdf_char_x-BDF_AA_OFFSET);
-      data_Put(bdf_char_y-BDF_AA_OFFSET);
-      //data_Put(bdf_encoding);
-      bdf_is_encoding_successfully_done = 1;
-    }
-    else
-    {
-      /*
-      
-format 1
-  0             BBX xoffset                                    signed   --> upper 4 Bit
-  0             BBX yoffset                                    signed --> lower 4 Bit
-  1             BBX width                                       unsigned --> upper 4 Bit
-  1             BBX height                                      unsigned --> lower 4 Bit
-  2             data size                                           unsigned -(BBX width + 7)/8 * BBX height  --> lower 4 Bit
-  2             DWIDTH                                          signed --> upper  4 Bit
-  byte 0 == 255 indicates empty glyph
-      */
-      
-      if ( bdf_glyph_data_len < 0 || bdf_glyph_data_len > 15 )
-      {
-        fprintf(stderr, "Glyph with encoding %d does not fit for format 1 (data len = %d)\n", bdf_encoding, bdf_glyph_data_len);
-        exit(1);
-      }
-      if ( bdf_delta_x < 0 || bdf_delta_x > 15 )
-      {
-        fprintf(stderr, "Glyph with encoding %d does not fit for format 1 (DWIDTH = %d)\n", bdf_encoding, bdf_delta_x);
-        exit(1);
-      }
-      if ( bdf_char_x < 0 || bdf_char_x > 15 )
-      {
-        fprintf(stderr, "Glyph with encoding %d does not fit for format 1 (x-off = %d)\n", bdf_encoding, bdf_char_x);
-        exit(1);
-      }
-      if ( bdf_char_y < -2 || bdf_char_y > 13 )
-      {
-        fprintf(stderr, "Glyph with encoding %d does not fit for format 1 (y-off = %d [%d..%d])\n", bdf_encoding, bdf_char_y, bdf_char_min_y, bdf_char_max_y);
-        exit(1);
-      }
-      if ( bdf_char_width < 0 || bdf_char_width > 15 )
-      {
-        fprintf(stderr, "Glyph with encoding %d does not fit for format 1 (width = %d)\n", bdf_encoding, bdf_char_width);
-        exit(1);
-      }
-      if ( bdf_char_height < 0 || bdf_char_height > 15 )
-      {
-        fprintf(stderr, "Glyph with encoding %d does not fit for format 1 (height = %d)\n", bdf_encoding, bdf_char_height);
-        exit(1);
-      }
-      //data_Put(bdf_encoding);
-      if ( ((bdf_char_x<<4) | (bdf_char_y+2)) == 255 )
-      {
-        fprintf(stderr, "Glyph with encoding %d does not fit for format 1 (skip mark generated)\n", bdf_encoding);
-        exit(1);
-      }
-      data_Put( (bdf_char_x<<4) | (bdf_char_y+2) );
-      data_Put( (bdf_char_width<<4) | bdf_char_height );
-      data_Put( (bdf_delta_x<<4) | bdf_glyph_data_len );
-      bdf_is_encoding_successfully_done = 1;
-    }
     
     sprintf(bdf_info+strlen(bdf_info), "/* encoding %d %c, bbx %d %d %d %d  asc %d dx %d*/\n", 
       bdf_encoding,
@@ -1168,19 +1077,15 @@ format 1
       bdf_char_ascent,
       bdf_delta_x);
 
-    if ( bdf_font_format <= 1 )
+    for( i = 0; i < bdf_glyph_data_len; i++ )
     {
-      for( y = 0; y < bdf_char_height; y++ )
-      {
-	for( x = 0; x < ((bdf_char_width+7)/8); x++ )
-	{
-	  data_Put(bdf_bitmap_line[y][x]);
-	  len--;
-	}
-      }
-      assert( len == 0 );
-      bdf_is_put_glyph_completed = 1;
+      data_Put(bd_out_buf[i]);
     }
+    
+
+    bdf_glyph_cnt++;
+
+    bdf_is_put_glyph_completed = 1;
   }
 }
 
@@ -1406,35 +1311,13 @@ void bdf_GenerateFontData(const char *filename, int begin, int end)
   /*
   font information 
   offset
-  0             font format
-  1             FONTBOUNDINGBOX width           unsigned
-  2             FONTBOUNDINGBOX height          unsigned
-  3             FONTBOUNDINGBOX x-offset         signed
-  4             FONTBOUNDINGBOX y-offset        signed
-  5             Capital A Height                                unsigned
-  6             position of encoding 65 'A'     high byte first
-  8             position of encoding 97 'a'      high byte first
+  0		number of glyphs in the font (1x byte)
+  1		decode algorithm: bits for 0
+  2		decode algorithm: bits for 1
   */
-  data_Put(bdf_font_format);
-  data_Put(bdf_font_width);
-  data_Put(bdf_font_height);
-  data_Put(bdf_font_x);
-  data_Put(bdf_font_y);
-  if ( bdf_capital_A_height > 0 )
-    data_Put(bdf_capital_A_height);
-  else
-    data_Put(bdf_capital_1_height);
-  data_Put(0);
-  data_Put(0);
-  data_Put(0);
-  data_Put(0);
-  data_Put(begin);
-  data_Put(end);                /* will be overwritten later */
-  data_Put(0);                  /* lower g descent */
-  data_Put(0);                  /* max ascent */
-  data_Put(0);                  /* min y = descent */
-  data_Put(0);                  /* x ascent */
-  data_Put(0);                  /* x descent */
+  data_Put(0);                  
+  data_Put(bd_bits_per_0);                  
+  data_Put(bd_bits_per_1);                  
 }
 
 void bdf_GenerateGlyph(const char *filename, int encoding)
@@ -1452,6 +1335,7 @@ void bdf_Generate(const char *filename, int begin, int end)
 
   bdf_encoding_65_pos = 0;
   bdf_encoding_97_pos = 0;
+  bdf_glyph_cnt = 0;
 
   bdf_InitFilePos();
   bdf_ResetMax();
@@ -1470,29 +1354,18 @@ void bdf_Generate(const char *filename, int begin, int end)
     
     bdf_is_encoding_successfully_done = 0;
     if ( bdf_IsEncodingAvailable(i) )
+    {
       bdf_GenerateGlyph(filename, i);
+    }
+    /*
     if ( bdf_is_encoding_successfully_done == 0 )
-      data_Put(255);          /* no char encoding */
+      data_Put(255);
+    */
     if ( bdf_is_encoding_successfully_done != 0 )
       last_valid_encoding = i;
   }
   /* data_Put(255); obsolete, not required any more for format 0 */         /* encoding 255, end of font data (format 0) */
-  
-  if ( bdf_capital_A_height > 0 )
-    data_buf[5] = bdf_capital_A_height;
-  else
-    data_buf[5] = bdf_capital_1_height;
-    
-  data_buf[6] = (bdf_encoding_65_pos >> 8);
-  data_buf[7] = (bdf_encoding_65_pos & 255);
-  data_buf[8] = (bdf_encoding_97_pos >> 8);
-  data_buf[9] = (bdf_encoding_97_pos & 255);
-  
-  data_buf[12] = bdf_lower_g_descent;
-  data_buf[13] = bdf_char_max_ascent;
-  data_buf[14] = bdf_char_min_y;
-  data_buf[15] = bdf_char_xascent;
-  data_buf[16] = bdf_char_xdescent;
+  data_buf[0] = bdf_glyph_cnt;
   
   // data_buf[11] = last_valid_encoding;
   
