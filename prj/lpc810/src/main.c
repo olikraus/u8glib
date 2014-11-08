@@ -55,7 +55,7 @@ unsigned minute = 0;
 void draw_hm(oled_t *oled, unsigned h, unsigned m)
 {
   unsigned x, y, d;
-  y = 50;
+  y = 47;
   x = 0;
   d = 25;
   oled_draw_glyph(oled, x, y, '0' + h / 10);
@@ -99,7 +99,6 @@ int __attribute__ ((noinline)) main(void)
   Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);  
   
     oled_init();
-    oled_set_font(&oled_o, logisoso46);
   
   for(;;)
   {
@@ -115,7 +114,10 @@ int __attribute__ ((noinline)) main(void)
     {
       //oled_draw_hline(&oled_o, 0,5,60);
       //oled_draw_hline(&oled_o, 0,5+8,60);
+      oled_set_font(&oled_o, logisoso46);
       draw_hm(&oled_o, hour, minute);
+      oled_set_font(&oled_o, helvR14);
+      oled_draw_string(&oled_o, 0, 63, "HELLO");
     }
     while( oled_next_page(&oled_o) );
     

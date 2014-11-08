@@ -41,7 +41,8 @@ typedef struct _oled_struct oled_t;
 extern oled_t oled_o;
 
 
-extern const unsigned char logisoso46[587];
+extern const unsigned char logisoso46[];
+extern const unsigned char helvR14[];
 
 void oled_init(void);
 void oled_set_font(oled_t *oled, const unsigned char *font);
