@@ -46,9 +46,29 @@
 #define SYS_CORE_CLOCK 12000000UL
 #define SYS_TICK_PERIOD_IN_MS 50
 
+unsigned hour = 0;
+unsigned minute = 0;
 
 
+/*=======================================================================*/
 
+void draw_hm(oled_t *oled, unsigned h, unsigned m)
+{
+  unsigned x, y, d;
+  y = 50;
+  x = 0;
+  d = 25;
+  oled_draw_glyph(oled, x, y, '0' + h / 10);
+  x += d;
+  oled_draw_glyph(oled, x, y, '0' + h % 10);
+  x += d;
+  oled_draw_glyph(oled, x, y, ':');
+  x += d/2;
+  oled_draw_glyph(oled, x, y, '0' + m / 10);
+  x += d;
+  oled_draw_glyph(oled, x, y, '0' + m % 10);
+  x += d;
+}
 
 /*=======================================================================*/
 /* main procedure, called by "Reset_Handler" */
@@ -78,15 +98,33 @@ int __attribute__ ((noinline)) main(void)
   /* let LED on pin 4 of the DIP8 blink */
   Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);  
   
+    oled_init();
+    oled_set_font(&oled_o, logisoso46);
   
   for(;;)
   {
-    oled_init();
     
     Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
     delay_micro_seconds(500000UL);
     Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
     delay_micro_seconds(500000UL);
+    
+    
+    oled_start_page(&oled_o);
+    do
+    {
+      //oled_draw_hline(&oled_o, 0,5,60);
+      //oled_draw_hline(&oled_o, 0,5+8,60);
+      draw_hm(&oled_o, hour, minute);
+    }
+    while( oled_next_page(&oled_o) );
+    
+      hour++;
+    if ( hour >= 24 )
+      hour = 0;
+    minute++;
+    if ( minute >= 60 )
+      minute = 0;
   }
 
   

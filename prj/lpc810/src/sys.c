@@ -183,7 +183,7 @@ static void i2c_delay(void)
   /* should be at least 4 */
   /* should be 5 for 100KHz transfer speed */
   
-  delay_micro_seconds(6);
+  delay_micro_seconds(4);
 }
 
 void __attribute__ ((noinline)) i2c_init(void)

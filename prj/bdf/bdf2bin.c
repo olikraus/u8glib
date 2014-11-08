@@ -131,7 +131,8 @@ ISO-8859-1 was incorporated as the first 256 code points of ISO/IEC 10646 and Un
 
 
 #define BDF2U8G_COMPACT_OUTPUT
-#define BDF2U8G_VERSION "1.01"
+#define BDF2U8G_VERSION "1.02"
+
 #define VERBOSE
 
 
@@ -740,7 +741,7 @@ void bd_expand(int a, int b)
   
 }
 
-int bd_compress(int bp0, int bp1)
+int bd_compress(void)
 {
   int x,y, byte, bit, i;
   int gx, gy;
@@ -761,9 +762,6 @@ int bd_compress(int bp0, int bp1)
   bd_chg_cnt = 0;
   bd_bitcnt = 0;
   bd_is_first = 1;
-
-  bd_bits_per_0 = bp0;
-  bd_bits_per_1 = bp1;
 
   bd_out_byte_pos = 0;
   bd_out_bit_pos = 0;
@@ -831,13 +829,13 @@ int bd_compress(int bp0, int bp1)
     bd_list[bd_chg_cnt] = 0;
     bd_chg_cnt++;
   }
-    printf("\n");
   for( i = 0; i < bd_chg_cnt; i+=2 )
   {
     //printf( " (%02x %02x)", bd_list[i], bd_list[i+1]);
     bd_expand(bd_list[i], bd_list[i+1]);
   }
   bd_out_bits(1, 0);		// ensure that there is a 0 bit at the end.
+#ifdef VERBOSE
   printf("bd_max_len = %d, bd_chg_cnt = %d, (bdf_char_width+7)/8*bdf_line_bm_line = %d, bytes = %d, bytepos = %d bitpos=%d\n", 
     bd_max_len, bd_chg_cnt, (bdf_char_width+7)/8*bdf_line_bm_line, (bd_bitcnt+7)/8, bd_out_byte_pos, bd_out_bit_pos);
   printf("\n");
@@ -854,6 +852,7 @@ int bd_compress(int bp0, int bp1)
   }
   
   printf("\n");
+#endif /* VERBOSE */
   /* return the size of the compressed data stream (bd_out_buf) */
   return bd_out_byte_pos + (bd_out_bit_pos==0?0:1);
 }
@@ -1033,7 +1032,7 @@ void bdf_PutGlyph(void)
 
     bdf_ShowGlyph();
     
-    len = bd_compress(5,5);
+    len = bd_compress();
     
     bdf_UpdateMax();
     
@@ -1400,11 +1399,13 @@ void bdf_WriteC(const char *outname, const char *fontname)
   fprintf(out_fp, "  Max Font    ascent =%2d descent=%2d\n", bdf_char_max_ascent, bdf_char_min_y);
 
   fprintf(out_fp, "*/\n");
-  fprintf(out_fp, "#include \"u8g.h\"\n");  
-  fprintf(out_fp, "const u8g_fntpgm_uint8_t %s[%d] U8G_FONT_SECTION(\"%s\") = {\n", fontname, data_pos, fontname);
+  //fprintf(out_fp, "#include \"u8g.h\"\n");  
+  fprintf(out_fp, "const unsigned char %s[%d] = {\n", fontname, data_pos);
   fprintf(out_fp, "  ");
   data_Write(out_fp, "  ");
   fprintf(out_fp, "};\n");
+  
+  printf("font size: %d bytes\n", data_pos);
 #ifdef BDF2U8G_COMPACT_OUTPUT
 #else
   fprintf(out_fp, "%s\n", bdf_info);
@@ -1453,8 +1454,8 @@ int main(int argc, char **argv)
   
   if ( argc < 4 )
   {
-    printf("bdf to u8glib font format converter v" BDF2U8G_VERSION "\n");
-    printf("%s [-l page] [-u page] [-s shift] [-S upper-shift] [-b begin] [-e end] [-f format] fontfile fontname outputfile\n", argv[0]);
+    printf("bdf to bin font format converter v" BDF2U8G_VERSION "\n");
+    printf("%s [-l page] [-u page] [-s shift] [-S upper-shift] [-b begin] [-e end] [-0 bits per 0] [-1 bits per 1] fontfile fontname outputfile\n", argv[0]);
     return 1;
   }
   
@@ -1494,9 +1495,21 @@ int main(int argc, char **argv)
       end = atoi(ga_argv[0]);
       ga_remove_arg();      
     }
+    /*
     else if ( ga_is_arg('f') )
     {
       bdf_font_format = atoi(ga_argv[0]);
+      ga_remove_arg();      
+    }
+    */
+    else if ( ga_is_arg('0') )
+    {
+      bd_bits_per_0 = atoi(ga_argv[0]);
+      ga_remove_arg();      
+    }
+    else if ( ga_is_arg('1') )
+    {
+      bd_bits_per_1 = atoi(ga_argv[0]);
       ga_remove_arg();      
     }
     else 
