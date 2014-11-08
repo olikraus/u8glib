@@ -1052,7 +1052,7 @@ void bdf_PutGlyph(void)
     0             encoding                                       unsigned
     1             BBX width                                       unsigned
     2             BBX height                                      unsigned
-    3             data size                                          unsigned
+    3             data size (size of full record)              unsigned
     4             DWIDTH                                          signed
     5             BBX xoffset                                    signed
     6             BBX yoffset                                    signed
@@ -1061,7 +1061,7 @@ void bdf_PutGlyph(void)
       data_Put(bdf_encoding);    
       data_Put(bdf_char_width);
       data_Put(bdf_char_height);
-      data_Put(bdf_glyph_data_len);
+      data_Put(bdf_glyph_data_len+7);
       data_Put(bdf_delta_x);
       data_Put(bdf_char_x);
       data_Put(bdf_char_y);
