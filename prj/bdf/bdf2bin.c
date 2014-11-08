@@ -567,91 +567,94 @@ int bd_out_bit_pos;
 #define BD_OUT_BUF_LEN 1024
 unsigned char bd_out_buf[BD_OUT_BUF_LEN];
 
+/* font decode */
+struct _fd_struct
+{
+  unsigned char *ptr;
+  unsigned bits_per_0;
+  unsigned bits_per_1;
+  
+  unsigned decode_byte_pos;
+  unsigned decode_bit_pos;
+  unsigned glyph_width;
+  unsigned glyph_height;
+  
+  unsigned x;
+  unsigned y;
+  
+};
+typedef struct _fd_struct fd_t;
 
-int bd_decode_byte_pos;
-int bd_decode_bit_pos;
 
-unsigned char bd_get_bits(unsigned char *ptr, int cnt)
+unsigned char fd_get_bits(fd_t *fd, int cnt)
 {
   unsigned char val;
-  //printf(" %d/%d byte=%02x ", bd_decode_byte_pos, bd_decode_bit_pos, ptr[bd_decode_byte_pos]);
-  
-  val = ptr[bd_decode_byte_pos];
-  val >>= bd_decode_bit_pos;
-  //printf(" val=%02x", val);
-  if ( bd_decode_bit_pos + cnt < 8 )
+  val = fd->ptr[fd->decode_byte_pos];
+  val >>= fd->decode_bit_pos;
+  if ( fd->decode_bit_pos + cnt < 8 )
   {
-    //printf(" val&=%02x", (1<<cnt) - 1);
     val &= (1<<cnt) - 1;
-    bd_decode_bit_pos += cnt;
   }
-  else if ( bd_decode_bit_pos + cnt == 8 )
+  /*
+  else if ( fd->decode_bit_pos + cnt == 8 )
   {
-    bd_decode_bit_pos = 0;
-    bd_decode_byte_pos++;
+    fd->decode_bit_pos = 0;
+    fd->decode_byte_pos++;
   }
+  */
   else
   {
-    bd_decode_byte_pos++;
-    val |= ptr[bd_decode_byte_pos] << 8-bd_decode_bit_pos;
-    //printf(" val|=%02x", ptr[bd_decode_byte_pos] << 8-bd_decode_bit_pos);
-    bd_decode_bit_pos += cnt;
-    bd_decode_bit_pos -= 8;
+    fd->decode_byte_pos++;
+    val |= fd->ptr[fd->decode_byte_pos] << 8-fd->decode_bit_pos;
+    fd->decode_bit_pos -= 8;
     val &= (1<<cnt) - 1;
-    //printf(" val&=%02x", (1<<cnt) - 1);
   }
+  fd->decode_bit_pos += cnt;
   return val;
 }
 
-//bd_test_decode(bd_out_buf)
-
-//bdf_char_width
-void bd_test_decode(unsigned char *ptr)
+void fd_inc(fd_t *fd)
 {
-  int x, y;
+  fd->x++;
+  if ( fd->x >= fd->glyph_width )
+  {
+    fd->x = 0;
+    fd->y++;
+    printf("\n");
+  }
+}
+
+void fd_decode(fd_t *fd)
+{
   int a, b;
   int i;
-  unsigned repeat;
   
-  bd_decode_byte_pos = 0;
-  bd_decode_bit_pos = 0;
-  x = 0;
-  y = 0;
+  fd->decode_byte_pos = 0;
+  fd->decode_bit_pos = 0;
+  fd->x = 0;
+  fd->y = 0;
   
   for(;;)
   {
-    a = bd_get_bits(ptr, bd_bits_per_0);
-    b = bd_get_bits(ptr, bd_bits_per_1);
+    a = fd_get_bits(fd, fd->bits_per_0);
+    b = fd_get_bits(fd, fd->bits_per_1);
     do
     {
       for( i = 0; i < a; i++ )
       {
 	printf(" .");
-	x++;
-	if ( x >= bdf_char_width )
-	{
-	  x = 0;
-	  y++;
-	  printf("\n");
-	}
+	fd_inc(fd);
       }
 
       for( i = 0; i < b; i++ )
       {
 	printf(" #");
-	x++;
-	if ( x >= bdf_char_width )
-	{
-	  x = 0;
-	  y++;
-	  printf("\n");
-	}
+	fd_inc(fd);
       }
       
-      repeat =  bd_get_bits(ptr, 1);
-    } while( repeat != 0 );
+    } while( fd_get_bits(fd, 1) != 0 );
     
-    if ( y >= bdf_line_bm_line )
+    if ( fd->y >= fd->glyph_height )
       break;
   }
 }
@@ -660,23 +663,27 @@ void bd_test_decode(unsigned char *ptr)
 void bd_out_bits(int cnt, int val)
 {
   int i;
+/*  
   printf("|");
   for( i = 0; i < cnt; i++)
   {
     printf("%c", ((val>>(cnt-1-i))&1) ? '1' : '0' );
   }
   printf("|");
+*/
   
   bd_out_buf[bd_out_byte_pos] |= (val << bd_out_bit_pos);
   
   if ( bd_out_bit_pos+cnt >= 8 )
   {
+/*    
     printf(" {%02x ", bd_out_buf[bd_out_byte_pos]);
     for( i = 0; i < 8; i++ )
     {
       printf("%c", ((bd_out_buf[bd_out_byte_pos]>>(8-1-i))&1) ? '1' : '0' );
     }
     printf("}");
+*/
     
     val >>= 8-bd_out_bit_pos;
     bd_out_byte_pos++;
@@ -690,8 +697,6 @@ void bd_out_bits(int cnt, int val)
   {
     bd_out_bit_pos+=cnt;
   }
-  
-  
 }
 
   
@@ -701,22 +706,27 @@ void bd_rle(int a, int b, int is_expand)
   {
     bd_bitcnt++;
     bd_out_bits(1, 1);
-      printf("*");
+/*
+    printf("*");
+*/
   }
   else
   {   
+/*
     if ( is_expand )
       printf(" [%02x, %02x]", a, b);
     else
       printf(" (%02x, %02x)", a, b);
-    
+*/
     if ( bd_is_first == 0 )
+    {
       bd_out_bits(1, 0);
+      bd_bitcnt++;
+    }
     bd_out_bits(bd_bits_per_0, a);
     bd_out_bits(bd_bits_per_1, b);
     
     bd_is_first = 0;
-    bd_bitcnt++;
     bd_bitcnt +=bd_bits_per_0;
     bd_bitcnt +=bd_bits_per_1;
     bd_last_0 = a;
@@ -742,7 +752,7 @@ void bd_expand(int a, int b)
   
 }
 
-void bd_compress(void)
+int bd_compress(int bp0, int bp1)
 {
   int x,y, byte, bit, i;
   int gx, gy;
@@ -763,6 +773,9 @@ void bd_compress(void)
   bd_chg_cnt = 0;
   bd_bitcnt = 0;
   bd_is_first = 1;
+
+  bd_bits_per_0 = bp0;
+  bd_bits_per_1 = bp1;
 
   bd_out_byte_pos = 0;
   bd_out_bit_pos = 0;
@@ -836,11 +849,25 @@ void bd_compress(void)
     //printf( " (%02x %02x)", bd_list[i], bd_list[i+1]);
     bd_expand(bd_list[i], bd_list[i+1]);
   }
-  printf("bd_max_len = %d, bd_chg_cnt = %d, (bdf_char_width+7)/8*bdf_line_bm_line = %d, bytes = %d\n", bd_max_len, bd_chg_cnt, (bdf_char_width+7)/8*bdf_line_bm_line, (bd_bitcnt+7)/8);
-    printf("\n");
-  printf("%02x %02x %02x\n", bd_out_buf[0], bd_out_buf[1], bd_out_buf[2]);
-  bd_test_decode(bd_out_buf);
-    printf("\n");
+  bd_out_bits(1, 0);		// ensure that there is a 0 bit at the end.
+  printf("bd_max_len = %d, bd_chg_cnt = %d, (bdf_char_width+7)/8*bdf_line_bm_line = %d, bytes = %d, bytepos = %d bitpos=%d\n", 
+    bd_max_len, bd_chg_cnt, (bdf_char_width+7)/8*bdf_line_bm_line, (bd_bitcnt+7)/8, bd_out_byte_pos, bd_out_bit_pos);
+  printf("\n");
+  //printf("%02x %02x %02x\n", bd_out_buf[0], bd_out_buf[1], bd_out_buf[2]);
+  {
+    fd_t fd;
+    fd.ptr = bd_out_buf;
+    fd.bits_per_0 = bd_bits_per_0;
+    fd.bits_per_1 = bd_bits_per_1;
+
+    fd.glyph_height = bdf_char_height;
+    fd.glyph_width = bdf_char_width;
+    fd_decode(&fd);
+  }
+  
+  printf("\n");
+  /* return the size of the compressed data stream (bd_out_buf) */
+  return bd_out_byte_pos + (bd_out_bit_pos==0?0:1);
 }
 
 void bdf_ShowGlyph(void)
@@ -939,6 +966,7 @@ void bdf_ShowGlyph(void)
     printf("\n");
   }
   
+  /*
   bd_list[bd_chg_cnt] = bd_curr_len;
   bd_chg_cnt++;
   if ( (bd_chg_cnt & 1) == 1 )
@@ -948,13 +976,9 @@ void bdf_ShowGlyph(void)
   }
   for( i = 0; i < bd_chg_cnt; i+=2 )
   {
-    //printf( " (%02x %02x)", bd_list[i], bd_list[i+1]);
     bd_expand(bd_list[i], bd_list[i+1]);
   }
-  printf("bd_max_len = %d, bd_chg_cnt = %d, (bdf_char_width+7)/8*bdf_line_bm_line = %d, bytes = %d\n", bd_max_len, bd_chg_cnt, (bdf_char_width+7)/8*bdf_line_bm_line, (bd_bitcnt+7)/8);
-    printf("\n");
-  
-    bd_compress();
+  */
   
 #else
   printf("bbx %d %d %d %d encoding %d\n", bdf_char_width, bdf_char_height, bdf_char_x, bdf_char_y, bdf_encoding);
@@ -1022,6 +1046,8 @@ void bdf_PutGlyph(void)
 
     bdf_ShowGlyph();
     
+    len = bd_compress(5,5);
+    
     bdf_UpdateMax();
     
     if ( bdf_font_format <= 1 )
@@ -1032,6 +1058,7 @@ void bdf_PutGlyph(void)
     {
       len = (bdf_char_width+2*BDF_AA_OFFSET + 3)/4 * (bdf_char_height+2*BDF_AA_OFFSET);
     }
+    
     if ( len > 255 )
     {
       fprintf(stderr, "Glyph with encoding %d is too large (%d > 255)\n", bdf_encoding, len);
