@@ -186,6 +186,7 @@ static void i2c_delay(void)
   delay_micro_seconds(4);
 }
 
+/* maybe this can be optimized */
 void __attribute__ ((noinline)) i2c_init(void)
 {
   Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO0,PIN_MODE_INACTIVE);	/* no pullup/-down */
@@ -197,10 +198,14 @@ void __attribute__ ((noinline)) i2c_init(void)
   i2c_delay();
 }
 
-uint8_t __attribute__ ((noinline)) i2c_read_scl(void)
+/* actually, the scl line is not observed, so this procedure does not return a value */
+void __attribute__ ((noinline)) i2c_read_scl_and_delay(void)
 {
+  uint8_t val;
   Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 3);
-  return Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 3);
+  //val = Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 3);
+  i2c_delay();
+  //return val;
 }
 
 void __attribute__ ((noinline)) i2c_clear_scl(void)
@@ -231,10 +236,7 @@ void __attribute__ ((noinline)) i2c_start(void)
     /* if already started: do restart */
     i2c_read_sda();	/* SDA = 1 */
     i2c_delay();
-    i2c_read_scl();
-    /* clock stretching is not done */
-    /* while (i2c_read_scl() == 0)   ; */
-    i2c_delay();		/* another delay, just to be sure... */
+    i2c_read_scl_and_delay();
   }
   i2c_read_sda();
   /*
@@ -258,19 +260,10 @@ void __attribute__ ((noinline)) i2c_stop(void)
   i2c_delay();
   
   /* now release all lines */
-  i2c_read_scl();
-  /* clock stretching is not done */
-  /* while (i2c_read_scl() == 0)   ; */
-  i2c_delay();		/* another delay, just to be sure... */
+  i2c_read_scl_and_delay();
   
   /* set SDA to 1 */
   i2c_read_sda();
-  /*
-  if (i2c_read_sda() == 0) 
-  {
-    // do something because arbitration is lost
-  }
-  */
   i2c_delay();
   i2c_started = 0;
 }
@@ -283,19 +276,7 @@ void i2c_write_bit(uint8_t val)
     i2c_clear_sda();
   
   i2c_delay();
-  i2c_read_scl();
-  /* clock stretching is not done */
-  /* while (i2c_read_scl() == 0)   ; */
-
-  /* validation is skipped, because this will be the only master */  
-  /* If SDA is high, check that nobody else is driving SDA */
-  /*
-  if (val && i2c_read_sda() == 0) 
-  {
-    arbitration_lost();
-  }
-  */
-  i2c_delay();
+  i2c_read_scl_and_delay();
   i2c_clear_scl();
 }
 
@@ -305,20 +286,16 @@ uint8_t i2c_read_bit(void)
   /* do not drive SDA */
   i2c_read_sda();
   i2c_delay();
-  i2c_read_scl();
-  /* clock stretching is not done */
-  /* while (i2c_read_scl() == 0)   ; */
-  
-  i2c_delay();	/* may not be required... */
+  i2c_read_scl_and_delay();
   val = i2c_read_sda();
   i2c_delay();
   i2c_clear_scl();
   return val;
 }
 
-uint8_t i2c_write_byte(uint8_t b)
+uint8_t i2c_write_byte(unsigned b)
 {
-  uint8_t i = 8;
+  unsigned i = 8;
   do
   {
     i2c_write_bit(b & 128);

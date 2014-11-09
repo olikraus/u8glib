@@ -216,17 +216,21 @@ void oled_draw_hline(oled_t *oled, uint32_t x, uint32_t y, uint32_t cnt)
 static unsigned __attribute__ ((noinline)) oled_fd_get_bits(oled_t *oled, int cnt)
 {
   unsigned val;
+  unsigned bit_pos = oled->decode_bit_pos;
   
   val = *(oled->decode_ptr);
-  val >>= oled->decode_bit_pos;
-  if ( oled->decode_bit_pos + cnt >= 8 )
+  
+  val >>= bit_pos;
+  if ( bit_pos + cnt >= 8 )
   {
     oled->decode_ptr++;
-    val |= *(oled->decode_ptr) << (8-oled->decode_bit_pos);
-    oled->decode_bit_pos -= 8;
+    val |= *(oled->decode_ptr) << (8-bit_pos);
+    bit_pos -= 8;
   }
   val &= (1<<cnt)-1;
-  oled->decode_bit_pos += cnt;
+  bit_pos += cnt;
+  
+  oled->decode_bit_pos = bit_pos;
   return val;
 }
 
@@ -237,12 +241,14 @@ static int __attribute__ ((noinline)) oled_fd_get_signed_bits(oled_t *oled, int 
 
 static void __attribute__ ((noinline)) oled_fd_inc(oled_t *oled)
 {
-  oled->x++;
-  if ( oled->x == oled->glyph_width )
+  unsigned x = oled->x;
+  x++;
+  if ( x == oled->glyph_width )
   {
-    oled->x = 0;
+    x = 0;
     oled->y++;
   }
+  oled->x = x;
 }
 
 static void oled_fd_decode(oled_t *oled, unsigned x, unsigned y)
@@ -387,9 +393,9 @@ int oled_next_page(oled_t *oled)
 {
   
   oled_start_page_seq[2] = 0x0b0 | (oled->page_start>>3);
-  delay_micro_seconds(100);
+  //delay_micro_seconds(100);
   oled_send_seq(I2C_CMD_MODE, sizeof(oled_start_page_seq), oled_start_page_seq);
-  delay_micro_seconds(100);
+  //delay_micro_seconds(100);
   oled_send_seq(I2C_DATA_MODE, WIDTH, oled->oled_display_page);
   oled_clear_page(oled);
   

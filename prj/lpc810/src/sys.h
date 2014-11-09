@@ -58,7 +58,7 @@ void delay_micro_seconds(uint32_t us);
 void i2c_init(void);
 void i2c_start(void) ;
 void i2c_stop(void);
-uint8_t i2c_write_byte(uint8_t b);
+uint8_t i2c_write_byte(unsigned b);
 
 
 #endif
