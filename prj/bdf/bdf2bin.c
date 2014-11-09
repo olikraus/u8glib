@@ -66,59 +66,19 @@
   
   font information 
   offset
-  0             font format
-  1             FONTBOUNDINGBOX width           unsigned
-  2             FONTBOUNDINGBOX height          unsigned
-  3             FONTBOUNDINGBOX x-offset         signed
-  4             FONTBOUNDINGBOX y-offset        signed
-  5             capital A height                                unsigned
-  6             start 'A'
-  8             start 'a'
-  10            encoding start
-  11            encoding end
-  12            descent 'g'                     negative: below baseline
-  13            font max ascent
-  14            font min decent             negative: below baseline 
-  15            xascent (ascent of "(")
-  16            xdescent (descent of ")")
+  0		number of glyphs in the font (1x byte)
+  1		decode algorithm: bits for 0
+  2		decode algorithm: bits for 1
+  3		bits_per_char_width
+  4		bits_per_char_height
+  5		bits_per_char_x
+  6		bits_per_char_y
+  7		bits_per_delta_x
 
-format 0
     glyph information 
     offset
-    0             BBX width                                       unsigned
-    1             BBX height                                      unsigned
-    2             data size                                          unsigned    (BBX width + 7)/8 * BBX height
-    3             DWIDTH                                          signed
-    4             BBX xoffset                                    signed
-    5             BBX yoffset                                    signed
-
-format 1
-  0             BBX xoffset                                    signed   --> upper 4 Bit
-  0             BBX yoffset                                    signed --> lower 4 Bit
-  1             BBX width                                       unsigned --> upper 4 Bit
-  1             BBX height                                      unsigned --> lower 4 Bit
-  2             data size                                           unsigned -(BBX width + 7)/8 * BBX height  --> lower 4 Bit
-  2             DWIDTH                                          signed --> upper  4 Bit
-  byte 0 == 255 indicates empty glyph
-
-format 2
-  like format 0, but 4 gray levels for the glyph (4 pixel per byte in the glyph data)
-
-  The glyph bitmap size is defined by BBX width and BBX height
-  number of bytes in the bitmap data (BBX width + 7)/8 * BBX height (format 0 and 1)
-
-  draw_text(x,y,str)
-  get_text_frame(x,y,str, &x1, &y1, &width, &height)
-  frame( x1, y1, width, height)
-  underline( x1, y-1, width )
-
-  size of the surrounding bbox
-  
-  width = - xoffset(c1) + DWIDTH(c1) + DWIDTH(c2) + ... + DWIDTH(cn-1) + width(cn) + xoffset(cn)
-  height = FONTBOUNDINGBOX height
-  x1 = x + xoffset(c1)
-  y1 = y + yoffset(c1)  
-  
+    0			encoding
+    1			block size
 
 ISO-8859-1 was incorporated as the first 256 code points of ISO/IEC 10646 and Unicode.
 
@@ -133,7 +93,7 @@ ISO-8859-1 was incorporated as the first 256 code points of ISO/IEC 10646 and Un
 #define BDF2U8G_COMPACT_OUTPUT
 #define BDF2U8G_VERSION "1.02"
 
-#define VERBOSE
+//#define VERBOSE
 
 
 /*=== forward declaration ===*/
@@ -546,6 +506,14 @@ void bdf_UpdateMax(void)
 
 int bd_bits_per_0 = 5;
 int bd_bits_per_1 = 5;
+int bd_bits_per_char_width = 7;
+int bd_bits_per_char_height = 7;
+int bd_bits_per_char_x = 7;
+int bd_bits_per_char_y = 7;
+int bd_bits_per_delta_x = 7;
+
+
+
 int bd_bitcnt;
 int bd_last_0 = 0;
 int bd_last_1 = 0;
@@ -617,11 +585,20 @@ void fd_decode(fd_t *fd)
 {
   int a, b;
   int i;
+
   
   fd->decode_byte_pos = 0;
   fd->decode_bit_pos = 0;
   fd->x = 0;
   fd->y = 0;
+
+  fd->glyph_width = fd_get_bits(fd, bd_bits_per_char_width);
+  fd->glyph_height = fd_get_bits(fd, bd_bits_per_char_height);
+
+  fd_get_bits(fd, bd_bits_per_char_x);
+  fd_get_bits(fd, bd_bits_per_char_y);
+  fd_get_bits(fd, bd_bits_per_delta_x);
+
   
   for(;;)
   {
@@ -652,6 +629,10 @@ void fd_decode(fd_t *fd)
 void bd_out_bits(int cnt, int val)
 {
   int i;
+  
+  assert( val < (1<<cnt) );
+  assert(val >= 0 );
+  
 /*  
   printf("|");
   for( i = 0; i < cnt; i++)
@@ -765,10 +746,18 @@ int bd_compress(void)
 
   bd_out_byte_pos = 0;
   bd_out_bit_pos = 0;
-  
+
+
   for( i = 0; i < BD_OUT_BUF_LEN; i++ )
     bd_out_buf[i] = 0;
-  
+
+  bd_out_bits(bd_bits_per_char_width, bdf_char_width);
+  bd_out_bits(bd_bits_per_char_height, bdf_char_height);
+
+  bd_out_bits(bd_bits_per_char_x, bdf_char_x+(1<<(bd_bits_per_char_x-1)));
+  bd_out_bits(bd_bits_per_char_y, bdf_char_y+(1<<(bd_bits_per_char_y-1)));
+  bd_out_bits(bd_bits_per_delta_x, bdf_delta_x);
+
   for( y = 0; y < bdf_line_bm_line; y++ )
   {
     gx = bdf_char_x;
@@ -845,9 +834,8 @@ int bd_compress(void)
     fd.ptr = bd_out_buf;
     fd.bits_per_0 = bd_bits_per_0;
     fd.bits_per_1 = bd_bits_per_1;
-
-    fd.glyph_height = bdf_char_height;
     fd.glyph_width = bdf_char_width;
+    fd.glyph_height = bdf_char_height;
     fd_decode(&fd);
   }
   
@@ -1049,23 +1037,36 @@ void bdf_PutGlyph(void)
     glyph information 
     offset
     0             encoding                                       unsigned
-    1             BBX width                                       unsigned
-    2             BBX height                                      unsigned
-    3             data size (size of full record)              unsigned
-    4             DWIDTH                                          signed
-    5             BBX xoffset                                    signed
-    6             BBX yoffset                                    signed
+    1             data size (size of full record)              unsigned	
+    
+    ~             BBX width                                       unsigned	5
+    ~             BBX height                                      unsigned	5
+    ~             BBX xoffset                                    signed		2
+    ~             BBX yoffset                                    signed		5
+    ~             DWIDTH                                          signed		3
+    
+    
   */
     
       data_Put(bdf_encoding);    
-      data_Put(bdf_char_width);
-      data_Put(bdf_char_height);
-      data_Put(bdf_glyph_data_len+7);
-      data_Put(bdf_delta_x);
-      data_Put(bdf_char_x);
-      data_Put(bdf_char_y);
+      data_Put(bdf_glyph_data_len+2);
+      //data_Put(bdf_char_width);
+      //data_Put(bdf_char_height);
+      //data_Put(bdf_delta_x);
+      //data_Put(bdf_char_x);
+      //data_Put(bdf_char_y);
       bdf_is_encoding_successfully_done = 1;
-    
+
+    printf("encoding %d %c, bbx w=%d h=%d x=%d y=%d dx=%d dx-w=%d bdf_glyph_data_len=%d\n", 
+      bdf_encoding,
+      bdf_encoding > 32 && bdf_encoding <= 'z' ? bdf_encoding : ' ',
+      bdf_char_width,
+      bdf_char_height,
+      bdf_char_x,
+      bdf_char_y,
+      bdf_delta_x,
+      bdf_delta_x - bdf_char_width, bdf_glyph_data_len);
+
     sprintf(bdf_info+strlen(bdf_info), "/* encoding %d %c, bbx %d %d %d %d  asc %d dx %d*/\n", 
       bdf_encoding,
       bdf_encoding > 32 && bdf_encoding <= 'z' ? bdf_encoding : ' ',
@@ -1313,10 +1314,23 @@ void bdf_GenerateFontData(const char *filename, int begin, int end)
   0		number of glyphs in the font (1x byte)
   1		decode algorithm: bits for 0
   2		decode algorithm: bits for 1
+  3		bits_per_char_width
+  4		bits_per_char_height
+  5		bits_per_char_x
+  6		bits_per_char_y
+  7		bits_per_delta_x
+  
   */
   data_Put(0);                  
   data_Put(bd_bits_per_0);                  
-  data_Put(bd_bits_per_1);                  
+  data_Put(bd_bits_per_1);
+
+  data_Put(bd_bits_per_char_width);
+  data_Put(bd_bits_per_char_height);
+  data_Put(bd_bits_per_char_x);
+  data_Put(bd_bits_per_char_y);
+  data_Put(bd_bits_per_delta_x);
+
 }
 
 void bdf_GenerateGlyph(const char *filename, int encoding)
@@ -1455,7 +1469,7 @@ int main(int argc, char **argv)
   if ( argc < 4 )
   {
     printf("bdf to bin font format converter v" BDF2U8G_VERSION "\n");
-    printf("%s [-l page] [-u page] [-s shift] [-S upper-shift] [-b begin] [-e end] [-0 bits per 0] [-1 bits per 1] fontfile fontname outputfile\n", argv[0]);
+    printf("%s [-l page] [-u page] [-s shift] [-S upper-shift] [-b begin] [-e end] [-0 bits per 0] [-1 bits per 1] [-w bits per width] [-h bits per height] [-x bits per xoff] [-y bits per yofft] [-d bits per xdelta] fontfile fontname outputfile\n", argv[0]);
     return 1;
   }
   
@@ -1512,6 +1526,33 @@ int main(int argc, char **argv)
       bd_bits_per_1 = atoi(ga_argv[0]);
       ga_remove_arg();      
     }
+    else if ( ga_is_arg('w') )
+    {
+      bd_bits_per_char_width = atoi(ga_argv[0]);
+      ga_remove_arg();      
+    }
+    else if ( ga_is_arg('h') )
+    {
+      bd_bits_per_char_height = atoi(ga_argv[0]);
+      ga_remove_arg();      
+    }
+    else if ( ga_is_arg('x') )
+    {
+      bd_bits_per_char_x = atoi(ga_argv[0]);
+      ga_remove_arg();      
+    }
+    else if ( ga_is_arg('y') )
+    {
+      bd_bits_per_char_y = atoi(ga_argv[0]);
+      ga_remove_arg();      
+    }
+    else if ( ga_is_arg('d') )
+    {
+      bd_bits_per_delta_x = atoi(ga_argv[0]);
+      ga_remove_arg();      
+    }
+    
+    
     else 
       break;
   }

@@ -116,7 +116,7 @@ int __attribute__ ((noinline)) main(void)
       //oled_draw_hline(&oled_o, 0,5+8,60);
       oled_set_font(&oled_o, logisoso46);
       draw_hm(&oled_o, hour, minute);
-      oled_set_font(&oled_o, helvR14);
+      oled_set_font(&oled_o, helvR14small);
       oled_draw_string(&oled_o, 0, 63, "HELLO");
     }
     while( oled_next_page(&oled_o) );

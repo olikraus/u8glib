@@ -13,14 +13,17 @@ struct _oled_struct
   unsigned glyph_cnt;
   unsigned bits_per_0;
   unsigned bits_per_1;
+  unsigned bits_per_char_width;
+  unsigned bits_per_char_height;
+  unsigned bits_per_char_x;
+  unsigned bits_per_char_y;
+  unsigned bits_per_delta_x;
 
   /* glyph information */
   const unsigned char *glyph_data;
   unsigned glyph_width;
   unsigned glyph_height;
   unsigned glyph_delta;
-  int x_offset;
-  int y_offset;
 
   /* glyph decode algorithm */
   const unsigned char *decode_ptr;
@@ -42,7 +45,7 @@ extern oled_t oled_o;
 
 
 extern const unsigned char logisoso46[];
-extern const unsigned char helvR14[];
+extern const unsigned char helvR14small[];
 
 void oled_init(void);
 void oled_set_font(oled_t *oled, const unsigned char *font);
