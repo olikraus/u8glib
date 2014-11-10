@@ -41,6 +41,7 @@
 #include "chip.h"
 #include "sys.h"
 #include "oled.h"
+#include "port.h"
 
 
 #define SYS_CORE_CLOCK 12000000UL
@@ -70,6 +71,31 @@ void draw_hm(oled_t *oled, unsigned h, unsigned m)
   x += d;
 }
 
+/*=================================================*/
+
+
+//Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
+const uint16_t pcs_led_out[] = 
+{  
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  PCS_SETB(2, 0x000/4) | PCS_END
+};
+
+//Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
+const uint16_t pcs_led_high[] = 
+{  
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  PCS_SETB(2, 0x200/4) | PCS_END
+};
+
+//Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
+const uint16_t pcs_led_low[] = 
+{
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  PCS_SETB(2, 0x280/4) | PCS_END
+};
+
+
 /*=======================================================================*/
 /* main procedure, called by "Reset_Handler" */
 
@@ -96,16 +122,16 @@ int __attribute__ ((noinline)) main(void)
   Chip_ACMP_Init(LPC_CMP);
 
   /* let LED on pin 4 of the DIP8 blink */
-  Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);  
+  //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
+  pcs(pcs_led_out);
   
-    oled_init();
+  oled_init();
   
   for(;;)
-  {
-    
-    Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
+  {    
+    pcs(pcs_led_high);
     delay_micro_seconds(500000UL);
-    Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
+    pcs(pcs_led_low);
     delay_micro_seconds(500000UL);
     
     

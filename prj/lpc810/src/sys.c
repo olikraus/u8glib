@@ -42,6 +42,7 @@
 
 #include "chip.h"
 #include "sys.h"
+#include "port.h"
 
 
 /*=======================================================================*/
@@ -199,77 +200,181 @@ void __attribute__ ((noinline)) i2c_init(void)
 }
 
 /* actually, the scl line is not observed, so this procedure does not return a value */
-void __attribute__ ((noinline)) i2c_read_scl_and_delay(void)
+const uint16_t pcs_i2c_read_scl_and_delay[] = 
+{  
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+//Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 3);
+  PCS_CLRB(3, 0x000/4),
+  PCS_DLY(4) | PCS_END
+};
+
+/* actually, the scl line is not observed, so this procedure does not return a value */
+void i2c_read_scl_and_delay(void)
 {
-  uint8_t val;
-  Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 3);
-  //val = Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 3);
-  i2c_delay();
-  //return val;
+  pcs(pcs_i2c_read_scl_and_delay);
 }
+
+const uint16_t pcs_i2c_clear_scl[] = 
+{  
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+//Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 3);
+//LPC_GPIO_PORT->DIR[0] |= 1UL << 3;
+  PCS_SETB(3, 0x000/4) | PCS_END
+};
+
 
 void __attribute__ ((noinline)) i2c_clear_scl(void)
 {
   /* set open collector and drive low */
-  //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 3);
-  //LPC_GPIO_PORT->DIR[0] &= ~(1UL << 3);
-  LPC_GPIO_PORT->DIR[0] |= 1UL << 3;
-
+  pcs(pcs_i2c_clear_scl);
 }
+
+const uint16_t pcs_i2c_read_sda[] = 
+{  
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+//Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 3);
+  PCS_CLRB(0, 0x000/4), 
+  PCS_GETB(0, 0x100/4) | PCS_END
+};
+
 
 uint8_t __attribute__ ((noinline)) i2c_read_sda(void)
 {
-  Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 0);
-  return Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 0);  
+  //Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 0);
+  return pcs(pcs_i2c_read_sda);
+  //return Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 0);  
 }
+
+const uint16_t pcs_i2c_clear_sda[] = 
+{  
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+//Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 3);
+//LPC_GPIO_PORT->DIR[0] |= 1UL << 3;
+  PCS_SETB(0, 0x000/4) | PCS_END
+};
 
 void __attribute__ ((noinline)) i2c_clear_sda(void)
 {
   /* set open collector and drive low */
-  Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 0);
+  pcs(pcs_i2c_clear_sda);
+  // Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 0);
 }
+
+const uint16_t pcs_i2c_restart[] = 
+{
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  // read sda / set high
+  PCS_CLRB(0, 0x000/4), 
+  // delay
+  PCS_DLY(4),
+  // read scl
+  PCS_CLRB(3, 0x000/4),
+  PCS_DLY(4) | PCS_END
+};
+
+const uint16_t pcs_i2c_start[] = 
+{
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  // read sda / set high
+  PCS_CLRB(0, 0x000/4), 
+  // clear sda / set low
+  PCS_SETB(0, 0x000/4),
+  // delay
+  PCS_DLY(4),
+  // clear scl
+  PCS_SETB(3, 0x000/4) | PCS_END
+};
 
 void __attribute__ ((noinline)) i2c_start(void) 
 {
   if ( i2c_started != 0 ) 
   { 
     /* if already started: do restart */
-    i2c_read_sda();	/* SDA = 1 */
-    i2c_delay();
-    i2c_read_scl_and_delay();
+    //i2c_read_sda();	/* SDA = 1 */
+    //i2c_delay();
+    //i2c_read_scl_and_delay();
+    pcs(pcs_i2c_restart);
   }
-  i2c_read_sda();
-  /*
-  if (i2c_read_sda() == 0) 
-  {
-    // do something because arbitration is lost
-  }
-  */
+  //i2c_read_sda();
   /* send the start condition, both lines go from 1 to 0 */
-  i2c_clear_sda();
-  i2c_delay();
-  i2c_clear_scl();
+  //i2c_clear_sda();
+  //i2c_delay();
+  //i2c_clear_scl();
+  
+  pcs(pcs_i2c_start);
   i2c_started = 1;
 }
 
+const uint16_t pcs_i2c_stop[] = 
+{
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  // clear sda / set low
+  PCS_SETB(0, 0x000/4),
+  // delay
+  PCS_DLY(4),
+  // read scl */
+  PCS_CLRB(3, 0x000/4),
+  // delay
+  PCS_DLY(4),
+  // read sda
+  PCS_CLRB(0, 0x000/4), 
+  // delay
+  PCS_DLY(4) | PCS_END
+};
 
 void __attribute__ ((noinline)) i2c_stop(void)
 {
   /* set SDA to 0 */
-  i2c_clear_sda();  
-  i2c_delay();
+  //i2c_clear_sda();  
+  //i2c_delay();
   
   /* now release all lines */
-  i2c_read_scl_and_delay();
+  //i2c_read_scl_and_delay();
   
   /* set SDA to 1 */
-  i2c_read_sda();
-  i2c_delay();
+  //i2c_read_sda();
+  //i2c_delay();
+  pcs(pcs_i2c_stop);
   i2c_started = 0;
 }
 
+const uint16_t pcs_i2c_write_1[] = 
+{
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  // read sda
+  PCS_CLRB(0, 0x000/4), 
+  // delay
+  PCS_DLY(4),
+  // read scl */
+  PCS_CLRB(3, 0x000/4),
+  // delay
+  PCS_DLY(4),
+  // clear scl
+  PCS_SETB(3, 0x000/4) | PCS_END
+};
+
+const uint16_t pcs_i2c_write_0[] = 
+{
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  // clear sda / set low
+  PCS_SETB(0, 0x000/4),
+  // delay
+  PCS_DLY(4),
+  // read scl */
+  PCS_CLRB(3, 0x000/4),
+  // delay
+  PCS_DLY(4),
+  // clear scl
+  PCS_SETB(3, 0x000/4) | PCS_END
+};
+
 void i2c_write_bit(uint8_t val) 
 {
+  if ( val )
+    pcs(pcs_i2c_write_1);
+  else
+    pcs(pcs_i2c_write_0);
+  /*
   if (val)
     i2c_read_sda();
   else
@@ -278,12 +383,34 @@ void i2c_write_bit(uint8_t val)
   i2c_delay();
   i2c_read_scl_and_delay();
   i2c_clear_scl();
+  */
 }
+
+const uint16_t pcs_i2c_read_bit[] = 
+{
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  // read sda
+  PCS_CLRB(0, 0x000/4), 
+  // delay
+  PCS_DLY(4),
+  // read scl */
+  PCS_CLRB(3, 0x000/4),
+  // delay
+  PCS_DLY(4),
+  // really read value from sda
+  PCS_GETB(0, 0x100/4),
+  // delay
+  PCS_DLY(4),
+  // clear scl
+  PCS_SETB(3, 0x000/4) | PCS_END
+};
 
 uint8_t i2c_read_bit(void) 
 {
-  uint8_t val;
+  return pcs(pcs_i2c_read_bit);
+  //uint8_t val;
   /* do not drive SDA */
+  /*
   i2c_read_sda();
   i2c_delay();
   i2c_read_scl_and_delay();
@@ -291,6 +418,7 @@ uint8_t i2c_read_bit(void)
   i2c_delay();
   i2c_clear_scl();
   return val;
+  */
 }
 
 uint8_t i2c_write_byte(unsigned b)
