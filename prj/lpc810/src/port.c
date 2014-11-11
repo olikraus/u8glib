@@ -39,18 +39,17 @@
 
 /* PCS = Port command sequence */
 
-
 unsigned pcs(const uint16_t *seq)
 {
-  uint32_t cmd;
+  uint16_t cmd;
   unsigned ret = 0;
   uint32_t mask;
-  uint32_t idx;
+  uint32_t lowbyte;
   uint32_t *base = 0;
   do
   {
       cmd = *seq++;
-      idx = cmd & 255;
+      lowbyte = cmd & 255;
       mask = 1UL<<((cmd >> 8)&31);
       switch((cmd>>13) & 3)
       {
@@ -58,24 +57,24 @@ unsigned pcs(const uint16_t *seq)
 	  if ( (cmd & 0x1000) != 0 )
 	  {
 	    /* load base adr */
-	    base = (uint32_t *)(((cmd & 0x0f00UL)<<20) | ((cmd & 0xffUL)<<12));
+	    base = (uint32_t *)(((cmd & 0x0f00UL)<<20) | ((lowbyte)<<12));
 	    //printf("%p\n", base);
 	  }
 	  else
 	  {
 	    /* delay */
-	    delay_micro_seconds(idx);	    
+	    delay_micro_seconds(lowbyte);	    
 	  }
 	  break;
 	case 1:
-	  ret = (base[idx] & mask) == 0 ? 0 : 1 ;
+	  ret = (base[lowbyte] & mask) == 0 ? 0 : 1 ;
 	  break;
 	case 2:
-	  base[idx]  &= ~mask;
+	  base[lowbyte]  &= ~mask;
 	  break;
 	case 3:
 	  //printf("%04x %08x\n ", idx, mask);
-	  base[idx]  |= mask;
+	  base[lowbyte]  |= mask;
 	  break;
       }
   } while( (cmd & PCS_END) == 0 );

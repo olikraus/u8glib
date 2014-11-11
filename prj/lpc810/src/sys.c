@@ -187,17 +187,43 @@ static void i2c_delay(void)
   delay_micro_seconds(4);
 }
 
-/* maybe this can be optimized */
-void __attribute__ ((noinline)) i2c_init(void)
+const uint16_t pcs_i2c_init[] = 
 {
-  Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO0,PIN_MODE_INACTIVE);	/* no pullup/-down */
-  Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO3,PIN_MODE_INACTIVE);	/* no pullup/-down */
-  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO3);	
-  Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO0);	
-  Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
-  Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 0);
-  i2c_delay();
+  PCS_BASE(LPC_IOCON_BASE),
+  
+  /* Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO0,PIN_MODE_INACTIVE); */
+  /* PIO0 is at index 0x11, Clear both mode bits to disable pull up/down */
+  PCS_CLRB(3, 0x011),
+  PCS_CLRB(4, 0x011),
+
+  /* Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO3,PIN_MODE_INACTIVE); */
+  /* PIO3 is at index 0x5, Clear both mode bits to disable pull up/down */
+  PCS_CLRB(3, 0x5),
+  PCS_CLRB(4, 0x5),
+  
+  /* Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO0); */
+  /* PIO0 is at index 0x11, Open Drain is bit 10 */
+  PCS_SETB(10, 0x11),
+  /* Chip_IOCON_PinEnableOpenDrainMode(LPC_IOCON, IOCON_PIO3); */
+  /* PIO3 is at index 0x5, Open Drain is bit 10 */
+  PCS_SETB(10, 0x5),
+  
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  //Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 3);
+  PCS_SETB(3, 0x280/4),
+  //Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 0);
+  PCS_SETB(0, 0x280/4),
+  // delay
+  PCS_DLY(4) | PCS_END
+};
+
+
+/* maybe this can be optimized */
+void i2c_init(void)
+{
+  pcs(pcs_i2c_init);
 }
+
 
 /* actually, the scl line is not observed, so this procedure does not return a value */
 const uint16_t pcs_i2c_read_scl_and_delay[] = 
@@ -285,7 +311,7 @@ const uint16_t pcs_i2c_start[] =
   PCS_SETB(3, 0x000/4) | PCS_END
 };
 
-void __attribute__ ((noinline)) i2c_start(void) 
+void i2c_start(void) 
 {
   if ( i2c_started != 0 ) 
   { 
@@ -322,7 +348,7 @@ const uint16_t pcs_i2c_stop[] =
   PCS_DLY(4) | PCS_END
 };
 
-void __attribute__ ((noinline)) i2c_stop(void)
+void i2c_stop(void)
 {
   /* set SDA to 0 */
   //i2c_clear_sda();  
