@@ -146,6 +146,8 @@ u8glib ChangeLog
   * Added U8GLIB_SSD1306_ADAFRUIT_128X64 constructor
 2014-xx-xx	v1.17	  Oliver Kraus <olikraus@gmail.com>
   * Added U8GLIB_UC1611_DOGM240 constructor
+  * Bufix in the sleep on/off sequence (CS has not been releases, issue 298)
+  
   
   
   
