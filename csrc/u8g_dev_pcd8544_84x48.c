@@ -76,7 +76,7 @@ static const uint8_t u8g_dev_pcd8544_sleep_on[] PROGMEM = {
   
   0x020,		                /* activate chip (PD=0), horizontal increment (V=0), enter normal command set (H=0) */
   0x00c,		                /* display on, normal */
-  U8G_ESC_CS(1),             	/* disable chip */
+  U8G_ESC_CS(0),             	/* disable chip, bugfix 12 nov 2014 */
   U8G_ESC_END                	/* end of sequence */
 };
 
@@ -88,7 +88,7 @@ static const uint8_t u8g_dev_pcd8544_sleep_off[] PROGMEM = {
   0x024,		                /* power down (PD=1), horizontal increment (V=0), enter normal command set (H=0) */
   
   U8G_ESC_DLY(50),       	/* delay 50 ms */
-  U8G_ESC_CS(1),             	/* disable chip */
+  U8G_ESC_CS(0),             	/* disable chip, bugfix 12 nov 2014 */
   U8G_ESC_END                	/* end of sequence */
 };
 

@@ -98,7 +98,7 @@ static const uint8_t u8g_dev_st7565_lm6059_sleep_on[] PROGMEM = {
   0x000,		                /* indicator register set (not sure if this is required) */
   0x0ae,		/* display off */      
   0x0a5,		/* all points on */      
-  U8G_ESC_CS(1),             /* disable chip */
+  U8G_ESC_CS(0),             /* disable chip, bugfix 12 nov 2014 */
   U8G_ESC_END                /* end of sequence */
 };
 
@@ -108,7 +108,7 @@ static const uint8_t u8g_dev_st7565_lm6059_sleep_off[] PROGMEM = {
   0x0a4,		/* all points off */      
   0x0af,		/* display on */      
   U8G_ESC_DLY(50),       /* delay 50 ms */
-  U8G_ESC_CS(1),             /* disable chip */
+  U8G_ESC_CS(0),             /* disable chip, bugfix 12 nov 2014 */
   U8G_ESC_END                /* end of sequence */
 };
 
