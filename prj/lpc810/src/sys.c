@@ -152,24 +152,6 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
 }
 
 
-/*=======================================================================*/
-/* u8g delay procedures */
-
-void u8g_Delay(uint16_t val)
-{
-    
-  delay_micro_seconds(1000UL*(uint32_t)val);
-}
-
-void u8g_MicroDelay(void)
-{
-  delay_micro_seconds(1);
-}
-
-void u8g_10MicroDelay(void)
-{
-  delay_micro_seconds(10);
-}
 
 /*=======================================================================*/
 /* generic  i2c (http://en.wikipedia.org/wiki/I%C2%B2C) */

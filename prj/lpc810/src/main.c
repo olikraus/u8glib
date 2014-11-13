@@ -95,6 +95,25 @@ const uint16_t pcs_led_low[] =
   PCS_SETB(2, 0x280/4) | PCS_END
 };
 
+//Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
+const uint16_t pcs_main_init[] = 
+{
+  PCS_BASE(LPC_SYSCTL_BASE),
+  /* enable GPIO (bit 6) in SYSAHBCLKCTRL, Chip_GPIO_Init(LPC_GPIO_PORT); */
+  PCS_SETB(6, 0x080/4),
+  /* enable IOCON (bit 18) in SYSAHBCLKCTRL,Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_IOCON); */
+  PCS_SETB(18, 0x080/4),
+  /* enable switch matrix (bit 6), Chip_SWM_Init(); */
+  PCS_SETB(7, 0x080/4),
+  
+  /* load switch matrix base */
+  PCS_BASE(LPC_SWM_BASE),
+  /* disable SWCLK at PIO_3, this might be enabled by boot sequence */
+  PCS_SETB(2, 0x1c0/4),
+  /* disable SWDIO at PIO_2, this might be enabled by boot sequence */
+  PCS_SETB(3, 0x1c0/4) | PCS_END
+};
+
 
 /*=======================================================================*/
 /* main procedure, called by "Reset_Handler" */
@@ -104,22 +123,25 @@ int __attribute__ ((noinline)) main(void)
 
   /* set systick and start systick interrupt */
   SysTick_Config(SYS_CORE_CLOCK/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS);
+ 
+
+  /* enable peripheral systems */ 
+  pcs(pcs_main_init);
   
   /* turn on GPIO */
-  Chip_GPIO_Init(LPC_GPIO_PORT);
-
+  //Chip_GPIO_Init(LPC_GPIO_PORT);
+ 
   /* disable SWCLK and SWDIO, after reset, boot code may activate this */
-  Chip_SWM_DisableFixedPin(2);
-  Chip_SWM_DisableFixedPin(3);
+  //Chip_SWM_DisableFixedPin(2);
+  //Chip_SWM_DisableFixedPin(3);
   
   /* turn on IOCON */
-  Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_IOCON);
-  
+  //Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_IOCON);
   /* turn on switch matrix */
-  Chip_SWM_Init();
+  //Chip_SWM_Init();
   
   /* activate analog comperator */
-  Chip_ACMP_Init(LPC_CMP);
+  //Chip_ACMP_Init(LPC_CMP);
 
   /* let LED on pin 4 of the DIP8 blink */
   //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
