@@ -158,6 +158,7 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
 /* SCL: 0_3 */
 /* SDA: 0_0 */
 
+#define I2C_DLY 0
 
 uint8_t i2c_started = 0;
 
@@ -196,7 +197,7 @@ const uint16_t pcs_i2c_init[] =
   //Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 0);
   PCS_SETB(0, 0x280/4),
   // delay
-  PCS_DLY(4) | PCS_END
+  PCS_DLY(I2C_DLY) | PCS_END
 };
 
 
@@ -213,7 +214,7 @@ const uint16_t pcs_i2c_read_scl_and_delay[] =
   PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
 //Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 3);
   PCS_CLRB(3, 0x000/4),
-  PCS_DLY(4) | PCS_END
+  PCS_DLY(I2C_DLY) | PCS_END
 };
 
 /* actually, the scl line is not observed, so this procedure does not return a value */
@@ -274,10 +275,10 @@ const uint16_t pcs_i2c_restart[] =
   // read sda / set high
   PCS_CLRB(0, 0x000/4), 
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // read scl
   PCS_CLRB(3, 0x000/4),
-  PCS_DLY(4) | PCS_END
+  PCS_DLY(I2C_DLY) | PCS_END
 };
 
 const uint16_t pcs_i2c_start[] = 
@@ -288,7 +289,7 @@ const uint16_t pcs_i2c_start[] =
   // clear sda / set low
   PCS_SETB(0, 0x000/4),
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // clear scl
   PCS_SETB(3, 0x000/4) | PCS_END
 };
@@ -319,15 +320,15 @@ const uint16_t pcs_i2c_stop[] =
   // clear sda / set low
   PCS_SETB(0, 0x000/4),
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // read scl */
   PCS_CLRB(3, 0x000/4),
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // read sda
   PCS_CLRB(0, 0x000/4), 
   // delay
-  PCS_DLY(4) | PCS_END
+  PCS_DLY(I2C_DLY) | PCS_END
 };
 
 void i2c_stop(void)
@@ -352,11 +353,11 @@ const uint16_t pcs_i2c_write_1[] =
   // read sda
   PCS_CLRB(0, 0x000/4), 
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // read scl */
   PCS_CLRB(3, 0x000/4),
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // clear scl
   PCS_SETB(3, 0x000/4) | PCS_END
 };
@@ -367,11 +368,11 @@ const uint16_t pcs_i2c_write_0[] =
   // clear sda / set low
   PCS_SETB(0, 0x000/4),
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // read scl */
   PCS_CLRB(3, 0x000/4),
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // clear scl
   PCS_SETB(3, 0x000/4) | PCS_END
 };
@@ -400,15 +401,15 @@ const uint16_t pcs_i2c_read_bit[] =
   // read sda
   PCS_CLRB(0, 0x000/4), 
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // read scl */
   PCS_CLRB(3, 0x000/4),
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // really read value from sda
   PCS_GETB(0, 0x100/4),
   // delay
-  PCS_DLY(4),
+  PCS_DLY(I2C_DLY),
   // clear scl
   PCS_SETB(3, 0x000/4) | PCS_END
 };

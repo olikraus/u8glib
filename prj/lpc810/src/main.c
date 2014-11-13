@@ -120,6 +120,29 @@ const uint16_t pcs_main_init[] =
 
 int __attribute__ ((noinline)) main(void)
 {
+  
+#ifdef LPC11xx_pll_setup
+     /* setup 48MHz for the LPC11xx */
+   
+   /* oscillator controll registor, no change needed for int. RC osc. */
+   LPC_SYSCON->SYSOSCCTRL = 0;		/* no bypass (bit 0), low freq range (bit 1), reset value is also 0 */
+   
+  LPC_SYSCON->SYSPLLCLKSEL = 0;		/* select PLL source, 0: IRC, 1: Sys osc */
+  LPC_SYSCON->SYSPLLCLKUEN = 0;	/* confirm change by writing 0 and 1 to SYSPLLCLKUEN */
+  LPC_SYSCON->SYSPLLCLKUEN = 1;
+  
+  LPC_SYSCON->SYSPLLCTRL = 3 | (1 << 5);	/* 48 Mhz, m = 4, p = 2 */
+  LPC_SYSCON->PDRUNCFG &= ~(1UL<<7); 	/* power-up PLL */
+
+  while (!(LPC_SYSCON->SYSPLLSTAT & 1))
+    ;	/* wait for PLL lock */
+   
+  LPC_SYSCON->MAINCLKSEL = 3;				/* select PLL for main clock */
+  LPC_SYSCON->MAINCLKUEN = 0;				/* confirm change by writing 0 and 1 to MAINCLKUEN */
+  LPC_SYSCON->MAINCLKUEN = 1;	
+
+  LPC_SYSCON->SYSAHBCLKDIV = 1;			/* set AHB clock divider to 1 */
+#endif
 
   /* set systick and start systick interrupt */
   SysTick_Config(SYS_CORE_CLOCK/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS);
