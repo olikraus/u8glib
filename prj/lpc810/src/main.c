@@ -44,9 +44,6 @@
 #include "port.h"
 
 
-#define SYS_CORE_CLOCK 12000000UL
-#define SYS_TICK_PERIOD_IN_MS 50
-
 unsigned hour = 0;
 unsigned minute = 0;
 
@@ -121,28 +118,26 @@ const uint16_t pcs_main_init[] =
 int __attribute__ ((noinline)) main(void)
 {
   
-#ifdef LPC11xx_pll_setup
-     /* setup 48MHz for the LPC11xx */
+  /* setup 30MHz for the LPC810 */
    
    /* oscillator controll registor, no change needed for int. RC osc. */
-   LPC_SYSCON->SYSOSCCTRL = 0;		/* no bypass (bit 0), low freq range (bit 1), reset value is also 0 */
-   
-  LPC_SYSCON->SYSPLLCLKSEL = 0;		/* select PLL source, 0: IRC, 1: Sys osc */
-  LPC_SYSCON->SYSPLLCLKUEN = 0;	/* confirm change by writing 0 and 1 to SYSPLLCLKUEN */
-  LPC_SYSCON->SYSPLLCLKUEN = 1;
+  //LPC_SYSCTL->SYSOSCCTRL = 0;		/* no bypass (bit 0), low freq range (bit 1), reset value is also 0 */
   
-  LPC_SYSCON->SYSPLLCTRL = 3 | (1 << 5);	/* 48 Mhz, m = 4, p = 2 */
-  LPC_SYSCON->PDRUNCFG &= ~(1UL<<7); 	/* power-up PLL */
+  //LPC_SYSCTL->SYSPLLCLKSEL = 0;			/* select PLL source, 0: IRC, 1: Sys osc, reset value is 0 */
+  //LPC_SYSCTL->SYSPLLCLKUEN = 0;			/* confirm change by writing 0 and 1 to SYSPLLCLKUEN */
+  //LPC_SYSCTL->SYSPLLCLKUEN = 1;
+  
+  LPC_SYSCTL->SYSPLLCTRL = 3 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 5, p (bits 5..6)= 1 (div by 2) */
+  LPC_SYSCTL->SYSAHBCLKDIV = 2;			/* divide by 2 to get 30 MHz, however, at the moment we will get 6MHz */
+  LPC_SYSCTL->PDRUNCFG &= ~(1UL<<7); 	/* power-up PLL */
 
-  while (!(LPC_SYSCON->SYSPLLSTAT & 1))
+  while (!(LPC_SYSCTL->SYSPLLSTAT & 1))
     ;	/* wait for PLL lock */
    
-  LPC_SYSCON->MAINCLKSEL = 3;				/* select PLL for main clock */
-  LPC_SYSCON->MAINCLKUEN = 0;				/* confirm change by writing 0 and 1 to MAINCLKUEN */
-  LPC_SYSCON->MAINCLKUEN = 1;	
+  LPC_SYSCTL->MAINCLKSEL = 3;				/* select PLL for main clock */
+  LPC_SYSCTL->MAINCLKUEN = 0;				/* confirm change by writing 0 and 1 to MAINCLKUEN */
+  LPC_SYSCTL->MAINCLKUEN = 1;	
 
-  LPC_SYSCON->SYSAHBCLKDIV = 1;			/* set AHB clock divider to 1 */
-#endif
 
   /* set systick and start systick interrupt */
   SysTick_Config(SYS_CORE_CLOCK/1000UL*(unsigned long)SYS_TICK_PERIOD_IN_MS);

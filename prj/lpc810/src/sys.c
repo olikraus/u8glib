@@ -353,11 +353,12 @@ const uint16_t pcs_i2c_write_1[] =
   // read sda
   PCS_CLRB(0, 0x000/4), 
   // delay
-  PCS_DLY(I2C_DLY),
+  //PCS_DLY(I2C_DLY),
   // read scl */
   PCS_CLRB(3, 0x000/4),
   // delay
-  PCS_DLY(I2C_DLY),
+  //PCS_DLY(I2C_DLY),
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),		// use BASE command for delay --> 90KHz
   // clear scl
   PCS_SETB(3, 0x000/4) | PCS_END
 };
@@ -368,11 +369,12 @@ const uint16_t pcs_i2c_write_0[] =
   // clear sda / set low
   PCS_SETB(0, 0x000/4),
   // delay
-  PCS_DLY(I2C_DLY),
+  //PCS_DLY(I2C_DLY),
   // read scl */
   PCS_CLRB(3, 0x000/4),
   // delay
-  PCS_DLY(I2C_DLY),
+  //PCS_DLY(I2C_DLY),
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),		// use BASE command for delay --> 90KHz
   // clear scl
   PCS_SETB(3, 0x000/4) | PCS_END
 };

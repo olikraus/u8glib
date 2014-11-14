@@ -48,7 +48,7 @@
 #include "stdint.h"
 
 
-#define SYS_CORE_CLOCK 12000000UL
+#define SYS_CORE_CLOCK 30000000UL
 #define SYS_TICK_PERIOD_IN_MS 50
 
 
