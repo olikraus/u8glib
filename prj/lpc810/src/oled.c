@@ -369,7 +369,25 @@ unsigned __attribute__ ((noinline)) oled_draw_string(oled_t *oled, unsigned x, u
   return x;
 }
 
-
+unsigned __attribute__ ((noinline)) oled_draw_num(oled_t *oled, unsigned x, unsigned y, unsigned d, unsigned is_leading_zero, unsigned val)
+{
+  unsigned t = 0;
+  while( val >= 10 )
+  {
+    t++;
+    val-=10;
+  }
+  if ( t != 0 || is_leading_zero != 0)
+  {
+    t += '0';
+    oled_draw_glyph(oled, x, y, t);
+  }
+  x+=d;
+  val += '0';
+  oled_draw_glyph(oled, x, y, val);
+  x+=d;
+  return x;
+}
 
 
 void __attribute__ ((noinline)) oled_clear_page(oled_t *oled)

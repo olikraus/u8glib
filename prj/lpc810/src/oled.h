@@ -51,6 +51,7 @@ void oled_init(void);
 void oled_set_font(oled_t *oled, const unsigned char *font);
 unsigned oled_draw_glyph(oled_t *oled, unsigned x, unsigned y, unsigned encoding);
 unsigned oled_draw_string(oled_t *oled, unsigned x, unsigned y, const char *s);
+unsigned oled_draw_num(oled_t *oled, unsigned x, unsigned y, unsigned d, unsigned is_leading_zero, unsigned val);
 void oled_start_page(oled_t *oled);
 int oled_next_page(oled_t *oled);
 

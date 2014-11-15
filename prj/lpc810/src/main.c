@@ -56,6 +56,13 @@ void draw_hm(oled_t *oled, unsigned h, unsigned m)
   y = 47;
   x = 0;
   d = 25;
+  
+  x += oled_draw_num(oled,x,y,d,0,h);
+  oled_draw_glyph(oled, x, y, ':');
+  x += d/2;
+  x += oled_draw_num(oled,x,y,d,1,m);
+  
+  /*
   oled_draw_glyph(oled, x, y, '0' + h / 10);
   x += d;
   oled_draw_glyph(oled, x, y, '0' + h % 10);
@@ -66,6 +73,7 @@ void draw_hm(oled_t *oled, unsigned h, unsigned m)
   x += d;
   oled_draw_glyph(oled, x, y, '0' + m % 10);
   x += d;
+  */
 }
 
 /*=================================================*/
