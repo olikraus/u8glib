@@ -49,7 +49,7 @@
 
 
 #define SYS_CORE_CLOCK 30000000UL
-#define SYS_TICK_PERIOD_IN_MS 50
+#define SYS_TICK_PERIOD_IN_MS 10
 
 
 void delay_system_ticks(uint32_t sys_ticks);

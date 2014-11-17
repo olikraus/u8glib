@@ -42,25 +42,33 @@
 #include "sys.h"
 #include "oled.h"
 #include "port.h"
+#include "clk.h"
+#include "menu.h"
 
-
-unsigned hour = 0;
-unsigned minute = 0;
 
 
 /*=======================================================================*/
 
-void draw_hm(oled_t *oled, unsigned h, unsigned m)
+
+/*=======================================================================*/
+
+void draw_hm(oled_t *oled, clk_t *clk)
 {
   unsigned x, y, d;
   y = 47;
   x = 0;
   d = 25;
+
+
+  oled_set_font(&oled_o, logisoso46);
   
-  x += oled_draw_num(oled,x,y,d,0,h);
+  x += oled_draw_num(oled,x,y,d,0,clk->cnt[2]);
   oled_draw_glyph(oled, x, y, ':');
   x += d/2;
-  x += oled_draw_num(oled,x,y,d,1,m);
+  x += oled_draw_num(oled,x,y,d,1,clk->cnt[1]);
+
+  oled_set_font(&oled_o, helvR14small);
+  oled_draw_num(oled,100,64,10,1,clk->cnt[0]);
   
   /*
   oled_draw_glyph(oled, x, y, '0' + h / 10);
@@ -116,7 +124,29 @@ const uint16_t pcs_main_init[] =
   /* disable SWCLK at PIO_3, this might be enabled by boot sequence */
   PCS_SETB(2, 0x1c0/4),
   /* disable SWDIO at PIO_2, this might be enabled by boot sequence */
-  PCS_SETB(3, 0x1c0/4) | PCS_END
+  PCS_SETB(3, 0x1c0/4),
+
+  PCS_BASE(LPC_IOCON_BASE),
+  
+  /* Chip_IOCON_PinSetMode(LPC_IOCON,IOCON_PIO0,PIN_MODE_INACTIVE); */
+  /* PIO1 is at index 0x0B, Clear bit 3, set bit 4 for pullup */
+  PCS_CLRB(3, 0x0B),
+  PCS_SETB(4, 0x0B),
+  /* disable open drain */
+  PCS_CLRB(10, 0x0B),
+
+    /* PIO4 is at index 0x04, Clear bit 3, set bit 4 for pullup */
+  PCS_CLRB(3, 0x04),
+  PCS_SETB(4, 0x04),
+  /* disable open drain */
+  PCS_CLRB(10, 0x04),
+
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+//Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 1);
+  PCS_CLRB(1, 0x000/4),
+//Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, 0, 4);
+  PCS_CLRB(4, 0x000/4) | PCS_END
+  
 };
 
 
@@ -174,35 +204,44 @@ int __attribute__ ((noinline)) main(void)
   pcs(pcs_led_out);
   
   oled_init();
+  clk_init(&clk_current_time);
   
-  for(;;)
-  {    
-    pcs(pcs_led_high);
-    delay_micro_seconds(500000UL);
-    pcs(pcs_led_low);
-    delay_micro_seconds(500000UL);
+  menu();
+  
+  {
+    int is_hello = 0;
+    for(;;)
+    {    
+      pcs(pcs_led_high);
+      delay_micro_seconds(100000UL);
+      pcs(pcs_led_low);
+      delay_micro_seconds(100000UL);
+      
     
-    
-    oled_start_page(&oled_o);
-    do
-    {
-      //oled_draw_hline(&oled_o, 0,5,60);
-      //oled_draw_hline(&oled_o, 0,5+8,60);
-      oled_set_font(&oled_o, logisoso46);
-      draw_hm(&oled_o, hour, minute);
-      oled_set_font(&oled_o, helvR14small);
-      oled_draw_string(&oled_o, 0, 63, "HELLO");
+      oled_start_page(&oled_o);
+      do
+      {
+	//oled_draw_hline(&oled_o, 0,5,60);
+	//oled_draw_hline(&oled_o, 0,5+8,60);
+	oled_set_font(&oled_o, logisoso46);
+	draw_hm(&oled_o, &clk_current_time);
+	oled_set_font(&oled_o, helvR14small);
+	if ( is_hello != 0 )
+	  oled_draw_string(&oled_o, 0, 63, "HELLO");
+      }
+      while( oled_next_page(&oled_o) );
+      
+      if ( key_get_from_queue() != 0 )
+      {
+	if ( is_hello == 0 )
+	  is_hello = 1;
+	else
+	  is_hello = 0;
+      }
+      
     }
-    while( oled_next_page(&oled_o) );
     
-      hour++;
-    if ( hour >= 24 )
-      hour = 0;
-    minute++;
-    if ( minute >= 60 )
-      minute = 0;
   }
-
   
   /* enter sleep mode: Reduce from 1.4mA to 0.8mA with 12MHz */  
   while (1)

@@ -43,6 +43,9 @@
 #include "chip.h"
 #include "sys.h"
 #include "port.h"
+#include "clk.h"
+#include "key.h"
+
 
 
 /*=======================================================================*/
@@ -141,15 +144,6 @@ void delay_micro_seconds(uint32_t us)
 
 /*=======================================================================*/
 /* system procedures and sys tick master task */
-
-volatile uint32_t sys_tick_irq_cnt=0;
-
-
-void __attribute__ ((interrupt)) SysTick_Handler(void)
-{
-  sys_tick_irq_cnt++;
-  
-}
 
 
 
@@ -447,103 +441,6 @@ uint8_t i2c_write_byte(unsigned b)
   return i2c_read_bit();
 }
 
-/*=======================================================================*/
-/* u8glib com callback */
-
-#ifdef U8G_CODE
-
-#define I2C_SLA         (0x3c*2)
-//#define I2C_CMD_MODE  0x080
-#define I2C_CMD_MODE    0x000
-#define I2C_DATA_MODE   0x040
-
-uint8_t u8g_a0_state;
-uint8_t u8g_set_a0;
-
-static void u8g_com_ssd_start_sequence(u8g_t *u8g)
-{
-  /* are we requested to set the a0 state? */
-  if ( u8g_set_a0 == 0 )
-    return;
-
-  i2c_start();
-  i2c_write_byte(I2C_SLA);		// address and 0 for RWn bit
-  
-  if ( u8g_a0_state == 0 )
-  {
-    i2c_write_byte(I2C_CMD_MODE);
-  }
-  else
-  {
-    i2c_write_byte(I2C_DATA_MODE);
-  }
-
-  u8g_set_a0 = 0;
-}
-
-uint8_t u8g_com_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
-{
-  switch(msg)
-  {
-    case U8G_COM_MSG_INIT:
-      //u8g_com_arduino_digital_write(u8g, U8G_PI_SCL, HIGH);
-      //u8g_com_arduino_digital_write(u8g, U8G_PI_SDA, HIGH);
-      //u8g_a0_state = 0;       /* inital RS state: unknown mode */
-    
-      i2c_init();
-      break;
-    
-    case U8G_COM_MSG_STOP:
-      break;
-
-    case U8G_COM_MSG_RESET:
-     break;
-      
-    case U8G_COM_MSG_CHIP_SELECT:
-      u8g_a0_state = 0;
-      u8g_set_a0 = 1;		/* force a0 to set again, also forces start condition */
-      if ( arg_val == 0 )
-      {
-        /* disable chip, send stop condition */
-	i2c_stop();
-     }
-      else
-      {
-        /* enable, do nothing: any byte writing will trigger the i2c start */
-      }
-      break;
-
-    case U8G_COM_MSG_WRITE_BYTE:
-      //u8g_set_a0 = 1;
-      u8g_com_ssd_start_sequence(u8g);
-      i2c_write_byte(arg_val);
-      break;
-    
-    case U8G_COM_MSG_WRITE_SEQ_P:
-    case U8G_COM_MSG_WRITE_SEQ:
-      //u8g_set_a0 = 1;
-      u8g_com_ssd_start_sequence(u8g);
-      {
-        register uint8_t *ptr = arg_ptr;
-        while( arg_val > 0 )
-        {
-	  i2c_write_byte(*ptr++);
-          arg_val--;
-        }
-      }
-      // lpc81x_i2c_stop();
-      break;
-
-    case U8G_COM_MSG_ADDRESS:                     /* define cmd (arg_val = 0) or data mode (arg_val = 1) */
-      u8g_a0_state = arg_val;
-      u8g_set_a0 = 1;		/* force a0 to set again */
-    
-      break;
-  }
-  return 1;
-}
-
-#endif
 
 
 /*=======================================================================*/
@@ -620,7 +517,11 @@ void __attribute__ ((interrupt)) __attribute__ ((noreturn)) Reset_Handler(void)
 }
 
 /* declare the SysTick_Handler only. It must be defined in the user code */
-void __attribute__ ((interrupt)) SysTick_Handler(void);
+void __attribute__ ((interrupt)) SysTick_Handler(void)
+{
+  clk_irq();
+  key_irq();
+}
 
 
 /* "NMI_Handler" is used in the ld script to calculate the checksum */
