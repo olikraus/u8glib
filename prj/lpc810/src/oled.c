@@ -364,7 +364,7 @@ unsigned __attribute__ ((noinline)) oled_draw_glyph(oled_t *oled, unsigned x, un
 
 unsigned __attribute__ ((noinline)) oled_draw_string(oled_t *oled, unsigned x, unsigned y, const char *s)
 {
-  while( *s != '\0' )
+  while( *s != '\0' && *s <'\xf0')
     x += oled_draw_glyph(oled, x, y, *s++);
   return x;
 }

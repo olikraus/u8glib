@@ -52,37 +52,6 @@
 
 /*=======================================================================*/
 
-void draw_hm(oled_t *oled, clk_t *clk)
-{
-  unsigned x, y, d;
-  y = 47;
-  x = 0;
-  d = 25;
-
-
-  oled_set_font(&oled_o, logisoso46);
-  
-  x += oled_draw_num(oled,x,y,d,0,clk->cnt[2]);
-  oled_draw_glyph(oled, x, y, ':');
-  x += d/2;
-  x += oled_draw_num(oled,x,y,d,1,clk->cnt[1]);
-
-  oled_set_font(&oled_o, helvR14small);
-  oled_draw_num(oled,100,64,10,1,clk->cnt[0]);
-  
-  /*
-  oled_draw_glyph(oled, x, y, '0' + h / 10);
-  x += d;
-  oled_draw_glyph(oled, x, y, '0' + h % 10);
-  x += d;
-  oled_draw_glyph(oled, x, y, ':');
-  x += d/2;
-  oled_draw_glyph(oled, x, y, '0' + m / 10);
-  x += d;
-  oled_draw_glyph(oled, x, y, '0' + m % 10);
-  x += d;
-  */
-}
 
 /*=================================================*/
 
@@ -209,36 +178,12 @@ int __attribute__ ((noinline)) main(void)
   menu();
   
   {
-    int is_hello = 0;
     for(;;)
     {    
       pcs(pcs_led_high);
       delay_micro_seconds(100000UL);
       pcs(pcs_led_low);
       delay_micro_seconds(100000UL);
-      
-    
-      oled_start_page(&oled_o);
-      do
-      {
-	//oled_draw_hline(&oled_o, 0,5,60);
-	//oled_draw_hline(&oled_o, 0,5+8,60);
-	oled_set_font(&oled_o, logisoso46);
-	draw_hm(&oled_o, &clk_current_time);
-	oled_set_font(&oled_o, helvR14small);
-	if ( is_hello != 0 )
-	  oled_draw_string(&oled_o, 0, 63, "HELLO");
-      }
-      while( oled_next_page(&oled_o) );
-      
-      if ( key_get_from_queue() != 0 )
-      {
-	if ( is_hello == 0 )
-	  is_hello = 1;
-	else
-	  is_hello = 0;
-      }
-      
     }
     
   }
