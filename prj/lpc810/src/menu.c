@@ -6,19 +6,16 @@
 #include "clk.h"
 #include "key.h"
 
-const char * const menu_str[] = 
-{
-  "STUNDE:",
-  "MIN:",
-  "SEK:",
-};
-
 
 struct menu_struct
 {
-  unsigned current_menu;
-  unsigned total;
-  unsigned curr;
+  unsigned current_dialog;
+  unsigned entry_type;
+  unsigned entry_arg;
+  const char *entry_label;
+  
+  unsigned total;	/* number of menu entries */
+  unsigned curr;	/* current menu entry (starts at 0) */
   
   const char *str[4];
   unsigned num[4];
@@ -28,7 +25,15 @@ typedef struct menu_struct menu_t;
 menu_t menu_o;
 
 /*=============================================================*/
-const char menu_hms[] = "\xf3\x18STUNDE\xf3\x3cMIN\xf3\x3cSEK";
+const char menu_top[] = "\xf1\x02ZEIT\xf1\x02TAGE\xf1\x02WOCHE";
+const char menu_hms[] = "\xf3\x18STUNDE\xf3\x3cMIN\xf3\x3cSEK\xf1\x01ZURUECK";
+
+const char * const menu_dialog_list[] = 
+{
+  menu_top,
+  menu_hms
+};
+
 
 /*=============================================================*/
 /*
@@ -68,13 +73,36 @@ const char *menu_get_entry(const char *me, unsigned idx)
   return me;
 }
 
+void menu_prepare_entry(unsigned entry_idx)
+{
+  const char *s;
+  
+  if ( entry_idx >= menu_o.total )
+    entry_idx = 0;
+  
+  menu_o.curr = entry_idx;
+  s = menu_get_entry(menu_dialog_list[menu_o.current_dialog], menu_o.curr);
+  menu_o.entry_type = *s++;
+  menu_o.entry_arg = *s++;
+  menu_o.entry_label  = s;  
+}
 
+
+void menu_prepare_dialog(unsigned idx)
+{
+  
+  menu_o.current_dialog = idx;
+  
+  menu_o.total  = menu_get_entry_cnt(menu_dialog_list[menu_o.current_dialog]);
+  menu_prepare_entry(0);
+ }
 
 void menu_init(unsigned total)
 {
   menu_o.total = total;
-  menu_o.curr = 0;
+  menu_prepare_dialog(0);
 }
+
 
 unsigned menu_handle_key(void)
 {
@@ -89,14 +117,21 @@ unsigned menu_handle_key(void)
     }
     else if ( code == KEY_NEXT )
     {
-      menu_o.curr++;
-      if ( menu_o.curr >= menu_o.total )
-	menu_o.curr = 0;
+      menu_prepare_entry(menu_o.curr+1);
       ret = 1;
     }
     else if ( code == KEY_SELECT )
     {
-      menu_o.num[menu_o.curr]++;
+      if ( menu_o.entry_type == 0xf1 )
+      {
+	menu_prepare_dialog(menu_o.entry_arg-1);
+      }
+      else
+      {
+	  menu_o.num[menu_o.curr]++;
+	  if ( menu_o.num[menu_o.curr] >= menu_o.entry_arg )
+	    menu_o.num[menu_o.curr] = 0;
+      }
       ret = 1;
     }
   }
@@ -127,26 +162,29 @@ void menu_draw(void)
 {
   unsigned y, i;
   
-  if ( menu_o.current_menu == 15 )
+  if ( menu_o.current_dialog == 15 )
   {
 	draw_hm(&oled_o, &clk_current_time);
   }
   else
   {
-    const char *m = menu_hms;
-    unsigned cnt = menu_get_entry_cnt(m);
+    const char *m = menu_dialog_list[menu_o.current_dialog];
     
     oled_set_font(&oled_o, helvR14small);
     
     y = 14;
-    for( i = 0; i < cnt; i++ )
+    for( i = 0; i < menu_o.total; i++ )
     {
 	if ( menu_o.curr == i )
 	{
 	  oled_draw_string(&oled_o, 0, y, ":");
 	}
-	oled_draw_string(&oled_o, 10, y, m+2);    
-	oled_draw_num(&oled_o, 100, y, 10, 1, menu_o.num[i]);    
+	oled_draw_string(&oled_o, 10, y, m+2); 
+	if ( *m == 0xf3 || *m == 0xf2 )
+	{
+	  oled_draw_num(&oled_o, 100, y, 10, 1, menu_o.num[i]);    
+	}
+	
 	y += 16;
 	m = menu_get_entry(m, 1);
     }
@@ -156,10 +194,6 @@ void menu_draw(void)
 void menu(void)
 {
   menu_init(3);
-  
-  menu_o.str[0] = menu_str[0];
-  menu_o.str[1] = menu_str[1];
-  menu_o.str[2] = menu_str[2];
   
   key_add_to_queue(KEY_NEXT);
   
