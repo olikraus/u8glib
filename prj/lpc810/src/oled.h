@@ -46,6 +46,7 @@ extern oled_t oled_o;
 
 extern const unsigned char logisoso46[];
 extern const unsigned char helvR14small[];
+extern const unsigned char helvR12small[];
 
 void oled_init(void);
 void oled_set_font(oled_t *oled, const unsigned char *font);

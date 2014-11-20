@@ -48,6 +48,7 @@ void clk_irq(void)
   if ( t >= 100 )
   {
     t = 0;
+    clk_current_time.is_update = 1;
     clk_inc(&clk_current_time);
   }
 }

@@ -7,6 +7,7 @@
 
 struct clk_struct
 {
+  volatile unsigned is_update;	/* will be set to 1 after one second by the IRQ */
   volatile uint32_t cnt[4];
   volatile uint32_t max[4];
 };
