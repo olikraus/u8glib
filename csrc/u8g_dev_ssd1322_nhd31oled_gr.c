@@ -243,6 +243,7 @@ uint8_t u8g_dev_ssd1322_nhd31oled_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
 	  u8g_WriteByte(u8g, dev, 0x00);
 	  u8g_WriteByte(u8g, dev, 0x00);
 #endif
+	  u8g_MicroDelay();	// for DUE?
 	  u8g_SetChipSelect(u8g, dev, 0);        
 	  p+=cnt;
 	}
@@ -254,6 +255,7 @@ uint8_t u8g_dev_ssd1322_nhd31oled_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg,
       u8g_WriteByte(u8g, dev, 0x081);
       u8g_SetAddress(u8g, dev, 1);          /* data mode */
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
+      u8g_MicroDelay();	// for DUE?
       u8g_SetChipSelect(u8g, dev, 0);      
       break;
     case U8G_DEV_MSG_SLEEP_ON:
@@ -298,6 +300,7 @@ uint8_t u8g_dev_ssd1322_nhd31oled_2x_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
 	  u8g_WriteByte(u8g, dev, 0x00);
 	  u8g_WriteByte(u8g, dev, 0x00);
 #endif
+	  u8g_MicroDelay();	// for DUE?
 	  u8g_SetChipSelect(u8g, dev, 0);        
 	  p+=cnt;
 	}
