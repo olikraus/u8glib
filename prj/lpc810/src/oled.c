@@ -4,7 +4,7 @@
 #include "sys.h"
 #include "oled.h"
 
-#define I2C_SLA         (0x3c*2)
+#define I2C_OLED_SLA         (0x3c*2)
 //#define I2C_CMD_MODE  0x080
 #define I2C_CMD_MODE    0x000
 #define I2C_DATA_MODE   0x040
@@ -175,7 +175,7 @@ void __attribute__ ((noinline)) oled_send_seq(uint32_t mode, uint32_t cnt, const
 {
   
   i2c_start();
-  i2c_write_byte(I2C_SLA);		// address and 0 for RWn bit    
+  i2c_write_byte(I2C_OLED_SLA);		// address and 0 for RWn bit    
   i2c_write_byte(mode);		// write mode byte
   do
   {
@@ -473,6 +473,8 @@ int oled_next_page(oled_t *oled)
   //delay_micro_seconds(100);
   oled_send_seq(I2C_DATA_MODE, WIDTH, oled->oled_display_page);
   oled_clear_page(oled);
+  
+  i2c_stop();	/* finally send a stop. this is not done by oled_send_seq, so it is done here */
   
   oled->page_start+=8;
   return oled->page_start < HEIGHT;

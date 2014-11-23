@@ -441,6 +441,25 @@ uint8_t i2c_write_byte(unsigned b)
   return i2c_read_bit();
 }
 
+/*
+  nack must be 0 if the data reading continues
+  nack should be 1 after the last byte. send stop after this
+*/
+unsigned i2c_read_byte(unsigned nack)
+{
+  unsigned i = 8;
+  unsigned b = 0;
+  do
+  {
+    b <<= 1;
+    if ( i2c_read_bit() )
+      b++;
+    i--;
+  } while ( i != 0 );
+  i2c_write_bit(nack);
+  return b;
+}
+
 
 
 /*=======================================================================*/

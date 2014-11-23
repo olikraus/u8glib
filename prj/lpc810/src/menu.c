@@ -171,13 +171,13 @@ static void draw_hm(oled_t *oled, clk_t *clk)
 
   oled_set_font(&oled_o, logisoso46);
   
-  x += oled_draw_num(oled,x,y,d,0,clk->cnt[2]);
+  x += oled_draw_num(oled,x,y,d,0,clk->current_time.data[2]);
   oled_draw_glyph(oled, x, y, ':');
   x += d/2;
-  x += oled_draw_num(oled,x,y,d,1,clk->cnt[1]);
+  x += oled_draw_num(oled,x,y,d,1,clk->current_time.data[1]);
 
   oled_set_font(&oled_o, helvR12small);
-  oled_draw_num(oled,100,64,10,1,clk->cnt[0]);
+  oled_draw_num(oled,100,64,10,1,clk->current_time.data[0]);
   
 }
 
@@ -187,7 +187,7 @@ void menu_draw(void)
   
   if ( menu_o.current_dialog == CLOCK_DIALOG )
   {
-	draw_hm(&oled_o, &clk_current_time);
+	draw_hm(&oled_o, &clk_o);
   }
   else
   {
@@ -222,9 +222,9 @@ void menu(void)
   
   for(;;)
   {
-    if ( menu_handle_key() != 0 || clk_current_time.is_update != 0 )
+    if ( menu_handle_key() != 0 || clk_o.is_update != 0 )
     {
-      clk_current_time.is_update = 0;
+      clk_o.is_update = 0;
       oled_start_page(&oled_o);
       do
       {

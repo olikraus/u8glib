@@ -2,31 +2,62 @@
 
 #include "clk.h"
 
-clk_t clk_current_time; 
+clk_t clk_o; 
 
-void clk_init(clk_t *clk)
+
+static const time_data_t time_data_max = { 59, 59, 23, 7 };
+
+
+/*=======================================================================*/
+
+void clk_init(void)
 {
-  clk->cnt[0] = 0;
-  clk->cnt[1] = 0;
-  clk->cnt[2] = 0;
-  clk->cnt[3] = 0;
-  clk->max[0] = 59;
-  clk->max[1] = 59;
-  clk->max[2] = 23;
-  clk->max[3] = 7;
 }
 
 
+/*=======================================================================*/
+
+void clk_read_pcf_pcf8563_raw_data(void)
+{
+  unsigned i=0;
+
+  i2c_start();
+  i2c_write_byte(0xa2);		// PCF8563 address and 0 (write) for RWn bit    
+  i2c_write_byte(0);			// set index 0    
+  i2c_start();				// restart
+  i2c_write_byte(0xa3);		// PCF8563 address and 1 (read) for RWn bit    
+  
+  do
+  {
+    clk_o.pcf8563[i] = i2c_read_byte(0);
+    i++;
+  } while ( i < 15 )
+  clk_o.pcf8563[i] = i2c_read_byte(1);
+  
+  i2c_stop();
+  
+}
+
+
+
+
+
+
+
+
+
+/*=======================================================================*/
+
 unsigned clk_inc_idx(clk_t *clk, unsigned idx)
 {
-  uint32_t cnt = clk->cnt[idx];
+  uint32_t cnt = clk->current_time.data[idx];
   cnt++;
-  if ( cnt > clk->max[idx] )
+  if ( cnt > time_data_max.data[idx] )
   {
-    clk->cnt[idx] = 0;
+    clk->current_time.data[idx] = 0;
     return 1;
   }
-  clk->cnt[idx] = cnt;
+  clk->current_time.data[idx] = cnt;
   return 0;
 }
 
@@ -48,8 +79,8 @@ void clk_irq(void)
   if ( t >= 100 )
   {
     t = 0;
-    clk_current_time.is_update = 1;
-    clk_inc(&clk_current_time);
+    clk_o.is_update = 1;
+    clk_inc(&clk_o);
   }
 }
 

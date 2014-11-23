@@ -60,5 +60,11 @@ void i2c_start(void) ;
 void i2c_stop(void);
 uint8_t i2c_write_byte(unsigned b);
 
+/*
+  nack must be 0 if the data reading continues
+  nack should be 1 after the last byte. send stop after this
+*/
+unsigned i2c_read_byte(unsigned nack);
+
 
 #endif

@@ -173,7 +173,7 @@ int __attribute__ ((noinline)) main(void)
   pcs(pcs_led_out);
   
   oled_init();
-  clk_init(&clk_current_time);
+  clk_init();
   
   menu();
   
