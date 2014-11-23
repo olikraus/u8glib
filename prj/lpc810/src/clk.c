@@ -1,18 +1,13 @@
 
 
 #include "clk.h"
+#include "sys.h"
 
 clk_t clk_o; 
 
 
-static const time_data_t time_data_max = { 59, 59, 23, 7 };
+static const time_data_t time_data_max = { { 59, 59, 23, 7 } };
 
-
-/*=======================================================================*/
-
-void clk_init(void)
-{
-}
 
 
 /*=======================================================================*/
@@ -31,18 +26,29 @@ void clk_read_pcf_pcf8563_raw_data(void)
   {
     clk_o.pcf8563[i] = i2c_read_byte(0);
     i++;
-  } while ( i < 15 )
+  } while ( i < 15 );
   clk_o.pcf8563[i] = i2c_read_byte(1);
   
   i2c_stop();
-  
 }
 
+/*
+02h VL_seconds VL SECONDS (0 to 59)
+03h Minutes x MINUTES (0 to 59)
+04h Hours x x HOURS (0 to 23)
+05h Days x x DAYS (1 to 31)
+06h Weekdays x x x x
+07h Century_months C x x MONTHS (1 to 12)
+08h Years YEARS (0 to 99)
+*/
 
-
-
-
-
+static void clk_pcf8563_to_currrent_time(void)
+{
+  clk_o.current_time.data[0] = clk_o.pcf8563[2] & 127;
+  clk_o.current_time.data[1] = clk_o.pcf8563[3] & 127;
+  clk_o.current_time.data[2] = clk_o.pcf8563[4] & 63;
+  clk_o.current_time.data[3] = clk_o.pcf8563[6] & 7;
+}
 
 
 
@@ -82,5 +88,13 @@ void clk_irq(void)
     clk_o.is_update = 1;
     clk_inc(&clk_o);
   }
+}
+
+/*=======================================================================*/
+
+void clk_init(void)
+{
+  clk_read_pcf_pcf8563_raw_data();
+  clk_pcf8563_to_currrent_time();
 }
 

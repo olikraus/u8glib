@@ -20,7 +20,7 @@ struct clk_struct
 {
   volatile unsigned is_update;	/* will be set to 1 after one second by the IRQ */
   time_data_t current_time;
-  volatile uint8_t pcf8563[16]		/* a copy of the registers of the PCF8563 */
+  volatile uint8_t pcf8563[16];		/* a copy of the registers of the PCF8563 */
   //volatile uint32_t cnt[4];
 };
 typedef struct clk_struct clk_t;

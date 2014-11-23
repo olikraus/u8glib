@@ -111,10 +111,9 @@ void menu_jump_to_dialog(unsigned idx)
   
  }
 
-void menu_init(unsigned total)
+static void menu_init(void)
 {
-  menu_o.total = total;
-  menu_jump_to_dialog(0);
+  menu_jump_to_dialog(CLOCK_DIALOG);
 }
 
 
@@ -216,9 +215,9 @@ void menu_draw(void)
 
 void menu(void)
 {
-  menu_init(3);
+  menu_init();
   
-  key_add_to_queue(KEY_NEXT);
+  //key_add_to_queue(KEY_NEXT);
   
   for(;;)
   {
