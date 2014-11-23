@@ -58,7 +58,7 @@ void delay_micro_seconds(uint32_t us);
 void i2c_init(void);
 void i2c_start(void) ;
 void i2c_stop(void);
-uint8_t i2c_write_byte(unsigned b);
+unsigned i2c_write_byte(unsigned b);
 
 /*
   nack must be 0 if the data reading continues

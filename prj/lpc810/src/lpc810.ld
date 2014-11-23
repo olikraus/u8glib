@@ -56,9 +56,12 @@ SECTIONS
 		KEEP(*(.isr_vector))
 		*(.text*)
 
+		/* remove _init and _fini prcedures */
+		/*
 		KEEP(*(.init))
 		KEEP(*(.fini))
-
+		*/
+  
 		/* .ctors */
 		*crtbegin.o(.ctors)
 		*crtbegin?.o(.ctors)
@@ -75,7 +78,8 @@ SECTIONS
 
 		*(.rodata*)
 
-		KEEP(*(.eh_frame*))
+		/* remove __EH_FRAME_BEGIN__ */
+		/* KEEP(*(.eh_frame*)) */
 	} > FLASH
 
 	.ARM.extab : 
@@ -106,20 +110,24 @@ SECTIONS
 
 		. = ALIGN(4);
 		/* init data */
+		/*
 		PROVIDE_HIDDEN (__init_array_start = .);
 		KEEP(*(SORT(.init_array.*)))
 		KEEP(*(.init_array))
 		PROVIDE_HIDDEN (__init_array_end = .);
+		*/
 
 
 		. = ALIGN(4);
 		/* finit data */
+		/*
 		PROVIDE_HIDDEN (__fini_array_start = .);
 		KEEP(*(SORT(.fini_array.*)))
 		KEEP(*(.fini_array))
 		PROVIDE_HIDDEN (__fini_array_end = .);
+		*/
 
-		KEEP(*(.jcr*))
+		/* KEEP(*(.jcr*)) */
 		. = ALIGN(4);
 		/* All data end */
 		__data_end__ = .;

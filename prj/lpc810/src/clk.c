@@ -1,5 +1,6 @@
 
 
+#include "chip.h"
 #include "clk.h"
 #include "sys.h"
 
@@ -44,10 +45,12 @@ void clk_read_pcf_pcf8563_raw_data(void)
 
 static void clk_pcf8563_to_currrent_time(void)
 {
+  __disable_irq();
   clk_o.current_time.data[0] = clk_o.pcf8563[2] & 127;
   clk_o.current_time.data[1] = clk_o.pcf8563[3] & 127;
   clk_o.current_time.data[2] = clk_o.pcf8563[4] & 63;
   clk_o.current_time.data[3] = clk_o.pcf8563[6] & 7;
+  __enable_irq();
 }
 
 

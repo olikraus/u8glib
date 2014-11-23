@@ -373,7 +373,7 @@ const uint16_t pcs_i2c_write_0[] =
   PCS_SETB(3, 0x000/4) | PCS_END
 };
 
-void i2c_write_bit(uint8_t val) 
+void __attribute__ ((noinline)) i2c_write_bit(uint8_t val) 
 {
   if ( val )
     pcs(pcs_i2c_write_1);
@@ -410,7 +410,7 @@ const uint16_t pcs_i2c_read_bit[] =
   PCS_SETB(3, 0x000/4) | PCS_END
 };
 
-uint8_t i2c_read_bit(void) 
+unsigned __attribute__ ((noinline)) i2c_read_bit(void) 
 {
   return pcs(pcs_i2c_read_bit);
   //uint8_t val;
@@ -426,7 +426,7 @@ uint8_t i2c_read_bit(void)
   */
 }
 
-uint8_t i2c_write_byte(unsigned b)
+unsigned __attribute__ ((noinline)) i2c_write_byte(unsigned b)
 {
   unsigned i = 8;
   do
@@ -445,15 +445,14 @@ uint8_t i2c_write_byte(unsigned b)
   nack must be 0 if the data reading continues
   nack should be 1 after the last byte. send stop after this
 */
-unsigned i2c_read_byte(unsigned nack)
+unsigned __attribute__ ((noinline)) i2c_read_byte(unsigned nack)
 {
   unsigned i = 8;
   unsigned b = 0;
   do
   {
     b <<= 1;
-    if ( i2c_read_bit() )
-      b++;
+    b |= i2c_read_bit();
     i--;
   } while ( i != 0 );
   i2c_write_bit(nack);

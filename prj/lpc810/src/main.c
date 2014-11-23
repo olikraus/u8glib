@@ -171,9 +171,11 @@ int __attribute__ ((noinline)) main(void)
   /* let LED on pin 4 of the DIP8 blink */
   //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
   pcs(pcs_led_out);
-  
-  oled_init();
+
   clk_init();
+
+
+  oled_init();
   
   menu();
   

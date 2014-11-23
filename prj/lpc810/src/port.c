@@ -38,7 +38,7 @@
 #include "port.h"
 
 /* PCS = Port command sequence */
-
+/* return value is 0 or 1 */
 unsigned pcs(const uint16_t *seq)
 {
   uint16_t cmd;

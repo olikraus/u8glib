@@ -83,7 +83,7 @@ COMMON_FLAGS += -Wall -I. -I$(SYSINC)
 # define constant for lpcopen library
 COMMON_FLAGS += -DCORE_M0PLUS
 # do not make a call to SystemInit()
-COMMON_FLAGS += -Os -flto
+COMMON_FLAGS += -Os -flto -fno-jump-tables
 # Do not use stand libs startup code. Uncomment this for gcclib procedures
 # memcpy still works, but might be required for __aeabi_uidiv
 # COMMON_FLAGS +=  -nostdlib

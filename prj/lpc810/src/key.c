@@ -172,3 +172,72 @@ void key_irq(void)
   }
 }
 
+/*
+void key_irq(void)
+{
+  unsigned curr_raw_code = key_get_raw_code();
+  
+  if (key_o.state == KEY_STATE_WAIT_FOR_BUTTON)
+  {
+      if ( curr_raw_code != 0 )
+      {
+	key_o.last_raw_code = curr_raw_code;
+	key_o.debounce_cnt = 0;
+	key_o.state = KEY_STATE_WAIT_FOR_DEBOUNCE;
+      }
+  }
+  else if ( key_o.state == KEY_STATE_WAIT_FOR_DEBOUNCE )
+  {
+      if ( key_o.last_raw_code != curr_raw_code )
+      {
+	key_o.state = KEY_STATE_WAIT_FOR_BUTTON;
+      }
+      else
+      {
+	key_o.debounce_cnt++;
+	if ( key_o.debounce_cnt >= KEY_DEBOUNCE_TICKS )
+	{
+	  key_o.initial_cnt = 0;
+	  key_o.state = KEY_STATE_WAIT_INITIAL_KEY_DELAY;	  
+	}
+      }
+  }
+    
+    case KEY_STATE_WAIT_INITIAL_KEY_DELAY:
+      if ( key_o.last_raw_code != curr_raw_code )
+      {
+	if ( curr_raw_code == 0 )
+	{
+	  key_add_to_queue(key_o.last_raw_code);
+	}
+	key_o.state = KEY_STATE_WAIT_FOR_BUTTON;
+      }
+      else
+      {
+	key_o.initial_cnt++;
+	if ( key_o.initial_cnt >= KEY_INITAL_TICKS )
+	{
+	  key_add_to_queue(key_o.last_raw_code);
+	  key_o.repeat_cnt = 0;
+	  key_o.state = KEY_STATE_AUTO_REPEAT;
+	}
+      }
+      break;
+    case KEY_STATE_AUTO_REPEAT:    
+      if ( key_o.last_raw_code != curr_raw_code )
+      {
+	key_o.state = KEY_STATE_WAIT_FOR_BUTTON;
+      }
+      else
+      {
+	key_o.repeat_cnt++;
+	if ( key_o.repeat_cnt >=  KEY_REPEAT_TICKS )
+	{
+	  key_add_to_queue(key_o.last_raw_code);
+	  key_o.repeat_cnt = 0;
+	}	
+      }
+      break;
+  }
+}
+*/
