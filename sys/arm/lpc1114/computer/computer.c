@@ -40,6 +40,19 @@
 #include "u8g_arm.h"
 
 /*========================================================================*/
+/* led output */
+
+void led_show_data(uint8_t data)
+{
+}
+
+void led_show_adr(uint8_t adr)
+{
+}
+
+
+
+/*========================================================================*/
 /* key handling */
 
 #define KEY_STATE_WAIT_FOR_BUTTON 0
@@ -68,6 +81,15 @@ struct key_struct
 
 typedef struct key_struct key_t;
 key_t key_o;
+
+#define KEY_D0 1
+#define KEY_D1 2
+#define KEY_D2 3
+#define KEY_D3 4
+
+#define KEY_UP 5 
+#define KEY_DOWN 6
+#define KEY_RUN 7
 
 
 /*
@@ -212,6 +234,63 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
 /*========================================================================*/
 /* main */
 
+
+#define COMP_MEM_SIZE 16
+struct comp_struct
+{
+  unsigned pc;
+  uint8_t mem[COMP_MEM_SIZE]
+};
+typedef struct comp_struct comp_t;
+comp_t comp_o;
+
+void update_comp(void)
+{
+  led_show_data(comp_o.mem[comp_o.pc]);
+  led_show_adr(comp_o.pc);
+}
+
+
+void editor(void)
+{
+  update_comp();
+  switch(key_get_from_queue())
+  {
+    case KEY_UP:
+      comp_o.pc++;
+      if ( comp_o.pc  >= COMP_MEM_SIZE )
+	comp_o.pc = 0;
+      update_comp();
+      break;
+    case KEY_DOWN:
+      if ( comp_o.pc  == 0 )
+	comp_o.pc = COMP_MEM_SIZE-1;
+      else
+	comp_o.pc--;
+      update_comp();
+      break;
+    case KEY_D0:
+      comp_o.mem[comp_o.pc] ^= 1;
+      update_comp();
+      break;
+    case KEY_D1:
+      comp_o.mem[comp_o.pc] ^= 2;
+      update_comp();
+      break;
+    case KEY_D2:
+      comp_o.mem[comp_o.pc] ^= 4;
+      update_comp();
+      break;
+    case KEY_D3:
+      comp_o.mem[comp_o.pc] ^= 8;
+      update_comp();
+      break;    
+  }
+}
+
+
+
+
 /*
 void set_gpio_mode(uint16_t pin, uint8_t is_output, uint8_t is_pullup)
 void set_gpio_level(uint16_t pin, uint8_t level)
@@ -237,3 +316,4 @@ void main()
   }  
 }
 
+  
