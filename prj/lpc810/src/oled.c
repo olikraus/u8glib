@@ -223,24 +223,13 @@ static const uint8_t oled_shutdown_seq[] =
   0x0ae,				/* display off, sleep mode */
 };
 
+/* this is place in the data section (RAM) to allow changing the page */
 uint8_t oled_start_page_seq[] = 
 {
  0x010,		/* set upper 4 bit of the col adr to 0 */
   0x000,		/* SSD1306: 0, SH1106. 2, set lower 4 bit of the col adr  */
   0x0b0,		/* select page 0 */
 };
-
-static const uint8_t oled_test_seq[] = 
-{
-  0x0ff,
-  0x0ff,
-  0x0ff,
-  
-  0x00f,
-  0x00f,
-  0x00f,
- };
-
 
 
 void __attribute__ ((noinline)) oled_draw_pixel(oled_t *oled, uint32_t x, uint32_t y)
@@ -486,9 +475,6 @@ void __attribute__ ((noinline)) oled_init(void)
   i2c_init();
   
   oled_send_seq(I2C_CMD_MODE, sizeof(oled_init_seq), oled_init_seq);
-  
-  //oled_send_seq(I2C_CMD_MODE, sizeof(oled_start_page_seq), oled_start_page_seq);
-  //oled_send_seq(I2C_DATA_MODE, sizeof(oled_test_seq), oled_test_seq);
   
   oled_start_page(&oled_o);
   do

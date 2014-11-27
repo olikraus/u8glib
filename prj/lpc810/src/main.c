@@ -133,8 +133,27 @@ int __attribute__ ((noinline)) main(void)
   //LPC_SYSCTL->SYSPLLCLKSEL = 0;			/* select PLL source, 0: IRC, 1: Sys osc, reset value is 0 */
   //LPC_SYSCTL->SYSPLLCLKUEN = 0;			/* confirm change by writing 0 and 1 to SYSPLLCLKUEN */
   //LPC_SYSCTL->SYSPLLCLKUEN = 1;
+ /*
+  4:0 6:5
+31:7
+Description Reset
+value
+4:0	MSEL 	Feedback divider value. The division value M is the programmed MSEL value + 1.
+			00000: Division ratio M = 1
+			to
+			11111: Division ratio M = 32 0
+6:5	PSEL 	Post divider ratio P. The division ratio is 2 X P
+			Value
+			0x0 P = 1
+			0x1 P = 2
+			0x2 P = 4
+			0x3 P = 8
+			
+Fout = Fin * M = Fin * MSEL+1
+*/  
   
-  LPC_SYSCTL->SYSPLLCTRL = 3 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 5, p (bits 5..6)= 1 (div by 2) */
+  
+  LPC_SYSCTL->SYSPLLCTRL = 4 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 4, p (bits 5..6)= 1 (div by 2) */
   LPC_SYSCTL->SYSAHBCLKDIV = 2;			/* divide by 2 to get 30 MHz, however, at the moment we will get 6MHz */
   LPC_SYSCTL->PDRUNCFG &= ~(1UL<<7); 	/* power-up PLL */
 
