@@ -5,6 +5,7 @@
 #include "oled.h"
 #include "clk.h"
 #include "key.h"
+#include "port.h"
 
 
 /* dialog number for the clock (master) display */
@@ -120,7 +121,12 @@ static void menu_jump_to_dialog(unsigned idx)
   switch(menu_o.current_dialog)
   {
     case 1:
+	
 	/* store time, entered by user */
+	/* num[0]: hour */
+	/* num[1]: minutes */
+	/* num[2]: seconds */
+    
 	break;
   }
   
@@ -130,6 +136,10 @@ static void menu_jump_to_dialog(unsigned idx)
   {
     case 1:
 	/* load current time for user change */
+      
+	//menu_o.num[2] = clk_o.current_time.data[0];	/* seconds */
+	//menu_o.num[1] = clk_o.current_time.data[1];	/* minutes */
+	//menu_o.num[0] = clk_o.current_time.data[2];	/* hours */
 	break;    
   }
   
@@ -232,9 +242,42 @@ void menu_draw(void)
   }
 }
 
+//Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
+const uint16_t pcs_led_out[] = 
+{  
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  PCS_SETB(2, 0x000/4) | PCS_END
+};
+
+//Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
+const uint16_t pcs_led_high[] = 
+{  
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  PCS_SETB(2, 0x200/4) | PCS_END
+};
+
+//Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
+const uint16_t pcs_led_low[] = 
+{
+  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
+  PCS_SETB(2, 0x280/4) | PCS_END
+};
+
 void menu(void)
 {
+  /* let LED on pin 4 of the DIP8 blink */
+  //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
+  pcs(pcs_led_out);
+
   menu_init();
+
+    for(;;)
+    {    
+      pcs(pcs_led_high);
+      delay_micro_seconds(100000UL);
+      pcs(pcs_led_low);
+      delay_micro_seconds(100000UL);
+    }
   
   //key_add_to_queue(KEY_NEXT);
   

@@ -56,26 +56,6 @@
 /*=================================================*/
 
 
-//Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
-const uint16_t pcs_led_out[] = 
-{  
-  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
-  PCS_SETB(2, 0x000/4) | PCS_END
-};
-
-//Chip_GPIO_SetPinOutHigh(LPC_GPIO_PORT, 0, 2); 	
-const uint16_t pcs_led_high[] = 
-{  
-  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
-  PCS_SETB(2, 0x200/4) | PCS_END
-};
-
-//Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
-const uint16_t pcs_led_low[] = 
-{
-  PCS_BASE(LPC_GPIO_PORT_BASE+0x2000),
-  PCS_SETB(2, 0x280/4) | PCS_END
-};
 
 //Chip_GPIO_SetPinOutLow(LPC_GPIO_PORT, 0, 2);    
 const uint16_t pcs_main_init[] = 
@@ -153,7 +133,8 @@ Fout = Fin * M = Fin * MSEL+1
 */  
   
   
-  LPC_SYSCTL->SYSPLLCTRL = 4 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 4, p (bits 5..6)= 1 (div by 2) */
+  //LPC_SYSCTL->SYSPLLCTRL = 4 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 4, p (bits 5..6)= 1 (div by 2) */
+  LPC_SYSCTL->SYSPLLCTRL = 3 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 4, p (bits 5..6)= 1 (div by 2) */
   LPC_SYSCTL->SYSAHBCLKDIV = 2;			/* divide by 2 to get 30 MHz, however, at the moment we will get 6MHz */
   LPC_SYSCTL->PDRUNCFG &= ~(1UL<<7); 	/* power-up PLL */
 
@@ -187,17 +168,13 @@ Fout = Fin * M = Fin * MSEL+1
   /* activate analog comperator */
   //Chip_ACMP_Init(LPC_CMP);
 
-  /* let LED on pin 4 of the DIP8 blink */
-  //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
-  pcs(pcs_led_out);
-
   clk_init();
-
 
   oled_init();
   
   menu();
   
+  /*
   {
     for(;;)
     {    
@@ -208,6 +185,7 @@ Fout = Fin * M = Fin * MSEL+1
     }
     
   }
+  */
   
   /* enter sleep mode: Reduce from 1.4mA to 0.8mA with 12MHz */  
   while (1)

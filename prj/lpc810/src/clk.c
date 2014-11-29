@@ -13,7 +13,7 @@ static const time_data_t time_data_max = { { 59, 59, 23, 7 } };
 
 /*=======================================================================*/
 
-void clk_read_pcf_pcf8563_raw_data(void)
+void clk_read_pcf8563_raw_data(void)
 {
   unsigned i=0;
 
@@ -33,6 +33,24 @@ void clk_read_pcf_pcf8563_raw_data(void)
   i2c_stop();
 }
 
+
+void clk_write_pcf8563_raw_data(unsigned start, unsigned cnt)
+{
+  unsigned i=start;
+
+  i2c_start();
+  i2c_write_byte(0xa2);		// PCF8563 address and 0 (write) for RWn bit    
+  i2c_write_byte(0);			// set index 0    
+  
+  do
+  {
+    i2c_write_byte(clk_o.pcf8563[i]);
+    cnt--;
+  } while ( cnt > 0 );
+  
+  i2c_stop();
+}
+
 /*
 02h VL_seconds VL SECONDS (0 to 59)
 03h Minutes x MINUTES (0 to 59)
@@ -46,10 +64,10 @@ void clk_read_pcf_pcf8563_raw_data(void)
 static void clk_pcf8563_to_currrent_time(void)
 {
   __disable_irq();
-  clk_o.current_time.data[0] = clk_o.pcf8563[2] & 127;
-  clk_o.current_time.data[1] = clk_o.pcf8563[3] & 127;
-  clk_o.current_time.data[2] = clk_o.pcf8563[4] & 63;
-  clk_o.current_time.data[3] = clk_o.pcf8563[6] & 7;
+  clk_o.current_time.data[0] = clk_o.pcf8563[2] & 127;	/* seconds */
+  clk_o.current_time.data[1] = clk_o.pcf8563[3] & 127;	/* minutes */
+  clk_o.current_time.data[2] = clk_o.pcf8563[4] & 63;	/* hours */
+  clk_o.current_time.data[3] = clk_o.pcf8563[6] & 7;	/* weekday */
   __enable_irq();
 }
 
@@ -99,7 +117,7 @@ void clk_irq(void)
 
 void clk_init(void)
 {
-  clk_read_pcf_pcf8563_raw_data();
+  clk_read_pcf8563_raw_data();
   clk_pcf8563_to_currrent_time();
 }
 
