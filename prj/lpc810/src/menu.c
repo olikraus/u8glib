@@ -137,9 +137,9 @@ static void menu_jump_to_dialog(unsigned idx)
     case 1:
 	/* load current time for user change */
       
-	//menu_o.num[2] = clk_o.current_time.data[0];	/* seconds */
-	//menu_o.num[1] = clk_o.current_time.data[1];	/* minutes */
-	//menu_o.num[0] = clk_o.current_time.data[2];	/* hours */
+	menu_o.num[2] = clk_o.current_time.data[0];	/* seconds */
+	menu_o.num[1] = clk_o.current_time.data[1];	/* minutes */
+	menu_o.num[0] = clk_o.current_time.data[2];	/* hours */
 	break;    
   }
   
@@ -265,19 +265,22 @@ const uint16_t pcs_led_low[] =
 
 void menu(void)
 {
-  /* let LED on pin 4 of the DIP8 blink */
-  //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
-  pcs(pcs_led_out);
+  int i;
 
   menu_init();
 
-    for(;;)
-    {    
+  /* let LED on pin 4 of the DIP8 blink */
+  //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, 0, 2);
+  /*
+  pcs(pcs_led_out);
+  for( i = 0; i < 10; i++ )
+  {
       pcs(pcs_led_high);
-      delay_micro_seconds(100000UL);
+      delay_micro_seconds(50000UL);
       pcs(pcs_led_low);
-      delay_micro_seconds(100000UL);
-    }
+      delay_micro_seconds(50000UL);
+  }
+  */
   
   //key_add_to_queue(KEY_NEXT);
   
@@ -290,6 +293,13 @@ void menu(void)
       do
       {
 	menu_draw();
+	
+	/*
+	pcs(pcs_led_high);
+	delay_micro_seconds(100000UL);
+	pcs(pcs_led_low);
+	delay_micro_seconds(100000UL);
+	*/
       }
       while( oled_next_page(&oled_o) );      
     }

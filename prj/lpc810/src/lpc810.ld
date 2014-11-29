@@ -80,6 +80,7 @@ SECTIONS
 
 		/* remove __EH_FRAME_BEGIN__ */
 		/* KEEP(*(.eh_frame*)) */
+		. = ALIGN(4);
 	} > FLASH
 
 	.ARM.extab : 

@@ -133,8 +133,8 @@ Fout = Fin * M = Fin * MSEL+1
 */  
   
   
-  //LPC_SYSCTL->SYSPLLCTRL = 4 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 4, p (bits 5..6)= 1 (div by 2) */
-  LPC_SYSCTL->SYSPLLCTRL = 3 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 4, p (bits 5..6)= 1 (div by 2) */
+  LPC_SYSCTL->SYSPLLCTRL = 4 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 4, p (bits 5..6)= 1 (div by 2) */
+  //LPC_SYSCTL->SYSPLLCTRL = 3 | (1 << 5);	/* 60 Mhz, m (bits 0..4) = 4, p (bits 5..6)= 1 (div by 2) */
   LPC_SYSCTL->SYSAHBCLKDIV = 2;			/* divide by 2 to get 30 MHz, however, at the moment we will get 6MHz */
   LPC_SYSCTL->PDRUNCFG &= ~(1UL<<7); 	/* power-up PLL */
 
