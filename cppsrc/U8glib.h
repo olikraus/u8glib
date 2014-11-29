@@ -486,6 +486,20 @@ class U8GLIB_UC1611_DOGM240 : public U8GLIB
       { }
 };
 
+class U8GLIB_UC1611_DOGXL240 : public U8GLIB
+{
+  public:
+    U8GLIB_UC1611_DOGXL240(uint8_t options = U8G_I2C_OPT_NONE)
+      : U8GLIB(&u8g_dev_uc1611_dogxl240_i2c, options)
+      {}
+    U8GLIB_UC1611_DOGXL240(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_uc1611_dogxl240_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_UC1611_DOGXL240(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_uc1611_dogxl240_hw_spi, cs, a0, reset)
+      { }
+};
+
 class U8GLIB_ST7920_128X64 : public U8GLIB 
 {
   public:

@@ -59,7 +59,7 @@ const char * const menu_dialog_list[] =
   3rd char: string
 */
 
-unsigned menu_get_entry_cnt(const char *me)
+static unsigned menu_get_entry_cnt(const char *me)
 {
   unsigned cnt = 0;
   while( *me != '\0' )
@@ -84,7 +84,7 @@ const char *menu_get_entry(const char *me, unsigned idx)
   return me;
 }
 
-void menu_prepare_entry(unsigned entry_idx)
+static void __attribute__ ((noinline))  menu_prepare_entry(unsigned entry_idx)
 {
   const char *s;
   
@@ -99,7 +99,7 @@ void menu_prepare_entry(unsigned entry_idx)
 }
 
 
-void menu_jump_to_dialog(unsigned idx)
+void menu_load_dialog(unsigned idx)
 {
   
   menu_o.current_dialog = idx;
@@ -108,12 +108,31 @@ void menu_jump_to_dialog(unsigned idx)
     menu_o.total  = menu_get_entry_cnt(menu_dialog_list[menu_o.current_dialog]);
     menu_prepare_entry(0);
   }
-  
  }
 
 static void menu_init(void)
 {
-  menu_jump_to_dialog(CLOCK_DIALOG);
+  menu_load_dialog(CLOCK_DIALOG);
+}
+
+static void menu_jump_to_dialog(unsigned idx)
+{
+  switch(menu_o.current_dialog)
+  {
+    case 1:
+	/* store time, entered by user */
+	break;
+  }
+  
+  menu_load_dialog(idx);
+  
+  switch(menu_o.current_dialog)
+  {
+    case 1:
+	/* load current time for user change */
+	break;    
+  }
+  
 }
 
 
