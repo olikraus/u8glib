@@ -152,7 +152,7 @@ void delay_micro_seconds(uint32_t us)
 /* SCL: 0_3 */
 /* SDA: 0_0 */
 
-#define I2C_DLY 0
+#define I2C_DLY 1
 
 uint8_t i2c_started = 0;
 

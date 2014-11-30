@@ -126,6 +126,11 @@ static void menu_jump_to_dialog(unsigned idx)
 	/* num[0]: hour */
 	/* num[1]: minutes */
 	/* num[2]: seconds */
+
+	clk_o.current_time.data[0] = menu_o.num[2];	/* seconds */
+	clk_o.current_time.data[1] = menu_o.num[1];	/* minutes */
+	clk_o.current_time.data[2] = menu_o.num[0];	/* hours */
+	clk_write_current_time();
     
 	break;
   }

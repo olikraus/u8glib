@@ -27,6 +27,8 @@ typedef struct clk_struct clk_t;
 
 extern clk_t clk_o;
 
+void clk_write_current_time(void);
+
 
 void clk_init(void);
 void clk_inc(clk_t *clk);

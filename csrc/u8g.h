@@ -306,6 +306,13 @@ extern u8g_dev_t u8g_dev_uc1608_240x64_hw_spi;
 extern u8g_dev_t u8g_dev_uc1608_240x64_2x_sw_spi;
 extern u8g_dev_t u8g_dev_uc1608_240x64_2x_hw_spi;
 
+/* UC1608 240x128 */
+extern u8g_dev_t u8g_dev_uc1608_240x128_sw_spi;
+extern u8g_dev_t u8g_dev_uc1608_240x128_hw_spi;
+
+extern u8g_dev_t u8g_dev_uc1608_240x128_2x_sw_spi;
+extern u8g_dev_t u8g_dev_uc1608_240x128_2x_hw_spi;
+
 /* dfrobot 128x64 Graphic LCD (SKU:FIT0021) */
 extern u8g_dev_t u8g_dev_st7920_128x64_sw_spi;
 extern u8g_dev_t u8g_dev_st7920_128x64_hw_spi;
