@@ -44,10 +44,49 @@
 
 void led_show_data(uint8_t data)
 {
+  if ( data & 1 )
+    set_gpio_level(8, 1);
+  else
+    set_gpio_level(8, 0);
+
+  if ( data & 2 )
+    set_gpio_level(9, 1);
+  else
+    set_gpio_level(9, 0);
+
+  if ( data & 4 )
+    set_gpio_level(10, 1);
+  else
+    set_gpio_level(10, 0);
+
+  if ( data & 8 )
+    set_gpio_level(11, 1);
+  else
+    set_gpio_level(11, 0);
+  
 }
 
 void led_show_adr(uint8_t adr)
 {
+  if ( adr & 1 )
+    set_gpio_level(0x10, 1);
+  else
+    set_gpio_level(0x10, 0);
+
+  if ( adr & 2 )
+    set_gpio_level(0x11, 1);
+  else
+    set_gpio_level(0x11, 0);
+
+  if ( adr & 4 )
+    set_gpio_level(0x12, 1);
+  else
+    set_gpio_level(0x12, 0);
+
+  if ( adr & 8 )
+    set_gpio_level(0x13, 1);
+  else
+    set_gpio_level(0x13, 0);
 }
 
 
@@ -74,9 +113,11 @@ struct key_struct
   unsigned initial_cnt;
   unsigned repeat_cnt;
   
-  unsigned queue_start;
-  unsigned queue_end;
-  unsigned queue_list[KEY_QUEUE_LEN];
+  volatile unsigned queue_start;
+  volatile unsigned queue_end;
+  volatile unsigned queue_list[KEY_QUEUE_LEN];
+  
+  volatile unsigned is_stop_key;
 };
 
 typedef struct key_struct key_t;
@@ -99,6 +140,20 @@ key_t key_o;
 */
 static unsigned key_get_raw_code(void)
 {
+  if ( get_gpio_level(0x18) == 0 )
+    return KEY_UP;
+  if ( get_gpio_level(0x19) == 0 )
+    return KEY_DOWN;
+  if ( get_gpio_level(0x01) == 0 )
+    return KEY_RUN;
+  if ( get_gpio_level(0x02) == 0 )
+    return KEY_D3;
+  if ( get_gpio_level(0x03) == 0 )
+    return KEY_D2;
+  if ( get_gpio_level(0x04) == 0 )
+    return KEY_D1;
+  if ( get_gpio_level(0x07) == 0 )
+    return KEY_D0;
   return 0;
 }
 
@@ -107,7 +162,9 @@ void key_add_to_queue(unsigned code)
   unsigned end;
 
   __disable_irq();
-  
+  if ( code == KEY_RUN )
+    key_o.is_stop_key = 1;
+    
   end = key_o.queue_end;
   end++;
   if ( end >= KEY_QUEUE_LEN )
@@ -150,10 +207,10 @@ void key_irq(void)
   switch(key_o.state)
   {
     case KEY_STATE_WAIT_FOR_BUTTON:
+      key_o.debounce_cnt = 0;
       if ( curr_raw_code != 0 )
       {
 	key_o.last_raw_code = curr_raw_code;
-	key_o.debounce_cnt = 0;
 	key_o.state = KEY_STATE_WAIT_FOR_DEBOUNCE;
       }
       break;
@@ -207,6 +264,9 @@ void key_irq(void)
 	}	
       }
       break;
+    default:
+      key_o.state = KEY_STATE_WAIT_FOR_BUTTON;
+      break;
   }
 }
 
@@ -239,7 +299,7 @@ void __attribute__ ((interrupt)) SysTick_Handler(void)
 struct comp_struct
 {
   unsigned pc;
-  uint8_t mem[COMP_MEM_SIZE]
+  uint8_t mem[COMP_MEM_SIZE];
 };
 typedef struct comp_struct comp_t;
 comp_t comp_o;
@@ -248,6 +308,138 @@ void update_comp(void)
 {
   led_show_data(comp_o.mem[comp_o.pc]);
   led_show_adr(comp_o.pc);
+}
+
+void inc_pc(void)
+{
+  comp_o.pc++;
+  if ( comp_o.pc  >= COMP_MEM_SIZE )
+    comp_o.pc = 0;
+}
+
+
+
+unsigned exec_cmd(void)
+{
+  unsigned key;
+  switch(comp_o.mem[comp_o.pc])
+  {    
+    case 0:		/* stop */
+      inc_pc();
+      return 1;
+    case 1:		/* 1 sekunde warten */
+      u8g_Delay(500);
+      break;
+    case 2:		/* warte auf eine taste */      
+      key = key_get_from_queue();
+      if ( key == 0 )
+	return 0;
+      if ( key == KEY_RUN )
+	return 1;
+      break;
+    case 3:		/* RGB LED aus */
+      set_gpio_level(0x06, 0);		/* grün */
+      set_gpio_level(0x14, 0);		/* blau */
+      set_gpio_level(0x15, 0);		/* rot */
+      break;
+    case 4:		/* RGB LED grün */
+      set_gpio_level(0x06, 1);		/* grün */
+      set_gpio_level(0x14, 0);		/* blau */
+      set_gpio_level(0x15, 0);		/* rot */
+      break;
+    case 5:		/* RGB LED blau */
+      set_gpio_level(0x06, 0);		/* grün */
+      set_gpio_level(0x14, 1);		/* blau */
+      set_gpio_level(0x15, 0);		/* rot */
+      break;
+    case 6:		/* RGB LED rot */
+      set_gpio_level(0x06, 0);		/* grün */
+      set_gpio_level(0x14, 0);		/* blau */
+      set_gpio_level(0x15, 1);		/* rot */
+      break;
+    case 7:		/* blinken */
+      led_show_data(0);
+      led_show_adr(0);
+      u8g_Delay(100);
+      led_show_data(15);
+      led_show_adr(15);
+      u8g_Delay(100);
+      led_show_data(0);
+      led_show_adr(0);
+      u8g_Delay(100);
+      led_show_data(15);
+      led_show_adr(15);
+      u8g_Delay(100);
+      led_show_data(0);
+      led_show_adr(0);
+      break;
+    case 8:		/* links rechts lauf */
+      led_show_data(1);
+      led_show_adr(0);
+      u8g_Delay(100);
+      led_show_data(2);
+      led_show_adr(0);
+      u8g_Delay(100);
+      led_show_data(4);
+      led_show_adr(0);
+      u8g_Delay(100);
+      led_show_data(8);
+      led_show_adr(0);
+      u8g_Delay(100);
+      led_show_data(0);
+      led_show_adr(1);
+      u8g_Delay(100);
+      led_show_data(0);
+      led_show_adr(2);
+      u8g_Delay(100);
+      led_show_data(0);
+      led_show_adr(4);
+       u8g_Delay(100);
+      led_show_data(0);
+      led_show_adr(8);
+       u8g_Delay(100);
+      led_show_data(0);
+      led_show_adr(0);
+     break;
+    case 9:		/* stop */
+      return 1;
+    case 10:		/* stop */
+      return 1;
+    case 11:		/* stop */
+      return 1;
+    case 12:		/* stop */
+      return 1;
+    case 13:		/* stop */
+      return 1;
+    case 14:		/* stop */
+      return 1;
+    case 15:		/* starte bei 0 */
+      comp_o.pc = 0;
+      return 0;
+      
+  }
+  inc_pc();
+  return 0;
+}
+
+unsigned execute(void)
+{
+  __disable_irq();
+  key_o.queue_start = key_o.queue_end;		/* alle tasten löschen */
+  __enable_irq();
+  
+  led_show_data(0);
+  led_show_adr(0);
+  
+  key_o.is_stop_key = 0;
+  while( exec_cmd() == 0 && key_o.is_stop_key == 0 )
+    ;
+  
+  led_show_data(0);
+  led_show_adr(0);
+  __disable_irq();
+  key_o.queue_start = key_o.queue_end;		/* alle tasten löschen */
+  __enable_irq();
 }
 
 
@@ -285,6 +477,9 @@ void editor(void)
       comp_o.mem[comp_o.pc] ^= 8;
       update_comp();
       break;    
+    case KEY_RUN:
+      execute();
+      break;
   }
 }
 
@@ -299,19 +494,57 @@ uint8_t get_gpio_level(uint16_t pin)
 
 void main()
 {
-  
-  
+  uint8_t data = 1;
+
+  /* tasten */
+  set_gpio_mode(0x18, 0, 1);
+  set_gpio_mode(0x19, 0, 1);
   set_gpio_mode(0x01, 0, 1);
-  set_gpio_mode(0x08, 1, 0);
+  set_gpio_mode(0x02, 0, 1);
+  set_gpio_mode(0x03, 0, 1);
+  set_gpio_mode(0x04, 0, 1);
+  set_gpio_mode(0x07, 0, 1);
+
+  /* daten LEDs */
+  set_gpio_mode(8, 1, 0);
+  set_gpio_mode(9, 1, 0);
+  set_gpio_mode(10, 1, 0);
+  set_gpio_mode(11, 1, 0);
+
+  /* adresse */
+  set_gpio_mode(0x10, 1, 0);
+  set_gpio_mode(0x11, 1, 0);
+  set_gpio_mode(0x12, 1, 0);
+  set_gpio_mode(0x13, 1, 0);
+
+  /* RGB LED */
+  set_gpio_mode(0x06, 1, 0);	/* grün */
+  set_gpio_level(0x06, 0);		/* grün */
+  
+  set_gpio_mode(0x14, 1, 0);	/* blau */
+  set_gpio_level(0x14, 0);		/* blau */
+
+  set_gpio_mode(0x15, 1, 0);	/* rot */
+  set_gpio_level(0x15, 0);		/* rot */
+
+  SystemInit();
+  
+  for(;;)
+    editor();
+    
+  led_show_data(data);
+  
   for(;;)
   {
+    if ( key_get_from_queue() != 0 )
+    //if ( key_get_raw_code() != 0 )
+    {
+      data++;
+      led_show_data(data);
+    }
       
-    if ( get_gpio_level(0x01) == 0 )
-      set_gpio_level(0x08, 0);
-    else
-      set_gpio_level(0x08, 1);
     /* refresh screen after some delay */
-    u8g_Delay(100);
+    u8g_Delay(10);
     
   }  
 }
