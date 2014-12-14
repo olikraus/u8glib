@@ -145,9 +145,12 @@ u8glib ChangeLog
   * Added support for T6963 128x128 displays
   * Added U8GLIB_SSD1306_ADAFRUIT_128X64 constructor
 2014-xx-xx	v1.17	  Oliver Kraus <olikraus@gmail.com>
-  * Added U8GLIB_UC1611_DOGM240 constructor
+  * Added U8GLIB_UC1611_DOGM240 constructor (Issue 284)
   * Added U8GLIB_UC1611_DOGXL240 constructor
   * Bufix in the sleep on/off sequence (CS has not been releases, issue 298)
+  * helvB and helvR number only fonts (Issue 271)
+  
+  
   
   
   

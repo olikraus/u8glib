@@ -173,14 +173,19 @@ echo "adobe helvB"
 echo "adobe helvR"
 ../bdf2u8g/bdf2u8g ../bdf/helvR08.bdf u8g_font_helvR08 u8g_font_helvr08.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR08.bdf u8g_font_helvR08r u8g_font_helvr08r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvR08.bdf u8g_font_helvR08n u8g_font_helvr08n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvR10.bdf u8g_font_helvR10 u8g_font_helvr10.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR10.bdf u8g_font_helvR10r u8g_font_helvr10r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvR10.bdf u8g_font_helvR10n u8g_font_helvr10n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvR12.bdf u8g_font_helvR12 u8g_font_helvr12.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR12.bdf u8g_font_helvR12r u8g_font_helvr12r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvR12.bdf u8g_font_helvR12n u8g_font_helvr12n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvR14.bdf u8g_font_helvR14 u8g_font_helvr14.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR14.bdf u8g_font_helvR14r u8g_font_helvr14r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvR14.bdf u8g_font_helvR14n u8g_font_helvr14n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvR18.bdf u8g_font_helvR18 u8g_font_helvr18.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR18.bdf u8g_font_helvR18r u8g_font_helvr18r.c > /dev/null
+../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvR18.bdf u8g_font_helvR18n u8g_font_helvr18n.c > /dev/null
 ../bdf2u8g/bdf2u8g ../bdf/helvR24.bdf u8g_font_helvR24 u8g_font_helvr24.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 32 -e 127 ../bdf/helvR24.bdf u8g_font_helvR24r u8g_font_helvr24r.c > /dev/null
 ../bdf2u8g/bdf2u8g  -b 42 -e 58  ../bdf/helvR24.bdf u8g_font_helvR24n u8g_font_helvr24n.c > /dev/null

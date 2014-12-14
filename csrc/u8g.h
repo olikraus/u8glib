@@ -750,7 +750,7 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_COM_ST7920_SW_SPI u8g_com_null_fn
 #endif
 
-/* ==== Parallel iinterface, Arduino ====*/
+/* ==== Parallel interface, Arduino ====*/
 #if defined(ARDUINO)
 #if defined(__AVR__)
 #define U8G_COM_PARALLEL u8g_com_arduino_parallel_fn
@@ -783,8 +783,8 @@ defined(__18CXX) || defined(__PIC32MX)
 #endif
 
 #ifndef U8G_COM_SSD_I2C
-#if defined(__AVR__)
-/* AVR variant can use the arduino version at the moment */
+#if defined(__AVR__) || defined(__SAM3X8E__)
+/* AVR variant and also DUE can use the arduino version at the moment */
 #define U8G_COM_SSD_I2C u8g_com_arduino_ssd_i2c_fn
 #endif
 #endif
@@ -1409,6 +1409,8 @@ void st_Step(uint8_t player_pos, uint8_t is_auto_fire, uint8_t is_fire);
 /* options for u8g_i2c_init() */
 #define U8G_I2C_OPT_NONE 0
 #define U8G_I2C_OPT_NO_ACK 2
+#define U8G_I2C_OPT_DEV_0 0
+#define U8G_I2C_OPT_DEV_1 4
 
 /* retrun values from u8g_twi_get_error() */
 #define U8G_I2C_ERR_NONE 0x00
@@ -1828,14 +1830,19 @@ extern const u8g_fntpgm_uint8_t u8g_font_helvB24n[] U8G_FONT_SECTION("u8g_font_h
 
 extern const u8g_fntpgm_uint8_t u8g_font_helvR08[] U8G_FONT_SECTION("u8g_font_helvR08");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR08r[] U8G_FONT_SECTION("u8g_font_helvR08r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvR08n[] U8G_FONT_SECTION("u8g_font_helvR08n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR10[] U8G_FONT_SECTION("u8g_font_helvR10");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR10r[] U8G_FONT_SECTION("u8g_font_helvR10r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvR10n[] U8G_FONT_SECTION("u8g_font_helvR10n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR12[] U8G_FONT_SECTION("u8g_font_helvR12");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR12r[] U8G_FONT_SECTION("u8g_font_helvR12r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvR12n[] U8G_FONT_SECTION("u8g_font_helvR12n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR14[] U8G_FONT_SECTION("u8g_font_helvR14");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR14r[] U8G_FONT_SECTION("u8g_font_helvR14r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvR14n[] U8G_FONT_SECTION("u8g_font_helvR14n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR18[] U8G_FONT_SECTION("u8g_font_helvR18");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR18r[] U8G_FONT_SECTION("u8g_font_helvR18r");
+extern const u8g_fntpgm_uint8_t u8g_font_helvR18n[] U8G_FONT_SECTION("u8g_font_helvR18n");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR24[] U8G_FONT_SECTION("u8g_font_helvR24");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR24r[] U8G_FONT_SECTION("u8g_font_helvR24r");
 extern const u8g_fntpgm_uint8_t u8g_font_helvR24n[] U8G_FONT_SECTION("u8g_font_helvR24n");

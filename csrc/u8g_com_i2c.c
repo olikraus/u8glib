@@ -41,8 +41,7 @@
 //#define U8G_I2C_WITH_NO_ACK
 
 static uint8_t u8g_i2c_err_code;
-static uint8_t u8g_i2c_opt;		/* U8G_I2C_OPT_NO_ACK */
-
+static uint8_t u8g_i2c_opt;		/* U8G_I2C_OPT_NO_ACK, SAM: U8G_I2C_OPT_DEV_1 */
 /*
   position values
     1: start condition
@@ -242,6 +241,129 @@ void twi_send(uint8_t adr, uint8_t data1, uint8_t data2)
   u8g_i2c_stop();
 }
 */
+
+#elif defined(ARDUINO) && defined(__SAM3X8E__)
+/* Arduino Due */
+#include "sam.h"
+
+/*
+TWI0 TWCK0 PA18 A			DUE PCB: SCL1
+TWI0 TWD0 PA17 A			DUE PCB: SDA1 
+TWI1 TWCK1 PB13 A			DUE PCB: SCL 21
+TWI1 TWD1 PB12 A			DUE PCB: SDA 20
+*/
+
+
+void u8g_i2c_init(uint8_t options)
+{
+  u8g_i2c_opt = options;
+  u8g_i2c_clear_error();
+  if ( u8g_i2c_opt & U8G_I2C_OPT_DEV_1 )
+  {
+    pmc_enable_periph_clk(ID_TWI1);
+  }
+  else
+  {    
+    pmc_enable_periph_clk(ID_TWI0);
+  }
+}
+
+/*
+uint8_t u8g_i2c_wait(uint8_t mask, uint8_t pos)
+{
+  return 1;
+}
+*/
+
+uint8_t u8g_i2c_start(uint8_t sla)
+{  
+  Twi* TWI = TWI0;
+  
+  if ( u8g_i2c_opt & U8G_I2C_OPT_DEV_1 )
+  {
+    TWI=TWI1;
+    REG_PIOA_PDR = PIO_PB12A_TWD1 | PIO_PB13A_TWCK1;
+  }
+  else
+  {    
+    REG_PIOA_PDR = PIO_PA17A_TWD0 | PIO_PA18A_TWCK0;
+  }
+
+  /* TWI reset */
+  TWI->TWI_CR = TWI_CR_SWRST ;
+
+  /* TWI Slave Mode Disabled, TWI Master Mode Disabled. */
+  TWI->TWI_CR = TWI_CR_SVDIS ;
+  TWI->TWI_CR = TWI_CR_MSDIS ;
+
+
+  /*
+    Frequenzy setup
+    Due: 84000 KHz
+    i2c:     100 KHz
+    CKDIV = 3
+    period = 105 
+    --> 105*2^3 = 840
+    CLDIV = 53
+    CHDIV = 53
+  */
+  TWI->TWI_CWGR = (53) | (53<<8) | (4<<16);
+
+  /* Set master mode */
+  TWI->TWI_CR = TWI_CR_MSEN;
+
+  /* setup master for write operation: do not set TWI_MMR_MREAD */
+  TWI->TWI_MMR = TWI_MMR_DADR(sla);
+  
+
+  return 1;
+}
+
+uint8_t u8g_i2c_send_byte(uint8_t data)
+{
+  uint32_t sr;
+  volatile uint32_t cnt = 0;
+  
+  Twi* TWI = TWI0;
+  
+  if ( u8g_i2c_opt & U8G_I2C_OPT_DEV_1 )
+  {
+    TWI=TWI1;
+  }
+  
+  //u8g_i2c_opt & U8G_I2C_OPT_NO_ACK
+  TWI->TWI_THR = data;
+  
+  for(;;)
+  {
+    sr = TWI->TWI_SR;
+    if ( (sr & TWI_SR_TXRDY) != 0 )
+      break;
+    /*
+    if ( (sr & TWI_SR_NACK) != 0 )
+      break;
+    cnt++;
+    if ( cnt > 10000UL )
+      break;
+      */
+  }
+  
+  return 1;
+}
+
+void u8g_i2c_stop(void)
+{
+  Twi* TWI = TWI0;
+  
+  if ( u8g_i2c_opt & U8G_I2C_OPT_DEV_1 )
+  {
+    TWI=TWI1;
+  }
+  /* the stop condition would require to send one more byte */
+  /* not sure how to deal with this */
+  
+}
+
 
 #elif defined(U8G_RASPBERRY_PI)
 

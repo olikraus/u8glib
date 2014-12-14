@@ -1653,34 +1653,48 @@ int main(void)
   pic_gen_font(u8g_font_courR24, "u8g_font_courR24", 32, "courR24");
   pic_gen_font(u8g_font_courR24r, "u8g_font_courR24r", 32, "courR24r");
   pic_gen_font(u8g_font_courR24n, "u8g_font_courR24n", 32, "courR24n");
+#endif
 
   pic_gen_font(u8g_font_helvB08, "u8g_font_helvB08", 12, "helvB08");
   pic_gen_font(u8g_font_helvB08r, "u8g_font_helvB08r", 12, "helvB08r");
+  puts("u8g_font_helvB08n");
+  pic_gen_font(u8g_font_helvB08n, "u8g_font_helvB08n", 12, "helvB08n");
   pic_gen_font(u8g_font_helvB10, "u8g_font_helvB10", 16, "helvB10");
   pic_gen_font(u8g_font_helvB10r, "u8g_font_helvB10r", 16, "helvB10r");
+  pic_gen_font(u8g_font_helvB10n, "u8g_font_helvB10n", 16, "helvB10n");
   pic_gen_font(u8g_font_helvB12, "u8g_font_helvB12", 18, "helvB12");
   pic_gen_font(u8g_font_helvB12r, "u8g_font_helvB12r", 18, "helvB12r");
+  pic_gen_font(u8g_font_helvB12n, "u8g_font_helvB12n", 18, "helvB12n");
   pic_gen_font(u8g_font_helvB14, "u8g_font_helvB14", 22, "helvB14");
   pic_gen_font(u8g_font_helvB14r, "u8g_font_helvB14r", 22, "helvB14r");
+  pic_gen_font(u8g_font_helvB14n, "u8g_font_helvB14n", 22, "helvB14n");
   pic_gen_font(u8g_font_helvB18, "u8g_font_helvB18", 26, "helvB18");
   pic_gen_font(u8g_font_helvB18r, "u8g_font_helvB18r", 26, "helvB18r");
+  pic_gen_font(u8g_font_helvB18n, "u8g_font_helvB18n", 26, "helvB18n");
   pic_gen_font(u8g_font_helvB24, "u8g_font_helvB24", 32, "helvB24");
   pic_gen_font(u8g_font_helvB24r, "u8g_font_helvB24r", 32, "helvB24r");
   pic_gen_font(u8g_font_helvB24n, "u8g_font_helvB24n", 32, "helvB24n");
 
   pic_gen_font(u8g_font_helvR08, "u8g_font_helvR08", 12, "helvR08");
   pic_gen_font(u8g_font_helvR08r, "u8g_font_helvR08r", 12, "helvR08r");
+  pic_gen_font(u8g_font_helvR08n, "u8g_font_helvR08n", 12, "helvR08n");
   pic_gen_font(u8g_font_helvR10, "u8g_font_helvR10", 16, "helvR10");
   pic_gen_font(u8g_font_helvR10r, "u8g_font_helvR10r", 16, "helvR10r");
+  pic_gen_font(u8g_font_helvR10n, "u8g_font_helvR10n", 16, "helvR10n");
   pic_gen_font(u8g_font_helvR12, "u8g_font_helvR12", 18, "helvR12");
   pic_gen_font(u8g_font_helvR12r, "u8g_font_helvR12r", 18, "helvR12r");
+  pic_gen_font(u8g_font_helvR12n, "u8g_font_helvR12n", 18, "helvR12n");
   pic_gen_font(u8g_font_helvR14, "u8g_font_helvR14", 22, "helvR14");
   pic_gen_font(u8g_font_helvR14r, "u8g_font_helvR14r", 22, "helvR14r");
+  pic_gen_font(u8g_font_helvR14n, "u8g_font_helvR14n", 22, "helvR14n");
   pic_gen_font(u8g_font_helvR18, "u8g_font_helvR18", 26, "helvR18");
   pic_gen_font(u8g_font_helvR18r, "u8g_font_helvR18r", 26, "helvR18r");
+  pic_gen_font(u8g_font_helvR18n, "u8g_font_helvR18n", 26, "helvR18n");
   pic_gen_font(u8g_font_helvR24, "u8g_font_helvR24", 32, "helvR24");
   pic_gen_font(u8g_font_helvR24r, "u8g_font_helvR24r", 32, "helvR24r");
   pic_gen_font(u8g_font_helvR24n, "u8g_font_helvR24n", 32, "helvR24n");
+
+#ifdef OLI
 
   pic_gen_font(u8g_font_ncenB08, "u8g_font_ncenB08", 12, "ncenB08");
   pic_gen_font(u8g_font_ncenB08r, "u8g_font_ncenB08r", 12, "ncenB08r");
@@ -1795,7 +1809,6 @@ int main(void)
 
   pic_gen_font(u8g_font_u8glib_4, "u8g_font_u8glib_4", 10, "u8glib 4");
   pic_gen_font(u8g_font_u8glib_4r, "u8g_font_u8glib_4r", 10, "u8glib 4");
-#endif
 
   pic_gen_font(u8g_font_profont10, "u8g_font_profont10", 10, "ProFont");
   pic_gen_font(u8g_font_profont10r, "u8g_font_profont10r", 10, "ProFont");
@@ -1817,6 +1830,7 @@ int main(void)
 
   pic_gen_font(u8g_font_profont29, "u8g_font_profont29", 18, "ProFont");
   pic_gen_font(u8g_font_profont29r, "u8g_font_profont29r", 18, "ProFont");
+#endif
 
   return 0;
 }
