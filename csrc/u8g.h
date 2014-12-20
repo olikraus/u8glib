@@ -1411,6 +1411,7 @@ void st_Step(uint8_t player_pos, uint8_t is_auto_fire, uint8_t is_fire);
 #define U8G_I2C_OPT_NO_ACK 2
 #define U8G_I2C_OPT_DEV_0 0
 #define U8G_I2C_OPT_DEV_1 4
+#define U8G_I2C_OPT_FAST 16
 
 /* retrun values from u8g_twi_get_error() */
 #define U8G_I2C_ERR_NONE 0x00

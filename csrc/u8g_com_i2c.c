@@ -244,124 +244,222 @@ void twi_send(uint8_t adr, uint8_t data1, uint8_t data2)
 
 #elif defined(ARDUINO) && defined(__SAM3X8E__)
 /* Arduino Due */
+#include "Arduino.h"
 #include "sam.h"
 
 /*
+
+Controller
+
 TWI0 TWCK0 PA18 A			DUE PCB: SCL1
 TWI0 TWD0 PA17 A			DUE PCB: SDA1 
 TWI1 TWCK1 PB13 A			DUE PCB: SCL 21
 TWI1 TWD1 PB12 A			DUE PCB: SDA 20
+
+Arduino definitions
+
+#define PIN_WIRE_SDA         (20u)
+#define PIN_WIRE_SCL         (21u)
+#define WIRE_INTERFACE       TWI1
+#define WIRE_INTERFACE_ID    ID_TWI1
+#define WIRE_ISR_HANDLER     TWI1_Handler
+
+#define PIN_WIRE1_SDA        (70u)
+#define PIN_WIRE1_SCL        (71u)
+#define WIRE1_INTERFACE      TWI0
+#define WIRE1_INTERFACE_ID   ID_TWI0
+#define WIRE1_ISR_HANDLER    TWI0_Handler
+
+
 */
+
+
+uint32_t i2c_started = 0;
+uint32_t i2c_scl_pin = 0;
+uint32_t i2c_sda_pin = 0;
+
+static void i2c_delay(void)
+{
+  /* should be at least 4 */
+  /* should be 5 for 100KHz transfer speed */
+ 
+  //delay_micro_seconds(4);
+  u8g_MicroDelay();
+  u8g_MicroDelay();
+  //u8g_10MicroDelay();
+}
+
+/* maybe this can be optimized */
+static void i2c_init(void)
+{
+  pinMode(i2c_sda_pin, OUTPUT);
+  digitalWrite(i2c_sda_pin, HIGH);
+  pinMode(i2c_scl_pin, OUTPUT);
+  digitalWrite(i2c_scl_pin, HIGH);
+  i2c_delay();
+  u8g_Delay(100);
+}
+
+/* actually, the scl line is not observed, so this procedure does not return a value */
+static void i2c_read_scl_and_delay(void)
+{
+  uint8_t val;
+  //pinMode(i2c_scl_pin, INPUT_PULLUP);
+  digitalWrite(i2c_scl_pin, HIGH);
+  i2c_delay();
+}
+
+static void i2c_clear_scl(void)
+{
+  /* set open collector and drive low */
+  //pinMode(i2c_scl_pin, OUTPUT);
+  digitalWrite(i2c_scl_pin, LOW);
+}
+
+static uint8_t i2c_read_sda(void)
+{
+  //pinMode(i2c_sda_pin, OUTPUT);
+  //digitalWrite(i2c_sda_pin, HIGH);
+  //pinMode(i2c_sda_pin, INPUT_PULLUP);
+  PIO_Configure( g_APinDescription[i2c_sda_pin].pPort, PIO_INPUT, g_APinDescription[i2c_sda_pin].ulPin, PIO_DEFAULT ) ;
+  return 1;
+  
+  //pinMode(i2c_sda_pin, INPUT_PULLUP);
+  //return digitalRead(i2c_sda_pin);
+}
+
+static void i2c_clear_sda(void)
+{
+  /* set open collector and drive low */
+  //pinMode(i2c_sda_pin, OUTPUT);
+  PIO_Configure( g_APinDescription[i2c_sda_pin].pPort, PIO_OUTPUT_0, g_APinDescription[i2c_sda_pin].ulPin, PIO_OPENDRAIN ) ;
+  
+  PIO_Clear( g_APinDescription[i2c_sda_pin].pPort, g_APinDescription[i2c_sda_pin].ulPin) ;
+  //digitalWrite(i2c_sda_pin, LOW);
+}
+
+static void i2c_start(void)
+{
+  if ( i2c_started != 0 )
+  {
+    /* if already started: do restart */
+    i2c_read_sda();     /* SDA = 1 */
+    i2c_delay();
+    i2c_read_scl_and_delay();
+  }
+  i2c_read_sda();
+  /*
+  if (i2c_read_sda() == 0)
+  {
+    // do something because arbitration is lost
+  }
+  */
+  /* send the start condition, both lines go from 1 to 0 */
+  i2c_clear_sda();
+  i2c_delay();
+  i2c_clear_scl();
+  i2c_started = 1;
+}
+
+
+static void i2c_stop(void)
+{
+  /* set SDA to 0 */
+  i2c_clear_sda();  
+  i2c_delay();
+ 
+  /* now release all lines */
+  i2c_read_scl_and_delay();
+ 
+  /* set SDA to 1 */
+  i2c_read_sda();
+  i2c_delay();
+  i2c_started = 0;
+}
+
+static void i2c_write_bit(uint8_t val)
+{
+  if (val)
+    i2c_read_sda();
+  else
+    i2c_clear_sda();
+ 
+  i2c_delay();
+  i2c_read_scl_and_delay();
+  i2c_clear_scl();
+}
+
+static uint8_t i2c_read_bit(void)
+{
+  uint8_t val;
+  /* do not drive SDA */
+  i2c_read_sda();
+  i2c_delay();
+  i2c_read_scl_and_delay();
+  val = i2c_read_sda();
+  i2c_delay();
+  i2c_clear_scl();
+  return val;
+}
+
+static uint8_t i2c_write_byte(uint8_t b)
+{
+  unsigned i = 8;
+  do
+  {
+    i2c_write_bit(b & 128);
+    b <<= 1;
+    i--;
+  } while ( i != 0 );
+  /* read ack from client */
+  /* 0: ack was given by client */
+  /* 1: nothing happend during ack cycle */  
+  return i2c_read_bit();
+}
+
 
 
 void u8g_i2c_init(uint8_t options)
 {
   u8g_i2c_opt = options;
   u8g_i2c_clear_error();
+
   if ( u8g_i2c_opt & U8G_I2C_OPT_DEV_1 )
   {
-    pmc_enable_periph_clk(ID_TWI1);
+    i2c_scl_pin = PIN_WIRE1_SCL;
+    i2c_sda_pin = PIN_WIRE1_SDA;
+    
+    //REG_PIOA_PDR = PIO_PB12A_TWD1 | PIO_PB13A_TWCK1;
   }
   else
   {    
-    pmc_enable_periph_clk(ID_TWI0);
+    
+    i2c_scl_pin = PIN_WIRE_SCL;
+    i2c_sda_pin = PIN_WIRE_SDA;
+    
+    //REG_PIOA_PDR = PIO_PA17A_TWD0 | PIO_PA18A_TWCK0;
   }
+  
+  i2c_init();
+
 }
 
-/*
-uint8_t u8g_i2c_wait(uint8_t mask, uint8_t pos)
-{
-  return 1;
-}
-*/
-
+/* sla includes also the r/w bit */
 uint8_t u8g_i2c_start(uint8_t sla)
 {  
-  Twi* TWI = TWI0;
-  
-  if ( u8g_i2c_opt & U8G_I2C_OPT_DEV_1 )
-  {
-    TWI=TWI1;
-    REG_PIOA_PDR = PIO_PB12A_TWD1 | PIO_PB13A_TWCK1;
-  }
-  else
-  {    
-    REG_PIOA_PDR = PIO_PA17A_TWD0 | PIO_PA18A_TWCK0;
-  }
-
-  /* TWI reset */
-  TWI->TWI_CR = TWI_CR_SWRST ;
-
-  /* TWI Slave Mode Disabled, TWI Master Mode Disabled. */
-  TWI->TWI_CR = TWI_CR_SVDIS ;
-  TWI->TWI_CR = TWI_CR_MSDIS ;
-
-
-  /*
-    Frequenzy setup
-    Due: 84000 KHz
-    i2c:     100 KHz
-    CKDIV = 3
-    period = 105 
-    --> 105*2^3 = 840
-    CLDIV = 53
-    CHDIV = 53
-  */
-  TWI->TWI_CWGR = (53) | (53<<8) | (4<<16);
-
-  /* Set master mode */
-  TWI->TWI_CR = TWI_CR_MSEN;
-
-  /* setup master for write operation: do not set TWI_MMR_MREAD */
-  TWI->TWI_MMR = TWI_MMR_DADR(sla);
-  
-
+  i2c_start();
+  i2c_write_byte(sla);
   return 1;
 }
 
 uint8_t u8g_i2c_send_byte(uint8_t data)
 {
-  uint32_t sr;
-  volatile uint32_t cnt = 0;
-  
-  Twi* TWI = TWI0;
-  
-  if ( u8g_i2c_opt & U8G_I2C_OPT_DEV_1 )
-  {
-    TWI=TWI1;
-  }
-  
-  //u8g_i2c_opt & U8G_I2C_OPT_NO_ACK
-  TWI->TWI_THR = data;
-  
-  for(;;)
-  {
-    sr = TWI->TWI_SR;
-    if ( (sr & TWI_SR_TXRDY) != 0 )
-      break;
-    /*
-    if ( (sr & TWI_SR_NACK) != 0 )
-      break;
-    cnt++;
-    if ( cnt > 10000UL )
-      break;
-      */
-  }
-  
-  return 1;
+  return i2c_write_byte(data);
 }
 
 void u8g_i2c_stop(void)
 {
-  Twi* TWI = TWI0;
-  
-  if ( u8g_i2c_opt & U8G_I2C_OPT_DEV_1 )
-  {
-    TWI=TWI1;
-  }
-  /* the stop condition would require to send one more byte */
-  /* not sure how to deal with this */
-  
+  i2c_stop();
 }
 
 
