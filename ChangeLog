@@ -149,6 +149,7 @@ u8glib ChangeLog
   * Added U8GLIB_UC1611_DOGXL240 constructor
   * Bufix in the sleep on/off sequence (CS has not been releases, issue 298)
   * helvB and helvR number only fonts (Issue 271)
+  * I2C support for Arduino Due. 100KHz/400KHz, TWI & TWI1, ACK will be ignored (issue 285)
   
   
   
