@@ -2,7 +2,8 @@
  * Currently unsupported
   * T6963 not supported by AVR, Chipkit (PIC32) and Arduino Due
   * HW SPI not supported by Chipkit (PIC32)
-  * I2C not supported by Chipkit (PIC32) and Arduino Due
+  * I2C not supported by Chipkit (PIC32)
+  * I2C not supported by Arduino Due (will be available with v1.18)
   * SBN1661/SED1520 not supported by AVR and Arduino Due
 
  * Mode
@@ -16,7 +17,9 @@
   * SW SPI: Use internal software SPI communication
   * I2C: Use hardware I2C/TWI. The following options are supported:
    * {{{U8G_I2C_OPT_NONE}}}: Normal TWI operation.
-   * {{{U8G_I2C_OPT_NO_ACK}}}: U8glib will ignore ACK (for those devices which do not send ACK, Available with v1.16)
+   * {{{U8G_I2C_OPT_NO_ACK}}}: U8glib will ignore ACK (for those devices which do not send ACK, Available with v1.16). For the Arduino Due, the ACK response will always be ignored (v1.18)
+   * {{{U8G_I2C_OPT_DEV_0}}}, {{{U8G_I2C_OPT_DEV_1}}}: For boards with more than one TWI bus, {{{U8G_I2C_OPT_DEV_1}}} will select the second bus (v1.18).
+   * {{{U8G_I2C_OPT_FAST}}}: If supported, use fast (400KHz) communication (v1.18).
   * 8Bit: 8 bit parallel communication with {{{digitalWrite}}}
   * 8Bit Fast: 8 bit parallel communication with {{{digitalPinToPort}}} 
 

@@ -273,69 +273,139 @@ Arduino definitions
 
 */
 
-
-uint32_t i2c_started = 0;
-uint32_t i2c_scl_pin = 0;
-uint32_t i2c_sda_pin = 0;
-
-static void i2c_delay(void)
+static void i2c_400KHz_delay(void)
 {
   /* should be at least 4 */
   /* should be 5 for 100KHz transfer speed */
  
-  //delay_micro_seconds(4);
-  u8g_MicroDelay();
-  u8g_MicroDelay();
-  //u8g_10MicroDelay();
+  
+  /*
+    Arduino Due
+    0x NOP: 470KHz
+    4x NOP: 450KHz
+    8x NOP: 430KHz
+    16x NOP: 400KHz
+  */
+  
+  __NOP();
+  __NOP();
+  __NOP();
+  __NOP();
+  
+  __NOP();
+  __NOP();
+  __NOP();
+  __NOP();
+
+  __NOP();
+  __NOP();
+  __NOP();
+  __NOP();
+
+  __NOP();
+  __NOP();
+  __NOP();
+  __NOP();
 }
+
+static void i2c_100KHz_delay(void)
+{
+  /* 
+    1x u8g_MicroDelay()	ca. 130KHz
+    2x u8g_MicroDelay()	ca. 80KHz 
+  */
+  u8g_MicroDelay();
+  u8g_MicroDelay();  
+}
+
+
+uint32_t i2c_started = 0;
+uint32_t i2c_scl_pin = 0;
+uint32_t i2c_sda_pin = 0;
+void (*i2c_delay)(void) = i2c_100KHz_delay;
+
+const PinDescription *i2c_scl_pin_desc;
+const PinDescription *i2c_sda_pin_desc;
+
 
 /* maybe this can be optimized */
 static void i2c_init(void)
 {
+  i2c_sda_pin_desc = &(g_APinDescription[i2c_sda_pin]);
+  i2c_scl_pin_desc = &(g_APinDescription[i2c_scl_pin]);
   pinMode(i2c_sda_pin, OUTPUT);
   digitalWrite(i2c_sda_pin, HIGH);
   pinMode(i2c_scl_pin, OUTPUT);
   digitalWrite(i2c_scl_pin, HIGH);
+  PIO_Configure( i2c_sda_pin_desc->pPort, PIO_OUTPUT_0, i2c_sda_pin_desc->ulPin, PIO_OPENDRAIN );
+  PIO_Configure( i2c_scl_pin_desc->pPort, PIO_OUTPUT_0, i2c_scl_pin_desc->ulPin, PIO_OPENDRAIN );
+  PIO_Clear( i2c_sda_pin_desc->pPort, i2c_sda_pin_desc->ulPin) ;
+  PIO_Clear( i2c_scl_pin_desc->pPort, i2c_scl_pin_desc->ulPin) ;
+  PIO_Configure( i2c_sda_pin_desc->pPort, PIO_INPUT, i2c_sda_pin_desc->ulPin, PIO_DEFAULT ) ;
+  PIO_Configure( i2c_scl_pin_desc->pPort, PIO_INPUT, i2c_scl_pin_desc->ulPin, PIO_DEFAULT ) ;
   i2c_delay();
-  u8g_Delay(100);
 }
 
 /* actually, the scl line is not observed, so this procedure does not return a value */
 static void i2c_read_scl_and_delay(void)
 {
-  uint8_t val;
-  //pinMode(i2c_scl_pin, INPUT_PULLUP);
-  digitalWrite(i2c_scl_pin, HIGH);
+  uint32_t dwMask = i2c_scl_pin_desc->ulPin;
+  //PIO_Configure( i2c_scl_pin_desc->pPort, PIO_INPUT, i2c_scl_pin_desc->ulPin, PIO_DEFAULT ) ;
+  //PIO_SetInput( i2c_scl_pin_desc->pPort, i2c_scl_pin_desc->ulPin, PIO_DEFAULT ) ;
+
+  /* set as input */
+  i2c_scl_pin_desc->pPort->PIO_ODR = dwMask ;
+  i2c_scl_pin_desc->pPort->PIO_PER = dwMask ;
+
   i2c_delay();
 }
 
 static void i2c_clear_scl(void)
 {
+  uint32_t dwMask = i2c_scl_pin_desc->ulPin;
+  
   /* set open collector and drive low */
-  //pinMode(i2c_scl_pin, OUTPUT);
-  digitalWrite(i2c_scl_pin, LOW);
+  //PIO_Configure( i2c_scl_pin_desc->pPort, PIO_OUTPUT_0, i2c_scl_pin_desc->ulPin, PIO_OPENDRAIN );
+  //PIO_SetOutput( i2c_scl_pin_desc->pPort, i2c_scl_pin_desc->ulPin, 0, 1, 0);
+
+  /* open drain, zero default output */
+  i2c_scl_pin_desc->pPort->PIO_MDER = dwMask;
+  i2c_scl_pin_desc->pPort->PIO_CODR = dwMask;
+  i2c_scl_pin_desc->pPort->PIO_OER = dwMask;
+  i2c_scl_pin_desc->pPort->PIO_PER = dwMask;
+
+  //PIO_Clear( i2c_scl_pin_desc->pPort, i2c_scl_pin_desc->ulPin) ;
 }
 
 static uint8_t i2c_read_sda(void)
 {
-  //pinMode(i2c_sda_pin, OUTPUT);
-  //digitalWrite(i2c_sda_pin, HIGH);
-  //pinMode(i2c_sda_pin, INPUT_PULLUP);
-  PIO_Configure( g_APinDescription[i2c_sda_pin].pPort, PIO_INPUT, g_APinDescription[i2c_sda_pin].ulPin, PIO_DEFAULT ) ;
+  uint32_t dwMask = i2c_sda_pin_desc->ulPin;
+  //PIO_Configure( i2c_sda_pin_desc->pPort, PIO_INPUT, i2c_sda_pin_desc->ulPin, PIO_DEFAULT ) ;
+  //PIO_SetInput( i2c_sda_pin_desc->pPort, i2c_sda_pin_desc->ulPin, PIO_DEFAULT ) ;
+
+  /* set as input */
+  i2c_sda_pin_desc->pPort->PIO_ODR = dwMask ;
+  i2c_sda_pin_desc->pPort->PIO_PER = dwMask ;
+
+
   return 1;
-  
-  //pinMode(i2c_sda_pin, INPUT_PULLUP);
-  //return digitalRead(i2c_sda_pin);
 }
 
 static void i2c_clear_sda(void)
 {
-  /* set open collector and drive low */
-  //pinMode(i2c_sda_pin, OUTPUT);
-  PIO_Configure( g_APinDescription[i2c_sda_pin].pPort, PIO_OUTPUT_0, g_APinDescription[i2c_sda_pin].ulPin, PIO_OPENDRAIN ) ;
+  uint32_t dwMask = i2c_sda_pin_desc->ulPin;
   
-  PIO_Clear( g_APinDescription[i2c_sda_pin].pPort, g_APinDescription[i2c_sda_pin].ulPin) ;
-  //digitalWrite(i2c_sda_pin, LOW);
+  /* set open collector and drive low */
+  //PIO_Configure( i2c_sda_pin_desc->pPort, PIO_OUTPUT_0, i2c_sda_pin_desc->ulPin, PIO_OPENDRAIN );
+  //PIO_SetOutput( i2c_sda_pin_desc->pPort, i2c_sda_pin_desc->ulPin, 0, 1, 0);
+  
+  /* open drain, zero default output */
+  i2c_sda_pin_desc->pPort->PIO_MDER = dwMask ;
+  i2c_sda_pin_desc->pPort->PIO_CODR = dwMask ;
+  i2c_sda_pin_desc->pPort->PIO_OER = dwMask ;
+  i2c_sda_pin_desc->pPort->PIO_PER = dwMask ;
+  
+  //PIO_Clear( i2c_sda_pin_desc->pPort, i2c_sda_pin_desc->ulPin) ;
 }
 
 static void i2c_start(void)
@@ -404,13 +474,15 @@ static uint8_t i2c_read_bit(void)
 
 static uint8_t i2c_write_byte(uint8_t b)
 {
-  unsigned i = 8;
-  do
-  {
-    i2c_write_bit(b & 128);
-    b <<= 1;
-    i--;
-  } while ( i != 0 );
+  i2c_write_bit(b & 128);
+  i2c_write_bit(b & 64);
+  i2c_write_bit(b & 32);
+  i2c_write_bit(b & 16);
+  i2c_write_bit(b & 8);
+  i2c_write_bit(b & 4);
+  i2c_write_bit(b & 2);
+  i2c_write_bit(b & 1);
+    
   /* read ack from client */
   /* 0: ack was given by client */
   /* 1: nothing happend during ack cycle */  
@@ -423,6 +495,16 @@ void u8g_i2c_init(uint8_t options)
 {
   u8g_i2c_opt = options;
   u8g_i2c_clear_error();
+
+  if ( u8g_i2c_opt & U8G_I2C_OPT_FAST )
+  {
+    i2c_delay = i2c_400KHz_delay;
+  }
+  else
+  {
+    i2c_delay = i2c_100KHz_delay;
+  }
+
 
   if ( u8g_i2c_opt & U8G_I2C_OPT_DEV_1 )
   {
