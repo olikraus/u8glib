@@ -144,12 +144,16 @@ u8glib ChangeLog
   * Added support for SH1106 128x64 OLED
   * Added support for T6963 128x128 displays
   * Added U8GLIB_SSD1306_ADAFRUIT_128X64 constructor
-2014-xx-xx	v1.17	  Oliver Kraus <olikraus@gmail.com>
+2014-12-21	v1.17	  Oliver Kraus <olikraus@gmail.com>
   * Added U8GLIB_UC1611_DOGM240 constructor (Issue 284)
   * Added U8GLIB_UC1611_DOGXL240 constructor
+  * Added support for UC1608 controller (Issue 300)
+  * Added U8GLIB_SSD1306_ADAFRUIT_128X64 for Adafruit OLEDs (Issue 289)
   * Bufix in the sleep on/off sequence (CS has not been releases, issue 298)
   * helvB and helvR number only fonts (Issue 271)
+  * 400KHz option for I2C with U8G_I2C_OPT_FAST available for Due and Uno (Issue 303)
   * I2C support for Arduino Due. 100KHz/400KHz, TWI & TWI1, ACK will be ignored (issue 285)
+  * Unifont update (Issue 297)
   
   
   

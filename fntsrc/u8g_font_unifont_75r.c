@@ -1,6 +1,6 @@
 /*
-  Fontname: -gnu-unifont-medium-r-normal--16-160-75-75-c-80-iso10646-1
-  Copyright: 
+  Fontname: -gnu-Unifont-Medium-R-Normal-Sans-16-160-75-75-c-80-iso10646-1
+  Copyright: Copyright (C) 2014 Roman Czyborra, Paul Hardy, Qianqian Fang, Andrew Miller, et al. Licensed under the GNU General Public License; either version 2, or (at your option) a later version, with the GNU Font Embedding Exception.
   Capital A Height: 6, '1' Height: 3
   Calculated Max Values w= 8 h=10 x= 2 y= 4 dx= 8 dy= 0 ascent=11 len=10
   Font Bounding box     w=16 h=16 x= 0 y=-2

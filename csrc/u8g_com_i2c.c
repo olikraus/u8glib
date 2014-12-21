@@ -118,11 +118,22 @@ void u8g_i2c_init(uint8_t options)
     TWSR = 0;
 	--> 100KHz
 
+    TWBR = 12;
+    TWSR = 0;
+	--> 400KHz
+
     F_CPU/(2*100000)-8  --> calculate TWBR value for 100KHz
 */
   u8g_i2c_opt = options;
   TWSR = 0;
-  TWBR = F_CPU/(2*100000)-8;
+  if ( options & U8G_I2C_OPT_FAST )
+  {
+    TWBR = F_CPU/(2*400000)-8;
+  }
+  else
+  {  
+    TWBR = F_CPU/(2*100000)-8;
+  }
   u8g_i2c_clear_error();
 }
 
