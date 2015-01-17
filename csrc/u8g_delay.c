@@ -61,6 +61,8 @@
 #  else
 #    define USE_ARDUINO_DELAY
 #  endif
+#elif defined(__MSP430__)
+#  define USE_MSP430_DELAY
 #elif defined(U8G_RASPBERRY_PI)
 #  define USE_RASPBERRYPI_DELAY
 #elif defined(__AVR__)
@@ -246,6 +248,34 @@ void u8g_10MicroDelay(void)
 } 
 
 #endif
+
+#if defined(USE_MSP430_DELAY)
+#include <msp430.h>
+
+#ifndef F_CPU
+#define F_CPU 1000000UL
+#endif
+
+
+void u8g_Delay(uint16_t val)
+{
+  int t;
+  for (t=0; t < val; t++)
+  {
+    __delay_cycles(F_CPU/1000UL);
+  }
+}
+void u8g_MicroDelay(void)
+{
+  __delay_cycles(F_CPU/1000000UL);
+}
+
+void u8g_10MicroDelay(void)
+{
+  __delay_cycles(F_CPU/100000UL);
+}
+#endif
+
 
 /*== Any other systems: Dummy Delay ==*/
 #if defined(USE_DUMMY_DELAY)
