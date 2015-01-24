@@ -93,7 +93,7 @@ ISO-8859-1 was incorporated as the first 256 code points of ISO/IEC 10646 and Un
 #define BDF2U8G_COMPACT_OUTPUT
 #define BDF2U8G_VERSION "1.02"
 
-//#define VERBOSE
+#define VERBOSE
 
 
 /*=== forward declaration ===*/
@@ -625,7 +625,14 @@ void fd_decode(fd_t *fd)
   }
 }
 
-
+/*
+  Desc:
+    Output a field to the bitstream. The field size in bits is given by "cnt" and
+    the value of the field is "val".
+  Args:
+    cnt:	Fieldsize in bits
+    val:	The value (content) of the field. Sidecondition: val < (1<<cnt) && val >= 0
+*/
 void bd_out_bits(int cnt, int val)
 {
   int i;
@@ -669,6 +676,23 @@ void bd_out_bits(int cnt, int val)
   }
 }
 
+/*
+  Desc:
+    Output a and b to the stream.
+    a and b must fit to the target size in bits.
+    Additionally a repeat code r (one bit) is generated:
+    It may look like this:
+      r = 0: 0aaaabb
+    or 
+      r = 1: 1
+    If r is 0, then the number of zeros (a) and ones (b) will follow and both
+    values must be stored as in the decoder.
+    If r os 1, then the number of zeros and ones is repeated once
+  Args:
+    a: number of 0 bits, log2(a) must be smaller or equal to the fieldsize
+    b: number of 1 bits, log2(b) must be smaller or equal to the fieldsize
+    is_expand: obsolete?
+*/
   
 void bd_rle(int a, int b, int is_expand)
 {
@@ -704,6 +728,15 @@ void bd_rle(int a, int b, int is_expand)
   }
 }
 
+/*
+  Desc:
+    Write the number of zeros and ones to the bit stream.
+    There is no restriction on the size of a and b.
+  Args:
+    a: number of 0 bits
+    b: number of 1 bits
+  
+*/
 void bd_expand(int a, int b)
 {
   while( a >= (1<<bd_bits_per_0) -1 )
@@ -768,8 +801,7 @@ int bd_compress(void)
     {
       byte = x >> 3;
       bit = 7-(x & 7);
-      
-      
+            
       if ( (bdf_bitmap_line[y][byte] & (1<<bit)) == 0 )
       {
 	if ( (delta_pos & 1 ) != 0 )
