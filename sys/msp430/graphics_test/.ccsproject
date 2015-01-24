@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <?ccsproject version="1.0"?>
 <projectOptions>
-	<deviceVariant value="MSP430F6659"/>
+	<deviceVariant value="MSP430F5529"/>
 	<deviceFamily value="MSP430"/>
-	<codegenToolVersion value="4.1.5"/>
+	<codegenToolVersion value="4.3.3"/>
 	<isElfFormat value="true"/>
 	<connection value="common/targetdb/connections/TIMSP430-USB.xml"/>
-	<linkerCommandFile value="lnk_msp430f6659.cmd"/>
+	<linkerCommandFile value="lnk_msp430f5529.cmd"/>
 	<rts value="libc.a"/>
+	<createSlaveProjects value=""/>
 	<templateProperties value="id=com.ti.common.project.core.emptyProjectTemplate,"/>
 	<isTargetManual value="false"/>
 </projectOptions>

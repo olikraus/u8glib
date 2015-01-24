@@ -72,6 +72,7 @@ void u8g_setup(void)
  */
 void sys_init(void)
 {
+  P3SEL |= BIT0|BIT2;                       // setup alternative mode
 }
 
 void draw(int i)

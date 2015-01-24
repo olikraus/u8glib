@@ -1,0 +1,128 @@
+#
+#   Makefile for TI Compiler
+#
+#   Universal 8bit Graphics Library
+#   
+#   Copyright (c) 2012, olikraus@gmail.com
+#   All rights reserved.
+# 
+#   Redistribution and use in source and binary forms, with or without modification, 
+#   are permitted provided that the following conditions are met:
+# 
+#   * Redistributions of source code must retain the above copyright notice, this list 
+#     of conditions and the following disclaimer.
+#     
+#   * Redistributions in binary form must reproduce the above copyright notice, this 
+#     list of conditions and the following disclaimer in the documentation and/or other 
+#     materials provided with the distribution.
+# 
+#   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+#   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+#   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+#   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+#   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+#   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+#   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+#   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+#   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+#   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+#   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+#   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+#   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+#
+# 	Features
+#		- upload
+#		- create exe from library
+#		- create assembler listing (.dis)
+#
+#	Limitations
+#		- only C-files supported
+#		- no automatic dependency checking (call 'make clean' if any .h files are changed)
+#
+#	Targets:
+#		make
+#			create hex file, no upload
+#		make upload
+#			create and upload hex file
+#		make clean
+#			delete all generated files
+#
+#  Note:
+#  	Display list make database: make -p -f/dev/null | less
+
+#================================================
+# Project Information
+TARGETNAME = u8g_test
+DMCU:=__MSP430F5529__
+F_CPU:=16000000
+U8GDIR = ../../../csrc/
+FONTDIR = ../../../sfntsrc/
+
+
+#================================================
+# System/Environment Information
+TIPATH:=/usr/local/ti/ccsv6
+MSP430COMP:=msp430_4.3.3
+TOOLSPATH:=$(TIPATH)/tools/compiler/$(MSP430COMP)
+MSP4305XXLIB:=$(TIPATH)/ccs_base/msp430/lib/5xx_6xx_FRxx
+
+# Add proper arguments for TI HEX tool
+MSP430HEX:=$(TOOLSPATH)/bin/hex430 --memwidth=8 --romwidth=8 --intel 
+#-o "Test.hex"  "Test.out" 
+
+
+
+#================================================
+# Main part of the Makefile starts here. Usually no changes are needed.
+
+# Append U(G Library
+SRC = graphics_test.c system_pre_init.c
+SRC += $(shell ls $(U8GDIR)*.c)
+SRC += $(shell ls $(FONTDIR)*.c)
+
+# Internal Variable Names
+LIBNAME:=$(TARGETNAME).a
+ELFNAME:=$(TARGETNAME).elf
+HEXNAME:=$(TARGETNAME).hex
+OBJS := $(SRC:.c=.obj)
+plat_objs = $(addprefix Build/,$(OBJS))
+# TI Compiler
+CC = $(TOOLSPATH)/bin/cl430
+# C flags
+COMMON_FLAGS = --define=F_CPU=$(F_CPU) --define=$(DMCU)
+COMMON_FLAGS += -g
+COMMON_FLAGS += -i"$(U8GDIR)" -i"$(TIPATH)/ccs_base/msp430/include" -i"$(TOOLSPATH)/include"
+COMMON_FLAGS += -vmspx --abi=eabi --data_model=restricted
+COMMON_FLAGS += --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU23 --silicon_errata=CPU40
+COMMON_FLAGS += --preproc_with_compile
+CFLAGS = $(COMMON_FLAGS)
+# Linker script
+LD_FLAGS = -i"$(TOOLSPATH)/lib" -i"$(MSP4305XXLIB)" -z -m"Test.map" --heap_size=160 --stack_size=160 --use_hw_mpy=F5 --cinit_hold_wdt=on "$(TIPATH)/ccs_base/msp430/include/lnk_msp430f5529.cmd" --rom_model
+
+# Additional Suffixes
+.SUFFIXES: .elf .hex
+
+# Targets
+.PHONY: all
+all: $(ELFNAME) $(HEXNAME)
+
+.PHONY: clean
+clean:
+	$(RM) $(ELFNAME) $(OBJS)
+
+# this is from : https://pythonhosted.org/python-msp430-tools/index.html
+.PHONY: upload
+upload: $(HEXNAME)
+	python -m msp430.bsl5.hid -e $(HEXNAME)
+
+# implicit rules
+.elf.hex:
+	$(MSP430HEX)  $< -o $@
+
+# ti special
+%obj: %c
+	$(CC) $(CFLAGS) -c $< --output_file $@
+
+# explicit rules : linking all .obj files from working dir
+$(ELFNAME): $(OBJS)
+	$(CC) $(COMMON_FLAGS) $(OBJS) $(LD_FLAGS) -o $@

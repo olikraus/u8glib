@@ -50,6 +50,7 @@ void sys_init(void)
   UCSCTL2 = FLLD_1 + 488;                   // Set DCO Multiplier for 16MHz
   __bic_SR_register(SCG0);                  // Enable the FLL control loop
   __delay_cycles(250000);
+  P3SEL |= BIT0|BIT2;                       // setup alternative mode
 }
 
 int main(void)

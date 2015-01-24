@@ -65,7 +65,7 @@ u8g_t u8g;
 void u8g_setup(void)
 {  
 
-#if defined U8G_USE_USCI==U8G_USE_USCIA2
+#if U8G_USE_USCI == 1
   u8g_InitHWSPI(&u8g, &u8g_dev_sh1106_128x64_hw_spi, PN(9, 1) /*CSB*/, PN(9,2)/*CD*/, PN(9,3)/*RS*/);
 #else
   u8g_InitHWSPI(&u8g, &u8g_dev_sh1106_128x64_hw_spi, PN(2, 0) /*CSB*/, PN(2,2)/*CD*/, PN(2,6)/*RS*/);
@@ -94,6 +94,7 @@ void sys_init(void)
   UCSCTL2 = FLLD_1 + 488;                   // Set DCO Multiplier for 16MHz
   __bic_SR_register(SCG0);                  // Enable the FLL control loop
   __delay_cycles(250000);
+  P3SEL |= BIT0|BIT2;                       // setup alternative mode
 }
 
 void u8g_prepare(void) {
@@ -127,6 +128,7 @@ void u8g_line(uint8_t a) {
   u8g_DrawLine(&u8g, 7+a*4, 10, 100, 55);
 }
 
+
 void u8g_ascii_1(void) {
   char s[2] = " ";
   uint8_t x, y;
@@ -156,6 +158,7 @@ uint8_t draw_state = 0;
 
 void draw(void) {
   u8g_prepare();
+
   switch(draw_state >> 3) {
     case 0: u8g_box_frame(draw_state&7); break;
     case 1: u8g_string(draw_state&7); break;

@@ -48,25 +48,81 @@
 #endif
 #define F_SPI  1000000UL
 
-#define U8G_USE_USCIA2	1
-#define U8G_USE_USCIA3	2
-#define U8G_USE_USCIB0	3
+#define U8G_USE_USCIA0	1
+#define U8G_USE_USCIB0	2
+#define U8G_USE_USCIA1	3
+#define U8G_USE_USCIB1	4
+#define U8G_USE_USCIA2	5
+#define U8G_USE_USCIB2	6
+#define U8G_USE_USCIA3	7
+#define U8G_USE_USCIB3	8
+
 #ifndef U8G_USE_USCI
 #define U8G_USE_USCI	U8G_USE_USCIB0
 #endif
 
+#if U8G_USE_USCI == 1
+#define UCTXBUF UCA0TXBUF
+#define UCSTAT  UCA0STAT
+#define UCCTL0  UCA0CTL0
+#define UCCTL1  UCA0CTL1
+#define UCBR0   UCA0BR0
+#define UCBR1   UCA0BR1
+#elif U8G_USE_USCI == 2
+#define UCTXBUF UCB0TXBUF
+#define UCSTAT  UCB0STAT
+#define UCCTL0  UCB0CTL0
+#define UCCTL1  UCB0CTL1
+#define UCBR0   UCB0BR0
+#define UCBR1   UCB0BR1
+#elif U8G_USE_USCI == 3
+#define UCTXBUF UCA1TXBUF
+#define UCSTAT  UCA1STAT
+#define UCCTL0  UCA1CTL0
+#define UCCTL1  UCA1CTL1
+#define UCBR0   UCA1BR0
+#define UCBR1   UCA1BR1
+#elif U8G_USE_USCI == 4
+#define UCTXBUF UCB1TXBUF
+#define UCSTAT  UCB1STAT
+#define UCCTL0  UCB1CTL0
+#define UCCTL1  UCB1CTL1
+#define UCBR0   UCB1BR0
+#define UCBR1   UCB1BR1
+#elif U8G_USE_USCI == 5
+#define UCTXBUF UCA2TXBUF
+#define UCSTAT  UCA2STAT
+#define UCCTL0  UCA2CTL0
+#define UCCTL1  UCA2CTL1
+#define UCBR0   UCA2BR0
+#define UCBR1   UCA2BR1
+#elif U8G_USE_USCI == 6
+#define UCTXBUF UCB2TXBUF
+#define UCSTAT  UCB2STAT
+#define UCCTL0  UCB2CTL0
+#define UCCTL1  UCB2CTL1
+#define UCBR0   UCB2BR0
+#define UCBR1   UCB2BR1
+#elif U8G_USE_USCI == 7
+#define UCTXBUF UCA3TXBUF
+#define UCSTAT  UCA3STAT
+#define UCCTL0  UCA3CTL0
+#define UCCTL1  UCA3CTL1
+#define UCBR0   UCA3BR0
+#define UCBR1   UCA3BR1
+#elif U8G_USE_USCI == 8
+#define UCTXBUF UCB3TXBUF
+#define UCSTAT  UCB3STAT
+#define UCCTL0  UCB3CTL0
+#define UCCTL1  UCB3CTL1
+#define UCBR0   UCB3BR0
+#define UCBR1   UCB3BR1
+#endif
+
 static uint8_t u8g_msp430_spi_out(uint8_t data)
 {
-#if U8G_USE_USCI == U8G_USE_USCIB0
-  UCB0TXBUF = data;
-  while ((UCB0STAT&UCBUSY));
-#elif U8G_USE_USCI == U8G_USE_USCIA2
-  UCA2TXBUF = data;
-  while ((UCA2STAT&UCBUSY));
-#elif U8g_USE_USCI == U8G_USE_USCIA3
-  UCA3TXBUF = data;
-  while ((UCA3STAT&UCBUSY));
-#endif
+  UCTXBUF = data;
+  while ((UCSTAT&UCBUSY));
 }
 
 uint8_t u8g_com_msp430_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
@@ -82,33 +138,12 @@ uint8_t u8g_com_msp430_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
  	 * may not be required on other MCU's - should be handled
  	 * by a low level u8g_SetPinAlternate(pin_number)...
  	 */
-#if U8G_USE_USCI == U8G_USE_USCIB0
-      P2SEL |= BIT1|BIT3;                       // Assign P2.3 to UCB0CLK and P2.1 UCB0SIMO
-      UCB0CTL1 |= UCSWRST;                      // **Put state machine in reset**
-      UCB0CTL0 |= UCMST|UCSYNC|UCCKPL|UCMSB;    // 3-pin, 8-bit SPI master Clock polarity high, MSB
-      UCB0CTL1 |= UCSSEL_2;                     // SMCLK
-      UCB0BR0 = (unsigned char)(F_CPU/F_SPI);   // 
-      UCB0BR1 = 0;                              //
-      UCB0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
-#elif U8G_USE_USCI == U8G_USE_USCIA2
-      P9SEL |= BIT0|BIT4;                     // Assign P9.0 to UCA2CLK and P9.4 UCA2SIMO
-      UCA2CTL1 |= UCSWRST;                      // **Put state machine in reset**
-      UCA2CTL0 |= UCMST|UCSYNC|UCCKPL|UCMSB;    // 3-pin, 8-bit SPI master Clock polarity high, MSB
-      UCA2CTL1 |= UCSSEL_2;                     // SMCLK
-      UCA2BR0 = (unsigned char)(F_CPU/F_SPI);   //
-      UCA2BR1 = 0;                              //
-      UCA2CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
-#elif U8G_USE_USCI == U8G_USE_USCIA3
-      P10SEL |= BIT0|BIT4;                     // Assign P10.0 to UCA3CLK and P10.4 UCA3SIMO
-      UCA3CTL1 |= UCSWRST;                      // **Put state machine in reset**
-      UCA3CTL0 |= UCMST|UCSYNC|UCCKPL|UCMSB;    // 3-pin, 8-bit SPI master Clock polarity high, MSB
-      UCA3CTL1 |= UCSSEL_2;                     // SMCLK
-      UCA3BR0 = (unsigned char)(F_CPU/F_SPI);   //
-      UCA3BR1 = 0;                              //
-      UCA3CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
-#else
-#error "Setup SPI failed!"
-#endif
+      UCCTL1 |= UCSWRST;                      // **Put state machine in reset**
+      UCCTL0 |= UCMST|UCSYNC|UCCKPL|UCMSB;    // 3-pin, 8-bit SPI master Clock polarity high, MSB
+      UCCTL1 |= UCSSEL_2;                     // SMCLK
+      UCBR0 = (unsigned char)(F_CPU/F_SPI);   // 
+      UCBR1 = 0;                              //
+      UCCTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
       u8g_SetPILevel(u8g, U8G_PI_CS, 1);
       u8g_SetPILevel(u8g, U8G_PI_A0, 1);
       u8g_SetPILevel(u8g, U8G_PI_RESET, 1);
