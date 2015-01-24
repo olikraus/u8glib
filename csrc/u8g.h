@@ -268,11 +268,13 @@ extern u8g_dev_t u8g_dev_st7565_dogm128_2x_parallel;
 extern u8g_dev_t u8g_dev_uc1611_dogm240_i2c;
 extern u8g_dev_t u8g_dev_uc1611_dogm240_hw_spi;
 extern u8g_dev_t u8g_dev_uc1611_dogm240_sw_spi;
+extern u8g_dev_t u8g_dev_uc1611_dogm240_8bit;
 
 /* EA DOGXL 240 */
 extern u8g_dev_t u8g_dev_uc1611_dogxl240_i2c;
 extern u8g_dev_t u8g_dev_uc1611_dogxl240_hw_spi;
 extern u8g_dev_t u8g_dev_uc1611_dogxl240_sw_spi;
+extern u8g_dev_t u8g_dev_uc1611_dogxl240_8bit;
 
 /* Display: Topway LM6059 128x64 (Adafruit) */
 extern u8g_dev_t u8g_dev_st7565_lm6059_sw_spi;
