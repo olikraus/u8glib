@@ -507,8 +507,8 @@ class U8GLIB_UC1611_DOGM240 : public U8GLIB
       : U8GLIB(&u8g_dev_uc1611_dogm240_hw_spi, cs, a0, reset)
       { }
     U8GLIB_UC1611_DOGM240(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
-        uint8_t en, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE) 
-      : U8GLIB(&u8g_dev_uc1611_dogm240_8bit, d0, d1, d2, d3, d4, d5, d6, d7, en, U8G_PIN_NONE, U8G_PIN_NONE, di, rw, reset)  // cs1 = cs2 = U8G_PIN_NONE
+        uint8_t en, uint8_t cs1, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_uc1611_dogm240_8bit, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, U8G_PIN_NONE, di, rw, reset)  // cs2 = U8G_PIN_NONE
       { }
 };
 
@@ -525,8 +525,8 @@ class U8GLIB_UC1611_DOGXL240 : public U8GLIB
       : U8GLIB(&u8g_dev_uc1611_dogxl240_hw_spi, cs, a0, reset)
       { }
     U8GLIB_UC1611_DOGXL240(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
-        uint8_t en, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE) 
-      : U8GLIB(&u8g_dev_uc1611_dogxl240_8bit, d0, d1, d2, d3, d4, d5, d6, d7, en, U8G_PIN_NONE, U8G_PIN_NONE, di, rw, reset)  // cs1 = cs2 = U8G_PIN_NONE
+        uint8_t en, uint8_t cs1, uint8_t di, uint8_t rw = U8G_PIN_NONE, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_uc1611_dogxl240_8bit, d0, d1, d2, d3, d4, d5, d6, d7, en, cs1, U8G_PIN_NONE, di, rw, reset)  // cs2 = U8G_PIN_NONE
       { }
 };
 
