@@ -62,6 +62,7 @@
 #endif
 
 #if U8G_USE_USCI == 1
+#define UCIFG	UCA0IFG
 #define UCTXBUF UCA0TXBUF
 #define UCSTAT  UCA0STAT
 #define UCCTL0  UCA0CTL0
@@ -69,6 +70,7 @@
 #define UCBR0   UCA0BR0
 #define UCBR1   UCA0BR1
 #elif U8G_USE_USCI == 2
+#define UCIFG	UCB0IFG
 #define UCTXBUF UCB0TXBUF
 #define UCSTAT  UCB0STAT
 #define UCCTL0  UCB0CTL0
@@ -76,6 +78,7 @@
 #define UCBR0   UCB0BR0
 #define UCBR1   UCB0BR1
 #elif U8G_USE_USCI == 3
+#define UCIFG	UCA1IFG
 #define UCTXBUF UCA1TXBUF
 #define UCSTAT  UCA1STAT
 #define UCCTL0  UCA1CTL0
@@ -83,6 +86,7 @@
 #define UCBR0   UCA1BR0
 #define UCBR1   UCA1BR1
 #elif U8G_USE_USCI == 4
+#define UCIFG	UCB1IFG
 #define UCTXBUF UCB1TXBUF
 #define UCSTAT  UCB1STAT
 #define UCCTL0  UCB1CTL0
@@ -90,6 +94,7 @@
 #define UCBR0   UCB1BR0
 #define UCBR1   UCB1BR1
 #elif U8G_USE_USCI == 5
+#define UCIFG	UCA2IFG
 #define UCTXBUF UCA2TXBUF
 #define UCSTAT  UCA2STAT
 #define UCCTL0  UCA2CTL0
@@ -97,6 +102,7 @@
 #define UCBR0   UCA2BR0
 #define UCBR1   UCA2BR1
 #elif U8G_USE_USCI == 6
+#define UCIFG	UCB2IFG
 #define UCTXBUF UCB2TXBUF
 #define UCSTAT  UCB2STAT
 #define UCCTL0  UCB2CTL0
@@ -104,6 +110,7 @@
 #define UCBR0   UCB2BR0
 #define UCBR1   UCB2BR1
 #elif U8G_USE_USCI == 7
+#define UCIFG	UCA3IFG
 #define UCTXBUF UCA3TXBUF
 #define UCSTAT  UCA3STAT
 #define UCCTL0  UCA3CTL0
@@ -111,6 +118,7 @@
 #define UCBR0   UCA3BR0
 #define UCBR1   UCA3BR1
 #elif U8G_USE_USCI == 8
+#define UCIFG	UCB3IFG
 #define UCTXBUF UCB3TXBUF
 #define UCSTAT  UCB3STAT
 #define UCCTL0  UCB3CTL0
@@ -121,8 +129,8 @@
 
 static uint8_t u8g_msp430_spi_out(uint8_t data)
 {
+  while (!(UCIFG&UCTXIFG));
   UCTXBUF = data;
-  while ((UCSTAT&UCBUSY));
 }
 
 uint8_t u8g_com_msp430_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr)
@@ -169,6 +177,7 @@ uint8_t u8g_com_msp430_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
     
     case U8G_COM_MSG_WRITE_BYTE:
       u8g_msp430_spi_out(arg_val);
+      while ((UCSTAT&UCBUSY));
       break;
     
     case U8G_COM_MSG_WRITE_SEQ:
@@ -179,6 +188,7 @@ uint8_t u8g_com_msp430_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
           u8g_msp430_spi_out(*ptr++);
           arg_val--;
         }
+        while ((UCSTAT&UCBUSY));
       }
       break;
     case U8G_COM_MSG_WRITE_SEQ_P:
@@ -190,6 +200,7 @@ uint8_t u8g_com_msp430_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
           ptr++;
           arg_val--;
         }
+        while ((UCSTAT&UCBUSY));
       }
       break;
   }
