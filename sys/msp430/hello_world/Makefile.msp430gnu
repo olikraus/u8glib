@@ -56,7 +56,7 @@
 # Project Information
 TARGETNAME = u8g_hello_world
 MCU:=msp430f5529
-DMCU:=__MSP430F5529__
+# DMCU:=__MSP430F5529__
 F_CPU:=1000000
 MSRC = hello_world.c
 U8GDIR = ../../../csrc/
@@ -65,11 +65,20 @@ FONTDIR = ../../../sfntsrc/
 
 #================================================
 # System/Environment Information
-#TIPATH:=/usr/local/ti/ccsv6
-TIPATH:=/home/kraus/prg/ti/gcc/
-#MSP430GCC:=gcc_msp430_4.9.14r1_10
-#TOOLSPATH:=$(TIPATH)/tools/compiler/$(MSP430GCC)/bin/
-TOOLSPATH:=/home/kraus/prg/ti/gcc/bin/
+# This Makefile requires two tools: 1) MSP430 GCC and 2) MSP430Flasher
+# MSP430 GCC must be here $(TIPATH)gcc
+' 
+TIPATH:=/home/kraus/prg/ti/
+
+# MSP430Flasher must be here: $(TIPATH)MSP430Flasher_1.3.3/
+MSP430FLASHER:=LD_LIBRARY_PATH=$(TIPATH)MSP430Flasher_1.3.3/ && $(TIPATH)MSP430Flasher_1.3.3/MSP430Flasher
+
+
+
+TOOLSPATH:=$(TIPATH)gcc/bin/
+
+~/prg/ti/MSP430Flasher_1.3.3/ && ~/prg/ti/MSP430Flasher_1.3.3/MSP430Flasher
+
 # Add proper arguments for tiflahser
 MSP430HEX:=
 
@@ -98,15 +107,15 @@ OBJCOPY:=$(TOOLSPATH)msp430-elf-objcopy
 OBJDUMP:=$(TOOLSPATH)msp430-elf-objdump
 SIZE:=$(TOOLSPATH)msp430-elf-size
 # C flags
-COMMON_FLAGS = -DF_CPU=$(F_CPU) -D$(DMCU) -mmcu=$(MCU)
+COMMON_FLAGS = -DF_CPU=$(F_CPU) -mmcu=$(MCU)
 COMMON_FLAGS += -g -Os -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-COMMON_FLAGS += -I. -I$(U8GDIR) -I$(TIPATH)/include
+COMMON_FLAGS += -I. -I$(U8GDIR) -I$(TIPATH)/gcc/include -L$(TIPATH)/gcc/include
 COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
 COMMON_FLAGS += -Wl,--relax
 COMMON_FLAGS += 
 CFLAGS = $(COMMON_FLAGS) -std=gnu99 -Wstrict-prototypes  
 # Linker script
-LDLIBS = -T $(TIPATH)/include/$(MCU).ld
+# LDLIBS = -T $(TIPATH)/gcc/include/$(MCU).ld
 
 # Additional Suffixes
 .SUFFIXES: .elf .hex .dis
@@ -130,7 +139,7 @@ clean:
 
 # explicit rules
 $(ELFNAME): $(LIBNAME)($(OBJ)) $(MOBJ)
-	$(LINK.o) $(COMMON_FLAGS) $(MOBJ) $(LIBNAME) $(LOADLIBES) $(LDLIBS) -o $@
+	$(LINK.o) $(COMMON_FLAGS) $(MOBJ) $(LIBNAME) $(LOADLIBES) -o $@
 
 $(DISNAME): $(ELFNAME)
 	$(OBJDUMP) -S $< > $@

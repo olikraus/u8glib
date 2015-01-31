@@ -66,7 +66,7 @@ static const uint8_t u8g_dev_uc1611_dogm240_init_seq[] PROGMEM = {
 
 static void setPage(u8g_t *u8g, u8g_dev_t *dev, unsigned char page)
 {
-  u8g_WriteByte(u8g, dev, 0x70);
+  u8g_WriteByte(u8g, dev, 0x70 + (page>>4)); 
   u8g_WriteByte(u8g, dev, 0x60 + (page&0x0F));
 }
 

@@ -83,7 +83,8 @@ class U8GLIB : public Print
       
     void setPrintPos(u8g_uint_t x, u8g_uint_t y) { tx = x; ty = y; }
     u8g_t *getU8g(void) { return &u8g; }
-    
+    u8g_uint_t getPrintCol(void) { return tx; }	
+    u8g_uint_t getPrintRow(void) { return ty; }    
     
     /* implementation of the write interface to the print class */
 #if defined(ARDUINO) && ARDUINO >= 100
