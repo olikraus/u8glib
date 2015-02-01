@@ -1,0 +1,39 @@
+
+U8glib for MSP430 Installation Instructions
+
+== Directories == 
+
+./src			U8glib source files
+./examples	Several example files
+
+== Environment == 
+
+Linux
+
+Hardware:
+  MSP430F5529 USB LaunchPad Evaluation Kit 
+  http://www.ti.com/tool/MSP-EXP430F5529LP
+  
+Compiler:
+  http://www.ti.com/tool/msp430-gcc-opensource
+
+Flash Tool:
+  http://www.ti.com/tool/msp430-flasher
+
+== Hardware Setup ==
+
+
+== Installation ==
+
+1. Install compiler and flash tool (see above) on your harddisk.
+2. Goto one of the examples in the example folder
+3. Update the Makefile and enter the installation directory for the compiler and 
+  flash tool
+4. Connect MSP430F5529 USB LaunchPad Evaluation Kit 
+5. 'make upload' 
+
+Note: 
+  On my system msp430-flasher has requested an update of the launchpad firmware.
+  However, the linux version of the msp430-flasher was not able to update the
+  firmware correctly. Use the windows version to update the launchpad firmware.
+  
