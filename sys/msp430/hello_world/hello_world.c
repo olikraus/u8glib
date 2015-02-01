@@ -64,7 +64,27 @@ u8g_t u8g;
 
 void u8g_setup(void)
 {  
-  u8g_InitHWSPI(&u8g, &u8g_dev_sh1106_128x64_hw_spi, PN(2, 0) /*CSB*/, PN(2,2)/*CD*/, PN(2,6)/*RS*/);
+  /* 
+    HW SPI on the MSP430F5529 LaunchPad Eval Kit
+    u8glib will use UCB0 by default
+      P3.2:	D0/CLK
+      P3.0:	D1/DATA/MOSI/SIMO
+      P2.0:	Chip Select
+      P2.2:	Command/Data select (CD/A0)
+      P2.6: 	Display Reset
+  */
+  //P3SEL |= BIT0|BIT2;                       // setup alternative mode
+  //u8g_InitHWSPI(&u8g, &u8g_dev_ssd1306_128x64_hw_spi, PN(2, 0) /*CSB*/, PN(2,2)/*CD*/, PN(2,6)/*RS*/);
+  
+  /* 
+    SW SPI on the MSP430F5529 LaunchPad Eval Kit
+      P3.2:	D0/CLK
+      P3.0:	D1/DATA/MOSI/SIMO
+      P2.0:	Chip Select
+      P2.2:	Command/Data select (CD/A0)
+      P2.6: 	Display Reset
+  */
+  u8g_InitSPI(&u8g, &u8g_dev_ssd1306_128x64_sw_spi, PN(3, 2) /*CLK*/, PN(3, 0) /*DATA*/, PN(2, 0) /*CSB*/, PN(2,2)/*CD*/, PN(2,6)/*RS*/);
 }
 
 /* 
@@ -72,8 +92,6 @@ void u8g_setup(void)
  */
 void sys_init(void)
 {
-  WDTCTL = WDTPW | WDTHOLD;		// Stop watchdog timer
-  P3SEL |= BIT0|BIT2;                       // setup alternative mode
 }
 
 void draw(int i)

@@ -61,10 +61,9 @@ typedef signed short int16_t;
 /* 
   use the com interface directly on any systems which are not AVR or ARDUINO 
 */
-#if defined(__AVR__) || defined(ARDUINO)
+#if defined(__AVR__) || defined(ARDUINO) || defined(__MSP430__)
 #define U8G_WITH_PINLIST
 #endif
-#define U8G_WITH_PINLIST
 
 
 #ifdef __cplusplus
@@ -96,7 +95,7 @@ extern "C" {
 #ifdef __MSP430__
 /*
   Specifying a section will cause the MSP-GCC to put even const data to RAM
-  at least for the fonts. But as the fonts are conts we don't need to specify
+  at least for the fonts. But as the fonts are consts we don't need to specify
   it manually - the MSP-GCC seems to be smart enough to put it into the
   flash memory.
 */
@@ -642,7 +641,12 @@ struct _u8g_dev_arg_irgb_t
 
 
 /* com driver */
+
 uint8_t u8g_com_null_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);               /* u8g_com_null.c */
+
+uint8_t u8g_com_std_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);	/* requires U8G_WITH_PINLIST */
+
+
 uint8_t u8g_com_arduino_std_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);        /* u8g_com_arduino_std_sw_spi.c */
 uint8_t u8g_com_arduino_hw_usart_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);      /* u8g_com_atmega_hw_usart_spi.c */
 uint8_t u8g_com_arduino_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);        /* u8g_com_arduino_sw_spi.c */
@@ -690,8 +694,6 @@ defined(__18CXX) || defined(__PIC32MX)
 /* ==== HW SPI, msp430  ====*/
 #if defined(__MSP430__)
 #define U8G_COM_HW_SPI u8g_com_msp430_hw_spi_fn
-#define U8G_COM_SW_SPI u8g_com_null_fn
-#define U8G_COM_ST7920_SW_SPI u8g_com_null_fn
 #define U8G_COM_ST7920_HW_SPI u8g_com_null_fn
 #endif
 
@@ -765,6 +767,13 @@ defined(__18CXX) || defined(__PIC32MX)
 
 #ifndef U8G_COM_SW_SPI
 /* ==== SW SPI, not Arduino ====*/
+
+/* ==== SW SPI, msp430  ====*/
+#if defined(__MSP430__)
+#define U8G_COM_SW_SPI u8g_com_std_sw_spi_fn
+#define U8G_COM_ST7920_SW_SPI u8g_com_null_fn
+#endif
+
 #if defined(__AVR__)
 #define U8G_COM_SW_SPI u8g_com_atmega_sw_spi_fn
 #define U8G_COM_ST7920_SW_SPI u8g_com_atmega_st7920_sw_spi_fn

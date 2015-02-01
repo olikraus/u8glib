@@ -1,5 +1,5 @@
 #
-#  Generic and Simple Atmel AVR GNU Makefile
+#  Generic and Simple GNU Makefile
 #
 #  Desinged for the msp430 gnu tool chain
 #

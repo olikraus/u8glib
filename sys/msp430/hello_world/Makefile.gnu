@@ -1,11 +1,11 @@
 #
-#  Generic and Simple Atmel AVR GNU Makefile
+#  Generic and Simple GNU Makefile
 #
-#  Desinged for the gnu-avr tool chain
+#  Desinged for the msp430 gnu tool chain
 #
 #   Universal 8bit Graphics Library
 #   
-#   Copyright (c) 2012, olikraus@gmail.com
+#   Copyright (c) 2015, olikraus@gmail.com
 #   All rights reserved.
 # 
 #   Redistribution and use in source and binary forms, with or without modification, 
@@ -56,7 +56,7 @@
 # Project Information
 TARGETNAME = u8g_hello_world
 MCU:=msp430f5529
-DMCU:=__MSP430F5529__
+# DMCU:=__MSP430F5529__
 F_CPU:=1000000
 MSRC = hello_world.c
 U8GDIR = ../../../csrc/
@@ -65,11 +65,15 @@ FONTDIR = ../../../sfntsrc/
 
 #================================================
 # System/Environment Information
-TIPATH:=/usr/local/ti/ccsv6
-MSP430GCC:=gcc_msp430_4.9.14r1_10
-TOOLSPATH:=$(TIPATH)/tools/compiler/$(MSP430GCC)/bin/
-# Add proper arguments for tiflahser
-MSP430HEX:=
+# This Makefile requires two tools: 1) MSP430 GCC and 2) MSP430Flasher
+# MSP430 GCC must be here $(TIPATH)gcc/bin
+TIPATH:=/home/kraus/prg/ti/
+
+# MSP430Flasher must be here: $(TIPATH)MSP430Flasher_1.3.3/
+MSP430FLASHER:=LD_LIBRARY_PATH=$(TIPATH)MSP430Flasher_1.3.3/ && $(TIPATH)MSP430Flasher_1.3.3/MSP430Flasher
+
+# this is the path for all of the gnu utilies and compilers
+TOOLSPATH:=$(TIPATH)gcc/bin/
 
 
 #================================================
@@ -96,15 +100,15 @@ OBJCOPY:=$(TOOLSPATH)msp430-elf-objcopy
 OBJDUMP:=$(TOOLSPATH)msp430-elf-objdump
 SIZE:=$(TOOLSPATH)msp430-elf-size
 # C flags
-COMMON_FLAGS = -DF_CPU=$(F_CPU) -D$(DMCU) -mmcu=$(MCU)
+COMMON_FLAGS = -DF_CPU=$(F_CPU) -mmcu=$(MCU)
 COMMON_FLAGS += -g -Os -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-COMMON_FLAGS += -I. -I$(U8GDIR) -I$(TIPATH)/ccs_base/msp430/include_gcc
+COMMON_FLAGS += -I. -I$(U8GDIR) -I$(TIPATH)/gcc/include -L$(TIPATH)/gcc/include
 COMMON_FLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
 COMMON_FLAGS += -Wl,--relax
 COMMON_FLAGS += 
 CFLAGS = $(COMMON_FLAGS) -std=gnu99 -Wstrict-prototypes  
 # Linker script
-LDLIBS = -T $(TIPATH)/ccs_base/msp430/include_gcc/$(MCU).ld
+# LDLIBS = -T $(TIPATH)/gcc/include/$(MCU).ld
 
 # Additional Suffixes
 .SUFFIXES: .elf .hex .dis
@@ -116,6 +120,7 @@ all: $(DISNAME) $(HEXNAME)
 
 .PHONY: upload
 upload: $(DISNAME) $(HEXNAME)
+	-$(MSP430FLASHER) -w $(HEXNAME) -v -z [VCC,RESET]
 	$(SIZE) $(ELFNAME)
 
 .PHONY: clean
@@ -128,7 +133,7 @@ clean:
 
 # explicit rules
 $(ELFNAME): $(LIBNAME)($(OBJ)) $(MOBJ)
-	$(LINK.o) $(COMMON_FLAGS) $(MOBJ) $(LIBNAME) $(LOADLIBES) $(LDLIBS) -o $@
+	$(LINK.o) $(COMMON_FLAGS) $(MOBJ) $(LIBNAME) $(LOADLIBES) -o $@
 
 $(DISNAME): $(ELFNAME)
 	$(OBJDUMP) -S $< > $@
