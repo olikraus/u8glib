@@ -72,6 +72,7 @@ void u8g_setup(void)
  */
 void sys_init(void)
 {
+  WDTCTL = WDTPW | WDTHOLD;		// Stop watchdog timer
   P3SEL |= BIT0|BIT2;                       // setup alternative mode
 }
 
@@ -87,14 +88,17 @@ int main(void)
   sys_init();
   u8g_setup();
 
-  for(i=0;i<15;i++)
-  {  
-    u8g_FirstPage(&u8g);
-    do
-    {
-      draw(i);
-    } while ( u8g_NextPage(&u8g) );
-    u8g_Delay(100);
+  for(;;)
+  {
+    for(i=0;i<15;i++)
+    {  
+      u8g_FirstPage(&u8g);
+      do
+      {
+	draw(i);
+      } while ( u8g_NextPage(&u8g) );
+      u8g_Delay(100);
+    }
   }
   return 0;
 }

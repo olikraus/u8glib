@@ -185,9 +185,9 @@ int main(void)
     if ( draw_state >= 5*8 )
       draw_state = 0;
 
-    if ((draw_state%8) == 0)
+    if ((draw_state & 7) == 0)
     {
-    	u8g_Delay(300);
+    	u8g_Delay(500);
     }
   }
 }

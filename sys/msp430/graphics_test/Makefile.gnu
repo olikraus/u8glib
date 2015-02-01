@@ -1,11 +1,11 @@
 #
 #  Generic and Simple Atmel AVR GNU Makefile
 #
-#  Desinged for the gnu-avr tool chain
+#  Desinged for the msp430 gnu tool chain
 #
 #   Universal 8bit Graphics Library
 #   
-#   Copyright (c) 2012, olikraus@gmail.com
+#   Copyright (c) 2015, olikraus@gmail.com
 #   All rights reserved.
 # 
 #   Redistribution and use in source and binary forms, with or without modification, 
@@ -57,8 +57,8 @@
 TARGETNAME = u8g_hello_world
 MCU:=msp430f5529
 # DMCU:=__MSP430F5529__
-F_CPU:=1000000
-MSRC = hello_world.c
+F_CPU:=16000000
+MSRC = graphics_test.c
 U8GDIR = ../../../csrc/
 FONTDIR = ../../../sfntsrc/
 
