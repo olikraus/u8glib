@@ -40,15 +40,18 @@
 
 #include <msp430.h>
 
+#define COLOR_128_DISPLAY	1
+
 
 u8g_t u8g;
 
 void u8g_setup(void)
 {  
-#if U8G_USE_USCI == 1
-  u8g_InitHWSPI(&u8g, &u8g_dev_sh1106_128x64_hw_spi, PN(9, 1) /*CSB*/, PN(9,2)/*CD*/, PN(9,3)/*RS*/);
-#else
+#if COLOR_128_DISPLAY != 1
   u8g_InitHWSPI(&u8g, &u8g_dev_sh1106_128x64_hw_spi, PN(2, 0) /*CSB*/, PN(2,2)/*CD*/, PN(2,6)/*RS*/);
+#else
+ // u8g_InitHWSPI(&u8g, &u8g_dev_ssd1353_160x128_hicolor_hw_spi, PN(2, 0) /*CSB*/, PN(2,2)/*CD*/, PN(2,6)/*RS*/);
+  u8g_InitHWSPI(&u8g, &u8g_dev_ssd1353_160x128_332_hw_spi, PN(2, 0) /*CSB*/, PN(2,2)/*CD*/, PN(2,6)/*RS*/);
 #endif
 }
 
@@ -71,49 +74,26 @@ sys_init(void)
 
 void sys_setup_keys(void)
 {
-#if defined(__AVR__)
-  /* configure buttons (inputs with pullup) */
-  DDRD &= ~(1<<5);
-  PORTD |= (1<<5);
-  DDRD &= ~(1<<6);
-  PORTD |= (1<<6);
-  DDRD &= ~(1<<7);
-  PORTD |= (1<<7);
-  DDRB &= ~(1<<7);
-  PORTB |= (1<<7);
-#elif defined(__MSP430__)
-  P1REN |= 0xF0;  
-  P1OUT |= 0xF0;
+#if defined(__MSP430__)
+  P1REN |= 0x02;
+  P1OUT |= 0x02;
+  P2REN |= 0x02;
+  P2OUT |= 0x02;
 #endif
 }
 
 #define KEY_NONE 0
 #define KEY_PREV 1
 #define KEY_NEXT 2
-#define KEY_SELECT 3
-#define KEY_BACK 4
 
 uint8_t sys_get_key(void)
 {
   uint8_t result = KEY_NONE;
-#if defined(__AVR__)
-  if ( (PIND & (1<<5)) == 0 ) 
+#if defined(__MSP430__)
+  if ( (P1IN & (1<<1)) == 0 )
     result = KEY_PREV;
-  if ( (PIND & (1<<6)) == 0 ) 
+  if ( (P2IN & (1<<1)) == 0 )
     result = KEY_NEXT;
-  if ( (PIND & (1<<7)) == 0 ) 
-    result |= KEY_SELECT;
-  if ( (PINB & (1<<7)) == 0 ) 
-    result |= KEY_BACK;
-#elif defined(__MSP430__)
-  if ( (P1IN & (1<<4)) == 0 ) 
-    result = KEY_PREV;
-  if ( (P1IN & (1<<5)) == 0 ) 
-    result = KEY_NEXT;
-  if ( (P1IN & (1<<6)) == 0 ) 
-    result |= KEY_SELECT;
-  if ( (P1IN & (1<<7)) == 0 ) 
-    result |= KEY_BACK;
 #endif
   return result;
 }
@@ -134,9 +114,13 @@ void sys_debounce_key(void)
     sys_key_code = KEY_NONE;
 }
 
-
+#if COLOR_128_DISPLAY == 1
+#define MENU_ITEMS 10
+char *menu_strings[MENU_ITEMS] = { "First Line", "Second Item", "Third Item", "Fourth Item", "Fifth Item", "Sixth Item", "Seven", "Eight line", "Ninth Point", "Last Entry" };
+#else
 #define MENU_ITEMS 4
 char *menu_strings[MENU_ITEMS] = { "First Line", "Second Item", "Third Item", "Fourth Item" };
+#endif
 
 uint8_t menu_current = 0;
 uint8_t menu_redraw_required = 0;
@@ -148,23 +132,31 @@ void draw_menu(void)
   u8g_uint_t w, d;
 
   u8g_SetFont(&u8g, u8g_font_8x13);
+
   u8g_SetFontRefHeightText(&u8g);
   u8g_SetFontPosTop(&u8g);
-  
+
   h = u8g_GetFontAscent(&u8g)-u8g_GetFontDescent(&u8g);
   w = u8g_GetWidth(&u8g);
+
   for( i = 0; i < MENU_ITEMS; i++ ) 
   {
     d = (w-u8g_GetStrWidth(&u8g, menu_strings[i]))/2;
+#if COLOR_128_DISPLAY != 1
     u8g_SetDefaultForegroundColor(&u8g);
+#else
+    u8g_SetDefaultMidColor(&u8g);
+#endif
     if ( i == menu_current ) 
     {
-      u8g_DrawBox(&u8g, 0, i*h+1, w, h);
+#if COLOR_128_DISPLAY == 1
+      u8g_SetDefaultForegroundColor(&u8g);
+#endif
+      u8g_DrawBox(&u8g, 0, ((i+1)*h+1), w, h);
       u8g_SetDefaultBackgroundColor(&u8g);
       u8g_SetContrast(&u8g, 128);
-      //u8g_SetDefaultMidColor(&u8g);
     }
-    u8g_DrawStr(&u8g, d, i*h, menu_strings[i]);
+    u8g_DrawStr(&u8g, d, (i+1)*h, menu_strings[i]);
   }
 }
 

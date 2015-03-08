@@ -524,7 +524,7 @@ uint8_t u8g_GetDefaultForegroundColor(u8g_t *u8g)
     return 3;         /* max intensity */
   else /* if ( u8g.getMode() == U8G_MODE_BW ) */
     return 1;         /* pixel on */
-  return 1;
+  //return 1;
 }
 
 void u8g_SetDefaultForegroundColor(u8g_t *u8g)
@@ -560,7 +560,7 @@ uint8_t u8g_GetDefaultMidColor(u8g_t *u8g)
     return 1;         /* low mid intensity */
   else /* if ( u8g.getMode() == U8G_MODE_BW ) */
     return 1;         /* pixel on */
-  return 1;   /* default */
+  //return 1;   /* default */
 }
 
 void u8g_SetDefaultMidColor(u8g_t *u8g)

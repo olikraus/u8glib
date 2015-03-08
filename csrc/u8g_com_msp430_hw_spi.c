@@ -46,7 +46,9 @@
 #ifndef F_CPU
 #error "Please specifiy actual master clock using F_CPU in HZ"
 #endif
+#ifndef F_SPI
 #define F_SPI  1000000UL
+#endif
 
 #define U8G_USE_USCIA0	1
 #define U8G_USE_USCIB0	2
@@ -127,7 +129,7 @@
 #define UCBR1   UCB3BR1
 #endif
 
-static uint8_t u8g_msp430_spi_out(uint8_t data)
+inline void u8g_msp430_spi_out(uint8_t data)
 {
   while (!(UCIFG&UCTXIFG));
   UCTXBUF = data;
