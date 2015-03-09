@@ -43,12 +43,13 @@
 
 #include "u8g.h"
 
-/* this driver is distributed as x128. However the ssd1353 actually has 132 pixels */
 #define WIDTH		160
-#define HEIGHT		132
+#define HEIGHT		128
 #define PAGE_HEIGHT	8
 
-static const uint8_t u8g_dev_ssd1353_160x128_newinit_seq[] PROGMEM = {
+#define USE_GREY_TABLE	0
+
+static const uint8_t u8g_dev_ssd1353_160x128_init_seq[] PROGMEM = {
 	U8G_ESC_CS(0),					/* disable chip */
 	U8G_ESC_DLY(50),
 	U8G_ESC_ADR(0),					/* instruction mode */
@@ -56,171 +57,125 @@ static const uint8_t u8g_dev_ssd1353_160x128_newinit_seq[] PROGMEM = {
 	U8G_ESC_DLY(50),
 	U8G_ESC_CS(1),					/* enable chip */
 
-	0xfd,							/* Command Lock */
+	0xFD,						/* Command unlock */
 	U8G_ESC_ADR(1),
 	0x12,						
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xae,							/* Set Display Off */
+	U8G_ESC_ADR(0),					
+	0xAE,						/* Set Display Off */
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xb3,
+	U8G_ESC_ADR(0),			
+	0xA8,
 	U8G_ESC_ADR(1),
-	0xf1,							/* Front Clock Div */
+	0x7F,						/* Set Multiplex Ratio */
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xa8,
+	U8G_ESC_ADR(0),			
+	0xA0,
 	U8G_ESC_ADR(1),
-	0x83,							/* Set Multiplex Ratio reset value 0x83 */
+	0xB4,						/* Set remapping */
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xa0,
+	U8G_ESC_ADR(0),		
+	0xA1,
 	U8G_ESC_ADR(1),
-	0xb4,							/* Set Colour Depth */
+	0x00,						/* Set Display Start Line */
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0x15,
+	U8G_ESC_ADR(0),	
+	0xA2,
 	U8G_ESC_ADR(1),
-	0x00, 0x9f,						/* Set Column Address  */
+	0x00,						/* Set Display Offset */
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0x75,
+	U8G_ESC_ADR(0),
+	0xB1,
 	U8G_ESC_ADR(1),
-	0x00, 0x83,						/* Set Row Address */
+	0x32,						/* Set Phase Length */
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xa1,
+	U8G_ESC_ADR(0),	
+	0xB4,
 	U8G_ESC_ADR(1),
-	0x00,							/* Set Display Start Line */
+	0x04,						/* Set Second Precharge Period */
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xa2,
-	U8G_ESC_ADR(1),
-	0x00,							/* Set Display Offset */
+	U8G_ESC_ADR(0),
+	0xA4,						/* Set Display Mode ON */
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xb1,
-	U8G_ESC_ADR(1),
-	0x32,							/* Set Phase Length */
+	U8G_ESC_ADR(0),
+	0xB3,
+	U8G_ESC_ADR(1),					/* frame rate  */
+	0x40,
+	
+	U8G_ESC_ADR(0),	
+	0xBB,	
+	U8G_ESC_ADR(1),					/* pre-charge level */
+	0x08,
 
-#if 0
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xb4,
-	U8G_ESC_ADR(1),
-	0xa0, 0xb5, 0x55,				/* Set Segment Low Voltage */
+	U8G_ESC_ADR(0),
+	0xBE,
+	U8G_ESC_ADR(1),					/* vcomh */
+	0x3C,
 
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xbb,
-	U8G_ESC_ADR(1),
-	0x17,							/* Set Precharge Voltage */
-
-	U8G_ESC_ADR(0),					/* instruction mode */
-	0xbe,
-	U8G_ESC_ADR(1),
-	0x05,							/* Set VComH Voltage */
-#endif
-
+	/* color adjustments */
+#if USE_GREY_TABLE != 1
 	U8G_ESC_ADR(0),					/* instruction mode */
 	0x81,
 	U8G_ESC_ADR(1),
-	0xc8,							/* Set Contrast Color 1*/
+	0xC8,							/* Set Contrast Color 1*/
 	U8G_ESC_ADR(0),					/* instruction mode */
 	0x82,
 	U8G_ESC_ADR(1),
 	0x80,							/* Set Contrast Color 2*/
 	U8G_ESC_ADR(0),					/* instruction mode */
-	0xc8,
+	0x83,
 	U8G_ESC_ADR(1),
-	0x7f,							/* Set Contrast Color 3*/
-
+	0xF8,							/* Set Contrast Color 3*/
 	U8G_ESC_ADR(0),					/* instruction mode */
 	0x87,
 	U8G_ESC_ADR(1),
-	0x0f,							/* Set Master Contrast MAX */
-
-	U8G_ESC_ADR(0),					/* instruction mode  */
-	0xb4,
-	U8G_ESC_ADR(1),
-	0x01,							/* Set Second Precharge Period */
-
+	0x09,							/* Set Master Contrast MAX */
 	U8G_ESC_ADR(0),					/* instruction mode */
-	0xa4,							/* Set Display Mode ON */
-
+	0xB9,							/* Set CMD Grayscale Linear */
+#else
 	U8G_ESC_ADR(0),					/* instruction mode */
-	0xb8,							/* Set CMD Grayscale Lookup */
+	0x81,
 	U8G_ESC_ADR(1),
-	0x05,
-	0x06,
-	0x07,
-	0x08,
-	0x09,
-	0x0a,
-	0x0b,
-	0x0c,
-	0x0D,
-	0x0E,
-	0x0F,
-	0x10,
-	0x11,
-	0x12,
-	0x13,
-	0x14,
-	0x15,
-	0x16,
-	0x18,
-	0x1a,
-	0x1b,
-	0x1C,
-	0x1D,
-	0x1F,
-	0x21,
-	0x23,
-	0x25,
-	0x27,
-	0x2A,
-	0x2D,
-	0x30,
-	0x33,
-	0x36,
-	0x39,
-	0x3C,
-	0x3F,
-	0x42,
-	0x45,
-	0x48,
-	0x4C,
-	0x50,
-	0x54,
-	0x58,
-	0x5C,
-	0x60,
-	0x64,
-	0x68,
-	0x6C,
-	0x70,
-	0x74,
-	0x78,
-	0x7D,
+	0xC8,							/* Set Contrast Color 1*/
+	U8G_ESC_ADR(0),					/* instruction mode */
 	0x82,
+	U8G_ESC_ADR(1),
+	0xA0,							/* Set Contrast Color 2*/
+	U8G_ESC_ADR(0),					/* instruction mode */
+	0x83,
+	U8G_ESC_ADR(1),
+	0xB0,							/* Set Contrast Color 3*/
+	U8G_ESC_ADR(0),					/* instruction mode */
 	0x87,
-	0x8C,
-	0x91,
-	0x96,
-	0x9B,
-	0xA0,
-	0xA5,
-	0xAA,
-	0xAF,
-	0xB4,
+	U8G_ESC_ADR(1),
+	0x0F,							/* Set Master Contrast MAX */
 
+	U8G_ESC_ADR(0),					/* instruction mode */
+	0xB8,							/* Set CMD Grayscale Lookup */
+	U8G_ESC_ADR(1),
+	0x05, 0x06, 0x07, 0x08,
+	0x09, 0x0a, 0x0b, 0x0c,
+	0x0D, 0x0E, 0x0F, 0x10, 
+	0x11, 0x12, 0x13, 0x14, 
+	0x15, 0x16, 0x18, 0x1a,
+	0x1b, 0x1C, 0x1D, 0x1F, 
+	0x21, 0x23, 0x25, 0x27, 
+	0x2A, 0x2D, 0x30, 0x33, 
+	0x36, 0x39, 0x3C, 0x3F, 
+	0x42, 0x45, 0x48, 0x4C,
+	0x50, 0x54, 0x58, 0x5C,
+	0x60, 0x64, 0x68, 0x6C,
+	0x70, 0x74, 0x78, 0x7D,
+	0x82, 0x87, 0x8C, 0x91,
+	0x96, 0x9B, 0xA0, 0xA5,
+	0xAA, 0xAF, 0xB4, 
+#endif
 	U8G_ESC_ADR(0),
-	0xaf,							/* Set Display On */
-	0x5c,							/* Write to GDDRRam */
+	0xAF,							/* Set Display On */
 	U8G_ESC_CS(0),					/* disable chip */
 	U8G_ESC_ADR(1),
 	U8G_ESC_END						/* end of sequence */
 };
-
 
 
 static const uint8_t u8g_dev_ssd1353_160x128_column_seq[] PROGMEM = {
@@ -228,12 +183,27 @@ static const uint8_t u8g_dev_ssd1353_160x128_column_seq[] PROGMEM = {
 	U8G_ESC_ADR(0), 0x15,
 	U8G_ESC_ADR(1), 0x00, 0x9f,
 	U8G_ESC_ADR(0), 0x75,
-	U8G_ESC_ADR(1), 0x00, 0x83,
+	U8G_ESC_ADR(1), 0x00, 0x7f,
 	U8G_ESC_ADR(0), 0x5c,
 	U8G_ESC_ADR(1),
 	U8G_ESC_CS(0),
 	U8G_ESC_END
 };
+
+static const uint8_t u8g_dev_ssd1353_160x128_sleep_on[] PROGMEM = {
+	U8G_ESC_CS(1),
+	U8G_ESC_ADR(0), 0xAE,
+	U8G_ESC_CS(0),
+	U8G_ESC_END
+};
+
+static const uint8_t u8g_dev_ssd1353_160x128_sleep_off[] PROGMEM = {
+	U8G_ESC_CS(1),
+	U8G_ESC_ADR(0), 0xAF,
+	U8G_ESC_CS(0),
+	U8G_ESC_END
+};
+
 
 #define RGB332_STREAM_BYTES 8
 static uint8_t u8g_ssd1353_stream_bytes[RGB332_STREAM_BYTES*3];
@@ -244,7 +214,7 @@ uint8_t u8g_dev_ssd1353_160x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 	{
 	case U8G_DEV_MSG_INIT:
 		u8g_InitCom(u8g, dev, U8G_SPI_CLK_CYCLE_50NS);
-		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_newinit_seq);
+		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_init_seq);
 		break;
 
 	case U8G_DEV_MSG_STOP:
@@ -289,8 +259,13 @@ uint8_t u8g_dev_ssd1353_160x128_332_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 		}
 
 		break;
-	case U8G_DEV_MSG_GET_MODE:
-	  return U8G_MODE_R3G3B2;
+
+	case U8G_DEV_MSG_SLEEP_ON:
+		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_sleep_on);
+		break;
+	case U8G_DEV_MSG_SLEEP_OFF:
+		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_sleep_off);
+		break;
 	}
 
 	return u8g_dev_pb8h8_base_fn(u8g, dev, msg, arg);
@@ -311,7 +286,7 @@ uint8_t u8g_dev_ssd1353_160x128_idx_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, 
 	{
 	case U8G_DEV_MSG_INIT:
 		u8g_InitCom(u8g, dev, U8G_SPI_CLK_CYCLE_50NS);
-		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_newinit_seq);
+		u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_init_seq);
 		break;
 
 	case U8G_DEV_MSG_STOP:
@@ -361,7 +336,7 @@ uint8_t u8g_dev_ssd1353_160x128_hicolor_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
   {
     case U8G_DEV_MSG_INIT:
       u8g_InitCom(u8g, dev, U8G_SPI_CLK_CYCLE_50NS);
-      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_newinit_seq);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_init_seq);
       break;
     case U8G_DEV_MSG_STOP:
       break;
@@ -409,8 +384,12 @@ uint8_t u8g_dev_ssd1353_160x128_hicolor_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t m
 	u8g_SetChipSelect(u8g, dev, 0);
       }
       break;    /* continue to base fn */
-    case U8G_DEV_MSG_GET_MODE:
-     return U8G_MODE_HICOLOR;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_sleep_on);
+      break;
+    case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd1353_160x128_sleep_off);
+      break;
   }
   return u8g_dev_pbxh16_base_fn(u8g, dev, msg, arg);
 }
