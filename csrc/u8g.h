@@ -508,6 +508,11 @@ extern u8g_dev_t u8g_dev_ssd1351_128x128gh_hicolor_hw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128gh_4x_hicolor_sw_spi;
 extern u8g_dev_t u8g_dev_ssd1351_128x128gh_4x_hicolor_hw_spi;
 
+
+/* SSD1353 OLED Palmtronics */
+extern u8g_dev_t u8g_dev_ssd1353_160x128_332_hw_spi;
+extern u8g_dev_t u8g_dev_ssd1353_160x128_hicolor_hw_spi;
+
 /* HT1632 */
 extern u8g_dev_t u8g_dev_ht1632_24x16;
 

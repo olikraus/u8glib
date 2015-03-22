@@ -91,6 +91,11 @@
 			<locationURI>PARENT-3-PROJECT_LOC/csrc/u8g_com_null.c</locationURI>
 		</link>
 		<link>
+			<name>csrc/u8g_com_std_sw_spi.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/csrc/u8g_com_std_sw_spi.c</locationURI>
+		</link>
+		<link>
 			<name>csrc/u8g_cursor.c</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/csrc/u8g_cursor.c</locationURI>
@@ -229,6 +234,11 @@
 			<name>csrc/u8g_dev_ssd1351_128x128.c</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/csrc/u8g_dev_ssd1351_128x128.c</locationURI>
+		</link>
+		<link>
+			<name>csrc/u8g_dev_ssd1353_160x128.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/csrc/u8g_dev_ssd1353_160x128.c</locationURI>
 		</link>
 		<link>
 			<name>csrc/u8g_dev_st7565_64128n.c</name>
