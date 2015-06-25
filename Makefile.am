@@ -361,9 +361,13 @@ u8gwpi_fontutf8test_LDFLAGS=-lu8gbase -lu8gwpi $(libu8gwpi_la_LDFLAGS)
 
 sys/sdl/fontutf8test/fontutf8-data.h: sys/sdl/fontutf8test/main.c tools/font/genpages/genpages.sh tools/font/genpages/unifont.bdf # tools/font/genpages/wenquanyi_12pt.bdf
 	cd sys/sdl/fontutf8test/ && ../../../tools/font/genpages/genpages.sh
+sys/sdl/fontutf8test/main.c: sys/sdl/fontutf8test/fontutf8-data.h
+	touch sys/sdl/fontutf8test/main.c
 
 sys/arduino/fontutf8test/fontutf8-data.h: sys/arduino/fontutf8test/fontutf8test.cpp tools/font/genpages/genpages.sh tools/font/genpages/unifont.bdf # tools/font/genpages/wenquanyi_12pt.bdf
 	cd sys/arduino/fontutf8test/ && ../../../tools/font/genpages/genpages.sh
+sys/arduino/fontutf8test/fontutf8test.cpp: sys/arduino/fontutf8test/fontutf8-data.h
+	touch sys/arduino/fontutf8test/fontutf8test.cpp
 
 sys/arduino/fontutf8test/genpages.sh: genpages
 	touch sys/arduino/fontutf8test/genpages.sh
