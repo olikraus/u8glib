@@ -87,10 +87,10 @@ class U8GLIB : public Print
     u8g_uint_t getPrintRow(void) { return ty; }    
     
     /* implementation of the write interface to the print class */
-#if defined(ARDUINO) && ARDUINO >= 100
-    size_t write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); return 1;}
-#else
+#if defined(ARDUINO) && ARDUINO < 100
     void write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); }
+#else
+    size_t write(uint8_t c) { tx += u8g_DrawGlyph(&u8g, tx, ty, c); return 1;}
 #endif
     
      /* screen rotation */

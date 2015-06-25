@@ -65,7 +65,7 @@ uint8_t isFire = 0;
 // setup the user interface
 void uiSetup(void) {
   // configure input keys 
-  
+#if defined(ARDUINO)
   pinMode(uiKeyUpPin, INPUT);           // set pin to input
   digitalWrite(uiKeyUpPin, HIGH);       // turn on pullup resistors
   pinMode(uiKeyDownPin, INPUT);           // set pin to input
@@ -79,14 +79,15 @@ void uiSetup(void) {
   digitalWrite(uiKeyDownPin2, HIGH);       // turn on pullup resistors
   pinMode(uiKeyFirePin2, INPUT);           // set pin to input
   digitalWrite(uiKeyFirePin2, HIGH);       // turn on pullup resistors
-  
-  
+#endif
+
   // assign some (more or less) useful values to the output variables
   shipLocation = 127;
 }
 
 // calculate new output values
 void uiStep(void) {
+#if defined(ARDUINO)
   if ( digitalRead(uiKeyUpPin) == LOW || digitalRead(uiKeyUpPin2) == LOW )
     if ( shipLocation <= 255 -  uiIncrement )
       shipLocation += uiIncrement;
@@ -96,6 +97,7 @@ void uiStep(void) {
   isFire = 0;
   if ( digitalRead(uiKeyFirePin) == LOW || digitalRead(uiKeyFirePin2) == LOW )
     isFire = 1;
+#endif
 }
 
 
@@ -121,7 +123,9 @@ void setup(void)
   u8g_SetDogmRot180();
   
   uiSetup();
+#if defined(ARDUINO)
   next_sec_time = millis() + 1000UL;
+#endif
   fps = 0;
   frame_cnt = 0;
    
@@ -139,12 +143,13 @@ void loop(void)
   st_Step(shipLocation, 0, isFire);
 
   frame_cnt++;
+#if defined(ARDUINO)
   if ( next_sec_time < millis() )
   {
     fps = frame_cnt;
     frame_cnt = 0;
     next_sec_time = millis() + 1000UL;
   }
-  
+#endif
 }
 
