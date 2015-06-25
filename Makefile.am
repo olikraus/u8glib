@@ -61,6 +61,7 @@ SRC_COMMON_ALG= \
     csrc/u8g_cursor.c \
     csrc/u8g_ellipse.c \
     csrc/u8g_font.c \
+    csrc/u8g_fontutf8.c \
     csrc/u8g_line.c \
     csrc/u8g_pb14v1.c \
     csrc/u8g_pb16h1.c \
@@ -221,20 +222,26 @@ libu8gwpi_la_LIBADD=$(top_builddir)/libu8gbase.la
 
 BIN_SDL= \
     u8gsdl_2bit u8gsdl_8bit u8gsdl_circle u8gsdl_helloworldpp \
-    u8gsdl_cursor u8gsdl_fonttop u8gsdl_fullcolor u8gsdl_gabc u8gsdl_gah u8gsdl_greek \
+    u8gsdl_cursor u8gsdl_fonttop u8gsdl_fontutf8test u8gsdl_fullcolor u8gsdl_gabc u8gsdl_gah u8gsdl_greek \
     u8gsdl_helloworld u8gsdl_hicolor u8gsdl_logo u8gsdl_menu u8gsdl_polygon u8gsdl_xbm \
     u8gsdl_chess u8gsdl_spacetrash \
     u8gsdl_clip \
     $(NULL)
 
-BIN_WPI=u8gwpi_chess u8gwpi_chessdogm u8gwpi_gtest u8gwpi_logo u8gwpi_spacetrash
+BIN_WPI=u8gwpi_chess u8gwpi_chessdogm u8gwpi_fontutf8test u8gwpi_gtest u8gwpi_logo u8gwpi_spacetrash
 
-BIN_TOOLS=bdf2u8g
+BIN_TOOLS=bdf2u8g genpages
 bdf2u8g_SOURCES= \
     tools/font/bdf2u8g/bdf2u8g.c \
     $(NULL)
 test:
 	./bdf2u8g -f 2 tools/font/bdf/9x18.bdf u8g_aafont_9x18 test_u8g_aafont_9x18.c
+
+genpages_SOURCES= \
+    tools/font/genpages/genpages.c \
+    tools/font/genpages/getline.h \
+    tools/font/genpages/getline.c \
+    $(NULL)
 
 bin_PROGRAMS=$(BIN_TOOLS) $(BIN_SDL)
 noinst_PROGRAMS=$(BIN_WPI)
@@ -270,6 +277,10 @@ u8gsdl_cursor_LDFLAGS=-lu8gbase -lu8gsdl $(libu8gsdl_la_LDFLAGS)
 u8gsdl_fonttop_SOURCES=sys/sdl/FontPosTop/main.c
 u8gsdl_fonttop_CPPFLAGS=$(libu8gsdl_la_CFLAGS)
 u8gsdl_fonttop_LDFLAGS=-lu8gbase -lu8gsdl $(libu8gsdl_la_LDFLAGS)
+
+u8gsdl_fontutf8test_SOURCES=sys/sdl/fontutf8test/main.c sys/sdl/fontutf8test/fontutf8-data.h
+u8gsdl_fontutf8test_CPPFLAGS=$(libu8gsdl_la_CFLAGS)
+u8gsdl_fontutf8test_LDFLAGS=-lu8gbase -lu8gsdl $(libu8gsdl_la_LDFLAGS)
 
 u8gsdl_fullcolor_SOURCES=sys/sdl/fullcolor/main.c
 u8gsdl_fullcolor_CPPFLAGS=$(libu8gsdl_la_CFLAGS)
@@ -317,7 +328,7 @@ u8gsdl_xbm_LDFLAGS=-lu8gbase -lu8gsdl $(libu8gsdl_la_LDFLAGS)
 
 .pde.cpp:
 	cp $< $@
-.ino.o:
+.ino.cpp:
 	cp $< $@
 
 #u8gwpi_logo_SOURCES=sys/arm/examples/u8g_logo/u8g_logo.c
@@ -342,3 +353,25 @@ u8gwpi_chess_LDFLAGS=-lu8gbase -lu8gwpi $(libu8gwpi_la_LDFLAGS)
 u8gwpi_chessdogm_SOURCES=nonarduino/wpimain.cpp sys/arduino/ChessDogm/Chess.pde
 u8gwpi_chessdogm_CPPFLAGS=$(libu8gwpi_la_CFLAGS)
 u8gwpi_chessdogm_LDFLAGS=-lu8gwpi $(libu8gwpi_la_LDFLAGS)
+
+u8gwpi_fontutf8test_SOURCES=nonarduino/wpimain.cpp sys/arduino/fontutf8test/fontutf8test.cpp sys/arduino/fontutf8test/fontutf8-data.h
+u8gwpi_fontutf8test_CFLAGS=$(libu8gwpi_la_CFLAGS)
+u8gwpi_fontutf8test_CPPFLAGS=$(libu8gwpi_la_CFLAGS)
+u8gwpi_fontutf8test_LDFLAGS=-lu8gbase -lu8gwpi $(libu8gwpi_la_LDFLAGS)
+
+sys/sdl/fontutf8test/fontutf8-data.h: sys/sdl/fontutf8test/main.c tools/font/genpages/genpages.sh tools/font/genpages/unifont.bdf # tools/font/genpages/wenquanyi_12pt.bdf
+	cd sys/sdl/fontutf8test/ && ../../../tools/font/genpages/genpages.sh
+sys/sdl/fontutf8test/main.c: sys/sdl/fontutf8test/fontutf8-data.h
+	touch sys/sdl/fontutf8test/main.c
+
+sys/arduino/fontutf8test/fontutf8-data.h: sys/arduino/fontutf8test/fontutf8test.cpp tools/font/genpages/genpages.sh tools/font/genpages/unifont.bdf # tools/font/genpages/wenquanyi_12pt.bdf
+	cd sys/arduino/fontutf8test/ && ../../../tools/font/genpages/genpages.sh
+sys/arduino/fontutf8test/fontutf8test.cpp: sys/arduino/fontutf8test/fontutf8-data.h
+	touch sys/arduino/fontutf8test/fontutf8test.cpp
+
+sys/arduino/fontutf8test/genpages.sh: genpages
+	touch sys/arduino/fontutf8test/genpages.sh
+tools/font/genpages/unifont-7.0.06.bdf.gz:
+	cd tools/font/genpages && wget http://unifoundry.com/pub/unifont-7.0.06/font-builds/unifont-7.0.06.bdf.gz
+tools/font/genpages/unifont.bdf: tools/font/genpages/unifont-7.0.06.bdf.gz
+	cd tools/font/genpages && gunzip -c unifont-7.0.06.bdf.gz > unifont.bdf
