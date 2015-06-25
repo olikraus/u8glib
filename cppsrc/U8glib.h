@@ -206,6 +206,8 @@ class U8GLIB : public Print
     u8g_uint_t getStrPixelWidth(const __FlashStringHelper *s) { return u8g_GetStrPixelWidthP(&u8g, (u8g_pgm_uint8_t *)s); }
     u8g_uint_t getStrWidth(const __FlashStringHelper *s) { return u8g_GetStrWidthP(&u8g, (u8g_pgm_uint8_t *)s); }
 #endif
+    // u8g_SetUtf8Fonts() in u8g.h
+    void drawUtf8Str (unsigned int x, unsigned int y, const char *utf8_msg) { u8g_DrawUtf8Str(&u8g, x, y, utf8_msg); }
 
     /* cursor handling */
     void setCursorFont(const u8g_pgm_uint8_t *cursor_font) { u8g_SetCursorFont(&u8g, cursor_font); }

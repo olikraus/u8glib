@@ -1272,11 +1272,48 @@ u8g_uint_t u8g_DrawStr270(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
 
 u8g_uint_t u8g_DrawStrDir(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t dir, const char *s);
 
-
 u8g_uint_t u8g_DrawStrP(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
 u8g_uint_t u8g_DrawStr90P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
 u8g_uint_t u8g_DrawStr180P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
 u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
+
+
+// utf-8 string in source code
+#define USE_RBTREE_LINUX 0
+
+#if USE_RBTREE_LINUX
+#include "rbtree.h"
+#else
+#include "tree-bsd.h"
+#endif
+
+#define NUM_ARRAY(a) (sizeof(a)/sizeof(a[0]))
+#define _U8GT(a) a
+
+#define DEFAULT_FONT u8g_font_9x15
+
+typedef struct _u8g_fontinfo_t {
+    int page;
+    int begin;
+    int end;
+    int size;
+    const u8g_fntpgm_uint8_t *fntdata;
+
+#if USE_RBTREE_LINUX
+    struct rb_node node;
+#else
+    RB_ENTRY(_u8g_fontinfo_t) node;
+#endif
+} u8g_fontinfo_t;
+
+extern int fontinfo_init (u8g_fontinfo_t * fntinfo, int number);
+extern char fontinfo_isinited(void);
+//void u8g_SetUtf8Fonts (u8g_fontinfo_t * fntinfo, int number);
+//char u8g_Utf8FontIsInited(void);
+#define u8g_SetUtf8Fonts        fontinfo_init
+#define u8g_Utf8FontIsInited    fontinfo_isinited
+
+void u8g_DrawUtf8Str (u8g_t *pu8g, unsigned int x, unsigned int y, const char *utf8_msg);
 
 
 void u8g_SetFontRefHeightText(u8g_t *u8g);
