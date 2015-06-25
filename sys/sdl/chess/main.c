@@ -1,9 +1,7 @@
 
-
 #include "u8g.h"
 #include <stdlib.h>
 #include <stdio.h>
-
 
 int u8g_sdl_get_key(void);
 
@@ -13,21 +11,26 @@ uint8_t get_key_code(void)
   int sdl_key;
   sdl_key = u8g_sdl_get_key();
   chess_key = CHESS_KEY_NONE;
-  if ( sdl_key > 0 )
-  {
-    if ( sdl_key == 'n' )
+  switch ( sdl_key ) {
+  case 'n':
+  case 274: // arrow down
+  case 275: // arrow right
       chess_key = CHESS_KEY_NEXT;
-    else if ( sdl_key == 'p' )
+      break;
+  case 'p':
+  case 273: // arrow up
+  case 276: // arrow left
       chess_key = CHESS_KEY_PREV;
-    else if ( sdl_key == ' ' )
+      break;
+  case ' ':
       chess_key = CHESS_KEY_SELECT;
-    else if ( sdl_key == 'q' )
+      break;
+  case 'q':
       exit(0);
-  }    
-  return chess_key;  
+      break;
+  }
+  return chess_key;
 }
-
-
 
 int main(void)
 {
@@ -83,4 +86,3 @@ int main(void)
     chess_Step(CHESS_KEY_NONE);
   }
 }
-

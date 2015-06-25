@@ -1,10 +1,12 @@
 
 
-#include "SDL.h"
-#include "u8g.h"
-//#include "u8g_dogm128_api.h"
 #include <stdlib.h>
 #include <stdio.h>
+
+#include <SDL.h>
+
+#include "u8g.h"
+//#include "u8g_dogm128_api.h"
 
 
 // generic configuration values

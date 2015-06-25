@@ -133,6 +133,8 @@
 //U8GLIB_SSD1351_128X128GH_332 u8g(8, 9, 7); // Arduino, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (Freetronics OLED)
 //U8GLIB_SSD1351_128X128GH_HICOLOR u8g(8, 9, 7); // Arduino, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (Freetronics OLED)
 
+U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
+
 void u8g_prepare(void) {
   u8g.setFont(u8g_font_6x10);
   u8g.setFontRefHeightExtendedText();
@@ -274,9 +276,10 @@ void setup(void) {
   // flip screen, if required
   //u8g.setRot180();
 
-  
+#if defined(ARDUINO)
   pinMode(13, OUTPUT);           
   digitalWrite(13, HIGH);  
+#endif
 }
 
 void loop(void) {

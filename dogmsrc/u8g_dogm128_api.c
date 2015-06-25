@@ -60,6 +60,7 @@ uint8_t u8g_InitDogm128API(u8g_dev_t *dev)
   return 1;
 }
 
+#if defined(U8G_WITH_PINLIST)
 uint8_t u8g_InitSPIDogm128API(u8g_dev_t *dev, uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset)
 {
 
@@ -77,7 +78,7 @@ uint8_t u8g_InitHWSPIDogm128API(u8g_dev_t *dev, uint8_t cs, uint8_t a0, uint8_t 
   u8g_init_dogm_common();
   return 1;
 }
-
+#endif
 
 void u8g_SetDogmRot90(void)
 {

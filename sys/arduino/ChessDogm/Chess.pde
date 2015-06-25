@@ -66,7 +66,7 @@ uint8_t uiKeyCode = CHESS_KEY_NONE;
 
 void uiSetup(void) {
   // configure input keys 
-  
+#if defined(ARDUINO)
   pinMode(uiKeyPrev, INPUT);           // set pin to input
   digitalWrite(uiKeyPrev, HIGH);       // turn on pullup resistors
   pinMode(uiKeyNext, INPUT);           // set pin to input
@@ -75,11 +75,13 @@ void uiSetup(void) {
   digitalWrite(uiKeySelect, HIGH);       // turn on pullup resistors
   pinMode(uiKeyBack, INPUT);           // set pin to input
   digitalWrite(uiKeyBack, HIGH);       // turn on pullup resistors
+#endif
 }
 
 void uiStep(void)
 {
   uiKeyCodeSecond = uiKeyCodeFirst;
+#if defined(ARDUINO)
   if ( digitalRead(uiKeyPrev) == LOW )
     uiKeyCodeFirst = CHESS_KEY_PREV;
   else if ( digitalRead(uiKeyNext) == LOW )
@@ -88,9 +90,10 @@ void uiStep(void)
     uiKeyCodeFirst = CHESS_KEY_SELECT;
   else if ( digitalRead(uiKeyBack) == LOW )
     uiKeyCodeFirst = CHESS_KEY_BACK;
-  else 
+  else
+#endif
     uiKeyCodeFirst = CHESS_KEY_NONE;
-  
+
   if ( uiKeyCodeSecond == uiKeyCodeFirst )
     uiKeyCode = uiKeyCodeFirst;
   else
@@ -107,7 +110,7 @@ void setup() {
 
   //u8g_SetDogmRot180();
   uiSetup();
-  chess_Init(&u8g_dogm128_obj);
+  chess_Init(&u8g_dogm128_obj, 0);
 }
 
 void loop() {  

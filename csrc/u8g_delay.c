@@ -61,6 +61,8 @@
 #  else
 #    define USE_ARDUINO_DELAY
 #  endif
+#elif defined(_GNU_SOURCE)
+#  define USE_LINUX_DELAY
 #elif defined(__MSP430__)
 #  define USE_MSP430_DELAY
 #elif defined(U8G_RASPBERRY_PI)
@@ -104,6 +106,22 @@ void u8g_10MicroDelay(void)
    usleep(10);
 }
 #endif
+
+#if defined(USE_LINUX_DELAY)
+void u8g_Delay(uint16_t val) {
+   //delay(val);
+   usleep((uint32_t)val*(uint32_t)1000);
+}
+void u8g_MicroDelay(void)
+{
+   usleep(1);
+}
+void u8g_10MicroDelay(void)
+{
+   usleep(10);
+}
+#endif
+
 
 
 /*== AVR Delay ==*/
