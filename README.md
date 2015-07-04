@@ -3,7 +3,7 @@
 
 A graphics library with support for many different monochrome displays.
 
-![http://wiki.u8glib.googlecode.com/hg/otherpic/nhd_oled180.jpg](nhd_oled180.jpg) ![http://wiki.u8glib.googlecode.com/hg/otherpic/dogs102_180.jpg](dogs102_180.jpg)
+![nhd_oled180.jpg](http://wiki.u8glib.googlecode.com/hg/otherpic/nhd_oled180.jpg) ![dogs102_180.jpg](http://wiki.u8glib.googlecode.com/hg/otherpic/dogs102_180.jpg)
 
 Left: NHD-2.7-12864 OLED (SSD1325), right: EA DOGS102 LCD (UC1701)
 
