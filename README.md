@@ -8,23 +8,21 @@ A graphics library with support for many different monochrome displays.
 Left: NHD-2.7-12864 OLED (SSD1325), right: EA DOGS102 LCD (UC1701)
 
 *U8glib:*
- * [https://github.com/olikraus/u8glib/wiki](Documentation)
- * [gallery](Gallery)
- * [https://bintray.com/olikraus/u8glib Bintray] download links:
-  * U8glib for Arduino: ![https://bintray.com/olikraus/u8glib/Arduino https://api.bintray.com/packages/olikraus/u8glib/Arduino/images/download.png](Arduino) 
-  * U8glib for AVR: ![https://bintray.com/olikraus/u8glib/AVR https://api.bintray.com/packages/olikraus/u8glib/AVR/images/download.png](AVR)
-  * U8glib for ARM: ![https://bintray.com/olikraus/u8glib/ARM https://api.bintray.com/packages/olikraus/u8glib/ARM/images/download.png](ARM)
-  * Converter for BDF fonts: [https://drive.google.com/folderview?id=0B5b6Dv0wCeCRLWJkYTh2TUlYVDg&usp=sharing](bdf2u8g_101.exe on google drive).
+ * [Gallery](gallery)
+ * [Bintray](https://bintray.com/olikraus/u8glib) download links:
+  * [U8glib for Arduino](https://bintray.com/olikraus/u8glib/Arduino)
+  * [U8glib for AVR](https://bintray.com/olikraus/u8glib/AVR)
+  * [U8glib for ARM](https://bintray.com/olikraus/u8glib/ARM)
+  * Converter for BDF fonts: [bdf2u8g_101.exe on google drive](https://drive.google.com/folderview?id=0B5b6Dv0wCeCRLWJkYTh2TUlYVDg&usp=sharing).
  * Supported environments:
-  * [http://www.arduino.cc/](Arduino (ATMEGA and ARM))
-  * [avr](AVR (ATMEGA))
-  * [lpc1114](ARM (with example for LPC1114))
+  * [Arduino (ATMEGA and ARM)](http://www.arduino.cc/)
+  * [AVR (ATMEGA)](avr)
+  * [ARM (with example for LPC1114)](lpc1114)
  * Library for graphic LCDs and OLEDs
- * Complete [u8glib documentation and tutorials]
- * Graphical user interface library (GUI) available: [http://code.google.com/p/m2tklib/ M2tklib]
- * Monochrome, grayscale and indexed color (planned)
+ * [U8glib documentation and tutorials](https://github.com/olikraus/u8glib/wiki)
+ * Graphical user interface library (GUI) available: [M2tklib](http://code.google.com/p/m2tklib/)
  * COM interfaces: Software SPI, Hardware SPI, 8Bit parallel
- * Large number of fonts (up to [fontsize 49 pixel height])
+ * Large number of [fonts](fontsize)
  * Monospaced and proportional fonts 
  * Mouse-Cursor support
  * Landscape and portrait mode
