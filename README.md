@@ -1,5 +1,5 @@
 
-# u8glib
+# U8glib
 
 A graphics library with support for many different monochrome displays.
 
@@ -7,7 +7,6 @@ A graphics library with support for many different monochrome displays.
 
 Left: NHD-2.7-12864 OLED (SSD1325), right: EA DOGS102 LCD (UC1701)
 
-*U8glib:*
  * [Gallery](https://github.com/olikraus/u8glib/wiki/gallery)
  * [Bintray](https://bintray.com/olikraus/u8glib) download links:
   * [U8glib for Arduino](https://bintray.com/olikraus/u8glib/Arduino)
