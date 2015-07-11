@@ -103,7 +103,8 @@ static uint8_t u8g_dev_uc1611_dogxl240_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t ms
       u8g_SetChipSelect(u8g, dev, 0);
       u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
       u8g_WriteByte(u8g, dev, 0x81);
-      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 2);	/* set contrast from, keep gain at 0 */
+      /* 11 Jul 2015: bugfix, github issue 339 */
+      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) );	/* set contrast from, keep gain at 0 */
       u8g_SetChipSelect(u8g, dev, 1);
       return 1;
   }
