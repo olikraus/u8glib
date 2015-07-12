@@ -7,7 +7,7 @@
   >>> Before compiling: Please remove comment from the constructor of the 
   >>> connected graphics display (see below).
   
-  Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
+  Universal 8bit Graphics Library, https://github.com/olikraus/u8glib/
   
   Copyright (c) 2012, olikraus@gmail.com
   All rights reserved.

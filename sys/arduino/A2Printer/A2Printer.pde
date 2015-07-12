@@ -5,7 +5,7 @@
   Special example code for the A2 Mciro Printer (https://www.sparkfun.com/products/10438)
   
   
-  Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
+  Universal 8bit Graphics Library, https://github.com/olikraus/u8glib/
   
   Copyright (c) 2013, olikraus@gmail.com
   All rights reserved.
