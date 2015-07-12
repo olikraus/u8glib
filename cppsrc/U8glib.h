@@ -968,6 +968,34 @@ class U8GLIB_SSD1306_128X32_2X : public U8GLIB
       { }
 };
 
+class U8GLIB_SSD1306_64X48 : public U8GLIB 
+{
+  public:
+    U8GLIB_SSD1306_64X48(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1306_64x48_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1306_64X48(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1306_64x48_hw_spi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1306_64X48(uint8_t options = U8G_I2C_OPT_NONE) 
+      : U8GLIB(&u8g_dev_ssd1306_64x48_i2c, options)
+      { }
+};
+
+class U8GLIB_SSD1306_64X48_2X : public U8GLIB 
+{
+  public:
+    U8GLIB_SSD1306_64X48_2X(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1306_64x48_2x_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1306_64X48_2X(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ssd1306_64x48_2x_hw_spi, cs, a0, reset)
+      { }
+    U8GLIB_SSD1306_64X48_2X(uint8_t options = U8G_I2C_OPT_NONE) 
+      : U8GLIB(&u8g_dev_ssd1306_64x48_2x_i2c, options)
+      { }
+};
+
 
 class U8GLIB_NHD27OLED_GR : public U8GLIB 
 {
