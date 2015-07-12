@@ -55,7 +55,7 @@
 //U8GLIB_NHD31OLED_2X_GR u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9, 8);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGM128 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_DOGM128 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM128_2X u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_ST7920_128X64_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
 //U8GLIB_ST7920_128X64_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
@@ -169,14 +169,10 @@ uint8_t uiKeyCode = KEY_NONE;
 void uiSetup(void) {
   // configure input keys 
   
-  pinMode(uiKeyPrev, INPUT);           // set pin to input
-  digitalWrite(uiKeyPrev, HIGH);       // turn on pullup resistors
-  pinMode(uiKeyNext, INPUT);           // set pin to input
-  digitalWrite(uiKeyNext, HIGH);       // turn on pullup resistors
-  pinMode(uiKeySelect, INPUT);           // set pin to input
-  digitalWrite(uiKeySelect, HIGH);       // turn on pullup resistors
-  pinMode(uiKeyBack, INPUT);           // set pin to input
-  digitalWrite(uiKeyBack, HIGH);       // turn on pullup resistors
+  pinMode(uiKeyPrev, INPUT_PULLUP);           // set pin to input with pullup
+  pinMode(uiKeyNext, INPUT_PULLUP);           // set pin to input with pullup
+  pinMode(uiKeySelect, INPUT_PULLUP);           // set pin to input with pullup
+  pinMode(uiKeyBack, INPUT_PULLUP);           // set pin to input with pullup
 }
 
 void uiStep(void) {
@@ -200,7 +196,7 @@ void uiStep(void) {
 
 
 #define MENU_ITEMS 4
-char *menu_strings[MENU_ITEMS] = { "First Line", "Second Item", "3333333", "abcdefg" };
+const char *menu_strings[MENU_ITEMS] = { "First Line", "Second Item", "3333333", "abcdefg" };
 
 uint8_t menu_current = 0;
 uint8_t menu_redraw_required = 0;

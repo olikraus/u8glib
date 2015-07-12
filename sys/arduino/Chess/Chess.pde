@@ -55,7 +55,7 @@
 //U8GLIB_NHD31OLED_2X_GR u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGS102 u8g(13, 11, 10, 9, 8);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM132 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
-//U8GLIB_DOGM128 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+U8GLIB_DOGM128 u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_DOGM128_2X u8g(13, 11, 10, 9);		// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_ST7920_128X64_1X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
 //U8GLIB_ST7920_128X64_4X u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, di=17,rw=16
@@ -143,17 +143,17 @@
 
 
 // DOGS102 shield configuration values
-uint8_t uiKeyPrev = 2;
-uint8_t uiKeyNext = 4;
-uint8_t uiKeySelect = 5;
-uint8_t uiKeyBack = 3;
+// uint8_t uiKeyPrev = 2;
+// uint8_t uiKeyNext = 4;
+// uint8_t uiKeySelect = 5;
+// uint8_t uiKeyBack = 3;
 
 // DOGM128-Shield	 configuration values
 // DOGXL60-Shield configuration values
-//uint8_t uiKeyPrev = 7;
-//uint8_t uiKeyNext = 3;
-//uint8_t uiKeySelect = 2;
-//uint8_t uiKeyBack = 8;
+uint8_t uiKeyPrev = 7;
+uint8_t uiKeyNext = 3;
+uint8_t uiKeySelect = 2;
+uint8_t uiKeyBack = 8;
 
 uint8_t uiKeyCodeFirst = CHESS_KEY_NONE;
 uint8_t uiKeyCodeSecond = CHESS_KEY_NONE;
@@ -163,14 +163,10 @@ uint8_t uiKeyCode = CHESS_KEY_NONE;
 void uiSetup(void) {
   // configure input keys 
 #if defined(ARDUINO)
-  pinMode(uiKeyPrev, INPUT);           // set pin to input
-  digitalWrite(uiKeyPrev, HIGH);       // turn on pullup resistors
-  pinMode(uiKeyNext, INPUT);           // set pin to input
-  digitalWrite(uiKeyNext, HIGH);       // turn on pullup resistors
-  pinMode(uiKeySelect, INPUT);           // set pin to input
-  digitalWrite(uiKeySelect, HIGH);       // turn on pullup resistors
-  pinMode(uiKeyBack, INPUT);           // set pin to input
-  digitalWrite(uiKeyBack, HIGH);       // turn on pullup resistors
+  pinMode(uiKeyPrev, INPUT_PULLUP);           // set pin to input
+  pinMode(uiKeyNext, INPUT_PULLUP);           // set pin to input
+  pinMode(uiKeySelect, INPUT_PULLUP);           // set pin to input
+  pinMode(uiKeyBack, INPUT_PULLUP);           // set pin to input
 #endif
 }
 
