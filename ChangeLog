@@ -154,10 +154,11 @@ u8glib ChangeLog
   * 400KHz option for I2C with U8G_I2C_OPT_FAST available for Due and Uno (Issue 303)
   * I2C support for Arduino Due. 100KHz/400KHz, TWI & TWI1, ACK will be ignored (issue 285)
   * Unifont update (Issue 297)
-2015-xx-xx	v1.18	  Oliver Kraus <olikraus@gmail.com>
+2015-07-14	v1.18	  Oliver Kraus <olikraus@gmail.com>
   * Fixed contrast assignment for SSD1309 and UC1611
   * Fixed bug in u8g_DrawLine(), Github issue 343 
   * Fixed bug in u8g_DrawStr90P(), Github issue 331
+  * Support for SSD1306 with 64x48 pixel
   
   
   
