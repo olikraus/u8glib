@@ -51,11 +51,20 @@ cp ../../../sys/arduino/A2Printer/A2Printer.pde ./../../../../U8glib_Arduino/exa
 # rename to .ino
 # find . -name "*.pde" -exec /bin/sh -c 'f={}; mv ${f} ${f%.*}.ino' \;
 
-cd ../../../../Ucglib_Arduino
+cd ../../../../U8glib_Arduino
 
 
 #chmod -R og=u libraries
 #cd libraries 
 #zip -r ../u8glib_arduino_`../../print_release.sh`.zip *
-#cd ..
+#cd ..cd ../../../../Ucglib_Arduino
+
+git commit -a -m `../u8glib/tools/release/print_release.sh`
+git push
+
+echo now create a release in gitub for U8glib_Arduino, tag/namex = v1.xx
+# Relases in github:
+# Tag: 1.02pre3
+# Release  name: 1.02pre3
+
 
