@@ -159,6 +159,7 @@ u8glib ChangeLog
   * Fixed bug in u8g_DrawLine(), Github issue 343 
   * Fixed bug in u8g_DrawStr90P(), Github issue 331
   * Support for SSD1306 with 64x48 pixel
+2015-xx-xx	v1.19	
   
   
   
