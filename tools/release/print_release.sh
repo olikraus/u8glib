@@ -1,1 +1,2 @@
-echo -n "v1.18.1"
+# without 'v' prefix
+echo -n "1.18.1"

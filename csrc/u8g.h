@@ -80,9 +80,13 @@ extern "C" {
 #  if defined(__MSPGCC__)
 /* mspgcc does not have .progmem sections. Use -fdata-sections. */
 #    define U8G_FONT_SECTION(name)
-#  endif
+# endif
 #  if defined(__AVR__)
 #    define U8G_FONT_SECTION(name) U8G_SECTION(".progmem." name)
+#  endif
+#  if defined(__XTENSA__)
+//#    define U8G_FONT_SECTION(name) U8G_SECTION(".irom.text." name)
+#    define U8G_FONT_SECTION(name) U8G_SECTION(".irom0.text" )
 #  endif
 #else
 #  define U8G_NOINLINE
@@ -120,16 +124,26 @@ typedef uint8_t PROGMEM u8g_pgm_uint8_t;
 typedef uint8_t u8g_fntpgm_uint8_t;
 #define u8g_pgm_read(adr) pgm_read_byte_near(adr)
 #define U8G_PSTR(s) ((u8g_pgm_uint8_t *)PSTR(s))
+#endif
 
-#else
-
-#define U8G_PROGMEM
-#define PROGMEM
+#if defined(__XTENSA__)
+#  ifndef PROGMEM
+#    define PROGMEM __attribute__ ((section (".irom0.text")))
+#  endif
+#  define U8G_PROGMEM PROGMEM
 typedef uint8_t u8g_pgm_uint8_t;
 typedef uint8_t u8g_fntpgm_uint8_t;
-#define u8g_pgm_read(adr) (*(const u8g_pgm_uint8_t *)(adr)) 
-#define U8G_PSTR(s) ((u8g_pgm_uint8_t *)(s))
+#  define u8g_pgm_read(adr) (*(const u8g_pgm_uint8_t *)(adr)) 
+#  define U8G_PSTR(s) ((u8g_pgm_uint8_t *)(s))
+#endif
 
+#ifndef U8G_PROGMEM
+#  define U8G_PROGMEM
+#  define PROGMEM
+typedef uint8_t u8g_pgm_uint8_t;
+typedef uint8_t u8g_fntpgm_uint8_t;
+#  define u8g_pgm_read(adr) (*(const u8g_pgm_uint8_t *)(adr)) 
+#  define U8G_PSTR(s) ((u8g_pgm_uint8_t *)(s))
 #endif
   
 /*===============================================================*/

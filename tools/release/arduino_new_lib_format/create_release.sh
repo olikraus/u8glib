@@ -53,16 +53,15 @@ cp ../../../sys/arduino/A2Printer/A2Printer.pde ./../../../../U8glib_Arduino/exa
 
 cd ../../../../U8glib_Arduino
 
+ver=`../u8glib/tools/release/print_release.sh`
 
-#chmod -R og=u libraries
-#cd libraries 
-#zip -r ../u8glib_arduino_`../../print_release.sh`.zip *
-#cd ..cd ../../../../Ucglib_Arduino
+sed -i -e "s/version=.*/version=${ver}/" library.properties
+
 
 git commit -a -m `../u8glib/tools/release/print_release.sh`
 git push
 
-echo now create a release in gitub for U8glib_Arduino, tag/namex = v1.xx
+echo now create a release in gitub for U8glib_Arduino, tag/namex = ${ver]
 # Relases in github:
 # Tag: 1.02pre3
 # Release  name: 1.02pre3
