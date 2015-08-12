@@ -71,6 +71,8 @@
 #  define USE_AVR_DELAY
 #elif defined(__18CXX)
 #  define USE_PIC18_DELAY
+#elif defined(U8G_CYPRESS_PSOC5)
+#define USE_PSOC5_DELAY
 #elif defined(__arm__)
 /* do not define anything, all procedures are expected to be defined outside u8glib */
 
@@ -292,6 +294,12 @@ void u8g_10MicroDelay(void)
 {
   __delay_cycles(F_CPU/100000UL);
 }
+#endif
+#if defined USE_PSOC5_DELAY
+  #include <project.h>
+  void u8g_Delay(uint16_t val)  {CyDelay(val);};
+  void u8g_MicroDelay(void)     {CyDelay(1);};
+  void u8g_10MicroDelay(void)   {CyDelay(10);};  
 #endif
 
 
