@@ -22,14 +22,15 @@
 
   One layer is the Command/Arg/Data interface. It can be used by the display layer
   to communicate with the display hardware.
+  This layer only deals with data, commands and arguments. D/C line is unknown.
     U8G2_MSG_CAD_INIT
+    U8G2_MSG_CAD_SET_I2C_ADR
+    U8G2_MSG_CAD_SET_DEVICE
+    U8G2_MSG_CAD_START_TRANSFER
     U8G2_MSG_CAD_SEND_CMD
     U8G2_MSG_CAD_SEND_ARG
     U8G2_MSG_CAD_SEND_DATA
-    U8G2_MSG_CAD_RESET
-    U8G2_MSG_CAD_CHIP_SELECT
-    U8G2_MSG_CAD_SET_I2C_ADR
-    U8G2_MSG_CAD_SET_DEVICE
+    U8G2_MSG_CAD_END_TRANSFER
     
   The byte interface is there to send 1 byte (8 bits) to the display hardware.
   This layer depends on the hardware of a microcontroller, if a specific hardware 
@@ -39,8 +40,8 @@
     U8G2_MSG_BYTE_INIT
     U8G2_MSG_BYTE_SEND 30
     U8G2_MSG_BYTE_SET_DC 31
-    U8G2_MSG_BYTE_RESET
-    U8G2_MSG_BYTE_CHIP_SELECT
+    U8G2_MSG_BYTE_START_TRANSFER
+    U8G2_MSG_BYTE_END_TRANSFER
     U8G2_MSG_BYTE_SET_I2C_ADR
     U8G2_MSG_BYTE_SET_DEVICE
 
@@ -169,8 +170,6 @@ void u8g2_display_Init(u8g2_t *u8g2);
 
 
 
-
-
 /*==========================================*/
 /* Command Arg Data (CAD) Interface */
 
@@ -219,9 +218,6 @@ uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 /* Byte Interface */
 #define U8G2_MSG_BYTE_SEND 30
 #define U8G2_MSG_BYTE_SET_DC 31
-
-/* arg_int: level */
-//#define U8G2_MSG_BYTE_RESET U8G2_MSG_CAD_RESET
 
 
 #define U8G2_MSG_BYTE_START_TRANSFER U8G2_MSG_CAD_START_TRANSFER
