@@ -116,10 +116,12 @@ uint8_t u8g2_byte_arduino_sw_spi(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, vo
       pinMode(11, OUTPUT);
       pinMode(13, OUTPUT);
       digitalWrite(13, 1);      
-      digitalWrite(10, arg_int);			// TODO: call gpio cb
+      //digitalWrite(10, arg_int);			// TODO: call gpio cb
+      u8g2_gpio_SetCS(u8g2, arg_int);
       break;
     case U8G2_MSG_BYTE_END_TRANSFER:
-      digitalWrite(10, arg_int);			// TODO: call gpio cb
+      //digitalWrite(10, arg_int);			// TODO: call gpio cb
+      u8g2_gpio_SetCS(u8g2, arg_int);
       break;
     case U8G2_MSG_BYTE_SET_I2C_ADR:
       break;
@@ -133,11 +135,17 @@ uint8_t u8g2_byte_arduino_sw_spi(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, vo
 
 void u8g2_Setup_UC1701_DOGS102(u8g2_t *u8g2)
 {
+  /* setup defaults */
   u8g2_Init(u8g2);
+  
+  /* setup specific callbacks */
   u8g2->display_cb = u8g2_d_uc1701_dogs102;
   u8g2->cad_cb = u8g2_cad_001;
   u8g2->byte_cb = u8g2_byte_arduino_sw_spi;
   u8g2->gpio_and_delay_cb = u8g2_gpio_and_delay_arduino;
+  
+  /* display init (done later) */
+  //u8g2_display_Init(&u8g2);  
 }
 
 

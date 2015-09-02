@@ -237,14 +237,23 @@ uint8_t u8g2_byte_Send(u8g2_t *u8g2, uint8_t byte);
 /* GPIO Interface */
 
 /* arg_int: milliseconds */
-#define U8G2_MSG_DELAY_MILLI		40
 
-#define U8G2_MSG_DELAY_10MICRO		41
-#define U8G2_MSG_DELAY_100NANO		42
+#define U8G2_MSG_GPIO_AND_DELAY_INIT 40
+
+#define U8G2_MSG_DELAY_MILLI		41
+
+#define U8G2_MSG_DELAY_10MICRO		42
+#define U8G2_MSG_DELAY_100NANO		43
 
 #define U8G2_MSG_GPIO_DC 45
 #define U8G2_MSG_GPIO_CS 46		
 #define U8G2_MSG_GPIO_RESET 47
+
+#define u8g2_gpio_Init(u8g2) ((u8g2)->gpio_and_delay_cb((u8g2), U8G2_MSG_GPIO_AND_DELAY_INIT, 0, NULL ))
+
+#define u8g2_gpio_SetDC(u8g2, v) ((u8g2)->gpio_and_delay_cb((u8g2), U8G2_MSG_GPIO_DC, (v), NULL ))
+#define u8g2_gpio_SetCS(u8g2, v) ((u8g2)->gpio_and_delay_cb((u8g2), U8G2_MSG_GPIO_CS, (v), NULL ))
+#define u8g2_gpio_SetReset(u8g2, v) ((u8g2)->gpio_and_delay_cb((u8g2), U8G2_MSG_GPIO_RESET, (v), NULL ))
 
 /*==========================================*/
 /* u8g2.c */

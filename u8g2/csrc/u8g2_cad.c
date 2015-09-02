@@ -3,7 +3,21 @@
   u8g2_cad.c
   
   "command arg data" interface to the graphics controller
+
+  The following sequence must be used for any data, which is set to the display:
   
+  
+  uint8_t u8g2_cad_StartTransfer(u8g2_t *u8g2, uint8_t cs)
+
+  any of the following calls
+    uint8_t u8g2_cad_SendCmd(u8g2_t *u8g2, uint8_t cmd)
+    uint8_t u8g2_cad_SendArg(u8g2_t *u8g2, uint8_t arg)
+    uint8_t u8g2_cad_SendData(u8g2_t *u8g2, uint8_t cnt, uint8_t *data)
+  
+  uint8_t u8g2_cad_EndTransfer(u8g2_t *u8g2, uint8_t cs)
+
+
+
 */
 /*
 uint8_t u8g2_cad_template(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
