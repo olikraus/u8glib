@@ -180,7 +180,7 @@ void u8g2_display_Init(u8g2_t *u8g2);
 /*  arg_int: arg byte */
 #define U8G2_MSG_CAD_SEND_DATA 22
 /*  arg_int: # of data, arg_ptr = uint8_t * with data */
-#define U8G2_MSG_CAD_RESET 23
+//#define U8G2_MSG_CAD_RESET 23
 /* arg_int: expected cs level after processing this msg */
 #define U8G2_MSG_CAD_START_TRANSFER 24
 /* arg_int: expected cs level after processing this msg */
@@ -193,8 +193,8 @@ void u8g2_display_Init(u8g2_t *u8g2);
 uint8_t u8g2_cad_SendCmd(u8g2_t *u8g2, uint8_t cmd);
 uint8_t u8g2_cad_SendArg(u8g2_t *u8g2, uint8_t arg);
 uint8_t u8g2_cad_SendData(u8g2_t *u8g2, uint8_t cnt, uint8_t *data);
-uint8_t u8g2_cad_Reset1(u8g2_t *u8g2);
-uint8_t u8g2_cad_Reset0(u8g2_t *u8g2);
+//uint8_t u8g2_cad_Reset1(u8g2_t *u8g2);
+//uint8_t u8g2_cad_Reset0(u8g2_t *u8g2);
 uint8_t u8g2_cad_StartTransfer(u8g2_t *u8g2, uint8_t cs);
 uint8_t u8g2_cad_EndTransfer(u8g2_t *u8g2, uint8_t cs);
 
@@ -221,7 +221,7 @@ uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 #define U8G2_MSG_BYTE_SET_DC 31
 
 /* arg_int: level */
-#define U8G2_MSG_BYTE_RESET U8G2_MSG_CAD_RESET
+//#define U8G2_MSG_BYTE_RESET U8G2_MSG_CAD_RESET
 
 
 #define U8G2_MSG_BYTE_START_TRANSFER U8G2_MSG_CAD_START_TRANSFER

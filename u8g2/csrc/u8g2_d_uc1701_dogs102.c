@@ -83,12 +83,14 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void 
       u8g2_gpio_Init(u8g2);
     
       /* 3) do reset */
-      u8g2_cad_Reset1(u8g2);
+      u8g2_gpio_SetReset(u8g2, 1);
       u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms, NULL);
-      u8g2_cad_Reset0(u8g2);
+      u8g2_gpio_SetReset(u8g2, 0);
       u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms, NULL);
-      u8g2_cad_Reset1(u8g2);
+      u8g2_gpio_SetReset(u8g2, 1);
       u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->post_reset_wait_ms, NULL);
+    
+      /* 4) send startup code */
       u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_init_seq);
     
       break;

@@ -13,23 +13,25 @@ uint8_t u8g2_gpio_and_delay_arduino(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int,
       pinMode(8, OUTPUT);
       pinMode(9, OUTPUT);
       pinMode(10, OUTPUT);
+      pinMode(11, OUTPUT);
+      pinMode(13, OUTPUT);
       break;
   
     case U8G2_MSG_DELAY_MILLI:
       delay(arg_int);
       break;
       
-  case U8G2_MSG_GPIO_DC:
-      digitalWrite(9, arg_int);
-      break;
-      
-  case U8G2_MSG_GPIO_CS:
-      digitalWrite(10, arg_int);
-      break;
-      
-  case U8G2_MSG_GPIO_RESET:
-      digitalWrite(8, arg_int);
-      break;
+    case U8G2_MSG_GPIO_DC:
+	digitalWrite(9, arg_int);
+	break;
+	
+    case U8G2_MSG_GPIO_CS:
+	digitalWrite(10, arg_int);
+	break;
+	
+    case U8G2_MSG_GPIO_RESET:
+	digitalWrite(8, arg_int);
+	break;
       
     default:
       return 0;
@@ -54,19 +56,14 @@ uint8_t u8g2_byte_arduino_hw_spi(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, vo
       SPI.end();
       break;
     case U8G2_MSG_BYTE_SET_DC:
-      digitalWrite(9, arg_int);
-      break;
-    case U8G2_MSG_BYTE_RESET:
-      digitalWrite(8, arg_int);
+      //digitalWrite(9, arg_int);   // TODO: Call to GPIO callback
+      u8g2_gpio_SetDC(u8g2, arg_int);
       break;
     case U8G2_MSG_BYTE_START_TRANSFER:
-      //pinMode(8, OUTPUT);
-      //pinMode(9, OUTPUT);
-      //pinMode(10, OUTPUT);
-      digitalWrite(10, arg_int);
+      u8g2_gpio_SetCS(u8g2, arg_int);
       break;
     case U8G2_MSG_BYTE_END_TRANSFER:
-      digitalWrite(10, arg_int);
+      u8g2_gpio_SetCS(u8g2, arg_int);
       break;
     case U8G2_MSG_BYTE_SET_I2C_ADR:
       break;
@@ -97,36 +94,17 @@ uint8_t u8g2_byte_arduino_sw_spi(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, vo
 	digitalWrite(13, 0);
 	delay(1);
 	digitalWrite(13, 1);
-	delay(1);
-	
-      }
-    
-    
-      //SPI.begin();
-      
-      //for( i = 0; i < arg_int; i++ )
-	// SPI.transfer(((uint8_t *)arg_ptr)[i]);
-      //SPI.transfer((uint8_t)arg_int);
-      //SPI.end();
+	delay(1);	
+      }    
       break;
     case U8G2_MSG_BYTE_SET_DC:
-      digitalWrite(9, arg_int);
-      break;
-    case U8G2_MSG_BYTE_RESET:
-      digitalWrite(8, arg_int);
+      u8g2_gpio_SetDC(u8g2, arg_int);
       break;
     case U8G2_MSG_BYTE_START_TRANSFER:
-      pinMode(8, OUTPUT);
-      pinMode(9, OUTPUT);
-      pinMode(10, OUTPUT);
-      pinMode(11, OUTPUT);
-      pinMode(13, OUTPUT);
       digitalWrite(13, 1);      
-      //digitalWrite(10, arg_int);			// TODO: call gpio cb
       u8g2_gpio_SetCS(u8g2, arg_int);
       break;
     case U8G2_MSG_BYTE_END_TRANSFER:
-      //digitalWrite(10, arg_int);			// TODO: call gpio cb
       u8g2_gpio_SetCS(u8g2, arg_int);
       break;
     case U8G2_MSG_BYTE_SET_I2C_ADR:

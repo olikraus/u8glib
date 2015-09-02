@@ -65,8 +65,6 @@ uint8_t u8g2_byte_stdio(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_p
     case U8G2_MSG_BYTE_SET_DC:
       dc = arg_int;
       break;
-    case U8G2_MSG_BYTE_RESET:
-      break;
     case U8G2_MSG_BYTE_START_TRANSFER:
       break;
     case U8G2_MSG_BYTE_END_TRANSFER:
@@ -102,8 +100,6 @@ uint8_t u8g2_cad_stdio(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_pt
       for( i = 0; i < 8; i++ )
 	u8g2_byte_Send(u8g2, ((uint8_t *)arg_ptr)[i]);
       break;
-    case U8G2_MSG_CAD_RESET:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_START_TRANSFER:
       return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_END_TRANSFER:

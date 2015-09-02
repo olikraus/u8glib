@@ -74,6 +74,7 @@ uint8_t u8g2_cad_SendData(u8g2_t *u8g2, uint8_t cnt, uint8_t *data)
   return u8g2->cad_cb(u8g2, U8G2_MSG_CAD_SEND_DATA, cnt, data);
 }
 
+/*
 uint8_t u8g2_cad_Reset1(u8g2_t *u8g2)
 {
   return u8g2->cad_cb(u8g2, U8G2_MSG_CAD_RESET, 1, NULL);
@@ -83,6 +84,7 @@ uint8_t u8g2_cad_Reset0(u8g2_t *u8g2)
 {
   return u8g2->cad_cb(u8g2, U8G2_MSG_CAD_RESET, 0, NULL);
 }
+*/
 
 uint8_t u8g2_cad_StartTransfer(u8g2_t *u8g2, uint8_t cs)
 {
@@ -197,8 +199,8 @@ uint8_t u8g2_cad_110(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
       for( i = 0; i < arg_int; i++ )
 	u8g2_byte_Send(u8g2, ((uint8_t *)arg_ptr)[i]);
       break;
-    case U8G2_MSG_CAD_RESET:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
+    //case U8G2_MSG_CAD_RESET:
+    //  return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_START_TRANSFER:
       return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_END_TRANSFER:
@@ -237,8 +239,8 @@ uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
       for( i = 0; i < arg_int; i++ )
 	u8g2_byte_Send(u8g2, ((uint8_t *)arg_ptr)[i]);
       break;
-    case U8G2_MSG_CAD_RESET:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
+    //case U8G2_MSG_CAD_RESET:
+    //  return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_START_TRANSFER:
       return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_END_TRANSFER:
