@@ -77,15 +77,15 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void 
   {
     case U8G2_MSG_DISPLAY_INIT:
       /* 1) set display info struct */
-      u8g2->display_info = u8g2_uc1601_display_info;
+      u8g2->display_info = &u8g2_uc1601_display_info;
     
       /* 3) do reset */
       u8g2_cad_Reset1(u8g2);
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info.reset_pulse_width_ms, NULL);
+      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms, NULL);
       u8g2_cad_Reset0(u8g2);
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info.reset_pulse_width_ms, NULL);
+      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms, NULL);
       u8g2_cad_Reset1(u8g2);
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info.post_reset_wait_ms, NULL);
+      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->post_reset_wait_ms, NULL);
       u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_init_seq);
       //u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, 100, NULL);
       //u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_init_seq);

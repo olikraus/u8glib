@@ -242,6 +242,10 @@ uint8_t u8g2_byte_Send(u8g2_t *u8g2, uint8_t byte);
 #define U8G2_MSG_DELAY_10MICRO		41
 #define U8G2_MSG_DELAY_100NANO		42
 
+#define U8G2_MSG_GPIO_DC 45
+#define U8G2_MSG_GPIO_CS 46		
+#define U8G2_MSG_GPIO_RESET 47
+
 /*==========================================*/
 /* u8g2.c */
 void u8g2_Init(u8g2_t *u8g2);

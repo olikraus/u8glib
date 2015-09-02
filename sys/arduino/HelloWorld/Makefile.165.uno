@@ -23,12 +23,13 @@
 #	002  05 Oct 2010	added 'uno'
 #	003  06 Dec 2011    arduino 1.0 
 #	004  11 Feb 2012     u8glib   
+#	004	09 Aug 2015	Arduino 1.6.5
 #
 
 #=== user configuration ===
 # All ...PATH variables must have a '/' at the end
 
-# Board (and prozessor) information: see $(ARDUINO_PATH)hardware/arduino/boards.txt
+# Board (and prozessor) information: see $(ARDUINO_PATH)hardware/arduino/avr/boards.txt
 # Some examples:
 #	BOARD		DESCRIPTION
 #	uno			Arduino Uno
@@ -41,7 +42,7 @@
 BOARD:=uno
 
 # additional definitions
-#DEFS:=-DARDUINO=105
+#DEFS:=-DARDUINO=165
 
   
 U8G_PATH:=$(shell cd ../../.. && pwd)/csrc/
@@ -54,10 +55,10 @@ U8G_FONT_PATH:=$(shell cd ../../.. && pwd)/sfntsrc/
 AVR_TOOLS_PATH:=/usr/bin/
 
 # Install path of the arduino software. Requires a '/' at the end.
-ARDUINO_PATH:=/home/kraus/prg/arduino-1.0.5-u8glib/
+ARDUINO_PATH:=/home/kraus/prg/arduino-1.6.5/
 
 # Install path for avrdude. Requires a '/' at the end. Can be empty if avrdude is in the search path.
-AVRDUDE_PATH:=$(ARDUINO_PATH)hardware/tools/
+AVRDUDE_PATH:=$(ARDUINO_PATH)hardware/tools/avr/bin/
 
 # The unix device where we can reach the arduino board
 # Uno: /dev/ttyACM0
@@ -74,7 +75,7 @@ EXTRA_DIRS+=$(ARDUINO_PATH)libraries/SPI/
 #=== fetch parameter from boards.txt processor parameter ===
 # the basic idea is to get most of the information from boards.txt
 
-BOARDS_TXT:=$(ARDUINO_PATH)hardware/arduino/boards.txt
+BOARDS_TXT:=$(ARDUINO_PATH)hardware/arduino/avr/boards.txt
 
 # get the MCU value from the $(BOARD).build.mcu variable. For the atmega328 board this is atmega328p
 MCU:=$(shell sed -n -e "s/$(BOARD).build.mcu=\(.*\)/\1/p" $(BOARDS_TXT))
