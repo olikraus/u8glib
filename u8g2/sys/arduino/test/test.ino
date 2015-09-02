@@ -9,6 +9,12 @@ uint8_t u8g2_gpio_and_delay_arduino(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int,
 {
   switch(msg)
   {
+    case U8G2_MSG_GPIO_AND_DELAY_INIT:
+      pinMode(8, OUTPUT);
+      pinMode(9, OUTPUT);
+      pinMode(10, OUTPUT);
+      break;
+  
     case U8G2_MSG_DELAY_MILLI:
       delay(arg_int);
       break;
@@ -54,9 +60,9 @@ uint8_t u8g2_byte_arduino_hw_spi(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, vo
       digitalWrite(8, arg_int);
       break;
     case U8G2_MSG_BYTE_START_TRANSFER:
-      pinMode(8, OUTPUT);
-      pinMode(9, OUTPUT);
-      pinMode(10, OUTPUT);
+      //pinMode(8, OUTPUT);
+      //pinMode(9, OUTPUT);
+      //pinMode(10, OUTPUT);
       digitalWrite(10, arg_int);
       break;
     case U8G2_MSG_BYTE_END_TRANSFER:
