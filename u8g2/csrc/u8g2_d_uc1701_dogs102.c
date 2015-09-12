@@ -6,14 +6,8 @@
 
 static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
   
-  /* the following sequence ensures that the chip select is high */
-  U8G2_START_CS0(),             		/* enable chip */
-  U8G2_DLY(1),       				/* delay 1 ms */
-  U8G2_END_CS1(),             		/* ensure that chip is disabled */
-  U8G2_DLY(1),       				/* delay 1 ms */
   
-  U8G2_START_CS0(),             		/* enable chip */
-  U8G2_DLY(1),       				/* delay 1 ms */
+  U8G2_START_TRANSFER(),             	/* enable chip, delay is part of the transfer start */
   
   U8G2_C(0x0e2),            			/* soft reset */
   U8G2_C(0x0ae),		                /* display off */
@@ -38,21 +32,21 @@ static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
   //U8G2_DLY(50),       			/* delay 100 ms */
   //U8G2_C(0x0a4),		                /* normal display */
   
-  //U8G2_C(0x010),		                /* col hi adr 0 */
-  //U8G2_C(0x000),		                /* col lo adr 0 */
-  //U8G2_C(0x0b0),		                /* page 0 */
+  U8G2_C(0x010),		                /* col hi adr 0 */
+  U8G2_C(0x000),		                /* col lo adr 0 */
+  U8G2_C(0x0b0),		                /* page 0 */
   
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
+  U8G2_D1(0x0ff),		                /* data */
+  U8G2_D1(0x0ff),		                /* data */
+  U8G2_D1(0x0ff),		                /* data */
+  U8G2_D1(0x0ff),		                /* data */
+  U8G2_D1(0x0ff),		                /* data */
+  U8G2_D1(0x0ff),		                /* data */
+  U8G2_D1(0x0ff),		                /* data */
+  U8G2_D1(0x0ff),		                /* data */
   
   
-  U8G2_END_CS1(),             		/* disable chip */
+  U8G2_END_TRANSFER(),             	/* disable chip */
   U8G2_END()             			/* end of sequence */
 };
 
@@ -92,11 +86,11 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void 
     
       /* 4) do reset */
       u8g2_gpio_SetReset(u8g2, 1);
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms, NULL);
+      u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms);
       u8g2_gpio_SetReset(u8g2, 0);
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms, NULL);
+      u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms);
       u8g2_gpio_SetReset(u8g2, 1);
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->post_reset_wait_ms, NULL);
+      u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->post_reset_wait_ms);
     
       /* 5) send startup code */
       u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_init_seq);
@@ -127,17 +121,3 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void 
 }
 
 
-/*
-static u8g2_mcd_t u8g2_mcd_byte_stdio;
-static u8g2_mcd_t u8g2_mcd_cad;
-static u8g2_mcd_t u8g2_mcd_display;
-
-
-void u8g2_InitUC1701DOGS102(u8g2_t *u8g2)
-{
-  u8g2_Init(u8g2);
-  u8g2_Chain(u8g2, &u8g2_mcd_byte_stdio, u8g2_byte_stdio);
-  u8g2_Chain(u8g2, &u8g2_cad_110, u8g2_mcd_cad);
-  u8g2_Chain(u8g2, &u8g2_d_uc1701_dogs102, u8g2_mcd_display);
-}
-*/

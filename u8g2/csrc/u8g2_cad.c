@@ -74,18 +74,6 @@ uint8_t u8g2_cad_SendData(u8g2_t *u8g2, uint8_t cnt, uint8_t *data)
   return u8g2->cad_cb(u8g2, U8G2_MSG_CAD_SEND_DATA, cnt, data);
 }
 
-/*
-uint8_t u8g2_cad_Reset1(u8g2_t *u8g2)
-{
-  return u8g2->cad_cb(u8g2, U8G2_MSG_CAD_RESET, 1, NULL);
-}
-
-uint8_t u8g2_cad_Reset0(u8g2_t *u8g2)
-{
-  return u8g2->cad_cb(u8g2, U8G2_MSG_CAD_RESET, 0, NULL);
-}
-*/
-
 uint8_t u8g2_cad_StartTransfer(u8g2_t *u8g2)
 {
   return u8g2->cad_cb(u8g2, U8G2_MSG_CAD_START_TRANSFER, 0, NULL);
@@ -151,18 +139,12 @@ void u8g2_cad_SendSequence(u8g2_t *u8g2, uint8_t const *data)
 	    case 0:
 		u8g2_cad_StartTransfer(u8g2); 
 		break;
-	    case 1:
-		u8g2_cad_StartTransfer(u8g2); 
-		break;
 	    case 2:
-		u8g2_cad_EndTransfer(u8g2); 
-		break;
-	    case 3:
 		u8g2_cad_EndTransfer(u8g2); 
 		break;
 	    case 14:
 		v = *data++;	      
-		u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, v, NULL);
+		u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, v);	    
 		break;
 	    default:
 	      return;
@@ -200,13 +182,9 @@ uint8_t u8g2_cad_110(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 	u8g2_byte_Send(u8g2, ((uint8_t *)arg_ptr)[i]);
       break;
     case U8G2_MSG_CAD_INIT:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_START_TRANSFER:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_END_TRANSFER:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_SET_I2C_ADR:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_SET_DEVICE:
       return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     default:
@@ -240,13 +218,9 @@ uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 	u8g2_byte_Send(u8g2, ((uint8_t *)arg_ptr)[i]);
       break;
     case U8G2_MSG_CAD_INIT:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_START_TRANSFER:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_END_TRANSFER:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_SET_I2C_ADR:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     case U8G2_MSG_CAD_SET_DEVICE:
       return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
     default:

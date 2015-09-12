@@ -103,10 +103,10 @@ uint8_t u8g2_byte_arduino_sw_spi(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, vo
     case U8G2_MSG_BYTE_START_TRANSFER:
       digitalWrite(13, 1);      
       u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_enable_level);  
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->post_chip_enable_wait_ns, NULL);
+      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_NANO, u8g2->display_info->post_chip_enable_wait_ns, NULL);
       break;
     case U8G2_MSG_BYTE_END_TRANSFER:
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->pre_chip_disable_wait_ns, NULL);
+      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_NANO, u8g2->display_info->pre_chip_disable_wait_ns, NULL);
       u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_disable_level);
       break;
     case U8G2_MSG_BYTE_SET_I2C_ADR:
