@@ -96,59 +96,39 @@ uint8_t u8g2_cad_EndTransfer(u8g2_t *u8g2)
 
 void u8g2_cad_SendSequence(u8g2_t *u8g2, uint8_t const *data)
 {
-  uint8_t hi, lo;
+  uint8_t cmd;
   uint8_t v;
 
   for(;;)
   {
-    hi = *data;
-    lo = hi;
-    hi >>= 4;
-    lo &= 0x0f;
+    cmd = *data;
     data++;
-    switch( hi )
+    switch( cmd )
     {
-      case 0:
-	  while( lo > 3 )
-	  {
-	    v = *data;
-	    u8g2_cad_SendCmd(u8g2, v);
-	    data++;
-	    lo-=4;
-	  }
-	  while( lo > 0 )
-	  {
-	    v = *data;
-	    u8g2_cad_SendArg(u8g2, v);
-	    data++;
-	    lo--;
-	  }
+      case 0x080:
+	  v = *data;
+	  u8g2_cad_SendCmd(u8g2, v);
+	  data++;
 	  break;
-      case 1:
-	  while( lo > 0 )
-	  {
-	    v = *data;
-	    u8g2_cad_SendData(u8g2, 1, &v);
-	    data++;
-	    lo--;
-	  }
+      case 0x081:
+	  v = *data;
+	  u8g2_cad_SendArg(u8g2, v);
+	  data++;
 	  break;
-      case 15:
-	  switch(lo)
-	  {
-	    case 0:
-		u8g2_cad_StartTransfer(u8g2); 
-		break;
-	    case 2:
-		u8g2_cad_EndTransfer(u8g2); 
-		break;
-	    case 14:
-		v = *data++;	      
-		u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, v);	    
-		break;
-	    default:
-	      return;
-	  }
+      case 0x082:
+	  v = *data;
+	  u8g2_cad_SendData(u8g2, 1, &v);
+	  data++;
+	  break;
+      case 0x0f0:
+	  u8g2_cad_StartTransfer(u8g2); 
+	  break;
+      case 0x0f2:
+	  u8g2_cad_EndTransfer(u8g2); 
+	  break;
+      case 0x0fe:
+	  v = *data++;	      
+	  u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, v);	    
 	  break;
       default:
 	return;

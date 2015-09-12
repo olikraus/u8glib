@@ -217,19 +217,18 @@ uint8_t u8g2_cad_SendData(u8g2_t *u8g2, uint8_t cnt, uint8_t *data) U8G2_NOINLIN
 uint8_t u8g2_cad_StartTransfer(u8g2_t *u8g2) U8G2_NOINLINE;
 uint8_t u8g2_cad_EndTransfer(u8g2_t *u8g2) U8G2_NOINLINE;
 
+/*
 #define U8G2_C(c0)				(0x04), (c0)
 #define U8G2_CA(c0,a0)			(0x05), (c0), (a0)
 #define U8G2_CAA(c0,a0,a1)		(0x06), (c0), (a0), (a1)
 #define U8G2_DATA()			(0x10)
 #define U8G2_D1(d0)			(0x11), (d0)
+*/
 
-/*
 #define U8G2_C(c0)				(0x80), (c0)
 #define U8G2_CA(c0,a0)			(0x80), (c0), (0x81), (a0)
 #define U8G2_CAA(c0,a0,a1)		(0x80), (c0), (0x81), (a0), (0x81), (a1)
-#define U8G2_DATA()			(0x82) 
-#define U8G2_D1(d0)			(0x83), (d0)
-*/
+#define U8G2_D1(d0)			(0x82), (d0)
 
 
 #define U8G2_START_TRANSFER()	(0xf0)
