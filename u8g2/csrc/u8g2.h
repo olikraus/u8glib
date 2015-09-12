@@ -250,9 +250,9 @@ uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 /* Byte Interface */
 
 #define U8G2_MSG_BYTE_INIT U8G2_MSG_CAD_INIT
-#define U8G2_MSG_BYTE_SEND 31
 #define U8G2_MSG_BYTE_SET_DC 32
 
+#define U8G2_MSG_BYTE_SEND U8G2_MSG_CAD_SEND_DATA
 
 #define U8G2_MSG_BYTE_START_TRANSFER U8G2_MSG_CAD_START_TRANSFER
 #define U8G2_MSG_BYTE_END_TRANSFER U8G2_MSG_CAD_END_TRANSFER
@@ -262,7 +262,8 @@ uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 
 
 uint8_t u8g2_byte_SetDC(u8g2_t *u8g2, uint8_t dc) U8G2_NOINLINE;
-uint8_t u8g2_byte_Send(u8g2_t *u8g2, uint8_t byte) U8G2_NOINLINE;
+uint8_t u8g2_byte_SendByte(u8g2_t *u8g2, uint8_t byte) U8G2_NOINLINE;
+uint8_t u8g2_byte_SendBytes(u8g2_t *u8g2, uint8_t cnt, uint8_t *data) U8G2_NOINLINE;
 
 /*==========================================*/
 /* GPIO Interface */
@@ -297,8 +298,7 @@ void u8g2_gpio_Delay(u8g2_t *u8g2, uint8_t msg, uint8_t dly) U8G2_NOINLINE;
 
 /*==========================================*/
 /* u8g2.c */
-void u8g2_Init(u8g2_t *u8g2);
-//void u8g2_Chain(u8g2_t *u8g2, u8g2_t *u8g2, u8g2_msg_cb cb); OBSOLETE
+void u8g2_SetupDefaults(u8g2_t *u8g2);
 
 
 /*==========================================*/

@@ -44,6 +44,7 @@ uint8_t u8g2_byte_stdio(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_p
   switch(msg)
   {
     case U8G2_MSG_BYTE_SEND:
+      /* 12 sep 15: wrong, args have changed, code must be updated to support multiple bytes */
       if ( dc == 0 )
       {
 	buf[i] = arg_int;
@@ -89,16 +90,16 @@ uint8_t u8g2_cad_stdio(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_pt
   {
     case U8G2_MSG_CAD_SEND_CMD:
       u8g2_byte_SetDC(u8g2, 1);
-      u8g2_byte_Send(u8g2, arg_int);
+      u8g2_byte_SendByte(u8g2, arg_int);
       break;
     case U8G2_MSG_CAD_SEND_ARG:
       u8g2_byte_SetDC(u8g2, 1);
-      u8g2_byte_Send(u8g2, arg_int);
+      u8g2_byte_SendByte(u8g2, arg_int);
       break;
     case U8G2_MSG_CAD_SEND_DATA:
       u8g2_byte_SetDC(u8g2, 0);
       for( i = 0; i < 8; i++ )
-	u8g2_byte_Send(u8g2, ((uint8_t *)arg_ptr)[i]);
+	u8g2_byte_SendByte(u8g2, ((uint8_t *)arg_ptr)[i]);
       break;
     case U8G2_MSG_CAD_START_TRANSFER:
       return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
@@ -146,7 +147,7 @@ uint8_t u8g2_d_stdio(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 
 void u8g2_InitStdio(u8g2_t *u8g2)
 {
-  u8g2_Init(u8g2);
+  u8g2_SetupDefaults(u8g2);
   u8g2->display_cb = u8g2_d_stdio;
   u8g2->cad_cb = u8g2_cad_stdio;
   u8g2->byte_cb = u8g2_byte_stdio;  

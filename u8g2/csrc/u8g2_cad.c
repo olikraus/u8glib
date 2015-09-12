@@ -139,23 +139,21 @@ void u8g2_cad_SendSequence(u8g2_t *u8g2, uint8_t const *data)
 */
 uint8_t u8g2_cad_110(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 {
-  uint8_t i;
-  
   switch(msg)
   {
     case U8G2_MSG_CAD_SEND_CMD:
       u8g2_byte_SetDC(u8g2, 1);
-      u8g2_byte_Send(u8g2, arg_int);
+      u8g2_byte_SendByte(u8g2, arg_int);
       break;
     case U8G2_MSG_CAD_SEND_ARG:
       u8g2_byte_SetDC(u8g2, 1);
-      u8g2_byte_Send(u8g2, arg_int);
+      u8g2_byte_SendByte(u8g2, arg_int);
       break;
     case U8G2_MSG_CAD_SEND_DATA:
       u8g2_byte_SetDC(u8g2, 0);
-      for( i = 0; i < arg_int; i++ )
-	u8g2_byte_Send(u8g2, ((uint8_t *)arg_ptr)[i]);
-      break;
+      //u8g2_byte_SendBytes(u8g2, arg_int, arg_ptr);
+      //break;
+      /* fall through */
     case U8G2_MSG_CAD_INIT:
     case U8G2_MSG_CAD_START_TRANSFER:
     case U8G2_MSG_CAD_END_TRANSFER:
@@ -175,23 +173,21 @@ uint8_t u8g2_cad_110(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 */
 uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 {
-  uint8_t i;
-  
   switch(msg)
   {
     case U8G2_MSG_CAD_SEND_CMD:
       u8g2_byte_SetDC(u8g2, 0);
-      u8g2_byte_Send(u8g2, arg_int);
+      u8g2_byte_SendByte(u8g2, arg_int);
       break;
     case U8G2_MSG_CAD_SEND_ARG:
       u8g2_byte_SetDC(u8g2, 0);
-      u8g2_byte_Send(u8g2, arg_int);
+      u8g2_byte_SendByte(u8g2, arg_int);
       break;
     case U8G2_MSG_CAD_SEND_DATA:
       u8g2_byte_SetDC(u8g2, 1);
-      for( i = 0; i < arg_int; i++ )
-	u8g2_byte_Send(u8g2, ((uint8_t *)arg_ptr)[i]);
-      break;
+      //u8g2_byte_SendBytes(u8g2, arg_int, arg_ptr);
+      //break;
+      /* fall through */
     case U8G2_MSG_CAD_INIT:
     case U8G2_MSG_CAD_START_TRANSFER:
     case U8G2_MSG_CAD_END_TRANSFER:

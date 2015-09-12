@@ -78,24 +78,33 @@ uint8_t u8g2_byte_arduino_hw_spi(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, vo
 
 uint8_t u8g2_byte_arduino_sw_spi(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 {
-  uint8_t i;
+  uint8_t i, b;
+  uint8_t *data;
+  
  
   switch(msg)
   {
     case U8G2_MSG_BYTE_SEND:
-      for( i = 0; i < 8; i++ )
+      data = (uint8_t *)arg_ptr;
+      while( arg_int > 0 )
       {
-	if ( arg_int & 128 )
-	  digitalWrite(11, 1);
-	else
-	  digitalWrite(11, 0);
-        arg_int <<= 1;
-	delay(1);
-	digitalWrite(13, 0);
-	delay(1);
-	digitalWrite(13, 1);
-	delay(1);	
-      }    
+	b = *data;
+	data++;
+	arg_int--;
+	for( i = 0; i < 8; i++ )
+	{
+	  if ( b & 128 )
+	    digitalWrite(11, 1);
+	  else
+	    digitalWrite(11, 0);
+	  b <<= 1;
+	  delay(1);
+	  digitalWrite(13, 0);
+	  delay(1);
+	  digitalWrite(13, 1);
+	  delay(1);	
+	}    
+      }
       break;
     case U8G2_MSG_BYTE_SET_DC:
       u8g2_gpio_SetDC(u8g2, arg_int);
@@ -122,7 +131,7 @@ uint8_t u8g2_byte_arduino_sw_spi(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, vo
 void u8g2_Setup_UC1701_DOGS102(u8g2_t *u8g2)
 {
   /* setup defaults */
-  u8g2_Init(u8g2);
+  u8g2_SetupDefaults(u8g2);
   
   /* setup specific callbacks */
   u8g2->display_cb = u8g2_d_uc1701_dogs102;

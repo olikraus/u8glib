@@ -20,7 +20,7 @@ uint8_t u8g2_dummy_cb(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr
   Args:
     u8g2	An empty u8g2 structure
 */
-void u8g2_Init(u8g2_t *u8g2)
+void u8g2_SetupDefaults(u8g2_t *u8g2)
 {
     u8g2->display_info = NULL;
     u8g2->display_cb = u8g2_dummy_cb;
