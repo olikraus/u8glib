@@ -49,3 +49,13 @@ void u8g2_display_Init(u8g2_t *u8g2)
 {
   u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_INIT, 0, NULL);  
 }
+
+void u8g2_display_PowerUp(u8g2_t *u8g2)
+{
+  u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_POWER_UP, 0, NULL);  
+}
+
+void u8g2_display_PowerDown(u8g2_t *u8g2)
+{
+  u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_POWER_DOWN, 0, NULL);  
+}

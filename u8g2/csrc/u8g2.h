@@ -10,11 +10,11 @@
   The topmost level is the display layer. It includes the following messages:
   
     U8G2_MSG_DISPLAY_INIT
-    U8G2_MSG_DISPLAY_POWER_DOWN
     U8G2_MSG_DISPLAY_POWER_UP
     U8G2_MSG_DISPLAY_SET_CONTRAST
     U8G2_MSG_DISPLAY_DRAW_TILE
     U8G2_MSG_DISPLAY_GET_LAYOUT
+    U8G2_MSG_DISPLAY_POWER_DOWN
 
   A display driver may decided to breakdown these messages to a lower level interface or
   implement this functionality directly.
@@ -178,7 +178,12 @@ struct u8g2_struct
 
 /* u8g2_display.c */
 uint8_t u8g2_display_DrawTile(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr);
+
+/* Init display, but keep display in power save mode. Usually this command must be followed by u8g2_display_PowerUp() */
 void u8g2_display_Init(u8g2_t *u8g2);
+/* wake up display from power save mode */
+void u8g2_display_PowerUp(u8g2_t *u8g2);
+void u8g2_display_PowerDown(u8g2_t *u8g2);
 
 
 

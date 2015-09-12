@@ -147,6 +147,7 @@ void setup(void)
 void loop(void)
 {
   u8g2_display_Init(&u8g2);  
+  u8g2_display_PowerUp(&u8g2);
   u8g2_display_DrawTile(&u8g2, 1, 1, 1, tile);
   u8g2_display_DrawTile(&u8g2, 2, 2, 1, tile);
   u8g2_display_DrawTile(&u8g2, 3, 3, 1, tile);

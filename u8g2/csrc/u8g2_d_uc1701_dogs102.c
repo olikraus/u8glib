@@ -5,8 +5,7 @@
 
 
 static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
-  
-  
+    
   U8G2_START_TRANSFER(),             	/* enable chip, delay is part of the transfer start */
   
   U8G2_C(0x0e2),            			/* soft reset */
@@ -23,7 +22,7 @@ static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
   U8G2_C(0x0fa),		                /* Set Temp compensation */ 
   U8G2_C(0x090),		                /* 0.11 deg/c WP Off WC Off*/
   U8G2_C(0x0a4),		                /* normal display  */
-  U8G2_C(0x0af),		                /* display on */
+  //U8G2_C(0x0af),		                /* display on */
 
   
   //U8G2_DLY(50),       			/* delay 100 ms */
@@ -32,20 +31,34 @@ static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
   //U8G2_DLY(50),       			/* delay 100 ms */
   //U8G2_C(0x0a4),		                /* normal display */
   
-  U8G2_C(0x010),		                /* col hi adr 0 */
-  U8G2_C(0x000),		                /* col lo adr 0 */
-  U8G2_C(0x0b0),		                /* page 0 */
+  //U8G2_C(0x010),		                /* col hi adr 0 */
+  //U8G2_C(0x000),		                /* col lo adr 0 */
+  //U8G2_C(0x0b0),		                /* page 0 */
   
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
   
   
+  U8G2_END_TRANSFER(),             	/* disable chip */
+  U8G2_END()             			/* end of sequence */
+};
+
+static const uint8_t u8g2_d_uc1701_dogs102_power_up_seq[] = {
+  U8G2_START_TRANSFER(),             	/* enable chip, delay is part of the transfer start */
+  U8G2_C(0x0af),		                /* display on */
+  U8G2_END_TRANSFER(),             	/* disable chip */
+  U8G2_END()             			/* end of sequence */
+};
+
+static const uint8_t u8g2_d_uc1701_dogs102_power_down_seq[] = {
+  U8G2_START_TRANSFER(),             	/* enable chip, delay is part of the transfer start */
+  U8G2_C(0x0ae),		                /* display off */
   U8G2_END_TRANSFER(),             	/* disable chip */
   U8G2_END()             			/* end of sequence */
 };
@@ -97,8 +110,10 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void 
     
       break;
     case U8G2_MSG_DISPLAY_POWER_DOWN:
+      u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_power_down_seq);
       break;
     case U8G2_MSG_DISPLAY_POWER_UP:
+      u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_power_up_seq);
       break;
     case U8G2_MSG_DISPLAY_SET_CONTRAST:
       break;
