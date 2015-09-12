@@ -58,6 +58,9 @@ static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
 
 static u8g2_display_info_t u8g2_uc1601_display_info =
 {
+  /* chip_enable_level = */ 0,
+  /* chip_disable_level = */ 1,
+  
   /* post_chip_enable_wait_ns = */ 5,
   /* pre_chip_disable_wait_ns = */ 5,
   /* reset_pulse_width_ms = */ 1, 
@@ -79,10 +82,15 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void 
       /* 1) set display info struct */
       u8g2->display_info = &u8g2_uc1601_display_info;
     
-      /* 2) apply default values to the GPIO lines */
+      /* 2) apply port directions to the GPIO lines and apply default values for the IO lines*/
       u8g2_gpio_Init(u8g2);
+      u8g2_cad_Init(u8g2);
+
+      /* 3) apply default value for chip select */
+      u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_disable_level);
+      /* no wait required here */
     
-      /* 3) do reset */
+      /* 4) do reset */
       u8g2_gpio_SetReset(u8g2, 1);
       u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms, NULL);
       u8g2_gpio_SetReset(u8g2, 0);
@@ -90,7 +98,7 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void 
       u8g2_gpio_SetReset(u8g2, 1);
       u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->post_reset_wait_ms, NULL);
     
-      /* 4) send startup code */
+      /* 5) send startup code */
       u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_init_seq);
     
       break;
@@ -101,14 +109,14 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void 
     case U8G2_MSG_DISPLAY_SET_CONTRAST:
       break;
     case U8G2_MSG_DISPLAY_DRAW_TILE:
-      u8g2_cad_StartTransfer(u8g2, /* cs = */ 0);
+      u8g2_cad_StartTransfer(u8g2);
       x = ((u8g2_tile_t *)arg_ptr)->x_pos;
     
       u8g2_cad_SendCmd(u8g2, 0x010 | (x>>1) );
       u8g2_cad_SendCmd(u8g2, 0x000 | ((x&1) << 3));
       u8g2_cad_SendCmd(u8g2, 0x0b0 | (((u8g2_tile_t *)arg_ptr)->y_pos));
       u8g2_cad_SendData(u8g2, 8, ((u8g2_tile_t *)arg_ptr)->tile_ptr);
-      u8g2_cad_EndTransfer(u8g2, /* cs = */ 1);
+      u8g2_cad_EndTransfer(u8g2);
       break;
     case U8G2_MSG_DISPLAY_GET_LAYOUT:
       break;

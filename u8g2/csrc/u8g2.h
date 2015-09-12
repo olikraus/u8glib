@@ -94,6 +94,9 @@ struct u8g2_tile_struct
 struct u8g2_display_info_struct
 {
   /* == general == */
+
+  uint8_t chip_enable_level;			/* UC1601: 0 */
+  uint8_t chip_disable_level;			/* opposite of chip_enable_level */
   
   uint8_t post_chip_enable_wait_ns;		/* UC1601: 5ns */
   uint8_t pre_chip_disable_wait_ns;		/* UC1601: 5ns */
@@ -173,13 +176,20 @@ void u8g2_display_Init(u8g2_t *u8g2);
 /*==========================================*/
 /* Command Arg Data (CAD) Interface */
 
-#define U8G2_MSG_CAD_SEND_CMD 20
+/*
+  U8G2_MSG_CAD_INIT
+    no args
+    call U8G2_MSG_BYTE_INIT
+    setup default values for the I/O lines
+*/
+#define U8G2_MSG_CAD_INIT 20
+
+
+#define U8G2_MSG_CAD_SEND_CMD 21
 /*  arg_int: cmd byte */
-#define U8G2_MSG_CAD_SEND_ARG 21
+#define U8G2_MSG_CAD_SEND_ARG 22
 /*  arg_int: arg byte */
-#define U8G2_MSG_CAD_SEND_DATA 22
-/*  arg_int: # of data, arg_ptr = uint8_t * with data */
-//#define U8G2_MSG_CAD_RESET 23
+#define U8G2_MSG_CAD_SEND_DATA 23
 /* arg_int: expected cs level after processing this msg */
 #define U8G2_MSG_CAD_START_TRANSFER 24
 /* arg_int: expected cs level after processing this msg */
@@ -188,14 +198,15 @@ void u8g2_display_Init(u8g2_t *u8g2);
 #define U8G2_MSG_CAD_SET_I2C_ADR 26
 #define U8G2_MSG_CAD_SET_DEVICE 27
 
+
+#define u8g2_cad_Init(u8g2) ((u8g2)->cad_cb((u8g2), U8G2_MSG_CAD_INIT, 0, NULL ))
+
 /* u8g_cad.c */
 uint8_t u8g2_cad_SendCmd(u8g2_t *u8g2, uint8_t cmd);
 uint8_t u8g2_cad_SendArg(u8g2_t *u8g2, uint8_t arg);
 uint8_t u8g2_cad_SendData(u8g2_t *u8g2, uint8_t cnt, uint8_t *data);
-//uint8_t u8g2_cad_Reset1(u8g2_t *u8g2);
-//uint8_t u8g2_cad_Reset0(u8g2_t *u8g2);
-uint8_t u8g2_cad_StartTransfer(u8g2_t *u8g2, uint8_t cs);
-uint8_t u8g2_cad_EndTransfer(u8g2_t *u8g2, uint8_t cs);
+uint8_t u8g2_cad_StartTransfer(u8g2_t *u8g2);
+uint8_t u8g2_cad_EndTransfer(u8g2_t *u8g2);
 
 #define U8G2_C(c0)		(0x04), (c0)
 #define U8G2_CA(c0,a0)		(0x05), (c0), (a0)
@@ -216,8 +227,10 @@ uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 
 /*==========================================*/
 /* Byte Interface */
-#define U8G2_MSG_BYTE_SEND 30
-#define U8G2_MSG_BYTE_SET_DC 31
+
+#define U8G2_MSG_BYTE_INIT U8G2_MSG_CAD_INIT
+#define U8G2_MSG_BYTE_SEND 31
+#define U8G2_MSG_BYTE_SET_DC 32
 
 
 #define U8G2_MSG_BYTE_START_TRANSFER U8G2_MSG_CAD_START_TRANSFER
@@ -226,16 +239,22 @@ uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 #define U8G2_MSG_BYTE_SET_I2C_ADR U8G2_MSG_CAD_SET_I2C_ADR
 #define U8G2_MSG_BYTE_SET_DEVICE U8G2_MSG_CAD_SET_DEVICE
 
+
 uint8_t u8g2_byte_SetDC(u8g2_t *u8g2, uint8_t dc);
 uint8_t u8g2_byte_Send(u8g2_t *u8g2, uint8_t byte);
 
 /*==========================================*/
 /* GPIO Interface */
 
-/* arg_int: milliseconds */
 
+/*
+  U8G2_MSG_GPIO_AND_DELAY_INIT
+  no args
+  setup port directions, do not set IO levels, this is done with BYTE/CAD_INIT
+*/
 #define U8G2_MSG_GPIO_AND_DELAY_INIT 40
 
+/* arg_int: milliseconds */
 #define U8G2_MSG_DELAY_MILLI		41
 
 #define U8G2_MSG_DELAY_10MICRO		42

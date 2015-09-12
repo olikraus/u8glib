@@ -128,11 +128,11 @@ uint8_t u8g2_d_stdio(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
     case U8G2_MSG_DISPLAY_SET_CONTRAST:
       break;
     case U8G2_MSG_DISPLAY_DRAW_TILE:
-      u8g2_cad_StartTransfer(u8g2, 0);
+      u8g2_cad_StartTransfer(u8g2);
       u8g2_cad_SendCmd(u8g2, ((u8g2_tile_t *)arg_ptr)->x_pos);
       u8g2_cad_SendCmd(u8g2, 0xf0 | ((u8g2_tile_t *)arg_ptr)->y_pos);
       u8g2_cad_SendData(u8g2, 8, ((u8g2_tile_t *)arg_ptr)->tile_ptr);
-      u8g2_cad_EndTransfer(u8g2, 1);
+      u8g2_cad_EndTransfer(u8g2);
       break;
     case U8G2_MSG_DISPLAY_GET_LAYOUT:
       break;
