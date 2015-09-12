@@ -225,14 +225,14 @@ uint8_t u8g2_cad_EndTransfer(u8g2_t *u8g2) U8G2_NOINLINE;
 #define U8G2_D1(d0)			(0x11), (d0)
 */
 
-#define U8G2_C(c0)				(0x80), (c0)
-#define U8G2_CA(c0,a0)			(0x80), (c0), (0x81), (a0)
-#define U8G2_CAA(c0,a0,a1)		(0x80), (c0), (0x81), (a0), (0x81), (a1)
-#define U8G2_D1(d0)			(0x82), (d0)
+#define U8G2_C(c0)				(U8G2_MSG_CAD_SEND_CMD), (c0)
+#define U8G2_CA(c0,a0)			(U8G2_MSG_CAD_SEND_CMD), (c0), (U8G2_MSG_CAD_SEND_ARG), (a0)
+#define U8G2_CAA(c0,a0,a1)		(U8G2_MSG_CAD_SEND_CMD), (c0), (U8G2_MSG_CAD_SEND_ARG), (a0), (U8G2_MSG_CAD_SEND_ARG), (a1)
+#define U8G2_D1(d0)			(U8G2_MSG_CAD_SEND_DATA), (d0)
 
 
-#define U8G2_START_TRANSFER()	(0xf0)
-#define U8G2_END_TRANSFER()	(0xf2)
+#define U8G2_START_TRANSFER()	(U8G2_MSG_CAD_START_TRANSFER)
+#define U8G2_END_TRANSFER()	(U8G2_MSG_CAD_END_TRANSFER)
 #define U8G2_DLY(m)			(0xfe),(m)
 #define U8G2_END()			(0xff)
 

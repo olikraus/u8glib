@@ -32,18 +32,18 @@ static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
   //U8G2_DLY(50),       			/* delay 100 ms */
   //U8G2_C(0x0a4),		                /* normal display */
   
-  U8G2_C(0x010),		                /* col hi adr 0 */
-  U8G2_C(0x000),		                /* col lo adr 0 */
-  U8G2_C(0x0b0),		                /* page 0 */
+  //U8G2_C(0x010),		                /* col hi adr 0 */
+  //U8G2_C(0x000),		                /* col lo adr 0 */
+  //U8G2_C(0x0b0),		                /* page 0 */
   
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
-  U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
+  //U8G2_D1(0x0ff),		                /* data */
   
   
   U8G2_END_TRANSFER(),             	/* disable chip */
