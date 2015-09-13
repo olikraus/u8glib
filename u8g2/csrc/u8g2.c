@@ -7,7 +7,7 @@
 
 #include "u8g2.h"
 
-uint8_t u8g2_dummy_cb(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
+uint8_t u8g2_dummy_cb(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   /* the dummy callback will not handle any message and will fail for all messages */
   return 0;
@@ -28,4 +28,5 @@ void u8g2_SetupDefaults(u8g2_t *u8g2)
     u8g2->byte_cb = u8g2_dummy_cb;
     u8g2->gpio_and_delay_cb = u8g2_dummy_cb;
 }
+
 

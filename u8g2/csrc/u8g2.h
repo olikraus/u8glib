@@ -59,6 +59,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#if defined(__GNUC__) && defined(__AVR__)
+#include <avr/pgmspace.h>
+#endif 
 
 #ifdef __cplusplus
 extern "C" {
@@ -71,6 +74,17 @@ extern "C" {
 #  define U8G2_NOINLINE
 #endif
 
+#if defined(__GNUC__) && defined(__AVR__)
+#  define U8G2_SECTION(name) __attribute__ ((section (name)))
+#  define U8G2_FONT_SECTION(name) U8G2_SECTION(".progmem." name)
+#  define u8g2_pgm_read(adr) pgm_read_byte_near(adr)
+#endif
+
+#ifndef U8G2_SECTION
+#  define U8G2_SECTION(name) __attribute__ ((section (name)))
+#  define U8G2_FONT_SECTION(name) 
+#  define u8g2_pgm_read(adr) (*(const uint8_t *)(adr)) 
+#endif
 
 
 
@@ -81,7 +95,7 @@ typedef struct u8g2_tile_struct u8g2_tile_t;
 
 
 
-typedef uint8_t (*u8g2_msg_cb)(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr);
+typedef uint8_t (*u8g2_msg_cb)(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
 
 //struct u8g2_mcd_struct
@@ -144,6 +158,7 @@ struct u8g2_struct
   u8g2_msg_cb cad_cb;
   u8g2_msg_cb byte_cb;
   u8g2_msg_cb gpio_and_delay_cb;
+  const uint8_t *font;
 };
 
 
@@ -213,9 +228,11 @@ void u8g2_display_PowerDown(u8g2_t *u8g2);
 #define U8G2_MSG_CAD_SET_DEVICE 27
 
 
-#define u8g2_cad_Init(u8g2) ((u8g2)->cad_cb((u8g2), U8G2_MSG_CAD_INIT, 0, NULL ))
 
 /* u8g_cad.c */
+
+#define u8g2_cad_Init(u8g2) ((u8g2)->cad_cb((u8g2), U8G2_MSG_CAD_INIT, 0, NULL ))
+
 uint8_t u8g2_cad_SendCmd(u8g2_t *u8g2, uint8_t cmd) U8G2_NOINLINE;
 uint8_t u8g2_cad_SendArg(u8g2_t *u8g2, uint8_t arg) U8G2_NOINLINE;
 uint8_t u8g2_cad_SendData(u8g2_t *u8g2, uint8_t cnt, uint8_t *data) U8G2_NOINLINE;
@@ -242,8 +259,8 @@ uint8_t u8g2_cad_EndTransfer(u8g2_t *u8g2) U8G2_NOINLINE;
 #define U8G2_END()			(0xff)
 
 void u8g2_cad_SendSequence(u8g2_t *u8g2, uint8_t const *data);
-uint8_t u8g2_cad_110(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr);
-uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr);
+uint8_t u8g2_cad_110(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
 
 /*==========================================*/
@@ -289,11 +306,20 @@ uint8_t u8g2_byte_SendBytes(u8g2_t *u8g2, uint8_t cnt, uint8_t *data) U8G2_NOINL
 
 #define u8g2_gpio_Init(u8g2) ((u8g2)->gpio_and_delay_cb((u8g2), U8G2_MSG_GPIO_AND_DELAY_INIT, 0, NULL ))
 
+/*
 #define u8g2_gpio_SetDC(u8g2, v) ((u8g2)->gpio_and_delay_cb((u8g2), U8G2_MSG_GPIO_DC, (v), NULL ))
 #define u8g2_gpio_SetCS(u8g2, v) ((u8g2)->gpio_and_delay_cb((u8g2), U8G2_MSG_GPIO_CS, (v), NULL ))
 #define u8g2_gpio_SetReset(u8g2, v) ((u8g2)->gpio_and_delay_cb((u8g2), U8G2_MSG_GPIO_RESET, (v), NULL ))
+*/
 
-void u8g2_gpio_Delay(u8g2_t *u8g2, uint8_t msg, uint8_t dly) U8G2_NOINLINE;
+#define u8g2_gpio_SetDC(u8g2, v) u8g2_gpio_call(u8g2, U8G2_MSG_GPIO_DC, (v))
+#define u8g2_gpio_SetCS(u8g2, v) u8g2_gpio_call(u8g2, U8G2_MSG_GPIO_CS, (v))
+#define u8g2_gpio_SetReset(u8g2, v) u8g2_gpio_call(u8g2, U8G2_MSG_GPIO_CS, (v))
+
+void u8g2_gpio_call(u8g2_t *u8g2, uint8_t msg, uint8_t arg) U8G2_NOINLINE;
+
+#define u8g2_gpio_Delay(u8g2, msg, dly) u8g2_gpio_call((u8g2), (msg), (dly))
+//void u8g2_gpio_Delay(u8g2_t *u8g2, uint8_t msg, uint8_t dly) U8G2_NOINLINE;
 
 
 /*==========================================*/
@@ -303,11 +329,18 @@ void u8g2_SetupDefaults(u8g2_t *u8g2);
 
 /*==========================================*/
 /* u8g2_d_stdio.c */
-void u8g2_InitStdio(u8g2_t *u8g2);
+void u8g2_SetupStdio(u8g2_t *u8g2);
 
 /*==========================================*/
 /* u8g2_d_uc1701_dogs102.c */
-uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr);
+uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+
+
+/*==========================================*/
+/* u8g2_8x8.c */
+void u8g2_Set8x8Font(u8g2_t *u8g2, const uint8_t *font_8x8);
+void u8g2_Draw8x8Glyph(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t encoding);
+void u8g2_Draw8x8String(u8g2_t *u8g2, uint8_t x, uint8_t y, const char *s);
 
 
 #ifdef __cplusplus

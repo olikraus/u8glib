@@ -35,6 +35,30 @@ uint8_t u8g2_d_xyz(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 
 #include "u8g2.h"
 
+/*
+  Prototype:
+    uint8_t u8g2_display_DrawTile(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr)
+  Description:
+    Send U8G2_MSG_DISPLAY_DRAW_TILE to the display callback. 
+    A tile is a sequence of 8 bytes (64 bits) and represents a 8x8 monochrome bitmap.
+    The lowest bit of the first byte is the upper left corner
+    The highest bit of the first byte is the lower left corner
+    The lowest bit of the last byte is the upper right corner
+    The highest bit of the last byte is the lower left corner
+    
+  Arguments:
+    u8g2		Pointer to the u8g2 object
+    x			X position of the tile
+    y			Y position of the tile
+    cnt		Number of tiles
+    tile_ptr		Pointer to "cnt" tiles. 
+  Returns:
+    0, if not successful or not supported
+  See also:
+  Example:
+
+*/
+
 uint8_t u8g2_display_DrawTile(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr)
 {
   u8g2_tile_t tile;
@@ -59,3 +83,4 @@ void u8g2_display_PowerDown(u8g2_t *u8g2)
 {
   u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_POWER_DOWN, 0, NULL);  
 }
+

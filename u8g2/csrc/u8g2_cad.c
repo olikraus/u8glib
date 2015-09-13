@@ -137,7 +137,7 @@ void u8g2_cad_SendSequence(u8g2_t *u8g2, uint8_t const *data)
     dc = 1 for commands and args and
     dc = 0 for data
 */
-uint8_t u8g2_cad_110(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
+uint8_t u8g2_cad_110(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   switch(msg)
   {
@@ -171,7 +171,7 @@ uint8_t u8g2_cad_110(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
     dc = 0 for commands and args and
     dc = 1 for data
 */
-uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
+uint8_t u8g2_cad_001(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   switch(msg)
   {

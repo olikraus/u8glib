@@ -80,7 +80,7 @@ static u8g2_display_info_t u8g2_uc1601_display_info =
   /* write_pulse_width_ns = */ 40
 };
 
-uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
+uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   uint8_t x;
   switch(msg)
