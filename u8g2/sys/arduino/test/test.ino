@@ -217,14 +217,26 @@ void u8g2_Setup_UC1701_DOGS102(u8g2_t *u8g2)
   
 }
 
+void u8g2_Setup_SSD1306_128x64_NONAME(u8g2_t *u8g2)
+{
+  /* setup defaults */
+  u8g2_SetupDefaults(u8g2);
+  
+  /* setup specific callbacks */
+  u8g2->display_cb = u8g2_d_ssd1306_128x64_noname;
+  u8g2->cad_cb = u8g2_cad_001;
+  u8g2->byte_cb = u8g2_byte_arduino_sw_spi;
+  u8g2->gpio_and_delay_cb = u8g2_gpio_and_delay_arduino;
+}
+
 
 u8g2_t u8g2;
 uint8_t tile[8] = { 0x0f, 0x0f, 0x0f, 0x0f, 0xf0, 0xf0, 0xf0, 0xf0 };
 
 void setup(void)
 {
-  u8g2_Setup_UC1701_DOGS102(&u8g2);  
-  //u8g2_display_DrawTile(&u8g2, 1, 1, 1, tile);
+  //u8g2_Setup_UC1701_DOGS102(&u8g2);  
+  u8g2_Setup_SSD1306_128x64_NONAME(&u8g2);
 }
 
 void loop(void)

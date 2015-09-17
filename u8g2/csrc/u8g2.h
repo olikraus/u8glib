@@ -335,6 +335,9 @@ void u8g2_SetupStdio(u8g2_t *u8g2);
 /* u8g2_d_uc1701_dogs102.c */
 uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
+/*==========================================*/
+/* u8g2_d_ssd1306_128x64_noname.c */
+uint8_t u8g2_d_ssd1306_128x64_noname(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
 /*==========================================*/
 /* u8g2_8x8.c */

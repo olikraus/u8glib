@@ -12,7 +12,7 @@ static const uint8_t u8g2_d_ssd1306_128x64_noname_init_seq[] = {
   U8G2_C(0x0ae),		                /* display off */
   U8G2_CA(0x0d5, 0x080),		/* clock divide ratio (0x00=1) and oscillator frequency (0x8) */
   U8G2_CA(0x0a8, 0x03f),		/* multiplex ratio */
-  U8G2_CA(0x0d3, 0x000)		/* display offset */
+  U8G2_CA(0x0d3, 0x000),		/* display offset */
   U8G2_C(0x040),		                /* set display start line to 0 */
   U8G2_CA(0x08d, 0x014),		/* [2] charge pump setting (p62): 0x014 enable, 0x010 disable */
   U8G2_CA(0x020, 0x000),		/* page addressing mode */
@@ -53,8 +53,8 @@ static u8g2_display_info_t u8g2_ssd1306_128x64_noname_display_info =
   
   /* post_chip_enable_wait_ns = */ 20,
   /* pre_chip_disable_wait_ns = */ 10,
-  /* reset_pulse_width_ms = */ 1, 	/* SSD1306: 3 us */
-  /* post_reset_wait_ms = */ 1, 
+  /* reset_pulse_width_ms = */ 100, 	/* SSD1306: 3 us */
+  /* post_reset_wait_ms = */ 100, /* far east OLEDs need much longer setup time */
   /* sda_setup_time_ns = */ 15,
   /* sck_pulse_width_ns = */ 50,	/* SSD1306: 20ns, but cycle time is 100ns, so use 100/50 */
   /* sck_takeover_edge = */ 1,		/* rising edge */
