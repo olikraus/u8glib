@@ -225,7 +225,7 @@ void u8g2_Setup_SSD1306_128x64_NONAME(u8g2_t *u8g2)
   /* setup specific callbacks */
   u8g2->display_cb = u8g2_d_ssd1306_128x64_noname;
   u8g2->cad_cb = u8g2_cad_001;
-  u8g2->byte_cb = u8g2_byte_arduino_sw_spi;
+  u8g2->byte_cb = u8g2_byte_arduino_hw_spi;
   u8g2->gpio_and_delay_cb = u8g2_gpio_and_delay_arduino;
 }
 
@@ -235,29 +235,35 @@ uint8_t tile[8] = { 0x0f, 0x0f, 0x0f, 0x0f, 0xf0, 0xf0, 0xf0, 0xf0 };
 
 void setup(void)
 {
-  //u8g2_Setup_UC1701_DOGS102(&u8g2);  
-  u8g2_Setup_SSD1306_128x64_NONAME(&u8g2);
+  u8g2_Setup_UC1701_DOGS102(&u8g2);  
+  //u8g2_Setup_SSD1306_128x64_NONAME(&u8g2);
 }
 
 void loop(void)
 {
   u8g2_display_Init(&u8g2);  
-  u8g2_display_PowerUp(&u8g2);
+  //u8g2_display_SetFlipMode(&u8g2, 1);
 
-  delay(500);
 
-  u8g2_Set8x8Font(&u8g2, bdf_font);
-  u8g2_Draw8x8String(&u8g2, 0, 0, "Hello gAjByCD");
-  u8g2_Draw8x8String(&u8g2, 3, 1, "World B");
-  
-  u8g2_display_DrawTile(&u8g2, 1, 1, 1, tile);
-  u8g2_display_DrawTile(&u8g2, 2, 2, 1, tile);
-  u8g2_display_DrawTile(&u8g2, 3, 3, 1, tile);
-  u8g2_display_DrawTile(&u8g2, 4, 4, 1, tile);
-  u8g2_display_DrawTile(&u8g2, 5, 5, 1, tile);
-  u8g2_display_DrawTile(&u8g2, 6, 6, 1, tile);
-  delay(1000);
   for(;;)
-    ;
+  {
+    u8g2_display_ClearScreen(&u8g2);  
+    u8g2_display_PowerUp(&u8g2);
+
+    delay(500);
+
+    u8g2_Set8x8Font(&u8g2, bdf_font);
+    u8g2_Draw8x8String(&u8g2, 0, 0, "Hello gAjByCD");
+    u8g2_Draw8x8String(&u8g2, 3, 1, "World B");
+    
+    u8g2_display_DrawTile(&u8g2, 1, 1, 1, tile);
+    u8g2_display_DrawTile(&u8g2, 2, 2, 1, tile);
+    u8g2_display_DrawTile(&u8g2, 3, 3, 1, tile);
+    u8g2_display_DrawTile(&u8g2, 4, 4, 1, tile);
+    u8g2_display_DrawTile(&u8g2, 5, 5, 1, tile);
+    u8g2_display_DrawTile(&u8g2, 6, 6, 1, tile);
+
+    delay(2000);
+  }
 }
 

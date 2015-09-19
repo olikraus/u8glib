@@ -66,7 +66,7 @@ uint8_t u8g2_display_DrawTile(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, u
   tile.y_pos = y;
   tile.cnt = cnt;
   tile.tile_ptr = tile_ptr;
-  return u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_DRAW_TILE, 0, (void *)&tile);
+  return u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_DRAW_TILE, 1, (void *)&tile);
 }
 
 void u8g2_display_Init(u8g2_t *u8g2)
@@ -82,5 +82,30 @@ void u8g2_display_PowerUp(u8g2_t *u8g2)
 void u8g2_display_PowerDown(u8g2_t *u8g2)
 {
   u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_POWER_DOWN, 0, NULL);  
+}
+
+void u8g2_display_SetFlipMode(u8g2_t *u8g2, uint8_t mode)
+{
+  u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_SET_FLIP_MODE, mode, NULL);  
+}
+
+
+void u8g2_display_ClearScreen(u8g2_t *u8g2)
+{
+  uint8_t buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+  u8g2_tile_t tile;
+  uint8_t h;
+
+  tile.x_pos = 0;
+  tile.cnt = 1;
+  tile.tile_ptr = buf;
+  
+  h = u8g2->display_info->tile_height;
+  tile.y_pos = 0;
+  do
+  {
+    u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_DRAW_TILE, u8g2->display_info->tile_width, (void *)&tile);
+    tile.y_pos++;
+  } while( tile.y_pos < h );
 }
 

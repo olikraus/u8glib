@@ -56,6 +56,17 @@
 #ifndef _U8G2_H
 #define _U8G2_H
 
+/* global defines */
+
+
+/* Undefine this to remove u8g2_display_SetFlipMode function */
+#define U8G2_WITH_FLIP_MODE
+
+/* Select 0 or 1 for the default flip mode. This is not affected by U8G2_WITH_FLIP_MODE */
+#define U8G2_DEFAULT_FLIP_MODE 0
+
+
+
 #include <stdint.h>
 #include <stddef.h>
 
@@ -66,6 +77,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+
+
 
 
 #ifdef __GNUC__
@@ -148,6 +162,13 @@ struct u8g2_display_info_struct
   uint8_t data_setup_time_ns;		/* UC1601: 30ns */
   /* write enable pulse width */
   uint8_t write_pulse_width_ns;		/* UC1601: 40ns */
+  
+  /* == layout == */
+  uint8_t tile_width;
+  uint8_t tile_height;
+
+  uint8_t default_x_offset;	/* default x offset for the display */
+
 };
 
 struct u8g2_struct
@@ -159,6 +180,7 @@ struct u8g2_struct
   u8g2_msg_cb byte_cb;
   u8g2_msg_cb gpio_and_delay_cb;
   const uint8_t *font;
+  uint8_t x_offset;	/* copied from info struct, can be modified in flip mode */
 };
 
 
@@ -182,14 +204,17 @@ struct u8g2_struct
 /* no args */
 #define U8G2_MSG_DISPLAY_POWER_UP 12
 
+/* arg_int: 0 normal, 1: flip */
+#define U8G2_MSG_DISPLAY_SET_FLIP_MODE 13
+
 /*  arg_int: 0..255 contrast value */
-#define U8G2_MSG_DISPLAY_SET_CONTRAST 13
+#define U8G2_MSG_DISPLAY_SET_CONTRAST 14
 
 /*  arg_ptr: u8g2_tile_t */
-#define U8G2_MSG_DISPLAY_DRAW_TILE 14
+#define U8G2_MSG_DISPLAY_DRAW_TILE 15
 
 /*  arg_ptr: layout struct */
-#define U8G2_MSG_DISPLAY_GET_LAYOUT 15
+#define U8G2_MSG_DISPLAY_GET_LAYOUT 16
 
 /* u8g2_display.c */
 uint8_t u8g2_display_DrawTile(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr);
@@ -199,6 +224,8 @@ void u8g2_display_Init(u8g2_t *u8g2);
 /* wake up display from power save mode */
 void u8g2_display_PowerUp(u8g2_t *u8g2);
 void u8g2_display_PowerDown(u8g2_t *u8g2);
+void u8g2_display_SetFlipMode(u8g2_t *u8g2, uint8_t mode);
+void u8g2_display_ClearScreen(u8g2_t *u8g2);
 
 
 

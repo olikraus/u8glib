@@ -11,8 +11,14 @@ static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
   U8G2_C(0x0e2),            			/* soft reset */
   U8G2_C(0x0ae),		                /* display off */
   U8G2_C(0x040),		                /* set display start line to 0 */
+  
+#if U8G2_DEFAULT_FLIP_MODE == 0 
   U8G2_C(0x0a1),		                /* ADC set to reverse */
   U8G2_C(0x0c0),		                /* common output mode */
+#else
+  U8G2_C(0x0a0),		                /* ADC set to reverse */
+  U8G2_C(0x0c8),		                /* common output mode */
+#endif
   U8G2_C(0x0a6),		                /* display normal, bit val 0: LCD pixel off. */
   U8G2_C(0x0a2),		                /* LCD bias 1/9 */
   U8G2_C(0x02f),		                /* all power  control circuits on */
@@ -63,6 +69,23 @@ static const uint8_t u8g2_d_uc1701_dogs102_power_down_seq[] = {
   U8G2_END()             			/* end of sequence */
 };
 
+static const uint8_t u8g2_d_uc1701_dogs102_flip0_seq[] = {
+  U8G2_START_TRANSFER(),             	/* enable chip, delay is part of the transfer start */
+  U8G2_C(0x0a1),				/* segment remap a0/a1*/
+  U8G2_C(0x0c0),				/* c0: scan dir normal, c8: reverse */
+  U8G2_END_TRANSFER(),             	/* disable chip */
+  U8G2_END()             			/* end of sequence */
+};
+
+static const uint8_t u8g2_d_uc1701_dogs102_flip1_seq[] = {
+  U8G2_START_TRANSFER(),             	/* enable chip, delay is part of the transfer start */
+  U8G2_C(0x0a0),				/* segment remap a0/a1*/
+  U8G2_C(0x0c8),				/* c0: scan dir normal, c8: reverse */
+  U8G2_END_TRANSFER(),             	/* disable chip */
+  U8G2_END()             			/* end of sequence */
+};
+
+
 static u8g2_display_info_t u8g2_uc1601_display_info =
 {
   /* chip_enable_level = */ 0,
@@ -77,17 +100,26 @@ static u8g2_display_info_t u8g2_uc1601_display_info =
   /* sck_takeover_edge = */ 1,		/* rising edge */
   /* i2c_bus_clock_100kHz = */ 37,
   /* data_setup_time_ns = */ 30,
-  /* write_pulse_width_ns = */ 40
+  /* write_pulse_width_ns = */ 40,
+  /* tile_width = */ 13,
+  /* tile_hight = */ 8,
+#if U8G2_DEFAULT_FLIP_MODE == 0 
+  /* default_x_offset = */ 0,
+#else
+  /* default_x_offset = */ 30,
+#endif
 };
 
 uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
-  uint8_t x;
+  uint8_t x, c;
+  uint8_t *ptr;
   switch(msg)
   {
     case U8G2_MSG_DISPLAY_INIT:
       /* 1) set display info struct */
       u8g2->display_info = &u8g2_uc1601_display_info;
+      u8g2->x_offset = u8g2->display_info->default_x_offset;
     
       /* 2) apply port directions to the GPIO lines and apply default values for the IO lines*/
       u8g2_gpio_Init(u8g2);
@@ -115,16 +147,44 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *
     case U8G2_MSG_DISPLAY_POWER_UP:
       u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_power_up_seq);
       break;
+ #ifdef U8G2_WITH_FLIP_MODE
+    case U8G2_MSG_DISPLAY_SET_FLIP_MODE:
+      if ( arg_int == 0 )
+      {
+	u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_flip0_seq);
+	u8g2->x_offset = 0;
+      }
+      else
+      {
+	u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_flip1_seq);
+	u8g2->x_offset = 30;
+      }	
+#endif
+      break;
     case U8G2_MSG_DISPLAY_SET_CONTRAST:
       break;
     case U8G2_MSG_DISPLAY_DRAW_TILE:
       u8g2_cad_StartTransfer(u8g2);
       x = ((u8g2_tile_t *)arg_ptr)->x_pos;
-    
-      u8g2_cad_SendCmd(u8g2, 0x010 | (x>>1) );
-      u8g2_cad_SendCmd(u8g2, 0x000 | ((x&1) << 3));
+      x *= 8;
+      x += u8g2->x_offset;
+      u8g2_cad_SendCmd(u8g2, 0x010 | (x>>4) );
+      u8g2_cad_SendCmd(u8g2, 0x000 | ((x&15)));
       u8g2_cad_SendCmd(u8g2, 0x0b0 | (((u8g2_tile_t *)arg_ptr)->y_pos));
-      u8g2_cad_SendData(u8g2, 8, ((u8g2_tile_t *)arg_ptr)->tile_ptr);
+    
+      do
+      {
+	c = ((u8g2_tile_t *)arg_ptr)->cnt;
+	ptr = ((u8g2_tile_t *)arg_ptr)->tile_ptr;
+	do
+	{
+	  u8g2_cad_SendData(u8g2, 8, ptr);
+	  ptr += 8;
+	  c--;
+	} while( c > 0 );
+	arg_int--;
+      } while( arg_int > 0 );
+      
       u8g2_cad_EndTransfer(u8g2);
       break;
     case U8G2_MSG_DISPLAY_GET_LAYOUT:
