@@ -7,57 +7,38 @@
   
 */
 
-/*
-template
-
-uint8_t u8g2_d_xyz(u8g2_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
-{
-  switch(msg)
-  {
-    case U8G2_MSG_DISPLAY_INIT:
-      break;
-    case U8G2_MSG_DISPLAY_POWER_DOWN:
-      break;
-    case U8G2_MSG_DISPLAY_POWER_UP:
-      break;
-    case U8G2_MSG_DISPLAY_SET_CONTRAST:
-      break;
-    case U8G2_MSG_DISPLAY_DRAW_TILE:
-      break;
-    case U8G2_MSG_DISPLAY_GET_LAYOUT:
-      break;
-    default:
-      break;
-  }
-  return 1;
-}
-*/
 
 #include "u8g2.h"
 
-/*
-  Prototype:
-    uint8_t u8g2_display_DrawTile(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr)
-  Description:
-    Send U8G2_MSG_DISPLAY_DRAW_TILE to the display callback. 
-    A tile is a sequence of 8 bytes (64 bits) and represents a 8x8 monochrome bitmap.
-    The lowest bit of the first byte is the upper left corner
-    The highest bit of the first byte is the lower left corner
-    The lowest bit of the last byte is the upper right corner
-    The highest bit of the last byte is the lower left corner
-    
-  Arguments:
-    u8g2		Pointer to the u8g2 object
-    x			X position of the tile
-    y			Y position of the tile
-    cnt		Number of tiles
-    tile_ptr		Pointer to "cnt" tiles. 
-  Returns:
-    0, if not successful or not supported
-  See also:
-  Example:
 
+/*==========================================*/
+/* internal library function */
+/*
+  this is a helper function for the U8G2_MSG_DISPLAY_INIT function.
+  It can be called within the display callback function to carry out the usual standard tasks.
+  
 */
+void u8g2_d_helper_display_init(u8g2_t *u8g2, const u8g2_display_info_t *display_info)
+{
+      /* 1) set display info struct */
+      u8g2->display_info = display_info;
+      u8g2->x_offset = u8g2->display_info->default_x_offset;
+    
+      /* 2) apply port directions to the GPIO lines and apply default values for the IO lines*/
+      u8g2_gpio_Init(u8g2);
+      u8g2_cad_Init(u8g2);
+
+      /* 3) do reset */
+      u8g2_gpio_SetReset(u8g2, 1);
+      u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms);
+      u8g2_gpio_SetReset(u8g2, 0);
+      u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms);
+      u8g2_gpio_SetReset(u8g2, 1);
+      u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->post_reset_wait_ms);
+}    
+
+/*==========================================*/
+/* official functions */
 
 uint8_t u8g2_display_DrawTile(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr)
 {

@@ -55,8 +55,8 @@
 #ifndef _U8G2_H
 #define _U8G2_H
 
-/* global defines */
-
+/*==========================================*/
+/* Global Defines */
 
 /* Undefine this to remove u8g2_display_SetContrast function */
 #define U8G2_WITH_SET_CONTRAST
@@ -67,6 +67,8 @@
 /* Select 0 or 1 for the default flip mode. This is not affected by U8G2_WITH_FLIP_MODE */
 #define U8G2_DEFAULT_FLIP_MODE 0
 
+/*==========================================*/
+/* Includes */
 
 
 #include <stdint.h>
@@ -76,12 +78,16 @@
 #include <avr/pgmspace.h>
 #endif 
 
+/*==========================================*/
+/* C++ compatible */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-
+/*==========================================*/
+/* U8G2 internal defines */
 
 
 #ifdef __GNUC__
@@ -102,13 +108,14 @@ extern "C" {
 #  define u8g2_pgm_read(adr) (*(const uint8_t *)(adr)) 
 #endif
 
+/*==========================================*/
+/* U8G2 typedefs and data structures */
 
 
 typedef struct u8g2_struct u8g2_t;
 typedef struct u8g2_display_info_struct u8g2_display_info_t;
 
 typedef struct u8g2_tile_struct u8g2_tile_t;
-
 
 
 typedef uint8_t (*u8g2_msg_cb)(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
@@ -146,12 +153,15 @@ struct u8g2_display_info_struct
   /* == SPI interface == */
   
   /* after SDA has been applied, wait this much time for the SCK data takeover edge */
+  /* if this is smaller than sck_pulse_width_ns, then use the value from sck_pulse_width_ns */
   uint8_t sda_setup_time_ns;		/* UC1601: 12ns */
   /* the pulse width of the the clock signal, cycle time is twice this value */
   /* max freq is 1/(2*sck_pulse_width_ns) */
   uint8_t sck_pulse_width_ns;		/* UC1601: 15ns */
+  
   /* data takeover edge:  0=falling edge, 1=rising edge*/
   /* initial default value for sck is low (0) for falling edge and high for rising edge */
+  /* this means, default value is identical to sck_takeover_edge */
   uint8_t sck_takeover_edge;		/* UC1601: rising edge (1) */
   
   /* == I2C == */
@@ -176,7 +186,7 @@ struct u8g2_display_info_struct
 struct u8g2_struct
 {
   //u8g2_t *u8g2_root;	/* root of the message call chain */
-  u8g2_display_info_t *display_info;
+  const u8g2_display_info_t *display_info;
   u8g2_msg_cb display_cb;
   u8g2_msg_cb cad_cb;
   u8g2_msg_cb byte_cb;
@@ -187,6 +197,10 @@ struct u8g2_struct
 
 
 /*==========================================*/
+
+/* helper functions */
+void u8g2_d_helper_display_init(u8g2_t *u8g2, const u8g2_display_info_t *display_info);
+
 /* Display Interface */
 
 /*
@@ -239,7 +253,11 @@ struct u8g2_struct
 	uint8_t x_pos;		first tile x position
 	uint8_t y_pos;		first tile y position 
   Tasks:
-    One tile has exactly 8 bytes (8x8 pixel). 
+    One tile has exactly 8 bytes (8x8 pixel monochrome bitmap). 
+    The lowest bit of the first byte is the upper left corner
+    The highest bit of the first byte is the lower left corner
+    The lowest bit of the last byte is the upper right corner
+    The highest bit of the last byte is the lower left corner
     "tile_ptr" is the address of a memory area, which contains
     one or more tiles. "cnt" will contain the exact number of
     tiles in the memory areay. The size of the memory area is 8*cnt;
@@ -350,6 +368,9 @@ uint8_t u8g2_byte_SetDC(u8g2_t *u8g2, uint8_t dc) U8G2_NOINLINE;
 uint8_t u8g2_byte_SendByte(u8g2_t *u8g2, uint8_t byte) U8G2_NOINLINE;
 uint8_t u8g2_byte_SendBytes(u8g2_t *u8g2, uint8_t cnt, uint8_t *data) U8G2_NOINLINE;
 
+uint8_t u8g2_byte_8bit_sw_spi(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+
+
 /*==========================================*/
 /* GPIO Interface */
 
@@ -371,6 +392,8 @@ uint8_t u8g2_byte_SendBytes(u8g2_t *u8g2, uint8_t cnt, uint8_t *data) U8G2_NOINL
 #define U8G2_MSG_GPIO_DC 45
 #define U8G2_MSG_GPIO_CS 46		
 #define U8G2_MSG_GPIO_RESET 47
+#define U8G2_MSG_GPIO_CLOCK 48
+#define U8G2_MSG_GPIO_DATA 49
 
 #define u8g2_gpio_Init(u8g2) ((u8g2)->gpio_and_delay_cb((u8g2), U8G2_MSG_GPIO_AND_DELAY_INIT, 0, NULL ))
 
@@ -383,6 +406,8 @@ uint8_t u8g2_byte_SendBytes(u8g2_t *u8g2, uint8_t cnt, uint8_t *data) U8G2_NOINL
 #define u8g2_gpio_SetDC(u8g2, v) u8g2_gpio_call(u8g2, U8G2_MSG_GPIO_DC, (v))
 #define u8g2_gpio_SetCS(u8g2, v) u8g2_gpio_call(u8g2, U8G2_MSG_GPIO_CS, (v))
 #define u8g2_gpio_SetReset(u8g2, v) u8g2_gpio_call(u8g2, U8G2_MSG_GPIO_CS, (v))
+#define u8g2_gpio_SetClock(u8g2, v) u8g2_gpio_call(u8g2, U8G2_MSG_GPIO_CLOCK, (v))
+#define u8g2_gpio_SetData(u8g2, v) u8g2_gpio_call(u8g2, U8G2_MSG_GPIO_DATA, (v))
 
 void u8g2_gpio_call(u8g2_t *u8g2, uint8_t msg, uint8_t arg) U8G2_NOINLINE;
 

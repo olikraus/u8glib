@@ -92,6 +92,14 @@ uint8_t u8g2_gpio_and_delay_arduino(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, 
     case U8G2_MSG_GPIO_RESET:
 	digitalWrite(8, arg_int);
 	break;
+	
+    case U8G2_MSG_GPIO_CLOCK:
+	digitalWrite(13, arg_int);
+	break;
+      
+    case U8G2_MSG_GPIO_DATA:
+	digitalWrite(11, arg_int);
+	break;
       
     default:
       return 0;
@@ -118,8 +126,12 @@ uint8_t u8g2_byte_arduino_hw_spi(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, voi
       }
       break;
     case U8G2_MSG_BYTE_INIT:
+      /* disable chipselect */
+      u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_disable_level);
+      /* no wait required here */
+      
       /* for SPI: setup correct level of the clock signal */
-      digitalWrite(13, 1);      
+      digitalWrite(13, u8g2->display_info->sck_takeover_edge);
       break;
     case U8G2_MSG_BYTE_SET_DC:
       u8g2_gpio_SetDC(u8g2, arg_int);
@@ -148,62 +160,6 @@ uint8_t u8g2_byte_arduino_hw_spi(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, voi
   return 1;
 }
 
-
-uint8_t u8g2_byte_arduino_sw_spi(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
-{
-  uint8_t i, b;
-  uint8_t *data;
-  
- 
-  switch(msg)
-  {
-    case U8G2_MSG_BYTE_SEND:
-      data = (uint8_t *)arg_ptr;
-      while( arg_int > 0 )
-      {
-	b = *data;
-	data++;
-	arg_int--;
-	for( i = 0; i < 8; i++ )
-	{
-	  if ( b & 128 )
-	    digitalWrite(11, 1);
-	  else
-	    digitalWrite(11, 0);
-	  b <<= 1;
-	  delay(1);
-	  digitalWrite(13, 0);
-	  delay(1);
-	  digitalWrite(13, 1);
-	  delay(1);	
-	}    
-      }
-      break;
-    case U8G2_MSG_BYTE_INIT:
-      /* for SPI: setup correct level of the clock signal */
-      digitalWrite(13, 1);      
-      break;
-    case U8G2_MSG_BYTE_SET_DC:
-      u8g2_gpio_SetDC(u8g2, arg_int);
-      break;
-    case U8G2_MSG_BYTE_START_TRANSFER:
-      u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_enable_level);  
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_NANO, u8g2->display_info->post_chip_enable_wait_ns, NULL);
-      break;
-    case U8G2_MSG_BYTE_END_TRANSFER:
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_NANO, u8g2->display_info->pre_chip_disable_wait_ns, NULL);
-      u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_disable_level);
-      break;
-    case U8G2_MSG_BYTE_SET_I2C_ADR:
-      break;
-    case U8G2_MSG_BYTE_SET_DEVICE:
-      break;
-    default:
-      return 0;
-  }
-  return 1;
-}
-
 void u8g2_Setup_UC1701_DOGS102(u8g2_t *u8g2)
 {
   /* setup defaults */
@@ -212,7 +168,7 @@ void u8g2_Setup_UC1701_DOGS102(u8g2_t *u8g2)
   /* setup specific callbacks */
   u8g2->display_cb = u8g2_d_uc1701_dogs102;
   u8g2->cad_cb = u8g2_cad_001;
-  u8g2->byte_cb = u8g2_byte_arduino_hw_spi;
+  u8g2->byte_cb = u8g2_byte_8bit_sw_spi;
   u8g2->gpio_and_delay_cb = u8g2_gpio_and_delay_arduino;
   
 }
@@ -225,7 +181,8 @@ void u8g2_Setup_SSD1306_128x64_NONAME(u8g2_t *u8g2)
   /* setup specific callbacks */
   u8g2->display_cb = u8g2_d_ssd1306_128x64_noname;
   u8g2->cad_cb = u8g2_cad_001;
-  u8g2->byte_cb = u8g2_byte_arduino_hw_spi;
+  //u8g2->byte_cb = u8g2_byte_arduino_hw_spi;
+  u8g2->byte_cb = u8g2_byte_8bit_sw_spi;
   u8g2->gpio_and_delay_cb = u8g2_gpio_and_delay_arduino;
 }
 
@@ -235,8 +192,8 @@ uint8_t tile[8] = { 0x0f, 0x0f, 0x0f, 0x0f, 0xf0, 0xf0, 0xf0, 0xf0 };
 
 void setup(void)
 {
-  u8g2_Setup_UC1701_DOGS102(&u8g2);  
-  //u8g2_Setup_SSD1306_128x64_NONAME(&u8g2);
+  //u8g2_Setup_UC1701_DOGS102(&u8g2);  
+  u8g2_Setup_SSD1306_128x64_NONAME(&u8g2);
 }
 
 void loop(void)

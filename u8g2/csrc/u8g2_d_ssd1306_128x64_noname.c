@@ -70,7 +70,7 @@ static const uint8_t u8g2_d_ssd1306_128x64_noname_flip1_seq[] = {
 };
 #endif
 
-static u8g2_display_info_t u8g2_ssd1306_128x64_noname_display_info =
+static const u8g2_display_info_t u8g2_ssd1306_128x64_noname_display_info =
 {
   /* chip_enable_level = */ 0,
   /* chip_disable_level = */ 1,
@@ -79,8 +79,8 @@ static u8g2_display_info_t u8g2_ssd1306_128x64_noname_display_info =
   /* pre_chip_disable_wait_ns = */ 10,
   /* reset_pulse_width_ms = */ 100, 	/* SSD1306: 3 us */
   /* post_reset_wait_ms = */ 100, /* far east OLEDs need much longer setup time */
-  /* sda_setup_time_ns = */ 15,
-  /* sck_pulse_width_ns = */ 50,	/* SSD1306: 20ns, but cycle time is 100ns, so use 100/50 */
+  /* sda_setup_time_ns = */ 50,		/* SSD1306: 15ns, but cycle time is 100ns, so use 100/2 */
+  /* sck_pulse_width_ns = */ 50,	/* SSD1306: 20ns, but cycle time is 100ns, so use 100/2 */
   /* sck_takeover_edge = */ 1,		/* rising edge */
   /* i2c_bus_clock_100kHz = */ 4,
   /* data_setup_time_ns = */ 40,
@@ -97,27 +97,7 @@ uint8_t u8g2_d_ssd1306_128x64_noname(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int,
   switch(msg)
   {
     case U8G2_MSG_DISPLAY_INIT:
-      /* 1) set display info struct */
-      u8g2->display_info = &u8g2_ssd1306_128x64_noname_display_info;
-      u8g2->x_offset = u8g2->display_info->default_x_offset;
-    
-      /* 2) apply port directions to the GPIO lines and apply default values for the IO lines*/
-      u8g2_gpio_Init(u8g2);
-      u8g2_cad_Init(u8g2);
-
-      /* 3) apply default value for chip select */
-      u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_disable_level);
-      /* no wait required here */
-    
-      /* 4) do reset */
-      u8g2_gpio_SetReset(u8g2, 1);
-      u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms);
-      u8g2_gpio_SetReset(u8g2, 0);
-      u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->reset_pulse_width_ms);
-      u8g2_gpio_SetReset(u8g2, 1);
-      u8g2_gpio_Delay(u8g2, U8G2_MSG_DELAY_MILLI, u8g2->display_info->post_reset_wait_ms);
-    
-      /* 5) send startup code */
+      u8g2_d_helper_display_init(u8g2, &u8g2_ssd1306_128x64_noname_display_info);
       u8g2_cad_SendSequence(u8g2, u8g2_d_ssd1306_128x64_noname_init_seq);
     
       break;
