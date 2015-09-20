@@ -23,8 +23,7 @@ static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
   U8G2_C(0x0a2),		                /* LCD bias 1/9 */
   U8G2_C(0x02f),		                /* all power  control circuits on */
   U8G2_C(0x027),		                /* regulator, booster and follower */
-  U8G2_C(0x081),		                /* set contrast */
-  U8G2_C(0x00e),		                /* contrast value, EA default: 0x010, previous value for S102: 0x0e */
+  U8G2_CA(0x081, 0x00e),		/* set contrast, contrast value, EA default: 0x010, previous value for S102: 0x0e */
   U8G2_C(0x0fa),		                /* Set Temp compensation */ 
   U8G2_C(0x090),		                /* 0.11 deg/c WP Off WC Off*/
   U8G2_C(0x0a4),		                /* normal display  */
@@ -55,20 +54,21 @@ static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
   U8G2_END()             			/* end of sequence */
 };
 
-static const uint8_t u8g2_d_uc1701_dogs102_power_up_seq[] = {
+static const uint8_t u8g2_d_uc1701_dogs102_powersave0_seq[] = {
   U8G2_START_TRANSFER(),             	/* enable chip, delay is part of the transfer start */
   U8G2_C(0x0af),		                /* display on */
   U8G2_END_TRANSFER(),             	/* disable chip */
   U8G2_END()             			/* end of sequence */
 };
 
-static const uint8_t u8g2_d_uc1701_dogs102_power_down_seq[] = {
+static const uint8_t u8g2_d_uc1701_dogs102_powersave1_seq[] = {
   U8G2_START_TRANSFER(),             	/* enable chip, delay is part of the transfer start */
   U8G2_C(0x0ae),		                /* display off */
   U8G2_END_TRANSFER(),             	/* disable chip */
   U8G2_END()             			/* end of sequence */
 };
 
+#ifdef U8G2_WITH_SET_FLIP_MODE
 static const uint8_t u8g2_d_uc1701_dogs102_flip0_seq[] = {
   U8G2_START_TRANSFER(),             	/* enable chip, delay is part of the transfer start */
   U8G2_C(0x0a1),				/* segment remap a0/a1*/
@@ -84,6 +84,7 @@ static const uint8_t u8g2_d_uc1701_dogs102_flip1_seq[] = {
   U8G2_END_TRANSFER(),             	/* disable chip */
   U8G2_END()             			/* end of sequence */
 };
+#endif
 
 
 static u8g2_display_info_t u8g2_uc1601_display_info =
@@ -141,13 +142,13 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *
       u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_init_seq);
     
       break;
-    case U8G2_MSG_DISPLAY_POWER_DOWN:
-      u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_power_down_seq);
+    case U8G2_MSG_DISPLAY_SET_POWER_SAVE:
+      if ( arg_int == 0 )
+	u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_powersave0_seq);
+      else
+	u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_powersave1_seq);
       break;
-    case U8G2_MSG_DISPLAY_POWER_UP:
-      u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_power_up_seq);
-      break;
- #ifdef U8G2_WITH_FLIP_MODE
+ #ifdef U8G2_WITH_SET_FLIP_MODE
     case U8G2_MSG_DISPLAY_SET_FLIP_MODE:
       if ( arg_int == 0 )
       {
@@ -159,10 +160,16 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *
 	u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_flip1_seq);
 	u8g2->x_offset = 30;
       }	
+      break;
 #endif
-      break;
+#ifdef U8G2_WITH_SET_CONTRAST
     case U8G2_MSG_DISPLAY_SET_CONTRAST:
+      u8g2_cad_StartTransfer(u8g2);
+      u8g2_cad_SendCmd(u8g2, 0x081 );
+      u8g2_cad_SendArg(u8g2, arg_int >> 2 );	/* uc1701 has range from 0 to 63 */
+      u8g2_cad_EndTransfer(u8g2);
       break;
+#endif
     case U8G2_MSG_DISPLAY_DRAW_TILE:
       u8g2_cad_StartTransfer(u8g2);
       x = ((u8g2_tile_t *)arg_ptr)->x_pos;
@@ -186,8 +193,6 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *
       } while( arg_int > 0 );
       
       u8g2_cad_EndTransfer(u8g2);
-      break;
-    case U8G2_MSG_DISPLAY_GET_LAYOUT:
       break;
     default:
       return 0;

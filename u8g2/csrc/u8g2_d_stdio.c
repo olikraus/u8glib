@@ -42,17 +42,14 @@ uint8_t u8g2_d_stdio(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
   {
     case U8G2_MSG_DISPLAY_INIT:
       break;
-    case U8G2_MSG_DISPLAY_POWER_DOWN:
-      break;
-    case U8G2_MSG_DISPLAY_POWER_UP:
-      bitmap_show();
+    case U8G2_MSG_DISPLAY_SET_POWER_SAVE:
+      if ( arg_int == 0 )
+	bitmap_show();
       break;
     case U8G2_MSG_DISPLAY_SET_CONTRAST:
       break;
     case U8G2_MSG_DISPLAY_DRAW_TILE:      
       bitmap_place_tile(((u8g2_tile_t *)arg_ptr)->x_pos, ((u8g2_tile_t *)arg_ptr)->y_pos, ((u8g2_tile_t *)arg_ptr)->tile_ptr);
-      break;
-    case U8G2_MSG_DISPLAY_GET_LAYOUT:
       break;
     default:
       break;

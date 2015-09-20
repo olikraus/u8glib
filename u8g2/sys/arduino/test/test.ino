@@ -248,8 +248,9 @@ void loop(void)
   for(;;)
   {
     u8g2_display_ClearScreen(&u8g2);  
-    u8g2_display_PowerUp(&u8g2);
-
+    u8g2_display_SetPowerSave(&u8g2, 0);
+    //u8g2_display_SetContrast(&u8g2, 10);
+    
     delay(500);
 
     u8g2_Set8x8Font(&u8g2, bdf_font);

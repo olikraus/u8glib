@@ -10,11 +10,10 @@
   The topmost level is the display layer. It includes the following messages:
   
     U8G2_MSG_DISPLAY_INIT
-    U8G2_MSG_DISPLAY_POWER_UP
+    U8G2_MSG_DISPLAY_SET_FLIP_MODE
+    U8G2_MSG_DISPLAY_SET_POWER_SAVE
     U8G2_MSG_DISPLAY_SET_CONTRAST
     U8G2_MSG_DISPLAY_DRAW_TILE
-    U8G2_MSG_DISPLAY_GET_LAYOUT
-    U8G2_MSG_DISPLAY_POWER_DOWN
 
   A display driver may decided to breakdown these messages to a lower level interface or
   implement this functionality directly.
@@ -59,8 +58,11 @@
 /* global defines */
 
 
+/* Undefine this to remove u8g2_display_SetContrast function */
+#define U8G2_WITH_SET_CONTRAST
+
 /* Undefine this to remove u8g2_display_SetFlipMode function */
-#define U8G2_WITH_FLIP_MODE
+#define U8G2_WITH_SET_FLIP_MODE
 
 /* Select 0 or 1 for the default flip mode. This is not affected by U8G2_WITH_FLIP_MODE */
 #define U8G2_DEFAULT_FLIP_MODE 0
@@ -192,29 +194,68 @@ struct u8g2_struct
   Args:	None
   Tasks:
     1) setup u8g2->display_info
-    2) put interface into default state
-    3) execute display reset (gpio interface)
-    4) send setup sequence to display, do not activate display, "power on" will follow 
+      copy u8g2->display_info->default_x_offset to u8g2->x_offset
+
+    2) put interface into default state: 
+	  execute u8g2_gpio_Init for port directions
+	  execute u8g2_cad_Init for default port levels
+    3) set CS status (not clear, may be done in cad/byte interface
+    4) execute display reset (gpio interface)
+    5) send setup sequence to display, do not activate display, disable "power save" will follow 
 */
 #define U8G2_MSG_DISPLAY_INIT 10
 
-/* no args */
-#define U8G2_MSG_DISPLAY_POWER_DOWN 11
+/*
+  Name: 	U8G2_MSG_DISPLAY_SET_POWER_SAVE
+  Args:	arg_int: 0: normal mode (RAM is visible on the display), 1: nothing is shown
+  Tasks:
+    Depending on arg_int, put the display into normal or power save mode.
+    Send the corresponding sequence to the display.
+    In power save mode, it must be possible to modify the RAM content.
+*/
+#define U8G2_MSG_DISPLAY_SET_POWER_SAVE 11
 
-/* no args */
-#define U8G2_MSG_DISPLAY_POWER_UP 12
-
-/* arg_int: 0 normal, 1: flip */
+/*
+  Name: 	U8G2_MSG_DISPLAY_SET_FLIP_MODE
+  Args:	arg_int: 0: normal mode, 1: flipped HW screen (180 degree)
+  Tasks:
+    Reprogramms the display controller to rotate the display by 
+    180 degree (arg_int = 1) or not (arg_int = 0)
+    This may change u8g2->x_offset if the display is smaller than the controller ram
+    This message should only be supported if U8G2_WITH_FLIP_MODE is defined.
+*/
 #define U8G2_MSG_DISPLAY_SET_FLIP_MODE 13
 
 /*  arg_int: 0..255 contrast value */
 #define U8G2_MSG_DISPLAY_SET_CONTRAST 14
 
-/*  arg_ptr: u8g2_tile_t */
+/*
+  Name: 	U8G2_MSG_DISPLAY_DRAW_TILE
+  Args:	
+    arg_int: How often to repeat this tile pattern
+    arg_ptr: pointer to u8g2_tile_t
+        uint8_t *tile_ptr;	pointer to one or more tiles (number is "cnt")
+	uint8_t cnt;		number of tiles
+	uint8_t x_pos;		first tile x position
+	uint8_t y_pos;		first tile y position 
+  Tasks:
+    One tile has exactly 8 bytes (8x8 pixel). 
+    "tile_ptr" is the address of a memory area, which contains
+    one or more tiles. "cnt" will contain the exact number of
+    tiles in the memory areay. The size of the memory area is 8*cnt;
+    Multiple tiles in the memory area form a horizontal sequence, this 
+    means the first tile is drawn at x_pos/y_pos, the second tile is drawn
+    at x_pos+1/y_pos, third at x_pos+2/y_pos.
+    "arg_int" tells how often the tile sequence should be repeated:
+    For example if "cnt" is two and tile_ptr points to tiles A and B,
+    then for arg_int = 3, the following tile sequence will be drawn:
+    ABABAB. Totally, cnt*arg_int tiles will be drawn. 
+        
+*/
 #define U8G2_MSG_DISPLAY_DRAW_TILE 15
 
 /*  arg_ptr: layout struct */
-#define U8G2_MSG_DISPLAY_GET_LAYOUT 16
+//#define U8G2_MSG_DISPLAY_GET_LAYOUT 16
 
 /* u8g2_display.c */
 uint8_t u8g2_display_DrawTile(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr);
@@ -222,9 +263,9 @@ uint8_t u8g2_display_DrawTile(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, u
 /* Init display, but keep display in power save mode. Usually this command must be followed by u8g2_display_PowerUp() */
 void u8g2_display_Init(u8g2_t *u8g2);
 /* wake up display from power save mode */
-void u8g2_display_PowerUp(u8g2_t *u8g2);
-void u8g2_display_PowerDown(u8g2_t *u8g2);
+void u8g2_display_SetPowerSave(u8g2_t *u8g2, uint8_t is_enable);
 void u8g2_display_SetFlipMode(u8g2_t *u8g2, uint8_t mode);
+void u8g2_display_SetContrast(u8g2_t *u8g2, uint8_t value);
 void u8g2_display_ClearScreen(u8g2_t *u8g2);
 
 

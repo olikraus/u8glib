@@ -74,19 +74,19 @@ void u8g2_display_Init(u8g2_t *u8g2)
   u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_INIT, 0, NULL);  
 }
 
-void u8g2_display_PowerUp(u8g2_t *u8g2)
+void u8g2_display_SetPowerSave(u8g2_t *u8g2, uint8_t is_enable)
 {
-  u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_POWER_UP, 0, NULL);  
-}
-
-void u8g2_display_PowerDown(u8g2_t *u8g2)
-{
-  u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_POWER_DOWN, 0, NULL);  
+  u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_SET_POWER_SAVE, is_enable, NULL);  
 }
 
 void u8g2_display_SetFlipMode(u8g2_t *u8g2, uint8_t mode)
 {
   u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_SET_FLIP_MODE, mode, NULL);  
+}
+
+void u8g2_display_SetContrast(u8g2_t *u8g2, uint8_t value)
+{
+  u8g2->display_cb(u8g2, U8G2_MSG_DISPLAY_SET_CONTRAST, value, NULL);  
 }
 
 
