@@ -28,28 +28,6 @@ static const uint8_t u8g2_d_uc1701_dogs102_init_seq[] = {
   U8G2_C(0x0fa),		                /* Set Temp compensation */ 
   U8G2_C(0x090),		                /* 0.11 deg/c WP Off WC Off*/
   U8G2_C(0x0a4),		                /* normal display  */
-  //U8G2_C(0x0af),		                /* display on */
-
-  
-  //U8G2_DLY(50),       			/* delay 100 ms */
-  //U8G2_C(0x0a5),		                /* display all points, ST7565, UC1610 */
-  //U8G2_DLY(50),       			/* delay 100 ms */
-  //U8G2_DLY(50),       			/* delay 100 ms */
-  //U8G2_C(0x0a4),		                /* normal display */
-  
-  //U8G2_C(0x010),		                /* col hi adr 0 */
-  //U8G2_C(0x000),		                /* col lo adr 0 */
-  //U8G2_C(0x0b0),		                /* page 0 */
-  
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  //U8G2_D1(0x0ff),		                /* data */
-  
   
   U8G2_END_TRANSFER(),             	/* disable chip */
   U8G2_END()             			/* end of sequence */
@@ -120,8 +98,7 @@ uint8_t u8g2_d_uc1701_dogs102(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *
   {
     case U8G2_MSG_DISPLAY_INIT:
       u8g2_d_helper_display_init(u8g2, &u8g2_uc1701_display_info);
-      u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_init_seq);
-    
+      u8g2_cad_SendSequence(u8g2, u8g2_d_uc1701_dogs102_init_seq);    
       break;
     case U8G2_MSG_DISPLAY_SET_POWER_SAVE:
       if ( arg_int == 0 )
