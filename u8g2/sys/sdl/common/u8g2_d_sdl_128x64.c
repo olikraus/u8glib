@@ -262,4 +262,16 @@ void u8g2_Setup_SDL_128x64(u8g2_t *u8g2)
   
 }
 
+void u8g2x_Setup_SDL_128x64(u8g2x_t *u8g2x)
+{
+  static uint8_t buf[128*8];
+  u8g2_Setup_SDL_128x64(u8g2x_GetU8x8(u8g2x));
+  u8g2x->tile_buf_ptr = buf;
+  u8g2x->tile_buf_height = 8;
+  u8g2x->tile_curr_row = 0;
+  u8g2x->draw_color = 1;
+}
 
+void u8g2x_draw_pixel(u8g2x_t *u8g2x, u8g2_uint_t x, u8g2_uint_t y)
+{
+}

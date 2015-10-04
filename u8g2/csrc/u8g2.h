@@ -114,8 +114,12 @@ extern "C" {
 
 typedef struct u8g2_struct u8g2_t;
 typedef struct u8g2_display_info_struct u8g2_display_info_t;
+typedef struct u8g2x_struct u8g2x_t;
+
 
 typedef struct u8g2_tile_struct u8g2_tile_t;
+
+typedef uint16_t u8g2_uint_t;	/* for pixel position only */
 
 
 typedef uint8_t (*u8g2_msg_cb)(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
@@ -180,7 +184,6 @@ struct u8g2_display_info_struct
   uint8_t tile_height;
 
   uint8_t default_x_offset;	/* default x offset for the display */
-
 };
 
 struct u8g2_struct
@@ -195,6 +198,16 @@ struct u8g2_struct
   uint8_t x_offset;	/* copied from info struct, can be modified in flip mode */
 };
 
+struct u8g2x_struct
+{
+  u8g2_t u8x8;
+  uint8_t *tile_buf_ptr;	/* ptr to memory area with u8g2.display_info->tile_width * 8 * tile_buf_height bytes */
+  uint8_t tile_buf_height;	/* height of the tile memory area in tile rows */
+  uint8_t tile_curr_row;	/* current row for picture loop */
+  uint8_t draw_color;		/* 0: clear pixel, 1: set pixel */
+};
+
+#define u8g2x_GetU8x8(u8g2x) ((u8g2_t *)(u8g2x))
 
 /*==========================================*/
 
@@ -444,6 +457,8 @@ uint8_t u8g2_d_ssd1306_128x64_noname(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int,
 void u8g2_Set8x8Font(u8g2_t *u8g2, const uint8_t *font_8x8);
 void u8g2_Draw8x8Glyph(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t encoding);
 void u8g2_Draw8x8String(u8g2_t *u8g2, uint8_t x, uint8_t y, const char *s);
+
+/*==========================================*/
 
 
 #ifdef __cplusplus
