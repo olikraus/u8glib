@@ -49,8 +49,8 @@
 
 #include "u8g.h"
 
-
-#if defined(__AVR__)
+#if defined(__AVR_XMEGA__)
+#elif defined(__AVR__)
 #define U8G_ATMEGA_HW_SPI
 
 /* remove the definition for attiny */
