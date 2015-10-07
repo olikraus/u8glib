@@ -111,18 +111,20 @@ extern "C" {
 /*==========================================*/
 /* U8G2 typedefs and data structures */
 
-
-typedef struct u8g2_struct u8g2_t;
-typedef struct u8g2_display_info_struct u8g2_display_info_t;
-typedef struct u8g2x_struct u8g2x_t;
-
-
-typedef struct u8g2_tile_struct u8g2_tile_t;
-
 typedef uint16_t u8g2_uint_t;	/* for pixel position only */
 
 
+typedef struct u8g2_struct u8g2_t;
+typedef struct u8g2_display_info_struct u8g2_display_info_t;
+typedef struct u8g2_tile_struct u8g2_tile_t;
+
+typedef struct u8g2x_struct u8g2x_t;
+typedef struct u8g2x_cb_struct u8g2x_cb_t;
+
 typedef uint8_t (*u8g2_msg_cb)(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+
+typedef void (*u8g2x_update_dimension_cb)(u8g2x_t *u8g2x_t);
+typedef void (*u8g2x_draw_l90_cb)(u8g2x_t *u8g2x_t, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir);
 
 
 //struct u8g2_mcd_struct
@@ -198,9 +200,18 @@ struct u8g2_struct
   uint8_t x_offset;	/* copied from info struct, can be modified in flip mode */
 };
 
+
+struct u8g2x_cb_struct
+{
+  u8g2x_update_dimension_cb update;
+  u8g2x_draw_l90_cb draw_l90;
+};
+
+
 struct u8g2x_struct
 {
   u8g2_t u8x8;
+  u8g2x_cb_t *cb;		/* callback drawprocedures, can be replaced for rotation */
   uint8_t *tile_buf_ptr;	/* ptr to memory area with u8g2.display_info->tile_width * 8 * tile_buf_height bytes */
   uint8_t tile_buf_height;	/* height of the tile memory area in tile rows */
   uint8_t tile_curr_row;	/* current row for picture loop */
