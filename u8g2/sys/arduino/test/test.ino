@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <SPI.h>
-#include "u8g2.h"
+#include "u8x8.h"
 
 /*
   Fontname: FreeType-Amstrad CPC extended-Medium-R-Normal--8-80-72-72-P-64-ISO10646-1
@@ -11,9 +11,9 @@
   Glyphs: 95/196
   BBX Build Mode: 3
 */
-#include "u8g2.h"
+//#include "u8x2.h"
 
-const uint8_t bdf_font[762] U8G2_FONT_SECTION("bdf_font") = {
+const uint8_t bdf_font[762] U8X8_FONT_SECTION("bdf_font") = {
   32,126,0,0,0,0,0,0,0,0,0,0,0,95,95,0,
   0,0,0,7,7,0,7,7,0,0,20,127,127,28,127,127,
   20,0,0,36,42,127,127,42,18,0,70,102,48,24,12,102,
@@ -65,11 +65,11 @@ const uint8_t bdf_font[762] U8G2_FONT_SECTION("bdf_font") = {
 
 
 
-uint8_t u8g2_gpio_and_delay_arduino(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+uint8_t u8x8_gpio_and_delay_arduino(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   switch(msg)
   {
-    case U8G2_MSG_GPIO_AND_DELAY_INIT:
+    case U8X8_MSG_GPIO_AND_DELAY_INIT:
       pinMode(8, OUTPUT);
       pinMode(9, OUTPUT);
       pinMode(10, OUTPUT);
@@ -77,27 +77,27 @@ uint8_t u8g2_gpio_and_delay_arduino(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, 
       pinMode(13, OUTPUT);
       break;
   
-    case U8G2_MSG_DELAY_MILLI:
+    case U8X8_MSG_DELAY_MILLI:
       delay(arg_int);
       break;
       
-    case U8G2_MSG_GPIO_DC:
+    case U8X8_MSG_GPIO_DC:
 	digitalWrite(9, arg_int);
 	break;
 	
-    case U8G2_MSG_GPIO_CS:
+    case U8X8_MSG_GPIO_CS:
 	digitalWrite(10, arg_int);
 	break;
 	
-    case U8G2_MSG_GPIO_RESET:
+    case U8X8_MSG_GPIO_RESET:
 	digitalWrite(8, arg_int);
 	break;
 	
-    case U8G2_MSG_GPIO_CLOCK:
+    case U8X8_MSG_GPIO_CLOCK:
 	digitalWrite(13, arg_int);
 	break;
       
-    case U8G2_MSG_GPIO_DATA:
+    case U8X8_MSG_GPIO_DATA:
 	digitalWrite(11, arg_int);
 	break;
       
@@ -109,13 +109,13 @@ uint8_t u8g2_gpio_and_delay_arduino(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, 
 
 
 
-uint8_t u8g2_byte_arduino_hw_spi(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+uint8_t u8x8_byte_arduino_hw_spi(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   uint8_t *data;
  
   switch(msg)
   {
-    case U8G2_MSG_BYTE_SEND:
+    case U8X8_MSG_BYTE_SEND:
 
       data = (uint8_t *)arg_ptr;
       while( arg_int > 0 )
@@ -125,34 +125,34 @@ uint8_t u8g2_byte_arduino_hw_spi(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, voi
 	arg_int--;
       }
       break;
-    case U8G2_MSG_BYTE_INIT:
+    case U8X8_MSG_BYTE_INIT:
       /* disable chipselect */
-      u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_disable_level);
+      u8x8_gpio_SetCS(u8g2, u8g2->display_info->chip_disable_level);
       /* no wait required here */
       
       /* for SPI: setup correct level of the clock signal */
       digitalWrite(13, u8g2->display_info->sck_takeover_edge);
       break;
-    case U8G2_MSG_BYTE_SET_DC:
-      u8g2_gpio_SetDC(u8g2, arg_int);
+    case U8X8_MSG_BYTE_SET_DC:
+      u8x8_gpio_SetDC(u8g2, arg_int);
       break;
-    case U8G2_MSG_BYTE_START_TRANSFER:
+    case U8X8_MSG_BYTE_START_TRANSFER:
       SPI.begin();
       SPI.setClockDivider( SPI_CLOCK_DIV2 );
       SPI.setDataMode(SPI_MODE0);
       SPI.setBitOrder(MSBFIRST);
       
-      u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_enable_level);  
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_NANO, u8g2->display_info->post_chip_enable_wait_ns, NULL);
+      u8x8_gpio_SetCS(u8g2, u8g2->display_info->chip_enable_level);  
+      u8g2->gpio_and_delay_cb(u8g2, U8X8_MSG_DELAY_NANO, u8g2->display_info->post_chip_enable_wait_ns, NULL);
       break;
-    case U8G2_MSG_BYTE_END_TRANSFER:
-      u8g2->gpio_and_delay_cb(u8g2, U8G2_MSG_DELAY_NANO, u8g2->display_info->pre_chip_disable_wait_ns, NULL);
-      u8g2_gpio_SetCS(u8g2, u8g2->display_info->chip_disable_level);
+    case U8X8_MSG_BYTE_END_TRANSFER:
+      u8g2->gpio_and_delay_cb(u8g2, U8X8_MSG_DELAY_NANO, u8g2->display_info->pre_chip_disable_wait_ns, NULL);
+      u8x8_gpio_SetCS(u8g2, u8g2->display_info->chip_disable_level);
       SPI.end();
       break;
-    case U8G2_MSG_BYTE_SET_I2C_ADR:
+    case U8X8_MSG_BYTE_SET_I2C_ADR:
       break;
-    case U8G2_MSG_BYTE_SET_DEVICE:
+    case U8X8_MSG_BYTE_SET_DEVICE:
       break;
     default:
       return 0;
@@ -160,66 +160,66 @@ uint8_t u8g2_byte_arduino_hw_spi(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, voi
   return 1;
 }
 
-void u8g2_Setup_UC1701_DOGS102(u8g2_t *u8g2)
+void u8x8_Setup_UC1701_DOGS102(u8x8_t *u8g2)
 {
   /* setup defaults */
-  u8g2_SetupDefaults(u8g2);
+  u8x8_SetupDefaults(u8g2);
   
   /* setup specific callbacks */
-  u8g2->display_cb = u8g2_d_uc1701_dogs102;
-  u8g2->cad_cb = u8g2_cad_001;
-  u8g2->byte_cb = u8g2_byte_8bit_sw_spi;
-  u8g2->gpio_and_delay_cb = u8g2_gpio_and_delay_arduino;
+  u8g2->display_cb = u8x8_d_uc1701_dogs102;
+  u8g2->cad_cb = u8x8_cad_001;
+  u8g2->byte_cb = u8x8_byte_8bit_sw_spi;
+  u8g2->gpio_and_delay_cb = u8x8_gpio_and_delay_arduino;
   
 }
 
-void u8g2_Setup_SSD1306_128x64_NONAME(u8g2_t *u8g2)
+void u8x8_Setup_SSD1306_128x64_NONAME(u8x8_t *u8g2)
 {
   /* setup defaults */
-  u8g2_SetupDefaults(u8g2);
+  u8x8_SetupDefaults(u8g2);
   
   /* setup specific callbacks */
-  u8g2->display_cb = u8g2_d_ssd1306_128x64_noname;
-  u8g2->cad_cb = u8g2_cad_001;
-  //u8g2->byte_cb = u8g2_byte_arduino_hw_spi;
-  u8g2->byte_cb = u8g2_byte_8bit_sw_spi;
-  u8g2->gpio_and_delay_cb = u8g2_gpio_and_delay_arduino;
+  u8g2->display_cb = u8x8_d_ssd1306_128x64_noname;
+  u8g2->cad_cb = u8x8_cad_001;
+  //u8g2->byte_cb = u8x8_byte_arduino_hw_spi;
+  u8g2->byte_cb = u8x8_byte_8bit_sw_spi;
+  u8g2->gpio_and_delay_cb = u8x8_gpio_and_delay_arduino;
 }
 
 
-u8g2_t u8g2;
+u8x8_t u8g2;
 uint8_t tile[8] = { 0x0f, 0x0f, 0x0f, 0x0f, 0xf0, 0xf0, 0xf0, 0xf0 };
 
 void setup(void)
 {
-  //u8g2_Setup_UC1701_DOGS102(&u8g2);  
-  u8g2_Setup_SSD1306_128x64_NONAME(&u8g2);
+  u8x8_Setup_UC1701_DOGS102(&u8g2);  
+  //u8x8_Setup_SSD1306_128x64_NONAME(&u8g2);
 }
 
 void loop(void)
 {
-  u8g2_display_Init(&u8g2);  
-  //u8g2_display_SetFlipMode(&u8g2, 1);
+  u8x8_display_Init(&u8g2);  
+  u8x8_display_SetFlipMode(&u8g2, 1);
 
 
   for(;;)
   {
-    u8g2_display_ClearScreen(&u8g2);  
-    u8g2_display_SetPowerSave(&u8g2, 0);
-    //u8g2_display_SetContrast(&u8g2, 10);
+    u8x8_display_ClearScreen(&u8g2);  
+    u8x8_display_SetPowerSave(&u8g2, 0);
+    //u8x8_display_SetContrast(&u8g2, 10);
     
     delay(500);
 
-    u8g2_Set8x8Font(&u8g2, bdf_font);
-    u8g2_Draw8x8String(&u8g2, 0, 0, "Hello gAjByCD");
-    u8g2_Draw8x8String(&u8g2, 3, 1, "World B");
+    u8x8_Set8x8Font(&u8g2, bdf_font);
+    u8x8_Draw8x8String(&u8g2, 0, 0, "Hello gAjByCD");
+    u8x8_Draw8x8String(&u8g2, 3, 1, "World B");
     
-    u8g2_display_DrawTile(&u8g2, 1, 1, 1, tile);
-    u8g2_display_DrawTile(&u8g2, 2, 2, 1, tile);
-    u8g2_display_DrawTile(&u8g2, 3, 3, 1, tile);
-    u8g2_display_DrawTile(&u8g2, 4, 4, 1, tile);
-    u8g2_display_DrawTile(&u8g2, 5, 5, 1, tile);
-    u8g2_display_DrawTile(&u8g2, 6, 6, 1, tile);
+    u8x8_display_DrawTile(&u8g2, 1, 1, 1, tile);
+    u8x8_display_DrawTile(&u8g2, 2, 2, 1, tile);
+    u8x8_display_DrawTile(&u8g2, 3, 3, 1, tile);
+    u8x8_display_DrawTile(&u8g2, 4, 4, 1, tile);
+    u8x8_display_DrawTile(&u8g2, 5, 5, 1, tile);
+    u8x8_display_DrawTile(&u8g2, 6, 6, 1, tile);
 
     delay(2000);
   }
