@@ -1,5 +1,5 @@
 
-#include "u8g2.h"
+#include "u8x8.h"
 
 #include <stdio.h>
 
@@ -36,20 +36,20 @@ void bitmap_show(void)
 }
 
 
-uint8_t u8g2_d_stdio(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+uint8_t u8x8_d_stdio(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   switch(msg)
   {
-    case U8G2_MSG_DISPLAY_INIT:
+    case U8X8_MSG_DISPLAY_INIT:
       break;
-    case U8G2_MSG_DISPLAY_SET_POWER_SAVE:
+    case U8X8_MSG_DISPLAY_SET_POWER_SAVE:
       if ( arg_int == 0 )
 	bitmap_show();
       break;
-    case U8G2_MSG_DISPLAY_SET_CONTRAST:
+    case U8X8_MSG_DISPLAY_SET_CONTRAST:
       break;
-    case U8G2_MSG_DISPLAY_DRAW_TILE:      
-      bitmap_place_tile(((u8g2_tile_t *)arg_ptr)->x_pos, ((u8g2_tile_t *)arg_ptr)->y_pos, ((u8g2_tile_t *)arg_ptr)->tile_ptr);
+    case U8X8_MSG_DISPLAY_DRAW_TILE:      
+      bitmap_place_tile(((u8x8_tile_t *)arg_ptr)->x_pos, ((u8x8_tile_t *)arg_ptr)->y_pos, ((u8x8_tile_t *)arg_ptr)->tile_ptr);
       break;
     default:
       break;
@@ -59,9 +59,9 @@ uint8_t u8g2_d_stdio(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 
 
 
-void u8g2_SetupStdio(u8g2_t *u8g2)
+void u8x8_SetupStdio(u8x8_t *u8g2)
 {
-  u8g2_SetupDefaults(u8g2);
-  u8g2->display_cb = u8g2_d_stdio;
+  u8x8_SetupDefaults(u8g2);
+  u8g2->display_cb = u8x8_d_stdio;
 }
 

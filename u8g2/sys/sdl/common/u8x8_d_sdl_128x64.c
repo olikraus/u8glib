@@ -1,8 +1,8 @@
 /*
-  u8g2_d_sdl_128x64.c
+  u8x8_d_sdl_128x64.c
 */
 
-#include "u8g2.h"
+#include "u8x8.h"
 #include "SDL.h"
 #include "SDL_video.h"
 #include <assert.h>
@@ -183,7 +183,7 @@ void main(void)
 }
 */
 
-static const u8g2_display_info_t u8g2_sdl_128x64_info =
+static const u8x8_display_info_t u8x8_sdl_128x64_info =
 {
   /* chip_enable_level = */ 0,
   /* chip_disable_level = */ 1,
@@ -200,7 +200,7 @@ static const u8g2_display_info_t u8g2_sdl_128x64_info =
   /* write_pulse_width_ns = */ 0,
   /* tile_width = */ 16,
   /* tile_hight = */ 8,
-#if U8G2_DEFAULT_FLIP_MODE == 0 
+#if U8X8_DEFAULT_FLIP_MODE == 0 
   /* default_x_offset = */ 0,
 #else
   /* default_x_offset = */ 0,
@@ -208,34 +208,34 @@ static const u8g2_display_info_t u8g2_sdl_128x64_info =
 };
 
 
-uint8_t u8g2_d_sdl(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+uint8_t u8x8_d_sdl(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   uint8_t x, y, c;
   uint8_t *ptr;
   switch(msg)
   {
-    case U8G2_MSG_DISPLAY_INIT:
-      u8g2_d_helper_display_init(u8g2, &u8g2_sdl_128x64_info);
+    case U8X8_MSG_DISPLAY_INIT:
+      u8x8_d_helper_display_init(u8g2, &u8x8_sdl_128x64_info);
       u8g_sdl_init();
       break;
-    case U8G2_MSG_DISPLAY_SET_POWER_SAVE:
+    case U8X8_MSG_DISPLAY_SET_POWER_SAVE:
       break;
-    case U8G2_MSG_DISPLAY_SET_FLIP_MODE:
+    case U8X8_MSG_DISPLAY_SET_FLIP_MODE:
       break;
-    case U8G2_MSG_DISPLAY_SET_CONTRAST:
+    case U8X8_MSG_DISPLAY_SET_CONTRAST:
       break;
-    case U8G2_MSG_DISPLAY_DRAW_TILE:
-      x = ((u8g2_tile_t *)arg_ptr)->x_pos;
+    case U8X8_MSG_DISPLAY_DRAW_TILE:
+      x = ((u8x8_tile_t *)arg_ptr)->x_pos;
       x *= 8;
       x += u8g2->x_offset;
     
-      y = ((u8g2_tile_t *)arg_ptr)->y_pos;
+      y = ((u8x8_tile_t *)arg_ptr)->y_pos;
       y *= 8;
     
       do
       {
-	c = ((u8g2_tile_t *)arg_ptr)->cnt;
-	ptr = ((u8g2_tile_t *)arg_ptr)->tile_ptr;
+	c = ((u8x8_tile_t *)arg_ptr)->cnt;
+	ptr = ((u8x8_tile_t *)arg_ptr)->tile_ptr;
 	u8g_sdl_set_multiple_8pixel(x, y, c*8, ptr);
 	arg_int--;
       } while( arg_int > 0 );
@@ -252,13 +252,13 @@ uint8_t u8g2_d_sdl(u8g2_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 }
 
 
-void u8g2_Setup_SDL_128x64(u8g2_t *u8g2)
+void u8x8_Setup_SDL_128x64(u8x8_t *u8g2)
 {
   /* setup defaults */
-  u8g2_SetupDefaults(u8g2);
+  u8x8_SetupDefaults(u8g2);
   
   /* setup specific callbacks */
-  u8g2->display_cb = u8g2_d_sdl;
+  u8g2->display_cb = u8x8_d_sdl;
   
 }
 
@@ -272,14 +272,14 @@ void u8g2x_Setup_SDL_128x64(u8g2x_t *u8g2x)
     buf[i] = (i>>2);
   */
   
-  u8g2_Setup_SDL_128x64(u8g2x_GetU8x8(u8g2x));
+  u8x8_Setup_SDL_128x64(u8g2x_GetU8x8(u8g2x));
   u8g2x->tile_buf_ptr = buf;
   u8g2x->tile_buf_height = 8;
   u8g2x->tile_curr_row = 0;
   u8g2x->draw_color = 1;
 }
 
-void u8g2x_draw_pixel(u8g2x_t *u8g2x, u8g2_uint_t x, u8g2_uint_t y)
+void u8g2x_draw_pixel(u8g2x_t *u8g2x, u8x8_uint_t x, u8x8_uint_t y)
 {
   uint8_t *ptr;
   uint8_t bit_pos, mask;
@@ -312,7 +312,7 @@ void u8g2x_draw_pixel(u8g2x_t *u8g2x, u8g2_uint_t x, u8g2_uint_t y)
   dir		0: horizontal line (left to right)
 		1: vertical line (top to bottom)
 */
-void u8g2x_DrawHVLine(u8g2x_t *u8g2x, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
+void u8g2x_DrawHVLine(u8g2x_t *u8g2x, u8x8_uint_t x, u8x8_uint_t y, u8x8_uint_t len, uint8_t dir)
 {
   if ( dir == 0 )
   {
@@ -347,7 +347,7 @@ static void u8g2x_send_tile_row(u8g2x_t *u8g2x, uint8_t tile_row)
   offset *= 8;
   ptr += offset;
     
-  u8g2_display_DrawTile(u8g2x_GetU8x8(u8g2x), 0, tile_row, w, ptr);
+  u8x8_display_DrawTile(u8g2x_GetU8x8(u8g2x), 0, tile_row, w, ptr);
 }
 
 void u8g2x_SendBuffer(u8g2x_t *u8g2x)

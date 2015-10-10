@@ -1,9 +1,9 @@
 
-#include "u8g2.h"
+#include "u8x8.h"
 
-u8g2_t u8g2;
+u8x8_t u8g2;
 
-const uint8_t bdf_font[762] U8G2_FONT_SECTION("bdf_font") = {
+const uint8_t bdf_font[762] U8X8_FONT_SECTION("bdf_font") = {
   32,126,0,0,0,0,0,0,0,0,0,0,0,95,95,0,
   0,0,0,7,7,0,7,7,0,0,20,127,127,28,127,127,
   20,0,0,36,42,127,127,42,18,0,70,102,48,24,12,102,
@@ -56,11 +56,11 @@ const uint8_t bdf_font[762] U8G2_FONT_SECTION("bdf_font") = {
 
 int main(void)
 {
-  u8g2_Setup_SDL_128x64(&u8g2);
-  u8g2_display_Init(&u8g2);  
+  u8x8_Setup_SDL_128x64(&u8g2);
+  u8x8_display_Init(&u8g2);  
 
-  u8g2_Set8x8Font(&u8g2, bdf_font);
-  u8g2_Draw8x8String(&u8g2, 0, 0, "Hello World!");
+  u8x8_Set8x8Font(&u8g2, bdf_font);
+  u8x8_Draw8x8String(&u8g2, 0, 0, "Hello World!");
   
   while( u8g_sdl_get_key() < 0 )
     ;
