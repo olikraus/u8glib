@@ -111,20 +111,20 @@ extern "C" {
 /*==========================================*/
 /* U8G2 typedefs and data structures */
 
-typedef uint16_t u8x8_uint_t;	/* for pixel position only */
+typedef uint16_t u8g2_uint_t;	/* for pixel position only */
 
 
 typedef struct u8x8_struct u8x8_t;
 typedef struct u8x8_display_info_struct u8x8_display_info_t;
 typedef struct u8x8_tile_struct u8x8_tile_t;
 
-typedef struct u8g2x_struct u8g2x_t;
-typedef struct u8g2x_cb_struct u8g2x_cb_t;
+typedef struct u8g2_struct u8g2_t;
+typedef struct u8g2_cb_struct u8g2_cb_t;
 
 typedef uint8_t (*u8x8_msg_cb)(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
-typedef void (*u8g2x_update_dimension_cb)(u8g2x_t *u8g2x_t);
-typedef void (*u8g2x_draw_l90_cb)(u8g2x_t *u8g2x_t, u8x8_uint_t x, u8x8_uint_t y, u8x8_uint_t len, uint8_t dir);
+typedef void (*u8g2_update_dimension_cb)(u8g2_t *u8g2_t);
+typedef void (*u8g2_draw_l90_cb)(u8g2_t *u8g2_t, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir);
 
 
 //struct u8x8_mcd_struct
@@ -201,24 +201,24 @@ struct u8x8_struct
 };
 
 
-struct u8g2x_cb_struct
+struct u8g2_cb_struct
 {
-  u8g2x_update_dimension_cb update;
-  u8g2x_draw_l90_cb draw_l90;
+  u8g2_update_dimension_cb update;
+  u8g2_draw_l90_cb draw_l90;
 };
 
 
-struct u8g2x_struct
+struct u8g2_struct
 {
   u8x8_t u8x8;
-  u8g2x_cb_t *cb;		/* callback drawprocedures, can be replaced for rotation */
+  u8g2_cb_t *cb;		/* callback drawprocedures, can be replaced for rotation */
   uint8_t *tile_buf_ptr;	/* ptr to memory area with u8g2.display_info->tile_width * 8 * tile_buf_height bytes */
   uint8_t tile_buf_height;	/* height of the tile memory area in tile rows */
   uint8_t tile_curr_row;	/* current row for picture loop */
   uint8_t draw_color;		/* 0: clear pixel, 1: set pixel */
 };
 
-#define u8g2x_GetU8x8(u8g2x) ((u8x8_t *)(u8g2x))
+#define u8g2_GetU8x8(u8g2) ((u8x8_t *)(u8g2))
 
 /*==========================================*/
 
@@ -451,7 +451,7 @@ void u8x8_SetupStdio(u8x8_t *u8x8);
 /*==========================================*/
 /* u8x8_d_sdl_128x64.c */
 void u8x8_Setup_SDL_128x64(u8x8_t *u8x8);
-void u8g2x_Setup_SDL_128x64(u8g2x_t *u8g2);
+void u8g2_Setup_SDL_128x64(u8g2_t *u8g2);
 int u8g_sdl_get_key(void);
 
 
@@ -473,8 +473,8 @@ void u8x8_Draw8x8String(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s);
 /*==========================================*/
 /* high level interface */
 
-void u8g2x_DrawHVLine(u8g2x_t *u8g2x, u8x8_uint_t x, u8x8_uint_t y, u8x8_uint_t len, uint8_t dir);
-void u8g2x_SendBuffer(u8g2x_t *u8g2x);
+void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir);
+void u8g2_SendBuffer(u8g2_t *u8g2);
 
 
 #ifdef __cplusplus

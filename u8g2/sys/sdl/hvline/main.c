@@ -52,27 +52,27 @@ const uint8_t bdf_font[762] U8X8_FONT_SECTION("bdf_font") = {
   8,0,0,0,0,127,127,0,0,0,0,8,8,62,119,65,
   65,0,2,3,1,3,2,1,1,0};
 
-u8g2x_t u8g2x;
+u8g2_t u8g2;
 
 int main(void)
 {
-  u8g2x_Setup_SDL_128x64(&u8g2x);
-  u8x8_display_Init(u8g2x_GetU8x8(&u8g2x));  
-  u8x8_display_SetPowerSave(u8g2x_GetU8x8(&u8g2x), 0);
+  u8g2_Setup_SDL_128x64(&u8g2);
+  u8x8_display_Init(u8g2_GetU8x8(&u8g2));
+  u8x8_display_SetPowerSave(u8g2_GetU8x8(&u8g2), 0);
 
   
-  u8g2x_DrawHVLine(&u8g2x, 5, 20, 40, 0);
-  u8g2x_DrawHVLine(&u8g2x, 5, 22, 40, 0);
-  u8g2x_DrawHVLine(&u8g2x, 5, 24, 40, 0);
+  u8g2_DrawHVLine(&u8g2, 5, 20, 40, 0);
+  u8g2_DrawHVLine(&u8g2, 5, 22, 40, 0);
+  u8g2_DrawHVLine(&u8g2, 5, 24, 40, 0);
 
-  u8g2x_DrawHVLine(&u8g2x, 5, 24, 40, 1);
+  u8g2_DrawHVLine(&u8g2, 5, 24, 40, 1);
   
   
-  u8g2x_SendBuffer(&u8g2x);
+  u8g2_SendBuffer(&u8g2);
   
   
-  u8x8_Set8x8Font(u8g2x_GetU8x8(&u8g2x), bdf_font);
-  u8x8_Draw8x8String(u8g2x_GetU8x8(&u8g2x), 0, 0, "Hello World!");
+  u8x8_Set8x8Font(u8g2_GetU8x8(&u8g2), bdf_font);
+  u8x8_Draw8x8String(u8g2_GetU8x8(&u8g2), 0, 0, "Hello World!");
   
   
   
