@@ -8,18 +8,18 @@
 
 #include "u8x8.h"
 
-void u8x8_Set8x8Font(u8x8_t *u8g2, const uint8_t *font_8x8)
+void u8x8_Set8x8Font(u8x8_t *u8x8, const uint8_t *font_8x8)
 {
-  u8g2->font = font_8x8;
+  u8x8->font = font_8x8;
 }
 
-void u8x8_Draw8x8Glyph(u8x8_t *u8g2, uint8_t x, uint8_t y, uint8_t encoding)
+void u8x8_Draw8x8Glyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding)
 {
   uint8_t first, last, i;
   uint8_t buf[8];
   uint16_t offset;
-  first = u8x8_pgm_read(u8g2->font+0);
-  last = u8x8_pgm_read(u8g2->font+1);
+  first = u8x8_pgm_read(u8x8->font+0);
+  last = u8x8_pgm_read(u8x8->font+1);
   
   if ( first <= encoding && encoding <= last )
   {
@@ -29,7 +29,7 @@ void u8x8_Draw8x8Glyph(u8x8_t *u8g2, uint8_t x, uint8_t y, uint8_t encoding)
     offset +=2;
     for( i = 0; i < 8; i++ )
     {
-      buf[i] = u8x8_pgm_read(u8g2->font+offset);
+      buf[i] = u8x8_pgm_read(u8x8->font+offset);
       offset++;
     }
   }
@@ -40,14 +40,14 @@ void u8x8_Draw8x8Glyph(u8x8_t *u8g2, uint8_t x, uint8_t y, uint8_t encoding)
       buf[i] = 0;
     }
   }
-  u8x8_display_DrawTile(u8g2, x, y, 1, buf);
+  u8x8_display_DrawTile(u8x8, x, y, 1, buf);
 }
 
-void u8x8_Draw8x8String(u8x8_t *u8g2, uint8_t x, uint8_t y, const char *s)
+void u8x8_Draw8x8String(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
 {
   while( *s != '\0'  )
   {
-    u8x8_Draw8x8Glyph(u8g2, x, y, (uint8_t)*s);
+    u8x8_Draw8x8Glyph(u8x8, x, y, (uint8_t)*s);
     s++;
     x++;
   }

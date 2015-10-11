@@ -121,7 +121,7 @@ typedef struct u8x8_tile_struct u8x8_tile_t;
 typedef struct u8g2x_struct u8g2x_t;
 typedef struct u8g2x_cb_struct u8g2x_cb_t;
 
-typedef uint8_t (*u8x8_msg_cb)(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+typedef uint8_t (*u8x8_msg_cb)(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
 typedef void (*u8g2x_update_dimension_cb)(u8g2x_t *u8g2x_t);
 typedef void (*u8g2x_draw_l90_cb)(u8g2x_t *u8g2x_t, u8x8_uint_t x, u8x8_uint_t y, u8x8_uint_t len, uint8_t dir);
@@ -300,15 +300,15 @@ void u8x8_d_helper_display_init(u8x8_t *u8g2, const u8x8_display_info_t *display
 //#define U8X8_MSG_DISPLAY_GET_LAYOUT 16
 
 /* u8x8_display.c */
-uint8_t u8x8_display_DrawTile(u8x8_t *u8g2, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr);
+uint8_t u8x8_display_DrawTile(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr);
 
 /* Init display, but keep display in power save mode. Usually this command must be followed by u8x8_display_SetPowerSave() */
-void u8x8_display_Init(u8x8_t *u8g2);
+void u8x8_display_Init(u8x8_t *u8x8);
 /* wake up display from power save mode */
-void u8x8_display_SetPowerSave(u8x8_t *u8g2, uint8_t is_enable);
-void u8x8_display_SetFlipMode(u8x8_t *u8g2, uint8_t mode);
-void u8x8_display_SetContrast(u8x8_t *u8g2, uint8_t value);
-void u8x8_display_ClearScreen(u8x8_t *u8g2);
+void u8x8_display_SetPowerSave(u8x8_t *u8x8, uint8_t is_enable);
+void u8x8_display_SetFlipMode(u8x8_t *u8x8, uint8_t mode);
+void u8x8_display_SetContrast(u8x8_t *u8x8, uint8_t value);
+void u8x8_display_ClearScreen(u8x8_t *u8x8);
 
 
 
@@ -341,13 +341,13 @@ void u8x8_display_ClearScreen(u8x8_t *u8g2);
 
 /* u8g_cad.c */
 
-#define u8x8_cad_Init(u8g2) ((u8g2)->cad_cb((u8g2), U8X8_MSG_CAD_INIT, 0, NULL ))
+#define u8x8_cad_Init(u8x8) ((u8x8)->cad_cb((u8x8), U8X8_MSG_CAD_INIT, 0, NULL ))
 
-uint8_t u8x8_cad_SendCmd(u8x8_t *u8g2, uint8_t cmd) U8X8_NOINLINE;
-uint8_t u8x8_cad_SendArg(u8x8_t *u8g2, uint8_t arg) U8X8_NOINLINE;
-uint8_t u8x8_cad_SendData(u8x8_t *u8g2, uint8_t cnt, uint8_t *data) U8X8_NOINLINE;
-uint8_t u8x8_cad_StartTransfer(u8x8_t *u8g2) U8X8_NOINLINE;
-uint8_t u8x8_cad_EndTransfer(u8x8_t *u8g2) U8X8_NOINLINE;
+uint8_t u8x8_cad_SendCmd(u8x8_t *u8x8, uint8_t cmd) U8X8_NOINLINE;
+uint8_t u8x8_cad_SendArg(u8x8_t *u8x8, uint8_t arg) U8X8_NOINLINE;
+uint8_t u8x8_cad_SendData(u8x8_t *u8x8, uint8_t cnt, uint8_t *data) U8X8_NOINLINE;
+uint8_t u8x8_cad_StartTransfer(u8x8_t *u8x8) U8X8_NOINLINE;
+uint8_t u8x8_cad_EndTransfer(u8x8_t *u8x8) U8X8_NOINLINE;
 
 /*
 #define U8X8_C(c0)				(0x04), (c0)
@@ -368,9 +368,9 @@ uint8_t u8x8_cad_EndTransfer(u8x8_t *u8g2) U8X8_NOINLINE;
 #define U8X8_DLY(m)			(0xfe),(m)
 #define U8X8_END()			(0xff)
 
-void u8x8_cad_SendSequence(u8x8_t *u8g2, uint8_t const *data);
-uint8_t u8x8_cad_110(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
-uint8_t u8x8_cad_001(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+void u8x8_cad_SendSequence(u8x8_t *u8x8, uint8_t const *data);
+uint8_t u8x8_cad_110(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+uint8_t u8x8_cad_001(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
 
 /*==========================================*/
@@ -388,11 +388,11 @@ uint8_t u8x8_cad_001(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 #define U8X8_MSG_BYTE_SET_DEVICE U8X8_MSG_CAD_SET_DEVICE
 
 
-uint8_t u8x8_byte_SetDC(u8x8_t *u8g2, uint8_t dc) U8X8_NOINLINE;
-uint8_t u8x8_byte_SendByte(u8x8_t *u8g2, uint8_t byte) U8X8_NOINLINE;
-uint8_t u8x8_byte_SendBytes(u8x8_t *u8g2, uint8_t cnt, uint8_t *data) U8X8_NOINLINE;
+uint8_t u8x8_byte_SetDC(u8x8_t *u8x8, uint8_t dc) U8X8_NOINLINE;
+uint8_t u8x8_byte_SendByte(u8x8_t *u8x8, uint8_t byte) U8X8_NOINLINE;
+uint8_t u8x8_byte_SendBytes(u8x8_t *u8x8, uint8_t cnt, uint8_t *data) U8X8_NOINLINE;
 
-uint8_t u8x8_byte_8bit_sw_spi(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+uint8_t u8x8_byte_8bit_sw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
 
 /*==========================================*/
@@ -419,56 +419,56 @@ uint8_t u8x8_byte_8bit_sw_spi(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *
 #define U8X8_MSG_GPIO_CLOCK 48
 #define U8X8_MSG_GPIO_DATA 49
 
-#define u8x8_gpio_Init(u8g2) ((u8g2)->gpio_and_delay_cb((u8g2), U8X8_MSG_GPIO_AND_DELAY_INIT, 0, NULL ))
+#define u8x8_gpio_Init(u8x8) ((u8x8)->gpio_and_delay_cb((u8x8), U8X8_MSG_GPIO_AND_DELAY_INIT, 0, NULL ))
 
 /*
-#define u8x8_gpio_SetDC(u8g2, v) ((u8g2)->gpio_and_delay_cb((u8g2), U8X8_MSG_GPIO_DC, (v), NULL ))
-#define u8x8_gpio_SetCS(u8g2, v) ((u8g2)->gpio_and_delay_cb((u8g2), U8X8_MSG_GPIO_CS, (v), NULL ))
-#define u8x8_gpio_SetReset(u8g2, v) ((u8g2)->gpio_and_delay_cb((u8g2), U8X8_MSG_GPIO_RESET, (v), NULL ))
+#define u8x8_gpio_SetDC(u8x8, v) ((u8x8)->gpio_and_delay_cb((u8x8), U8X8_MSG_GPIO_DC, (v), NULL ))
+#define u8x8_gpio_SetCS(u8x8, v) ((u8x8)->gpio_and_delay_cb((u8x8), U8X8_MSG_GPIO_CS, (v), NULL ))
+#define u8x8_gpio_SetReset(u8x8, v) ((u8x8)->gpio_and_delay_cb((u8x8), U8X8_MSG_GPIO_RESET, (v), NULL ))
 */
 
-#define u8x8_gpio_SetDC(u8g2, v) u8x8_gpio_call(u8g2, U8X8_MSG_GPIO_DC, (v))
-#define u8x8_gpio_SetCS(u8g2, v) u8x8_gpio_call(u8g2, U8X8_MSG_GPIO_CS, (v))
-#define u8x8_gpio_SetReset(u8g2, v) u8x8_gpio_call(u8g2, U8X8_MSG_GPIO_CS, (v))
-#define u8x8_gpio_SetClock(u8g2, v) u8x8_gpio_call(u8g2, U8X8_MSG_GPIO_CLOCK, (v))
-#define u8x8_gpio_SetData(u8g2, v) u8x8_gpio_call(u8g2, U8X8_MSG_GPIO_DATA, (v))
+#define u8x8_gpio_SetDC(u8x8, v) u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_DC, (v))
+#define u8x8_gpio_SetCS(u8x8, v) u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_CS, (v))
+#define u8x8_gpio_SetReset(u8x8, v) u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_CS, (v))
+#define u8x8_gpio_SetClock(u8x8, v) u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_CLOCK, (v))
+#define u8x8_gpio_SetData(u8x8, v) u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_DATA, (v))
 
-void u8x8_gpio_call(u8x8_t *u8g2, uint8_t msg, uint8_t arg) U8X8_NOINLINE;
+void u8x8_gpio_call(u8x8_t *u8x8, uint8_t msg, uint8_t arg) U8X8_NOINLINE;
 
-#define u8x8_gpio_Delay(u8g2, msg, dly) u8x8_gpio_call((u8g2), (msg), (dly))
-//void u8x8_gpio_Delay(u8x8_t *u8g2, uint8_t msg, uint8_t dly) U8X8_NOINLINE;
+#define u8x8_gpio_Delay(u8x8, msg, dly) u8x8_gpio_call((u8x8), (msg), (dly))
+//void u8x8_gpio_Delay(u8x8_t *u8x8, uint8_t msg, uint8_t dly) U8X8_NOINLINE;
 
 
 /*==========================================*/
-/* u8g2.c */
-void u8x8_SetupDefaults(u8x8_t *u8g2);
+/* u8x8_setup.c */
+void u8x8_SetupDefaults(u8x8_t *u8x8);
 
 
 /*==========================================*/
 /* u8x8_d_stdio.c */
-void u8x8_SetupStdio(u8x8_t *u8g2);
+void u8x8_SetupStdio(u8x8_t *u8x8);
 
 /*==========================================*/
 /* u8x8_d_sdl_128x64.c */
-void u8x8_Setup_SDL_128x64(u8x8_t *u8g2);
-void u8g2x_Setup_SDL_128x64(u8g2x_t *u8g2x);
+void u8x8_Setup_SDL_128x64(u8x8_t *u8x8);
+void u8g2x_Setup_SDL_128x64(u8g2x_t *u8g2);
 int u8g_sdl_get_key(void);
 
 
 
 /*==========================================*/
 /* u8x8_d_uc1701_dogs102.c */
-uint8_t u8x8_d_uc1701_dogs102(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+uint8_t u8x8_d_uc1701_dogs102(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
 /*==========================================*/
 /* u8x8_d_ssd1306_128x64_noname.c */
-uint8_t u8x8_d_ssd1306_128x64_noname(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+uint8_t u8x8_d_ssd1306_128x64_noname(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
 /*==========================================*/
 /* u8x8_8x8.c */
-void u8x8_Set8x8Font(u8x8_t *u8g2, const uint8_t *font_8x8);
-void u8x8_Draw8x8Glyph(u8x8_t *u8g2, uint8_t x, uint8_t y, uint8_t encoding);
-void u8x8_Draw8x8String(u8x8_t *u8g2, uint8_t x, uint8_t y, const char *s);
+void u8x8_Set8x8Font(u8x8_t *u8x8, const uint8_t *font_8x8);
+void u8x8_Draw8x8Glyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding);
+void u8x8_Draw8x8String(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s);
 
 /*==========================================*/
 /* high level interface */

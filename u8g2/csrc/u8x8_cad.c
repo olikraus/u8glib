@@ -7,20 +7,20 @@
   The following sequence must be used for any data, which is set to the display:
   
   
-  uint8_t u8x8_cad_StartTransfer(u8x8_t *u8g2)
+  uint8_t u8x8_cad_StartTransfer(u8x8_t *u8x8)
 
   any of the following calls
-    uint8_t u8x8_cad_SendCmd(u8x8_t *u8g2, uint8_t cmd)
-    uint8_t u8x8_cad_SendArg(u8x8_t *u8g2, uint8_t arg)
-    uint8_t u8x8_cad_SendData(u8x8_t *u8g2, uint8_t cnt, uint8_t *data)
+    uint8_t u8x8_cad_SendCmd(u8x8_t *u8x8, uint8_t cmd)
+    uint8_t u8x8_cad_SendArg(u8x8_t *u8x8, uint8_t arg)
+    uint8_t u8x8_cad_SendData(u8x8_t *u8x8, uint8_t cnt, uint8_t *data)
   
-  uint8_t u8x8_cad_EndTransfer(u8x8_t *u8g2)
+  uint8_t u8x8_cad_EndTransfer(u8x8_t *u8x8)
 
 
 
 */
 /*
-uint8_t u8x8_cad_template(u8x8_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg_ptr)
+uint8_t u8x8_cad_template(u8x8_t *u8x8, uint8_t msg, uint16_t arg_int, void *arg_ptr)
 {
   uint8_t i;
   
@@ -59,29 +59,29 @@ uint8_t u8x8_cad_template(u8x8_t *u8g2, uint8_t msg, uint16_t arg_int, void *arg
 
 #include "u8x8.h"
 
-uint8_t u8x8_cad_SendCmd(u8x8_t *u8g2, uint8_t cmd)
+uint8_t u8x8_cad_SendCmd(u8x8_t *u8x8, uint8_t cmd)
 {
-  return u8g2->cad_cb(u8g2, U8X8_MSG_CAD_SEND_CMD, cmd, NULL);
+  return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_CMD, cmd, NULL);
 }
 
-uint8_t u8x8_cad_SendArg(u8x8_t *u8g2, uint8_t arg)
+uint8_t u8x8_cad_SendArg(u8x8_t *u8x8, uint8_t arg)
 {
-  return u8g2->cad_cb(u8g2, U8X8_MSG_CAD_SEND_ARG, arg, NULL);
+  return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_ARG, arg, NULL);
 }
 
-uint8_t u8x8_cad_SendData(u8x8_t *u8g2, uint8_t cnt, uint8_t *data)
+uint8_t u8x8_cad_SendData(u8x8_t *u8x8, uint8_t cnt, uint8_t *data)
 {
-  return u8g2->cad_cb(u8g2, U8X8_MSG_CAD_SEND_DATA, cnt, data);
+  return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_DATA, cnt, data);
 }
 
-uint8_t u8x8_cad_StartTransfer(u8x8_t *u8g2)
+uint8_t u8x8_cad_StartTransfer(u8x8_t *u8x8)
 {
-  return u8g2->cad_cb(u8g2, U8X8_MSG_CAD_START_TRANSFER, 0, NULL);
+  return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_START_TRANSFER, 0, NULL);
 }
 
-uint8_t u8x8_cad_EndTransfer(u8x8_t *u8g2)
+uint8_t u8x8_cad_EndTransfer(u8x8_t *u8x8)
 {
-  return u8g2->cad_cb(u8g2, U8X8_MSG_CAD_END_TRANSFER, 0, NULL);
+  return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_END_TRANSFER, 0, NULL);
 }
 
 /*
@@ -94,7 +94,7 @@ uint8_t u8x8_cad_EndTransfer(u8x8_t *u8g2)
 
 */
 
-void u8x8_cad_SendSequence(u8x8_t *u8g2, uint8_t const *data)
+void u8x8_cad_SendSequence(u8x8_t *u8x8, uint8_t const *data)
 {
   uint8_t cmd;
   uint8_t v;
@@ -108,21 +108,21 @@ void u8x8_cad_SendSequence(u8x8_t *u8g2, uint8_t const *data)
       case U8X8_MSG_CAD_SEND_CMD:
       case U8X8_MSG_CAD_SEND_ARG:
 	  v = *data;
-	  u8g2->cad_cb(u8g2, cmd, v, NULL);
+	  u8x8->cad_cb(u8x8, cmd, v, NULL);
 	  data++;
 	  break;
       case U8X8_MSG_CAD_SEND_DATA:
 	  v = *data;
-	  u8x8_cad_SendData(u8g2, 1, &v);
+	  u8x8_cad_SendData(u8x8, 1, &v);
 	  data++;
 	  break;
       case U8X8_MSG_CAD_START_TRANSFER:
       case U8X8_MSG_CAD_END_TRANSFER:
-	  u8g2->cad_cb(u8g2, cmd, 0, NULL);
+	  u8x8->cad_cb(u8x8, cmd, 0, NULL);
 	  break;
       case 0x0fe:
 	  v = *data;
-	  u8x8_gpio_Delay(u8g2, U8X8_MSG_DELAY_MILLI, v);	    
+	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_MILLI, v);	    
 	  data++;
 	  break;
       default:
@@ -137,21 +137,21 @@ void u8x8_cad_SendSequence(u8x8_t *u8g2, uint8_t const *data)
     dc = 1 for commands and args and
     dc = 0 for data
 */
-uint8_t u8x8_cad_110(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+uint8_t u8x8_cad_110(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   switch(msg)
   {
     case U8X8_MSG_CAD_SEND_CMD:
-      u8x8_byte_SetDC(u8g2, 1);
-      u8x8_byte_SendByte(u8g2, arg_int);
+      u8x8_byte_SetDC(u8x8, 1);
+      u8x8_byte_SendByte(u8x8, arg_int);
       break;
     case U8X8_MSG_CAD_SEND_ARG:
-      u8x8_byte_SetDC(u8g2, 1);
-      u8x8_byte_SendByte(u8g2, arg_int);
+      u8x8_byte_SetDC(u8x8, 1);
+      u8x8_byte_SendByte(u8x8, arg_int);
       break;
     case U8X8_MSG_CAD_SEND_DATA:
-      u8x8_byte_SetDC(u8g2, 0);
-      //u8x8_byte_SendBytes(u8g2, arg_int, arg_ptr);
+      u8x8_byte_SetDC(u8x8, 0);
+      //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
       //break;
       /* fall through */
     case U8X8_MSG_CAD_INIT:
@@ -159,7 +159,7 @@ uint8_t u8x8_cad_110(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
     case U8X8_MSG_CAD_END_TRANSFER:
     case U8X8_MSG_CAD_SET_I2C_ADR:
     case U8X8_MSG_CAD_SET_DEVICE:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
+      return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
     default:
       return 0;
   }
@@ -171,21 +171,21 @@ uint8_t u8x8_cad_110(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
     dc = 0 for commands and args and
     dc = 1 for data
 */
-uint8_t u8x8_cad_001(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+uint8_t u8x8_cad_001(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   switch(msg)
   {
     case U8X8_MSG_CAD_SEND_CMD:
-      u8x8_byte_SetDC(u8g2, 0);
-      u8x8_byte_SendByte(u8g2, arg_int);
+      u8x8_byte_SetDC(u8x8, 0);
+      u8x8_byte_SendByte(u8x8, arg_int);
       break;
     case U8X8_MSG_CAD_SEND_ARG:
-      u8x8_byte_SetDC(u8g2, 0);
-      u8x8_byte_SendByte(u8g2, arg_int);
+      u8x8_byte_SetDC(u8x8, 0);
+      u8x8_byte_SendByte(u8x8, arg_int);
       break;
     case U8X8_MSG_CAD_SEND_DATA:
-      u8x8_byte_SetDC(u8g2, 1);
-      //u8x8_byte_SendBytes(u8g2, arg_int, arg_ptr);
+      u8x8_byte_SetDC(u8x8, 1);
+      //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
       //break;
       /* fall through */
     case U8X8_MSG_CAD_INIT:
@@ -193,7 +193,7 @@ uint8_t u8x8_cad_001(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
     case U8X8_MSG_CAD_END_TRANSFER:
     case U8X8_MSG_CAD_SET_I2C_ADR:
     case U8X8_MSG_CAD_SET_DEVICE:
-      return u8g2->byte_cb(u8g2, msg, arg_int, arg_ptr);
+      return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
     default:
       return 0;
   }
