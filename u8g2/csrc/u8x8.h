@@ -1,5 +1,5 @@
 /*
-  u8g2.h
+  u8x8.h
   
   
   
@@ -9,6 +9,7 @@
 
   The topmost level is the display layer. It includes the following messages:
   
+    U8X8_MSG_DISPLAY_SETUP			no communicaation with the display, setup memory ony
     U8X8_MSG_DISPLAY_INIT
     U8X8_MSG_DISPLAY_SET_FLIP_MODE
     U8X8_MSG_DISPLAY_SET_POWER_SAVE
@@ -123,8 +124,8 @@ typedef struct u8g2_cb_struct u8g2_cb_t;
 
 typedef uint8_t (*u8x8_msg_cb)(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
-typedef void (*u8g2_update_dimension_cb)(u8g2_t *u8g2_t);
-typedef void (*u8g2_draw_l90_cb)(u8g2_t *u8g2_t, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir);
+typedef void (*u8g2_update_dimension_cb)(u8g2_t *u8g2);
+typedef void (*u8g2_draw_l90_cb)(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir);
 
 
 //struct u8x8_mcd_struct
@@ -212,27 +213,46 @@ struct u8g2_struct
 {
   u8x8_t u8x8;
   u8g2_cb_t *cb;		/* callback drawprocedures, can be replaced for rotation */
+  
+  /* the following variables must be assigned during u8g2 setup */
   uint8_t *tile_buf_ptr;	/* ptr to memory area with u8g2.display_info->tile_width * 8 * tile_buf_height bytes */
   uint8_t tile_buf_height;	/* height of the tile memory area in tile rows */
   uint8_t tile_curr_row;	/* current row for picture loop */
+  
+  /* the following variables are set by the update dimension callback */
+  u8g2_uint_t buf_x0;	/* left corner of the buffer */
+  u8g2_uint_t buf_x1;	/* right corner of the buffer (excluded) */
+  u8g2_uint_t buf_y0;
+  u8g2_uint_t buf_y1;
+
   uint8_t draw_color;		/* 0: clear pixel, 1: set pixel */
 };
 
 #define u8g2_GetU8x8(u8g2) ((u8x8_t *)(u8g2))
 
+
+
 /*==========================================*/
 
 /* helper functions */
-void u8x8_d_helper_display_init(u8x8_t *u8g2, const u8x8_display_info_t *display_info);
+void u8x8_d_helper_display_setup(u8x8_t *u8x8, const u8x8_display_info_t *display_info);
+void u8x8_d_helper_display_init(u8x8_t *u8g2);
 
 /* Display Interface */
+
+/*
+  Name: 	U8X8_MSG_DISPLAY_SETUP
+  Args:	None
+  Tasks:
+    1) setup u8g2->display_info
+      copy u8g2->display_info->default_x_offset to u8g2->x_offset
+*/
+#define U8X8_MSG_DISPLAY_SETUP 9
 
 /*
   Name: 	U8X8_MSG_DISPLAY_INIT
   Args:	None
   Tasks:
-    1) setup u8g2->display_info
-      copy u8g2->display_info->default_x_offset to u8g2->x_offset
 
     2) put interface into default state: 
 	  execute u8x8_gpio_Init for port directions
@@ -302,6 +322,8 @@ void u8x8_d_helper_display_init(u8x8_t *u8g2, const u8x8_display_info_t *display
 /* u8x8_display.c */
 uint8_t u8x8_display_DrawTile(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr);
 
+/* setup display memory structures */
+void u8x8_display_Setup(u8x8_t *u8x8);
 /* Init display, but keep display in power save mode. Usually this command must be followed by u8x8_display_SetPowerSave() */
 void u8x8_display_Init(u8x8_t *u8x8);
 /* wake up display from power save mode */

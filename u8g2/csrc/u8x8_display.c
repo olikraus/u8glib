@@ -13,17 +13,26 @@
 
 /*==========================================*/
 /* internal library function */
+
+/*
+  this is a helper function for the U8X8_MSG_DISPLAY_SETUP function.
+  It can be called within the display callback function to carry out the usual standard tasks.
+  
+*/
+void u8x8_d_helper_display_setup(u8x8_t *u8x8, const u8x8_display_info_t *display_info)
+{
+      /* 1) set display info struct */
+      u8x8->display_info = display_info;
+      u8x8->x_offset = u8x8->display_info->default_x_offset;
+}
+
 /*
   this is a helper function for the U8X8_MSG_DISPLAY_INIT function.
   It can be called within the display callback function to carry out the usual standard tasks.
   
 */
-void u8x8_d_helper_display_init(u8x8_t *u8x8, const u8x8_display_info_t *display_info)
+void u8x8_d_helper_display_init(u8x8_t *u8x8)
 {
-      /* 1) set display info struct */
-      u8x8->display_info = display_info;
-      u8x8->x_offset = u8x8->display_info->default_x_offset;
-    
       /* 2) apply port directions to the GPIO lines and apply default values for the IO lines*/
       u8x8_gpio_Init(u8x8);
       u8x8_cad_Init(u8x8);
@@ -48,6 +57,12 @@ uint8_t u8x8_display_DrawTile(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t cnt, u
   tile.cnt = cnt;
   tile.tile_ptr = tile_ptr;
   return u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_DRAW_TILE, 1, (void *)&tile);
+}
+
+/* should be implemented as macro */
+void u8x8_display_Setup(u8x8_t *u8x8)
+{
+  u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_SETUP, 0, NULL);  
 }
 
 void u8x8_display_Init(u8x8_t *u8x8)

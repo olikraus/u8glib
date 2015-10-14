@@ -214,8 +214,11 @@ uint8_t u8x8_d_sdl(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
   uint8_t *ptr;
   switch(msg)
   {
+    case U8X8_MSG_DISPLAY_SETUP:
+      u8x8_d_helper_display_setup(u8g2, &u8x8_sdl_128x64_info);
+      break;
     case U8X8_MSG_DISPLAY_INIT:
-      u8x8_d_helper_display_init(u8g2, &u8x8_sdl_128x64_info);
+      u8x8_d_helper_display_init(u8g2);
       u8g_sdl_init();
       break;
     case U8X8_MSG_DISPLAY_SET_POWER_SAVE:
@@ -252,14 +255,16 @@ uint8_t u8x8_d_sdl(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 }
 
 
-void u8x8_Setup_SDL_128x64(u8x8_t *u8g2)
+void u8x8_Setup_SDL_128x64(u8x8_t *u8x8)
 {
   /* setup defaults */
-  u8x8_SetupDefaults(u8g2);
+  u8x8_SetupDefaults(u8x8);
   
   /* setup specific callbacks */
-  u8g2->display_cb = u8x8_d_sdl;
-  
+  u8x8->display_cb = u8x8_d_sdl;
+
+  /* setup display info */
+  u8x8_display_Setup(u8x8);  
 }
 
 void u8g2_Setup_SDL_128x64(u8g2_t *u8g2)
@@ -279,60 +284,6 @@ void u8g2_Setup_SDL_128x64(u8g2_t *u8g2)
   u8g2->draw_color = 1;
 }
 
-void u8g2_draw_pixel(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
-{
-  uint8_t *ptr;
-  uint8_t bit_pos, mask;
-  uint16_t offset;
-  ptr = u8g2->tile_buf_ptr;
-  /* bytes are vertical, lsb on top (y=0), msb at bottom (y=7) */
-  bit_pos = y;		/* overflow truncate is ok here... */
-  bit_pos &= 7; 	/* ... because only the lowest 3 bits are needed */
-  y &= ~7;		/* zero the lowest 3 bits, y is tile-row * 8 from  now on */
-  offset = y;		/* y might be 8 or 16 bit, but we need 16 bit, so use a 16 bit variable */
-  offset *= u8g2_GetU8x8(u8g2)->display_info->tile_width;
-  ptr += offset;
-  ptr += x;
-  mask = 1;
-  mask <<= bit_pos;
-  if ( u8g2->draw_color != 0 )
-  {
-    *ptr |= mask;
-  }
-  else
-  {
-    mask ^= 255;
-    *ptr &= mask;
-  }  
-}
-
-/*
-  x,y		Upper left position of the line
-  len		length of the line in pixel, len must not be 0
-  dir		0: horizontal line (left to right)
-		1: vertical line (top to bottom)
-*/
-void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
-{
-  if ( dir == 0 )
-  {
-    do
-    {
-      u8g2_draw_pixel(u8g2, x, y);
-      x++;
-      len--;
-    } while( len != 0 );
-  }
-  else
-  {
-    do
-    {
-      u8g2_draw_pixel(u8g2, x, y);
-      y++;
-      len--;
-    } while( len != 0 );
-  }
-}
 
 static void u8g2_send_tile_row(u8g2_t *u8g2, uint8_t tile_row)
 {

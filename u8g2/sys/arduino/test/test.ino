@@ -160,30 +160,35 @@ uint8_t u8x8_byte_arduino_hw_spi(u8x8_t *u8g2, uint8_t msg, uint8_t arg_int, voi
   return 1;
 }
 
-void u8x8_Setup_UC1701_DOGS102(u8x8_t *u8g2)
+void u8x8_Setup_UC1701_DOGS102(u8x8_t *u8x8)
 {
   /* setup defaults */
-  u8x8_SetupDefaults(u8g2);
+  u8x8_SetupDefaults(u8x8);
   
   /* setup specific callbacks */
-  u8g2->display_cb = u8x8_d_uc1701_dogs102;
-  u8g2->cad_cb = u8x8_cad_001;
-  u8g2->byte_cb = u8x8_byte_8bit_sw_spi;
-  u8g2->gpio_and_delay_cb = u8x8_gpio_and_delay_arduino;
-  
+  u8x8->display_cb = u8x8_d_uc1701_dogs102;
+  u8x8->cad_cb = u8x8_cad_001;
+  u8x8->byte_cb = u8x8_byte_8bit_sw_spi;
+  u8x8->gpio_and_delay_cb = u8x8_gpio_and_delay_arduino;
+
+  /* setup display info */
+  u8x8_display_Setup(u8x8);
 }
 
-void u8x8_Setup_SSD1306_128x64_NONAME(u8x8_t *u8g2)
+void u8x8_Setup_SSD1306_128x64_NONAME(u8x8_t *u8x8)
 {
   /* setup defaults */
-  u8x8_SetupDefaults(u8g2);
+  u8x8_SetupDefaults(u8x8);
   
   /* setup specific callbacks */
-  u8g2->display_cb = u8x8_d_ssd1306_128x64_noname;
-  u8g2->cad_cb = u8x8_cad_001;
-  //u8g2->byte_cb = u8x8_byte_arduino_hw_spi;
-  u8g2->byte_cb = u8x8_byte_8bit_sw_spi;
-  u8g2->gpio_and_delay_cb = u8x8_gpio_and_delay_arduino;
+  u8x8->display_cb = u8x8_d_ssd1306_128x64_noname;
+  u8x8->cad_cb = u8x8_cad_001;
+  //u8x8->byte_cb = u8x8_byte_arduino_hw_spi;
+  u8x8->byte_cb = u8x8_byte_8bit_sw_spi;
+  u8x8->gpio_and_delay_cb = u8x8_gpio_and_delay_arduino;
+  
+  /* setup display info */
+  u8x8_display_Setup(u8x8);
 }
 
 
