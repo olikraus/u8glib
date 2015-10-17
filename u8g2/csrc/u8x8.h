@@ -212,7 +212,7 @@ struct u8g2_cb_struct
 struct u8g2_struct
 {
   u8x8_t u8x8;
-  u8g2_cb_t *cb;		/* callback drawprocedures, can be replaced for rotation */
+  const u8g2_cb_t *cb;		/* callback drawprocedures, can be replaced for rotation */
   
   /* the following variables must be assigned during u8g2 setup */
   uint8_t *tile_buf_ptr;	/* ptr to memory area with u8g2.display_info->tile_width * 8 * tile_buf_height bytes */
@@ -473,7 +473,7 @@ void u8x8_SetupStdio(u8x8_t *u8x8);
 /*==========================================*/
 /* u8x8_d_sdl_128x64.c */
 void u8x8_Setup_SDL_128x64(u8x8_t *u8x8);
-void u8g2_Setup_SDL_128x64(u8g2_t *u8g2);
+void u8g2_Setup_SDL_128x64(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
 int u8g_sdl_get_key(void);
 
 
@@ -498,6 +498,9 @@ void u8x8_Draw8x8String(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s);
 void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir);
 void u8g2_SendBuffer(u8g2_t *u8g2);
 
+
+/* u8g2_setup.c */
+extern const u8g2_cb_t u8g2_cb_r0;
 
 #ifdef __cplusplus
 }
