@@ -5,6 +5,7 @@
 */
 
 #include "u8g2.h"
+#include <assert.h>
 
 
 void u8g2_draw_pixel(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
@@ -12,6 +13,13 @@ void u8g2_draw_pixel(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
   uint8_t *ptr;
   uint8_t bit_pos, mask;
   uint16_t offset;
+  
+  assert(x >= u8g2->buf_x0);
+  assert(x < u8g2->buf_x1);
+  assert(y >= u8g2->buf_y0);
+  assert(y < u8g2->buf_y1);
+
+  
   ptr = u8g2->tile_buf_ptr;
   /* bytes are vertical, lsb on top (y=0), msb at bottom (y=7) */
   bit_pos = y;		/* overflow truncate is ok here... */
@@ -40,7 +48,7 @@ void u8g2_draw_pixel(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
   dir		0: horizontal line (left to right)
 		1: vertical line (top to bottom)
 */
-void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
+static void u8g2_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
 {
   if ( dir == 0 )
   {
@@ -93,9 +101,36 @@ static uint8_t u8g2_clip_intersection(u8g2_uint_t *ap, u8g2_uint_t *bp, u8g2_uin
   dir		0: horizontal line (left to right)
 		1: vertical line (top to bottom)
 */
-void u8g2_ClipAndDrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
+void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
 {
-  
+  u8g2_uint_t a;
+  if ( dir == 0 )
+  {
+    if ( y < u8g2->buf_y0 )
+      return;
+    if ( y >= u8g2->buf_y1 )
+      return;
+    a = x;
+    a += len;
+    if ( u8g2_clip_intersection(&x, &a, u8g2->buf_x0, u8g2->buf_x1) == 0 )
+      return;
+    len = a;
+    len -= x;
+  }
+  else
+  {
+    if ( x < u8g2->buf_x0 )
+      return;
+    if ( x >= u8g2->buf_x1 )
+      return;
+    a = y;
+    a += len;
+    if ( u8g2_clip_intersection(&y, &a, u8g2->buf_y0, u8g2->buf_y1) == 0 )
+      return;
+    len = a;
+    len -= y;
+  }
+  u8g2_draw_hv_line(u8g2, x, y, len, dir);
 }
 
 

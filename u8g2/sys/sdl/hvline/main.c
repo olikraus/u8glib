@@ -67,6 +67,8 @@ int main(void)
   u8g2_DrawHVLine(&u8g2, 5, 24, 40, 0);
 
   u8g2_DrawHVLine(&u8g2, 5, 24, 40, 1);
+
+  u8g2_DrawHVLine(&u8g2, 120, 24, 40, 0);
   
   
   u8g2_SendBuffer(&u8g2);

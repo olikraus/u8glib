@@ -31,6 +31,12 @@ void u8g2_update_dimension_r0(u8g2_t *u8g2)
   u8g2->buf_x1 += w;
   u8g2->buf_y1 = u8g2->buf_y0;
   u8g2->buf_y1 += h;
+  
+  
+  /*
+  printf("x0=%d x1=%d y0=%d y1=%d\n", 
+      u8g2->buf_x0, u8g2->buf_x1, u8g2->buf_y0, u8g2->buf_y1);
+  */
 }
 
 
