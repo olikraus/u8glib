@@ -74,7 +74,7 @@ static void u8g2_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_u
   Description:
     clip range from a (included) to b (excluded) agains c (included) to d (excluded)
   Assumptions:
-    a <= b		(also rare, this is checked)
+    a <= b		(this is checked and handled correctly)
     c <= d		(this is not checked)
   will return 0 if there is no intersection and if a > b
 */
@@ -82,20 +82,40 @@ static uint8_t u8g2_clip_intersection(u8g2_uint_t *ap, u8g2_uint_t *bp, u8g2_uin
 {
   u8g2_uint_t a = *ap;
   u8g2_uint_t b = *bp;
+  
+  /* handle the a>b case correctly. If code and time is critical, this could */
+  /* be removed completly (be aware about memory curruption for wrong */
+  /* arguments) or return 0 for a>b (will lead to skipped lines for wrong */
+  /* arguments) */  
+  
+  /* removing the following if clause completly may lead to memory corruption of a>b */
+  if ( a > b )
+  {    
+    /* replacing this if with a simple "return 0;" will not handle the case with negative a */    
+    if ( a < d )
+    {
+      b = d;
+      b--;
+      *bp = b;
+    }
+    else
+    {
+      a = 0;
+      *ap = a;
+    }
+  }
+  
+  /* from now on, the asumption a <= b is ok */
+  
   if ( a >= d )
     return 0;
   if ( b <= c )
     return 0;
-  if ( a > b )		/* this is a very rare case */
-  {				/* there are two options to react: just return 0 or calculate the correct value */
-    //return 0;		/* just returning 0 is disabled here, instead the correct clipping is done */
-    b = d-1;
-    *bp = b;
-  }
   if ( a < c )
     *ap = c;
   if ( b > d )
     *bp = d;
+    
   return 1;
 }
 

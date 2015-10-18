@@ -75,6 +75,14 @@ int main(void)
   u8g2_DrawHVLine(&u8g2, 120, 42, 0xff8f, 0);	/* rare case */
   u8g2_DrawHVLine(&u8g2, 120, 43, 6, 0);
 
+  u8g2_DrawHVLine(&u8g2, 0, 40, 10, 0);
+  u8g2_DrawHVLine(&u8g2, -2, 41, 5, 0);
+  u8g2_DrawHVLine(&u8g2, -3, 42, 5, 0);
+  u8g2_DrawHVLine(&u8g2, -8, 43, 5, 0);
+  u8g2_DrawHVLine(&u8g2, 0, 44, 10, 0);
+
+  
+  
   u8g2_DrawHVLine(&u8g2, 99, 70, 40, 1);
   u8g2_DrawHVLine(&u8g2, 98, 60, 40, 1);
   u8g2_DrawHVLine(&u8g2, 97, 60, 0xfff0, 1);	/* rare case */
