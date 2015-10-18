@@ -68,7 +68,17 @@ int main(void)
 
   u8g2_DrawHVLine(&u8g2, 5, 24, 40, 1);
 
-  u8g2_DrawHVLine(&u8g2, 120, 24, 40, 0);
+  /* clipping tests */  
+  u8g2_DrawHVLine(&u8g2, 60000, 10000, 39, 0);
+  u8g2_DrawHVLine(&u8g2, 140, 40, 40, 0);
+  u8g2_DrawHVLine(&u8g2, 120, 41, 40, 0);
+  u8g2_DrawHVLine(&u8g2, 120, 42, 0xff8f, 0);	/* difficult case, something should be drawn, but there is an internal overflow, which just detected */
+  u8g2_DrawHVLine(&u8g2, 120, 43, 6, 0);
+
+  u8g2_DrawHVLine(&u8g2, 99, 70, 40, 1);
+  u8g2_DrawHVLine(&u8g2, 98, 60, 40, 1);
+  u8g2_DrawHVLine(&u8g2, 97, 60, 0xfff0, 1);	/* difficult case, something should be drawn, but there is an internal overflow, which just detected */
+  u8g2_DrawHVLine(&u8g2, 96, 60, 3, 1);
   
   
   u8g2_SendBuffer(&u8g2);

@@ -74,17 +74,19 @@ static void u8g2_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_u
   Description:
     clip range from a (included) to b (excluded) agains c (included) to d (excluded)
   Assumptions:
-    a <= b
-    c <= d
+    a <= b		(also rare, this is checked and 0 is returned)
+    c <= d		(this is not checked)
+  will return 0 if there is no intersection and if a > b
 */
 static uint8_t u8g2_clip_intersection(u8g2_uint_t *ap, u8g2_uint_t *bp, u8g2_uint_t c, u8g2_uint_t d)
 {
   u8g2_uint_t a = *ap;
   u8g2_uint_t b = *bp;
-  
   if ( a >= d )
     return 0;
   if ( b <= c )
+    return 0;
+  if ( a > b )		/* this is a very rare case */
     return 0;
   if ( a < c )
     *ap = c;
