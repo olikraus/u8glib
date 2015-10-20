@@ -43,6 +43,8 @@ void u8g2_update_dimension_r0(u8g2_t *u8g2)
 /*============================================*/
 void u8g2_draw_l90_r0(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
 {
+  u8g2_DrawHVLine(u8g2, x, y, len, dir);
+
 }
 
 

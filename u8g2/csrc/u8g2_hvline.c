@@ -186,3 +186,8 @@ void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len
 }
 
 
+void u8g2_DrawL90(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
+{
+  u8g2->cb->draw_l90(u8g2, x, y, len, dir);
+}
+
