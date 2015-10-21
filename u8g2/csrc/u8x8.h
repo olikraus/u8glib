@@ -240,8 +240,8 @@ struct _u8g2_font_decode_t
 {
   const uint8_t *decode_ptr;			/* pointer to the compressed data */
   
-  ucg_int_t target_x;
-  ucg_int_t target_y;
+  u8g2_uint_t target_x;
+  u8g2_uint_t target_y;
   
   int8_t x;						/* local coordinates, (0,0) is upper left */
   int8_t y;
