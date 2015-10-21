@@ -707,6 +707,8 @@ uint8_t u8g_com_msp430_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
 uint8_t u8g_com_raspberrypi_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);                /* u8g_com_rasperrypi_hw_spi.c */
 uint8_t u8g_com_raspberrypi_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);		/* u8g_com_raspberrypi_ssd_i2c.c */
 
+uint8_t u8g_com_linux_ssd_i2c_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);             /* u8g_com_linux_ssd_i2c.c */
+
 uint8_t u8g_com_psoc5_ssd_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);   /* u8g_com_psoc5_ssd_hw_spi.c */
 uint8_t u8g_com_psoc5_ssd_hw_parallel_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);   /* u8g_com_psoc5_ssd_hw_parallel.c */
 
@@ -863,6 +865,11 @@ defined(__18CXX) || defined(__PIC32MX)
 #ifndef U8G_COM_SSD_I2C
 #if defined(U8G_RASPBERRY_PI)
 #define U8G_COM_SSD_I2C u8g_com_raspberrypi_ssd_i2c_fn
+#endif
+#endif
+#ifndef U8G_COM_SSD_I2C
+#if defined(U8G_LINUX)
+#define U8G_COM_SSD_I2C u8g_com_linux_ssd_i2c_fn
 #endif
 #endif
 #if defined(U8G_CYPRESS_PSOC5)
