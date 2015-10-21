@@ -201,12 +201,67 @@ struct u8x8_struct
   uint8_t x_offset;	/* copied from info struct, can be modified in flip mode */
 };
 
+/* from ucglib... */
+struct _u8g2_font_info_t
+{
+  /* offset 0 */
+  uint8_t glyph_cnt;
+  uint8_t bbx_mode;
+  uint8_t bits_per_0;
+  uint8_t bits_per_1;
+  
+  /* offset 4 */
+  uint8_t bits_per_char_width;
+  uint8_t bits_per_char_height;		
+  uint8_t bits_per_char_x;
+  uint8_t bits_per_char_y;
+  uint8_t bits_per_delta_x;
+  
+  /* offset 9 */
+  int8_t max_char_width;
+  int8_t max_char_height; /* overall height, NOT ascent. Instead ascent = max_char_height + y_offset */
+  int8_t x_offset;
+  int8_t y_offset;
+  
+  /* offset 13 */
+  int8_t  ascent_A;
+  int8_t  descent_g;
+  int8_t  ascent_para;
+  int8_t  descent_para;
+  
+  /* offset 17 */
+  uint16_t start_pos_upper_A;
+  uint16_t start_pos_lower_a;  
+};
+typedef struct _u8g2_font_info_t u8g2_font_info_t;
+
+/* from ucglib... */
+struct _u8g2_font_decode_t
+{
+  const uint8_t *decode_ptr;			/* pointer to the compressed data */
+  
+  ucg_int_t target_x;
+  ucg_int_t target_y;
+  
+  int8_t x;						/* local coordinates, (0,0) is upper left */
+  int8_t y;
+  int8_t glyph_width;	
+  int8_t glyph_height;
+
+  uint8_t decode_bit_pos;			/* bitpos inside a byte of the compressed data */
+  uint8_t is_transparent;
+  uint8_t dir;				/* direction */
+};
+typedef struct _u8g2_font_decode_t u8g2_font_decode_t;
+
 
 struct u8g2_cb_struct
 {
   u8g2_update_dimension_cb update;
   u8g2_draw_l90_cb draw_l90;
 };
+
+typedef u8g2_uint_t (*u8g2_font_calc_vref_fnptr)(u8g2_t *u8g2);
 
 
 struct u8g2_struct
@@ -224,6 +279,13 @@ struct u8g2_struct
   u8g2_uint_t buf_x1;	/* right corner of the buffer (excluded) */
   u8g2_uint_t buf_y0;
   u8g2_uint_t buf_y1;
+  
+  /* information about the current font */
+  const unsigned char *font;             /* current font for all text procedures */
+  u8g2_font_calc_vref_fnptr font_calc_vref;
+  u8g2_font_decode_t font_decode;		/* new font decode structure */
+  u8g2_font_info_t font_info;			/* new font info structure */
+  
 
   uint8_t draw_color;		/* 0: clear pixel, 1: set pixel */
 };

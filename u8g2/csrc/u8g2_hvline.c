@@ -128,8 +128,10 @@ static uint8_t u8g2_clip_intersection(u8g2_uint_t *ap, u8g2_uint_t *bp, u8g2_uin
   len		length of the line in pixel, len must not be 0
   dir		0: horizontal line (left to right)
 		1: vertical line (top to bottom)
+  This function will clip the line and call u8g2_unsafe_draw_hv_line()
+  
 */
-static void u8g2_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
+static void u8g2_draw_hv_line_2dir(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
 {
   u8g2_uint_t a;
   if ( dir == 0 )
@@ -168,8 +170,11 @@ static void u8g2_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_u
 		1: vertical line (top to bottom)
 		2: horizontal line (right to left)
 		3: vertical line (bottom to top)
+
+  This function will remove directions 2 and 3. Instead 0 and 1 are used.
+
 */
-void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
+void u8g2_draw_hv_line_4dir(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
 {
   if ( dir == 2 )
   {
@@ -182,12 +187,17 @@ void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len
     y++;
   }
   dir &= 1;  
-  u8g2_draw_hv_line(u8g2, x, y, len, dir);
+  u8g2_draw_hv_line_2dir(u8g2, x, y, len, dir);
 }
 
-
-void u8g2_DrawL90(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
+/*
+  This is the toplevel function for the hv line draw procedures.
+  This function should be called by the user.
+*/
+void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
 {
+  /* Make a call the the callback function. The callback may rotate the hv line */
+  /* after rotation this will call u8g2_draw_hv_line_4dir() */
   u8g2->cb->draw_l90(u8g2, x, y, len, dir);
 }
 
