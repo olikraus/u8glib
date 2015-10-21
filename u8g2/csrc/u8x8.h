@@ -281,11 +281,14 @@ struct u8g2_struct
   u8g2_uint_t buf_y1;
   
   /* information about the current font */
-  const unsigned char *font;             /* current font for all text procedures */
+  const uint8_t *font;             /* current font for all text procedures */
   u8g2_font_calc_vref_fnptr font_calc_vref;
   u8g2_font_decode_t font_decode;		/* new font decode structure */
   u8g2_font_info_t font_info;			/* new font info structure */
   
+  uint8_t font_height_mode;
+  int8_t font_ref_ascent;
+  int8_t font_ref_descent;
 
   uint8_t draw_color;		/* 0: clear pixel, 1: set pixel */
 };

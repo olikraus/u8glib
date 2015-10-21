@@ -25,6 +25,16 @@
 
 #include "u8x8.h"
 
+#ifdef __GNUC__
+#  define U8G2_NOINLINE __attribute__((noinline))
+#else
+#  define U8G2_NOINLINE
+#endif
+
+#define U8G2_FONT_HEIGHT_MODE_TEXT 0
+#define U8G2_FONT_HEIGHT_MODE_XTEXT 1
+#define U8G2_FONT_HEIGHT_MODE_ALL 2
+
 
 
 
