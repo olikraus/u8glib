@@ -697,7 +697,7 @@ void u8g2_SetFont(u8g2_t *u8g2, const uint8_t  *font)
     u8g2->font = font;
     u8g2_read_font_info(&(u8g2->font_info), font);
     u8g2_UpdateRefHeight(u8g2);
-    //u8g2_SetFontPosBaseline(u8g2);
+    u8g2_SetFontPosBaseline(u8g2);
   }
 }
 
