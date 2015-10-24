@@ -287,7 +287,7 @@ void u8g2_Setup_SDL_128x64(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb)
   u8g2->cb->update(u8g2);
 }
 
-
+/*
 static void u8g2_send_tile_row(u8g2_t *u8g2, uint8_t tile_row)
 {
   uint8_t *ptr;
@@ -316,6 +316,6 @@ void u8g2_SendBuffer(u8g2_t *u8g2)
   } while( cnt > 0 );
 }
 
-
+*/
 
 

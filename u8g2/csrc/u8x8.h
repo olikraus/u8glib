@@ -557,15 +557,6 @@ void u8x8_Set8x8Font(u8x8_t *u8x8, const uint8_t *font_8x8);
 void u8x8_Draw8x8Glyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding);
 void u8x8_Draw8x8String(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s);
 
-/*==========================================*/
-/* high level interface */
-
-void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir);
-void u8g2_SendBuffer(u8g2_t *u8g2);
-
-
-/* u8g2_setup.c */
-extern const u8g2_cb_t u8g2_cb_r0;
 
 #ifdef __cplusplus
 }
