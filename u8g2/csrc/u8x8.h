@@ -275,10 +275,21 @@ struct u8g2_struct
   uint8_t tile_curr_row;	/* current row for picture loop */
   
   /* the following variables are set by the update dimension callback */
+  /* this is clipbox after rotation for the hvline procedures */
   u8g2_uint_t buf_x0;	/* left corner of the buffer */
   u8g2_uint_t buf_x1;	/* right corner of the buffer (excluded) */
   u8g2_uint_t buf_y0;
   u8g2_uint_t buf_y1;
+  
+  /* display dimensions for the user */
+  u8g2_uint_t width;
+  u8g2_uint_t height;
+  
+  /* ths is the clip box for the user to check if a specific box has an intersection */
+  u8g2_uint_t user_x0;	/* left corner of the buffer */
+  u8g2_uint_t user_x1;	/* right corner of the buffer (excluded) */
+  u8g2_uint_t user_y0;
+  u8g2_uint_t user_y1;
   
   /* information about the current font */
   const uint8_t *font;             /* current font for all text procedures */
@@ -539,6 +550,7 @@ void u8x8_SetupStdio(u8x8_t *u8x8);
 /* u8x8_d_sdl_128x64.c */
 void u8x8_Setup_SDL_128x64(u8x8_t *u8x8);
 void u8g2_Setup_SDL_128x64(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
+void u8g2_Setup_SDL_128x64_4(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
 int u8g_sdl_get_key(void);
 
 

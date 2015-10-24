@@ -201,7 +201,7 @@ int main(void)
 {
   int x, y;
   int k;
-  u8g2_Setup_SDL_128x64(&u8g2, &u8g2_cb_r0);
+  u8g2_Setup_SDL_128x64_4(&u8g2, &u8g2_cb_r1);
   
   u8x8_display_Init(u8g2_GetU8x8(&u8g2));
   u8x8_display_SetPowerSave(u8g2_GetU8x8(&u8g2), 0);
@@ -214,15 +214,26 @@ int main(void)
   
   for(;;)
   {
+    /*
     u8g2_ClearBuffer(&u8g2);
     
-    u8g2_DrawString(&u8g2, x, y, 0, "abc");
+    u8g2_DrawString(&u8g2, x, y, 0, "ABC");
     u8g2_DrawString(&u8g2, x, y, 1, "abc");
     u8g2_DrawString(&u8g2, x, y, 2, "abc");
     u8g2_DrawString(&u8g2, x, y, 3, "abc");
-
     
     u8g2_SendBuffer(&u8g2);
+    */
+    
+    u8g2_FirstPage(&u8g2);
+    do
+    {
+      u8g2_DrawString(&u8g2, x, y, 0, "ABC");
+      u8g2_DrawString(&u8g2, x, y, 1, "abc");
+      u8g2_DrawString(&u8g2, x, y, 2, "abc");
+      u8g2_DrawString(&u8g2, x, y, 3, "abc");
+    } while( u8g2_NextPage(&u8g2) );
+    
     do
     {
       k = u8g_sdl_get_key();

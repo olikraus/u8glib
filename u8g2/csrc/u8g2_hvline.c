@@ -19,8 +19,9 @@ void u8g2_draw_pixel(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
   assert(x < u8g2->buf_x1);
   assert(y >= u8g2->buf_y0);
   assert(y < u8g2->buf_y1);
-
   
+  y -= u8g2->tile_curr_row*8;
+
   ptr = u8g2->tile_buf_ptr;
   /* bytes are vertical, lsb on top (y=0), msb at bottom (y=7) */
   bit_pos = y;		/* overflow truncate is ok here... */
