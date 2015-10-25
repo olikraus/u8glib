@@ -201,6 +201,7 @@ int main(void)
 {
   int x, y;
   int k;
+  int i;
   u8g2_Setup_SDL_128x64_4(&u8g2, &u8g2_cb_r1);
   
   u8x8_display_Init(u8g2_GetU8x8(&u8g2));
@@ -226,12 +227,25 @@ int main(void)
     */
     
     u8g2_FirstPage(&u8g2);
+    i = 0;
     do
     {
       u8g2_DrawString(&u8g2, x, y, 0, "ABC");
       u8g2_DrawString(&u8g2, x, y, 1, "abc");
       u8g2_DrawString(&u8g2, x, y, 2, "abc");
       u8g2_DrawString(&u8g2, x, y, 3, "abc");
+      
+      if ( i == 1 )
+      {
+	u8g2_DrawHVLine(&u8g2, u8g2.user_x0, u8g2.user_y0, 1, 0);
+	u8g2_DrawHVLine(&u8g2, u8g2.user_x0, u8g2.user_y1-1, 1, 0);
+	u8g2_DrawHVLine(&u8g2, u8g2.user_x1-1, u8g2.user_y1-1, 1, 0);
+	u8g2_DrawHVLine(&u8g2, u8g2.user_x1-1, u8g2.user_y0, 1, 0);
+
+      }
+      
+      i++;
+      
     } while( u8g2_NextPage(&u8g2) );
     
     do

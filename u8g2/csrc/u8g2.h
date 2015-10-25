@@ -54,6 +54,11 @@ extern const u8g2_cb_t u8g2_cb_r1;
 
 
 /*==========================================*/
+/* u8g2_intersection.c */
+uint8_t u8g2_IsIntersection(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_uint_t x1, u8g2_uint_t y1);
+
+
+/*==========================================*/
 /* u8g2_font.c */
 
 
