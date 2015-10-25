@@ -428,6 +428,39 @@ int8_t u8g2_font_decode_glyph(u8g2_t *u8g2, const uint8_t *glyph_data)
     decode->target_x = u8g2_add_vector_x(decode->target_x, x, -(h+y), decode->dir);
     decode->target_y = u8g2_add_vector_y(decode->target_y, x, -(h+y), decode->dir);
     //u8g2_add_vector(&(decode->target_x), &(decode->target_y), x, -(h+y), decode->dir);
+
+#ifdef U8G2_WITH_INTERSECTION    
+    {
+      u8g2_uint_t x0, x1, y0, y1;
+      x0 = decode->target_x;
+      y0 = decode->target_y;
+      x1 = x0;
+      y1 = y0;
+      
+      switch(decode->dir)
+      {
+	case 0:
+	    x1 += decode->glyph_width;
+	    y1 += h;
+	    break;
+	case 1:
+	    x0 -= h;
+	    y1 += decode->glyph_width;
+	    break;
+	case 2:
+	    x0 -= decode->glyph_width;
+	    y0 -= h;
+	    break;	  
+	case 3:
+	    x1 += h;
+	    y0 -= decode->glyph_width;
+	    break;
+	  
+      }
+      if ( u8g2_IsIntersection(u8g2, x0, y0, x1, y1) == 0 ) 
+	return d;
+    }
+#endif
    
     /* reset local x/y position */
     decode->x = 0;

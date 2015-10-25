@@ -178,6 +178,10 @@ static void u8g2_draw_hv_line_2dir(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u
 */
 void u8g2_draw_hv_line_4dir(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
 {
+#ifdef U8G2_WITH_HVLINE_COUNT
+  u8g2->hv_cnt++;
+#endif /* U8G2_WITH_HVLINE_COUNT */   
+  
   if ( dir == 2 )
   {
     x -= len;

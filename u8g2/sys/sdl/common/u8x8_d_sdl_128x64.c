@@ -2,7 +2,7 @@
   u8x8_d_sdl_128x64.c
 */
 
-#include "u8x8.h"
+#include "u8g2.h"
 #include "SDL.h"
 #include "SDL_video.h"
 #include <assert.h>

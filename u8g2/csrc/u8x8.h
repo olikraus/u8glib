@@ -119,13 +119,7 @@ typedef struct u8x8_struct u8x8_t;
 typedef struct u8x8_display_info_struct u8x8_display_info_t;
 typedef struct u8x8_tile_struct u8x8_tile_t;
 
-typedef struct u8g2_struct u8g2_t;
-typedef struct u8g2_cb_struct u8g2_cb_t;
-
 typedef uint8_t (*u8x8_msg_cb)(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
-
-typedef void (*u8g2_update_dimension_cb)(u8g2_t *u8g2);
-typedef void (*u8g2_draw_l90_cb)(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir);
 
 
 //struct u8x8_mcd_struct
@@ -200,111 +194,6 @@ struct u8x8_struct
   const uint8_t *font;
   uint8_t x_offset;	/* copied from info struct, can be modified in flip mode */
 };
-
-/* from ucglib... */
-struct _u8g2_font_info_t
-{
-  /* offset 0 */
-  uint8_t glyph_cnt;
-  uint8_t bbx_mode;
-  uint8_t bits_per_0;
-  uint8_t bits_per_1;
-  
-  /* offset 4 */
-  uint8_t bits_per_char_width;
-  uint8_t bits_per_char_height;		
-  uint8_t bits_per_char_x;
-  uint8_t bits_per_char_y;
-  uint8_t bits_per_delta_x;
-  
-  /* offset 9 */
-  int8_t max_char_width;
-  int8_t max_char_height; /* overall height, NOT ascent. Instead ascent = max_char_height + y_offset */
-  int8_t x_offset;
-  int8_t y_offset;
-  
-  /* offset 13 */
-  int8_t  ascent_A;
-  int8_t  descent_g;
-  int8_t  ascent_para;
-  int8_t  descent_para;
-  
-  /* offset 17 */
-  uint16_t start_pos_upper_A;
-  uint16_t start_pos_lower_a;  
-};
-typedef struct _u8g2_font_info_t u8g2_font_info_t;
-
-/* from ucglib... */
-struct _u8g2_font_decode_t
-{
-  const uint8_t *decode_ptr;			/* pointer to the compressed data */
-  
-  u8g2_uint_t target_x;
-  u8g2_uint_t target_y;
-  
-  int8_t x;						/* local coordinates, (0,0) is upper left */
-  int8_t y;
-  int8_t glyph_width;	
-  int8_t glyph_height;
-
-  uint8_t decode_bit_pos;			/* bitpos inside a byte of the compressed data */
-  uint8_t is_transparent;
-  uint8_t dir;				/* direction */
-};
-typedef struct _u8g2_font_decode_t u8g2_font_decode_t;
-
-
-struct u8g2_cb_struct
-{
-  u8g2_update_dimension_cb update;
-  u8g2_draw_l90_cb draw_l90;
-};
-
-typedef u8g2_uint_t (*u8g2_font_calc_vref_fnptr)(u8g2_t *u8g2);
-
-
-struct u8g2_struct
-{
-  u8x8_t u8x8;
-  const u8g2_cb_t *cb;		/* callback drawprocedures, can be replaced for rotation */
-  
-  /* the following variables must be assigned during u8g2 setup */
-  uint8_t *tile_buf_ptr;	/* ptr to memory area with u8g2.display_info->tile_width * 8 * tile_buf_height bytes */
-  uint8_t tile_buf_height;	/* height of the tile memory area in tile rows */
-  uint8_t tile_curr_row;	/* current row for picture loop */
-  
-  /* the following variables are set by the update dimension callback */
-  /* this is clipbox after rotation for the hvline procedures */
-  u8g2_uint_t buf_x0;	/* left corner of the buffer */
-  u8g2_uint_t buf_x1;	/* right corner of the buffer (excluded) */
-  u8g2_uint_t buf_y0;
-  u8g2_uint_t buf_y1;
-  
-  /* display dimensions for the user */
-  u8g2_uint_t width;
-  u8g2_uint_t height;
-  
-  /* ths is the clip box for the user to check if a specific box has an intersection */
-  u8g2_uint_t user_x0;	/* left corner of the buffer */
-  u8g2_uint_t user_x1;	/* right corner of the buffer (excluded) */
-  u8g2_uint_t user_y0;
-  u8g2_uint_t user_y1;
-  
-  /* information about the current font */
-  const uint8_t *font;             /* current font for all text procedures */
-  u8g2_font_calc_vref_fnptr font_calc_vref;
-  u8g2_font_decode_t font_decode;		/* new font decode structure */
-  u8g2_font_info_t font_info;			/* new font info structure */
-  
-  uint8_t font_height_mode;
-  int8_t font_ref_ascent;
-  int8_t font_ref_descent;
-
-  uint8_t draw_color;		/* 0: clear pixel, 1: set pixel */
-};
-
-#define u8g2_GetU8x8(u8g2) ((u8x8_t *)(u8g2))
 
 
 
@@ -549,10 +438,7 @@ void u8x8_SetupStdio(u8x8_t *u8x8);
 /*==========================================*/
 /* u8x8_d_sdl_128x64.c */
 void u8x8_Setup_SDL_128x64(u8x8_t *u8x8);
-void u8g2_Setup_SDL_128x64(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
-void u8g2_Setup_SDL_128x64_4(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
 int u8g_sdl_get_key(void);
-
 
 
 /*==========================================*/

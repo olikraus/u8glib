@@ -1,6 +1,6 @@
 
 #include "u8g2.h"
-
+#include <stdio.h>
 
 const uint8_t bdf_font[762] U8X8_FONT_SECTION("bdf_font") = {
   32,126,0,0,0,0,0,0,0,0,0,0,0,95,95,0,
@@ -212,6 +212,7 @@ int main(void)
   
   x = 50;
   y = 30;
+
   
   for(;;)
   {
@@ -225,6 +226,9 @@ int main(void)
     
     u8g2_SendBuffer(&u8g2);
     */
+#ifdef U8G2_WITH_HVLINE_COUNT
+    u8g2.hv_cnt = 0UL;
+#endif /* U8G2_WITH_HVLINE_COUNT */   
     
     u8g2_FirstPage(&u8g2);
     i = 0;
@@ -246,7 +250,11 @@ int main(void)
       
       i++;
       
+
     } while( u8g2_NextPage(&u8g2) );
+#ifdef U8G2_WITH_HVLINE_COUNT
+    printf("hv cnt: %ld\n", u8g2.hv_cnt);
+#endif /* U8G2_WITH_HVLINE_COUNT */   
     
     do
     {

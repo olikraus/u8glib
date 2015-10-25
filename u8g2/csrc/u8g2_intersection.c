@@ -14,6 +14,10 @@
 #define U8G2_ALWAYS_INLINE
 #endif 
 
+
+#ifdef U8G2_WITH_INTERSECTION    
+
+
 /*
   intersection assumptions:
     a1 <= a2 is always true    
@@ -75,4 +79,6 @@ uint8_t u8g2_IsIntersection(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_u
   return u8g2_is_intersection_decision_tree(u8g2->user_x0, u8g2->user_x1, x0, x1);
 }
 
+
+#endif /* U8G2_WITH_INTERSECTION */
 
