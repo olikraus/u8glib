@@ -202,12 +202,10 @@ int main(void)
   int x, y;
   int k;
   int i;
-  u8g2_Setup_SDL_128x64_4(&u8g2, &u8g2_cb_r1);
   
+  u8g2_Setup_SDL_128x64_4(&u8g2, &u8g2_cb_r0);
   u8x8_display_Init(u8g2_GetU8x8(&u8g2));
-  u8x8_display_SetPowerSave(u8g2_GetU8x8(&u8g2), 0);
-
-  
+  u8x8_display_SetPowerSave(u8g2_GetU8x8(&u8g2), 0);  
   u8g2_SetFont(&u8g2, u8g2_font_helvB18_tr);
   
   x = 50;
@@ -216,6 +214,10 @@ int main(void)
   
   for(;;)
   {
+#ifdef U8G2_WITH_HVLINE_COUNT
+    u8g2.hv_cnt = 0UL;
+#endif /* U8G2_WITH_HVLINE_COUNT */   
+    
     /*
     u8g2_ClearBuffer(&u8g2);
     
@@ -226,9 +228,6 @@ int main(void)
     
     u8g2_SendBuffer(&u8g2);
     */
-#ifdef U8G2_WITH_HVLINE_COUNT
-    u8g2.hv_cnt = 0UL;
-#endif /* U8G2_WITH_HVLINE_COUNT */   
     
     u8g2_FirstPage(&u8g2);
     i = 0;

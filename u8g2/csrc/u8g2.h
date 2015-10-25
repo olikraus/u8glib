@@ -189,6 +189,7 @@ void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len
 extern const u8g2_cb_t u8g2_cb_r0;
 extern const u8g2_cb_t u8g2_cb_r1;
 extern const u8g2_cb_t u8g2_cb_r2;
+extern const u8g2_cb_t u8g2_cb_r3;
 
 
 /*==========================================*/

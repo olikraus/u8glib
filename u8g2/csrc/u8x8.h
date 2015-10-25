@@ -66,6 +66,7 @@
 #define U8X8_WITH_SET_FLIP_MODE
 
 /* Select 0 or 1 for the default flip mode. This is not affected by U8X8_WITH_FLIP_MODE */
+/* Note: Not all display types support a mirror functon for the frame buffer */
 #define U8X8_DEFAULT_FLIP_MODE 0
 
 /*==========================================*/
