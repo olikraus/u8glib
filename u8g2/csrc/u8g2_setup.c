@@ -7,6 +7,23 @@
 #include "u8g2.h"
 #include <string.h>
 
+/*============================================*/
+
+void u8g2_Setup(u8g2_t *u8g2, uint8_t *buf, uint8_t tile_buf_height, const u8g2_cb_t *u8g2_cb)
+{
+  u8g2->tile_buf_ptr = buf;
+  u8g2->tile_buf_height = tile_buf_height;
+  
+  u8g2->tile_curr_row = 0;
+  u8g2->draw_color = 1;
+  
+  u8g2->cb = u8g2_cb;
+  u8g2->cb->update(u8g2);
+
+#ifdef U8G2_WITH_FONT_ROTATION  
+  u8g2->font_decode.dir = 0;
+#endif
+}
 
 
 /*============================================*/

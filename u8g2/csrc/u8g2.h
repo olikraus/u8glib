@@ -112,7 +112,9 @@ struct _u8g2_font_decode_t
 
   uint8_t decode_bit_pos;			/* bitpos inside a byte of the compressed data */
   uint8_t is_transparent;
+#ifdef U8G2_WITH_FONT_ROTATION  
   uint8_t dir;				/* direction */
+#endif
 };
 typedef struct _u8g2_font_decode_t u8g2_font_decode_t;
 
@@ -163,7 +165,7 @@ struct u8g2_struct
   u8g2_font_calc_vref_fnptr font_calc_vref;
   u8g2_font_decode_t font_decode;		/* new font decode structure */
   u8g2_font_info_t font_info;			/* new font info structure */
-  
+
   uint8_t font_height_mode;
   int8_t font_ref_ascent;
   int8_t font_ref_descent;
@@ -176,6 +178,16 @@ struct u8g2_struct
 };
 
 #define u8g2_GetU8x8(u8g2) ((u8x8_t *)(u8g2))
+
+/*==========================================*/
+/* u8g2_setup.c */
+
+extern const u8g2_cb_t u8g2_cb_r0;
+extern const u8g2_cb_t u8g2_cb_r1;
+extern const u8g2_cb_t u8g2_cb_r2;
+extern const u8g2_cb_t u8g2_cb_r3;
+
+void u8g2_Setup(u8g2_t *u8g2, uint8_t *buf, uint8_t tile_buf_height, const u8g2_cb_t *u8g2_cb);
 
 
 
@@ -193,13 +205,6 @@ uint8_t u8g2_NextPage(u8g2_t *u8g2);
 /* u8g2_hvline.c */
 void u8g2_DrawHVLine(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir);
 
-/*==========================================*/
-/* u8g2_setup.c */
-
-extern const u8g2_cb_t u8g2_cb_r0;
-extern const u8g2_cb_t u8g2_cb_r1;
-extern const u8g2_cb_t u8g2_cb_r2;
-extern const u8g2_cb_t u8g2_cb_r3;
 
 
 /*==========================================*/
@@ -218,7 +223,8 @@ uint8_t u8g2_IsIntersection(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_u
 #define U8G2_FONT_HEIGHT_MODE_ALL 2
 
 void u8g2_SetFont(u8g2_t *u8g2, const uint8_t  *font);
-u8g2_uint_t u8g2_DrawString(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t dir, const char *str);
+void u8g2_SetFontDirection(u8g2_t *u8g2, uint8_t dir);
+u8g2_uint_t u8g2_DrawString(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, const char *str);
 
 /*==========================================*/
 /* u8x8_d_sdl_128x64.c */

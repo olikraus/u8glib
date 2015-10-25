@@ -239,10 +239,10 @@ int8_t u8g2_font_decode_get_signed_bits(u8g2_font_decode_t *f, uint8_t cnt)
 }
 
 
+#ifdef U8G2_WITH_FONT_ROTATION
 static u8g2_uint_t u8g2_add_vector_y(u8g2_uint_t dy, int8_t x, int8_t y, uint8_t dir) U8G2_NOINLINE;
 static u8g2_uint_t u8g2_add_vector_y(u8g2_uint_t dy, int8_t x, int8_t y, uint8_t dir)
 {
-#ifdef U8G2_WITH_FONT_ROTATION
   switch(dir)
   {
     case 0:
@@ -259,15 +259,11 @@ static u8g2_uint_t u8g2_add_vector_y(u8g2_uint_t dy, int8_t x, int8_t y, uint8_t
       break;      
   }
   return dy;
-#else
-  return dy+y;
-#endif
 }
 
 static u8g2_uint_t u8g2_add_vector_x(u8g2_uint_t dx, int8_t x, int8_t y, uint8_t dir) U8G2_NOINLINE;
 static u8g2_uint_t u8g2_add_vector_x(u8g2_uint_t dx, int8_t x, int8_t y, uint8_t dir)
 {
-#ifdef U8G2_WITH_FONT_ROTATION
   switch(dir)
   {
     case 0:
@@ -284,10 +280,8 @@ static u8g2_uint_t u8g2_add_vector_x(u8g2_uint_t dx, int8_t x, int8_t y, uint8_t
       break;      
   }
   return dx;
-#else
-  return dx+x;
-#endif
 }
+#endif
 
 
 
@@ -351,8 +345,13 @@ void u8g2_font_decode_len(u8g2_t *u8g2, uint8_t len, uint8_t is_foreground)
     y = decode->target_y;
 
     /* apply rotation */
+#ifdef U8G2_WITH_FONT_ROTATION
     x = u8g2_add_vector_x(x, lx, ly, decode->dir);
     y = u8g2_add_vector_y(y, lx, ly, decode->dir);
+#else
+    x += lx;
+    y += ly;
+#endif
     
     /* draw foreground and background (if required) */
     if ( is_foreground )
@@ -443,8 +442,13 @@ int8_t u8g2_font_decode_glyph(u8g2_t *u8g2, const uint8_t *glyph_data)
   
   if ( decode->glyph_width > 0 )
   {
+#ifdef U8G2_WITH_FONT_ROTATION
     decode->target_x = u8g2_add_vector_x(decode->target_x, x, -(h+y), decode->dir);
     decode->target_y = u8g2_add_vector_y(decode->target_y, x, -(h+y), decode->dir);
+#else
+    decode->target_x += x;
+    decode->target_y -= h+y;
+#endif
     //u8g2_add_vector(&(decode->target_x), &(decode->target_y), x, -(h+y), decode->dir);
 
 #ifdef U8G2_WITH_INTERSECTION
@@ -542,13 +546,13 @@ const uint8_t *u8g2_font_get_glyph_data(u8g2_t *u8g2, uint8_t encoding)
   return NULL;
 }
 
-u8g2_uint_t u8g2_font_draw_glyph(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t dir, uint8_t encoding)
+static u8g2_uint_t u8g2_font_draw_glyph(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t encoding)
 {
   u8g2_uint_t dx = 0;
   u8g2->font_decode.target_x = x;
   u8g2->font_decode.target_y = y;
   //u8g2->font_decode.is_transparent = is_transparent; this is already set
-  u8g2->font_decode.dir = dir;
+  //u8g2->font_decode.dir = dir;
   const uint8_t *glyph_data = u8g2_font_get_glyph_data(u8g2, encoding);
   if ( glyph_data != NULL )
   {
@@ -593,10 +597,10 @@ void u8g2_SetFontMode(u8g2_t *u8g2, uint8_t is_transparent)
   u8g2->font_decode.is_transparent = is_transparent;		// new font procedures
 }
 
-u8g2_uint_t u8g2_DrawGlyph(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t dir, uint8_t encoding)
+u8g2_uint_t u8g2_DrawGlyph(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t encoding)
 {
 #ifdef U8G2_WITH_FONT_ROTATION
-  switch(dir)
+  switch(u8g2->font_decode.dir)
   {
     case 0:
       y += u8g2->font_calc_vref(u8g2);
@@ -614,19 +618,19 @@ u8g2_uint_t u8g2_DrawGlyph(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t d
 #else
   y += u8g2->font_calc_vref(u8g2);
 #endif
-  return u8g2_font_draw_glyph(u8g2, x, y, dir, encoding);
+  return u8g2_font_draw_glyph(u8g2, x, y, encoding);
 }
 
-u8g2_uint_t u8g2_DrawString(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t dir, const char *str)
+u8g2_uint_t u8g2_DrawString(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, const char *str)
 {
   u8g2_uint_t delta, sum;
   sum = 0;
   while( *str != '\0' )
   {
-    delta = u8g2_DrawGlyph(u8g2, x, y, dir, (uint8_t)*str);
+    delta = u8g2_DrawGlyph(u8g2, x, y, (uint8_t)*str);
     
 #ifdef U8G2_WITH_FONT_ROTATION
-    switch(dir)
+    switch(u8g2->font_decode.dir)
     {
       case 0:
 	x += delta;
@@ -789,4 +793,11 @@ u8g2_uint_t u8g2_GetStrWidth(u8g2_t *u8g2, const char *s)
     s++;
   }
   return w;  
+}
+
+void u8g2_SetFontDirection(u8g2_t *u8g2, uint8_t dir)
+{
+#ifdef U8G2_WITH_FONT_ROTATION  
+  u8g2->font_decode.dir = dir;
+#endif
 }
