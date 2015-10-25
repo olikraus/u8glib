@@ -242,6 +242,7 @@ int8_t u8g2_font_decode_get_signed_bits(u8g2_font_decode_t *f, uint8_t cnt)
 static u8g2_uint_t u8g2_add_vector_y(u8g2_uint_t dy, int8_t x, int8_t y, uint8_t dir) U8G2_NOINLINE;
 static u8g2_uint_t u8g2_add_vector_y(u8g2_uint_t dy, int8_t x, int8_t y, uint8_t dir)
 {
+#ifdef U8G2_WITH_FONT_ROTATION
   switch(dir)
   {
     case 0:
@@ -258,11 +259,15 @@ static u8g2_uint_t u8g2_add_vector_y(u8g2_uint_t dy, int8_t x, int8_t y, uint8_t
       break;      
   }
   return dy;
+#else
+  return dy+y;
+#endif
 }
 
 static u8g2_uint_t u8g2_add_vector_x(u8g2_uint_t dx, int8_t x, int8_t y, uint8_t dir) U8G2_NOINLINE;
 static u8g2_uint_t u8g2_add_vector_x(u8g2_uint_t dx, int8_t x, int8_t y, uint8_t dir)
 {
+#ifdef U8G2_WITH_FONT_ROTATION
   switch(dir)
   {
     case 0:
@@ -279,6 +284,9 @@ static u8g2_uint_t u8g2_add_vector_x(u8g2_uint_t dx, int8_t x, int8_t y, uint8_t
       break;      
   }
   return dx;
+#else
+  return dx+x;
+#endif
 }
 
 
@@ -354,7 +362,12 @@ void u8g2_font_decode_len(u8g2_t *u8g2, uint8_t len, uint8_t is_foreground)
 	x, 
 	y, 
 	current, 
-	/* dir */ decode->dir);
+#ifdef U8G2_WITH_FONT_ROTATION
+	/* dir */ decode->dir
+#else
+	0
+#endif
+      );
     }
     else if ( decode->is_transparent == 0 )    
     {
@@ -363,7 +376,12 @@ void u8g2_font_decode_len(u8g2_t *u8g2, uint8_t len, uint8_t is_foreground)
 	x, 
 	y, 
 	current, 
-	/* dir */ decode->dir);   
+#ifdef U8G2_WITH_FONT_ROTATION
+	/* dir */ decode->dir
+#else
+	0
+#endif
+      );   
     }
     
     /* check, whether the end of the run length code has been reached */
@@ -429,7 +447,7 @@ int8_t u8g2_font_decode_glyph(u8g2_t *u8g2, const uint8_t *glyph_data)
     decode->target_y = u8g2_add_vector_y(decode->target_y, x, -(h+y), decode->dir);
     //u8g2_add_vector(&(decode->target_x), &(decode->target_y), x, -(h+y), decode->dir);
 
-#ifdef U8G2_WITH_INTERSECTION    
+#ifdef U8G2_WITH_INTERSECTION
     {
       u8g2_uint_t x0, x1, y0, y1;
       x0 = decode->target_x;
@@ -437,6 +455,7 @@ int8_t u8g2_font_decode_glyph(u8g2_t *u8g2, const uint8_t *glyph_data)
       x1 = x0;
       y1 = y0;
       
+#ifdef U8G2_WITH_FONT_ROTATION
       switch(decode->dir)
       {
 	case 0:
@@ -454,13 +473,17 @@ int8_t u8g2_font_decode_glyph(u8g2_t *u8g2, const uint8_t *glyph_data)
 	case 3:
 	    x1 += h;
 	    y0 -= decode->glyph_width;
-	    break;
-	  
+	    break;	  
       }
+#else /* U8G2_WITH_FONT_ROTATION */
+      x1 += decode->glyph_width;
+      y1 += h;      
+#endif
+      
       if ( u8g2_IsIntersection(u8g2, x0, y0, x1, y1) == 0 ) 
 	return d;
     }
-#endif
+#endif /* U8G2_WITH_INTERSECTION */
    
     /* reset local x/y position */
     decode->x = 0;
@@ -572,6 +595,7 @@ void u8g2_SetFontMode(u8g2_t *u8g2, uint8_t is_transparent)
 
 u8g2_uint_t u8g2_DrawGlyph(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t dir, uint8_t encoding)
 {
+#ifdef U8G2_WITH_FONT_ROTATION
   switch(dir)
   {
     case 0:
@@ -587,6 +611,9 @@ u8g2_uint_t u8g2_DrawGlyph(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t d
       x += u8g2->font_calc_vref(u8g2);
       break;
   }
+#else
+  y += u8g2->font_calc_vref(u8g2);
+#endif
   return u8g2_font_draw_glyph(u8g2, x, y, dir, encoding);
 }
 
@@ -598,6 +625,7 @@ u8g2_uint_t u8g2_DrawString(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t 
   {
     delta = u8g2_DrawGlyph(u8g2, x, y, dir, (uint8_t)*str);
     
+#ifdef U8G2_WITH_FONT_ROTATION
     switch(dir)
     {
       case 0:
@@ -613,7 +641,9 @@ u8g2_uint_t u8g2_DrawString(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, uint8_t 
 	y -= delta;
 	break;
     }
-    
+#else
+    x += delta;
+#endif    
     sum += delta;    
     str++;
   }

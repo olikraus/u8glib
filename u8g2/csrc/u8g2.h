@@ -23,6 +23,11 @@
 
 #include "u8x8.h"
 
+/*
+  The following macro enables all four drawing directions for glyphs and strings.
+  If this macro is not defined, than a string can be drawn only in horizontal direction.
+*/
+#define U8G2_WITH_FONT_ROTATION
 
 /*
   The following macro activates the early intersection check with the current visible area.
@@ -138,8 +143,8 @@ struct u8g2_struct
   
   /* the following variables are set by the update dimension callback */
   /* this is clipbox after rotation for the hvline procedures */
-  u8g2_uint_t buf_x0;	/* left corner of the buffer */
-  u8g2_uint_t buf_x1;	/* right corner of the buffer (excluded) */
+  //u8g2_uint_t buf_x0;	/* left corner of the buffer */
+  //u8g2_uint_t buf_x1;	/* right corner of the buffer (excluded) */
   u8g2_uint_t buf_y0;
   u8g2_uint_t buf_y1;
   
