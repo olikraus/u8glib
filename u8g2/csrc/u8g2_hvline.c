@@ -93,8 +93,11 @@ static void u8g2_unsafe_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y,
     a <= b		(this is checked and handled correctly)
     c <= d		(this is not checked)
   will return 0 if there is no intersection and if a > b
+
+  optimized clipping: c is set to 0
 */
-static uint8_t u8g2_clip_intersection(u8g2_uint_t *ap, u8g2_uint_t *bp, u8g2_uint_t c, u8g2_uint_t d)
+//static uint8_t u8g2_clip_intersection(u8g2_uint_t *ap, u8g2_uint_t *bp, u8g2_uint_t c, u8g2_uint_t d)
+static uint8_t u8g2_clip_intersection(u8g2_uint_t *ap, u8g2_uint_t *bp, u8g2_uint_t d)
 {
   u8g2_uint_t a = *ap;
   u8g2_uint_t b = *bp;
@@ -125,10 +128,10 @@ static uint8_t u8g2_clip_intersection(u8g2_uint_t *ap, u8g2_uint_t *bp, u8g2_uin
   
   if ( a >= d )
     return 0;
-  if ( b <= c )
+  if ( b <= 0 )		// was b <= c, could be replaced with b == 0
     return 0;
-  if ( a < c )
-    *ap = c;
+  //if ( a < c )		// never true with c == 0
+  //  *ap = c;
   if ( b > d )
     *bp = d;
     
@@ -149,37 +152,31 @@ static uint8_t u8g2_clip_intersection(u8g2_uint_t *ap, u8g2_uint_t *bp, u8g2_uin
 static void u8g2_draw_hv_line_2dir(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
 {
   u8g2_uint_t a;
-  u8g2_uint_t w, h;
+  register u8g2_uint_t w, h;
 
   y -= u8g2->tile_curr_row*8;
   
-  h = u8g2->tile_buf_height;
-  h *= 8;
-  w = u8g2_GetU8x8(u8g2)->display_info->tile_width;
-  w *= 8;
+  h = u8g2->pixel_buf_height;
+  w = u8g2->pixel_buf_width;
   
   if ( dir == 0 )
   {
-    //if ( y < u8g2->buf_y0 )
-    //  return;
     if ( y >= h )
       return;
     a = x;
     a += len;
-    if ( u8g2_clip_intersection(&x, &a, 0, w) == 0 )
+    if ( u8g2_clip_intersection(&x, &a, w) == 0 )
       return;
     len = a;
     len -= x;
   }
   else
   {
-    //if ( x < u8g2->buf_x0 )
-    //  return;
     if ( x >= w )
       return;
     a = y;
     a += len;
-    if ( u8g2_clip_intersection(&y, &a, 0, h) == 0 )
+    if ( u8g2_clip_intersection(&y, &a, h) == 0 )
       return;
     len = a;
     len -= y;

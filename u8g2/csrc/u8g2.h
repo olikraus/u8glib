@@ -131,6 +131,11 @@ struct u8g2_struct
   uint8_t tile_buf_height;	/* height of the tile memory area in tile rows */
   uint8_t tile_curr_row;	/* current row for picture loop */
   
+  /* dimension of the buffer in pixel */
+  u8g2_uint_t pixel_buf_width;		/* equal to tile_buf_height*8 */
+  u8g2_uint_t pixel_buf_height;		/* u8g2.display_info->tile_width*8 */
+  u8g2_uint_t pixel_curr_row;		/* u8g2.tile_curr_row*8 */
+  
   /* the following variables are set by the update dimension callback */
   /* this is clipbox after rotation for the hvline procedures */
   u8g2_uint_t buf_x0;	/* left corner of the buffer */
@@ -138,7 +143,7 @@ struct u8g2_struct
   u8g2_uint_t buf_y0;
   u8g2_uint_t buf_y1;
   
-  /* display dimensions for the user */
+  /* display dimensions in pixel for the user, calculated inu8g2_update_dimension_common(), used in u8g2_draw_hv_line_2dir() */
   u8g2_uint_t width;
   u8g2_uint_t height;
   
