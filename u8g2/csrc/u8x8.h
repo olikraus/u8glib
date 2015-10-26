@@ -186,7 +186,6 @@ struct u8x8_display_info_struct
 
 struct u8x8_struct
 {
-  //u8x8_t *u8x8_root;	/* root of the message call chain */
   const u8x8_display_info_t *display_info;
   u8x8_msg_cb display_cb;
   u8x8_msg_cb cad_cb;
