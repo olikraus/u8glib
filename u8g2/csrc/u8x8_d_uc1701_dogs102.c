@@ -145,16 +145,7 @@ uint8_t u8x8_d_uc1701_dogs102(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *
       {
 	c = ((u8x8_tile_t *)arg_ptr)->cnt;
 	ptr = ((u8x8_tile_t *)arg_ptr)->tile_ptr;
-	
-	u8x8_cad_SendData(u8x8, c*8, ptr);
-	/*
-	do
-	{
-	  u8x8_cad_SendData(u8x8, 8, ptr);
-	  ptr += 8;
-	  c--;
-	} while( c > 0 );
-	*/
+	u8x8_cad_SendData(u8x8, c*8, ptr);	/* note: SendData can not handle more than 255 bytes */
 	arg_int--;
       } while( arg_int > 0 );
       

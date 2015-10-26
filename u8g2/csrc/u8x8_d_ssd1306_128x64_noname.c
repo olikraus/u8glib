@@ -138,12 +138,15 @@ uint8_t u8x8_d_ssd1306_128x64_noname(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int,
       {
 	c = ((u8x8_tile_t *)arg_ptr)->cnt;
 	ptr = ((u8x8_tile_t *)arg_ptr)->tile_ptr;
+	u8x8_cad_SendData(u8x8, c*8, ptr); 	/* note: SendData can not handle more than 255 bytes */
+	/*
 	do
 	{
 	  u8x8_cad_SendData(u8x8, 8, ptr);
 	  ptr += 8;
 	  c--;
 	} while( c > 0 );
+	*/
 	arg_int--;
       } while( arg_int > 0 );
       

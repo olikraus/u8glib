@@ -183,8 +183,8 @@ void u8x8_Setup_SSD1306_128x64_NONAME(u8x8_t *u8x8)
   /* setup specific callbacks */
   u8x8->display_cb = u8x8_d_ssd1306_128x64_noname;
   u8x8->cad_cb = u8x8_cad_001;
-  //u8x8->byte_cb = u8x8_byte_arduino_hw_spi;
-  u8x8->byte_cb = u8x8_byte_8bit_sw_spi;
+  u8x8->byte_cb = u8x8_byte_arduino_hw_spi;
+  //u8x8->byte_cb = u8x8_byte_8bit_sw_spi;
   u8x8->gpio_and_delay_cb = u8x8_gpio_and_delay_arduino;
   
   /* setup display info */
@@ -197,14 +197,14 @@ uint8_t tile[8] = { 0x0f, 0x0f, 0x0f, 0x0f, 0xf0, 0xf0, 0xf0, 0xf0 };
 
 void setup(void)
 {
-  u8x8_Setup_UC1701_DOGS102(&u8g2);  
-  //u8x8_Setup_SSD1306_128x64_NONAME(&u8g2);
+  //u8x8_Setup_UC1701_DOGS102(&u8g2);  
+  u8x8_Setup_SSD1306_128x64_NONAME(&u8g2);
 }
 
 void loop(void)
 {
   u8x8_display_Init(&u8g2);  
-  u8x8_display_SetFlipMode(&u8g2, 1);
+  //u8x8_display_SetFlipMode(&u8g2, 1);
 
 
   for(;;)
