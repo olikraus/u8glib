@@ -16,12 +16,198 @@
 #include "u8g2.h"
 #include <assert.h>
 
+#ifdef U8G2_HVLINE_SPEED_OPTIMIZATION
 
+
+static uint8_t *u8g2_get_buffer_ptr(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y) U8G2_NOINLINE;
+static uint8_t *u8g2_get_buffer_ptr(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
+{
+  uint8_t *ptr;
+  uint16_t offset;
+  
+  y &= ~7;		/* zero the lowest 3 bits, y is tile-row * 8 from  now on */
+  offset = y;		/* y might be 8 or 16 bit, but we need 16 bit, so use a 16 bit variable */
+  offset *= u8g2_GetU8x8(u8g2)->display_info->tile_width;
+  ptr = u8g2->tile_buf_ptr;
+  ptr += offset;
+  ptr += x;
+
+  return ptr;
+}
+
+static void u8g2_draw_hline(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len)
+{
+  uint8_t *ptr;
+  uint8_t bit_pos, mask;
+  
+  //assert(x >= u8g2->buf_x0);
+  assert(x < u8g2_GetU8x8(u8g2)->display_info->tile_width*8);
+  //assert(y >= u8g2->buf_y0);
+  assert(y < u8g2_GetU8x8(u8g2)->display_info->tile_height*8);
+  
+  /* bytes are vertical, lsb on top (y=0), msb at bottom (y=7) */
+  bit_pos = y;		/* overflow truncate is ok here... */
+  bit_pos &= 7; 	/* ... because only the lowest 3 bits are needed */
+  
+  ptr = u8g2_get_buffer_ptr(u8g2, x, y);
+  
+  mask = 1;
+  mask <<= bit_pos;
+  if ( u8g2->draw_color != 0 )
+  {
+    do
+    {
+      *ptr |= mask;
+      len--;
+      ptr++;
+    } while( len > 0 );
+  }
+  else
+  {
+    mask ^= 255;
+    do
+    {
+      *ptr &= mask;
+      len--;
+      ptr++;
+    } while( len > 0 );
+  }  
+}
+
+/*
+  bitpos0 = y & 7
+  remaining len = len - (8 - bitpos0)
+  (len)/8 --> count intermediate bytes
+  if ( bitpos2 != 0 )
+
+*/
+
+static void u8g2_draw_vline(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len)
+{
+  uint8_t *ptr;
+  uint16_t offset;
+  uint8_t bit_pos0, bit_pos2;
+  uint8_t mask0, mask1, mask2;
+  u8g2_uint_t cnt;
+  
+  //assert(x >= u8g2->buf_x0);
+  assert(x < u8g2_GetU8x8(u8g2)->display_info->tile_width*8);
+  //assert(y >= u8g2->buf_y0);
+  assert(y < u8g2_GetU8x8(u8g2)->display_info->tile_height*8);
+  
+  /* bytes are vertical, lsb on top (y=0), msb at bottom (y=7) */
+  bit_pos0 = y;		/* overflow truncate is ok here... */
+  bit_pos2 = y;		/* overflow truncate is ok here... */
+  bit_pos2 += (uint8_t)len;	/* overflow truncate is also ok here... */
+  bit_pos0 &= 7; 	/* ... because only the lowest 3 bits are needed */
+  bit_pos2 &= 7; 	/* ... because only the lowest 3 bits are needed */
+
+  ptr = u8g2_get_buffer_ptr(u8g2, x, y);
+    
+  mask0 = 255;
+  mask0 <<= bit_pos0;
+  
+  mask2 = 255;
+  mask2 <<= bit_pos2;
+  
+  cnt = (len - (8 - bit_pos0));
+  cnt >>= 3;
+  
+  if ( u8g2->draw_color != 0 )
+  {
+    mask1 = 255;
+    mask2 ^= 255;
+    if ( (len <= 7) && (bit_pos0 < bit_pos2 ) )
+    {
+      mask0 &= mask2;
+      *ptr |= mask0;
+    }
+    else
+    {
+      *ptr |= mask0;
+      while( cnt > 0 )
+      {
+	ptr+=u8g2->width;
+	*ptr = mask1;
+	cnt--;
+      }
+      if ( bit_pos2 != 0 )
+      {
+	ptr+=u8g2->width;
+	*ptr |= mask2;
+      }
+    }
+  }
+  else
+  {
+    mask0 ^= 255;
+    mask1 = 0;
+    if ( (len <= 7) && (bit_pos0 < bit_pos2 ) )
+    {
+      mask0 |= mask2;
+      *ptr &= mask0;      
+    }
+    else
+    {
+      *ptr &= mask0;      
+      while( cnt > 0 )
+      {
+	ptr+=u8g2->width;
+	*ptr = mask1;
+	cnt--;
+      }
+      if ( bit_pos2 != 0 )
+      {
+	ptr+=u8g2->width;
+	*ptr &= mask2;
+      }
+    }
+    
+  }
+}
+
+/*
+  x,y		Upper left position of the line within the local buffer (not the display!)
+  len		length of the line in pixel, len must not be 0
+  dir		0: horizontal line (left to right)
+		1: vertical line (top to bottom)
+  asumption: 
+    all clipping done
+*/
+static void u8g2_unsafe_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, uint8_t dir)
+{
+  if ( dir == 0 )
+  {
+    u8g2_draw_hline(u8g2, x, y, len);
+    /*
+    do
+    {
+      u8g2_draw_pixel(u8g2, x, y);
+      x++;
+      len--;
+    } while( len != 0 );
+    */
+  }
+  else
+  {
+    u8g2_draw_vline(u8g2, x, y, len);
+    /*
+    do
+    {
+      u8g2_draw_pixel(u8g2, x, y);
+      y++;
+      len--;
+    } while( len != 0 );
+    */
+  }
+}
+
+#else /* U8G2_HVLINE_SPEED_OPTIMIZATION */
 
 /*
   x,y position within the buffer
 */
-void u8g2_draw_pixel(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
+static void u8g2_draw_pixel(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
 {
   uint8_t *ptr;
   uint8_t bit_pos, mask;
@@ -32,8 +218,6 @@ void u8g2_draw_pixel(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
   //assert(y >= u8g2->buf_y0);
   assert(y < u8g2_GetU8x8(u8g2)->display_info->tile_height*8);
   
-  // y -= u8g2->tile_curr_row*8;
-
   ptr = u8g2->tile_buf_ptr;
   /* bytes are vertical, lsb on top (y=0), msb at bottom (y=7) */
   bit_pos = y;		/* overflow truncate is ok here... */
@@ -85,6 +269,13 @@ static void u8g2_unsafe_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y,
     } while( len != 0 );
   }
 }
+
+
+#endif /* U8G2_HVLINE_SPEED_OPTIMIZATION */
+
+
+
+#ifdef U8G2_WITH_CLIPPING
 
 /*
   Description:
@@ -185,6 +376,8 @@ static void u8g2_draw_hv_line_2dir(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u
   u8g2_unsafe_draw_hv_line(u8g2, x, y, len, dir);
 }
 
+#endif
+
 /*
   x,y		Upper left position of the line
   len		length of the line in pixel, len must not be 0
@@ -213,7 +406,11 @@ void u8g2_draw_hv_line_4dir(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uin
     y++;
   }
   dir &= 1;  
+#ifdef U8G2_WITH_CLIPPING
   u8g2_draw_hv_line_2dir(u8g2, x, y, len, dir);
+#else
+  u8g2_unsafe_draw_hv_line(u8g2, x, y, len, dir);
+#endif
 }
 
 /*

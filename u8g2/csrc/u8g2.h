@@ -13,12 +13,13 @@
     
   
   Arduino Uno Text Example
->	FONT_ROTATION	INTERSECTION	text	   	data		bss		dec		hex	
->	x				x				7450	104		1116	8670	21de
->	-				x				7132	    104	   1115	   8351	   209f
->	x				-				7230	    104	   1116	   8450	   2102
->	-				-				7010	    104	   1115	   8229	   2025
-
+>	FONT_ROTATION	INTERSECTION	CLIPPING	text	   	data		bss		dec		hex	
+>																		8944
+>	x				x				x			7450	104		1116	8670	21de
+>	-				x				x			7132	104		1115	8351	209f
+>	x				-				x			7230	104		1116	8450	2102
+>	-				-				x			7010	104		1115	8229	2025
+>	-				-				-			6880	104		1115	8099	1fa3
   
   
 */
@@ -28,6 +29,12 @@
 #define _U8G2_H
 
 #include "u8x8.h"
+
+/*
+  The following macro enames the HVLine speed optimization.
+  It will consume about 300 bytes more in flash memory of the AVR.
+*/
+#define U8G2_HVLINE_SPEED_OPTIMIZATION
 
 /*
   The following macro enables all four drawing directions for glyphs and strings.
@@ -49,6 +56,17 @@
   Should not be defined for production code
 */
 //#define U8G2_WITH_HVLINE_COUNT
+
+/*
+  Defining the following variable adds the clipping and check procedures agains the display boundaries.
+  Clipping procedures are mandatory for the picture loop (u8g2_FirstPage/NextPage).
+  Clipping procedures will also allow strings to exceed the display boundaries.
+  On the other side, without clipping, all the setting of pixels must happen within the display boundaries.
+  
+  WARNING: Adding a comment in front of the following macro or removing the following line
+  may lead to memory faults if you write any pixel outside the display boundary.
+*/
+#define U8G2_WITH_CLIPPING
 
 /*==========================================*/
 
