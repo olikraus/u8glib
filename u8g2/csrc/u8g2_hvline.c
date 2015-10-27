@@ -177,26 +177,10 @@ static void u8g2_unsafe_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y,
   if ( dir == 0 )
   {
     u8g2_draw_hline(u8g2, x, y, len);
-    /*
-    do
-    {
-      u8g2_draw_pixel(u8g2, x, y);
-      x++;
-      len--;
-    } while( len != 0 );
-    */
   }
   else
   {
     u8g2_draw_vline(u8g2, x, y, len);
-    /*
-    do
-    {
-      u8g2_draw_pixel(u8g2, x, y);
-      y++;
-      len--;
-    } while( len != 0 );
-    */
   }
 }
 
@@ -238,19 +222,25 @@ static void u8g2_unsafe_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y,
   
   if ( dir == 0 )
   {
-    do
+    if ( u8g2->draw_color != 0 )
     {
-      if ( u8g2->draw_color != 0 )
+      do
       {
 	*ptr |= mask;
-      }
-      else
+	ptr++;
+	len--;
+      } while( len != 0 );
+    }
+    else
+    {
+      mask = ~mask;
+      do
       {
-	*ptr &= ~mask;
-      }  
-      ptr++;
-      len--;
-    } while( len != 0 );
+	*ptr &= mask;
+	ptr++;
+	len--;
+      } while( len != 0 );
+    }  
   }
   else
   {    
@@ -267,16 +257,36 @@ static void u8g2_unsafe_draw_hv_line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y,
       
       bit_pos++;
       bit_pos &= 7;
+
+      len--;
+
       if ( bit_pos == 0 )
       {
 	ptr+=u8g2->width;
+	
+	/* another speed optimization, but requires about 60 bytes on AVR */
+	/*
+	while( len >= 8 )
+	{
+	  if ( u8g2->draw_color != 0 )
+	  {
+	    *ptr = 255;
+	  }
+	  else
+	  {
+	    *ptr = 0;
+	  }
+	  len -= 8;
+	  ptr+=u8g2->width;
+	}
+	*/
+	
 	mask = 1;
       }
       else
       {
 	mask <<= 1;
       }
-      len--;
     } while( len != 0 );
   }
 }

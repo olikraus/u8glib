@@ -14,7 +14,7 @@
   
   Arduino Uno Text Example
 >	FONT_ROTATION	INTERSECTION	CLIPPING	text	   	data		bss		dec		hex	
->																		8944
+>																		8700
 >	x				x				x			7450	104		1116	8670	21de
 >	-				x				x			7132	104		1115	8351	209f
 >	x				-				x			7230	104		1116	8450	2102
@@ -31,8 +31,8 @@
 #include "u8x8.h"
 
 /*
-  The following macro enames the HVLine speed optimization.
-  It will consume about 30 bytes more in flash memory of the AVR.
+  The following macro enables the HVLine speed optimization.
+  It will consume about 40 bytes more in flash memory of the AVR.
 */
 #define U8G2_HVLINE_SPEED_OPTIMIZATION
 
