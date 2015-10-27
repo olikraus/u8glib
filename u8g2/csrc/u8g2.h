@@ -32,7 +32,7 @@
 
 /*
   The following macro enames the HVLine speed optimization.
-  It will consume about 300 bytes more in flash memory of the AVR.
+  It will consume about 30 bytes more in flash memory of the AVR.
 */
 #define U8G2_HVLINE_SPEED_OPTIMIZATION
 
