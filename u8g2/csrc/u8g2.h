@@ -12,7 +12,13 @@
     setup tile buffer
     
   
-  
+  Arduino Uno Text Example
+>	FONT_ROTATION	INTERSECTION	text	   	data		bss		dec		hex	
+>	x				x				7450	104		1116	8670	21de
+>	-				x				7132	    104	   1115	   8351	   209f
+>	x				-				7230	    104	   1116	   8450	   2102
+>	-				-				7010	    104	   1115	   8229	   2025
+
   
   
 */
@@ -42,7 +48,7 @@
   Internal performance test for the effect of enabling U8G2_WITH_INTERSECTION
   Should not be defined for production code
 */
-#define U8G2_WITH_HVLINE_COUNT
+//#define U8G2_WITH_HVLINE_COUNT
 
 /*==========================================*/
 
@@ -51,6 +57,13 @@
 #  define U8G2_NOINLINE __attribute__((noinline))
 #else
 #  define U8G2_NOINLINE
+#endif
+
+/*==========================================*/
+/* C++ compatible */
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 /*==========================================*/
@@ -231,6 +244,12 @@ u8g2_uint_t u8g2_DrawString(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, const ch
 void u8g2_Setup_SDL_128x64(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
 void u8g2_Setup_SDL_128x64_4(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
 
+/*==========================================*/
+/* C++ compatible */
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif
