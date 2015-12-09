@@ -64,10 +64,6 @@ static const uint8_t u8g_dev_ili9163c_128x128_init_seq[] PROGMEM = {
   U8G_ESC_CS(1),             /* enable chip */
   CMD(0x01 /* SOFTWARE_RESET */),
   U8G_ESC_DLY(100),       /* delay 100 ms */
-  U8G_ESC_DLY(100),       /* delay 100 ms */
-  U8G_ESC_DLY(100),       /* delay 100 ms */
-  U8G_ESC_DLY(100),       /* delay 100 ms */
-  U8G_ESC_DLY(100),       /* delay 100 ms */
   CMD(0x11 /* SLEEP_OUT */),
   U8G_ESC_DLY(5),         /* delay 5 ms */
 
