@@ -67,7 +67,7 @@ static const uint8_t u8g_dev_ili9163c_128x128_init_seq[] PROGMEM = {
   CMD(0x11 /* SLEEP_OUT */),
   U8G_ESC_DLY(5),         /* delay 5 ms */
 
-  CMD(0x0C /* PIXEL_FMT */), 0x05, // 16bit Color format
+  CMD(0x3A /* PIXEL_FMT */), 0x05, // 16bit Color format
   CMD(0x26 /* GAMMA_SET */), 0x02, // Gamma Curve 2 (0x01, 0x02, 0x04 or 0x08)
   CMD(0x13 /* NORMAL_DISPLAY_MODE_ON */),
   CMD(0xB6 /* DISPLAY_FUNCTION_SET */), 0xff, 0x06,
