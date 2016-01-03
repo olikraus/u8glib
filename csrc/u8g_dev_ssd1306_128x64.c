@@ -302,6 +302,15 @@ uint8_t u8g_dev_sh1106_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
     case U8G_DEV_MSG_SLEEP_OFF:
       u8g_WriteEscSeqP(u8g, dev, u8g_dev_ssd13xx_sleep_off);    
       return 1;
+    case U8G_DEV_MSG_CONTRAST:
+    {
+	u8g_SetChipSelect(u8g, dev, 1);
+	u8g_SetAddress(u8g, dev, 0); /* instruction mode */
+	u8g_WriteByte(u8g, dev, 0x81);
+	u8g_WriteByte(u8g, dev, *(uint8_t *) arg);
+	u8g_SetChipSelect(u8g, dev, 0);
+	return 1;
+    }
   }
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
 }

@@ -56,7 +56,7 @@ u8x8_t u8x8;
 
 int main(void)
 {
-  u8x8_Setup_TGA(&u8x8);
+  u8x8_Setup_TGA_DESC(&u8x8);
   u8x8_display_Init(&u8x8);  
   u8x8_display_SetPowerSave(&u8x8, 0);
 

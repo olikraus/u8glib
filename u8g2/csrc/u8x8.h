@@ -111,9 +111,7 @@ extern "C" {
 #endif
 
 /*==========================================*/
-/* U8G2 typedefs and data structures */
-
-typedef uint16_t u8g2_uint_t;	/* for pixel position only */
+/* U8X8 typedefs and data structures */
 
 
 typedef struct u8x8_struct u8x8_t;
@@ -442,7 +440,8 @@ int u8g_sdl_get_key(void);
 
 /*==========================================*/
 /* u8x8_d_tga.c */
-void u8x8_Setup_TGA(u8x8_t *u8x8);
+void u8x8_Setup_TGA_DESC(u8x8_t *u8x8);
+void u8x8_Setup_TGA_LCD(u8x8_t *u8x8);
 void tga_save(const char *name);
 
 /*==========================================*/

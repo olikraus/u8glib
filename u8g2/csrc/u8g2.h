@@ -86,6 +86,8 @@ extern "C" {
 
 /*==========================================*/
 
+typedef uint16_t u8g2_uint_t;	/* for pixel position only */
+
 typedef struct u8g2_struct u8g2_t;
 typedef struct u8g2_cb_struct u8g2_cb_t;
 
@@ -264,7 +266,8 @@ void u8g2_Setup_SDL_128x64_4(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
 
 /*==========================================*/
 /* u8x8_d_tga.c */
-void u8g2_Setup_TGA(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
+void u8g2_Setup_TGA_DESC(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
+void u8g2_Setup_TGA_LCD(u8g2_t *u8g2, const u8g2_cb_t *u8g2_cb);
 
 
 /*==========================================*/
