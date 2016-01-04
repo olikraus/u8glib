@@ -1321,8 +1321,8 @@ u8g_uint_t u8g_DrawStr90P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_
 u8g_uint_t u8g_DrawStr180P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
 u8g_uint_t u8g_DrawStr270P(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const u8g_pgm_uint8_t *s);
 
-int8_t printSizedChar(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding, uint8_t size);
-u8g_uint_t printSizedString(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s, uint8_t scale);
+int8_t u8g_printSizedChar(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding, uint8_t scale);
+u8g_uint_t u8g_printSizedString(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s, uint8_t scale);
 
 void u8g_SetFontRefHeightText(u8g_t *u8g);
 void u8g_SetFontRefHeightExtendedText(u8g_t *u8g);
