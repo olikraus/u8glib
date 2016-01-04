@@ -1511,7 +1511,7 @@ u8g_uint_t u8g_DrawAAStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
   return t;
 }
 
-int8_t printSizedChar(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding, uint8_t scale)
+int8_t u8g_printSizedChar(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding, uint8_t scale)
 {
 	const u8g_pgm_uint8_t *data;
 	uint8_t w, h;
@@ -1569,7 +1569,7 @@ int8_t printSizedChar(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding, 
 	return u8g->glyph_dx;
 }
 
-u8g_uint_t printSizedString(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s, uint8_t scale)
+u8g_uint_t u8g_printSizedString(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s, uint8_t scale)
 {
 	u8g_uint_t t = 0;
 	int8_t d;
