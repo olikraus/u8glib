@@ -1510,3 +1510,76 @@ u8g_uint_t u8g_DrawAAStr(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s)
   }
   return t;
 }
+
+int8_t printSizedChar(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, uint8_t encoding, uint8_t scale)
+{
+	const u8g_pgm_uint8_t *data;
+	uint8_t w, h;
+	uint8_t i, j;
+	u8g_uint_t ix, iy;
+	uint8_t ch;
+	uint8_t k, height;
+	{
+		u8g_glyph_t g = u8g_GetGlyph(u8g, encoding);
+		if ( g == NULL  )
+		return 0;
+		data = u8g_font_GetGlyphDataStart(u8g->font, g);
+	}
+	y += u8g->font_calc_vref(u8g)*scale;
+	w = u8g->glyph_width;
+	h = u8g->glyph_height;
+	
+	x += u8g->glyph_x;
+	y -= u8g->glyph_y;
+	y--;
+	
+	if ( u8g_IsBBXIntersection(u8g, x, y-h*scale+1, w*scale, h*scale) == 0 )
+		return u8g->glyph_dx;
+
+	/* now, w is reused as bytes per line */
+	w += 7;
+	w /= 8;
+	
+	iy = y;
+	iy -= h*scale;
+	iy++;	
+	for( j = 0; j < h; j++ )
+	{
+		for(height=0;height<scale;height++)
+		{
+			ix = x;
+			for( i = 0; i < w; i++ )
+			{
+				ch = u8g_pgm_read(data+i+w*j);
+				for (k = 0; k<8;k++)
+				{
+					for(uint8_t xscale=0;xscale<scale;xscale++)
+					{
+						if((ch&(1<<(7-k)))!=0)
+							u8g_DrawPixel(u8g,ix,iy);
+						ix++;
+					}
+					
+				}
+				
+			}
+			iy++;
+		}
+	}
+	return u8g->glyph_dx;
+}
+
+u8g_uint_t printSizedString(u8g_t *u8g, u8g_uint_t x, u8g_uint_t y, const char *s, uint8_t scale)
+{
+	u8g_uint_t t = 0;
+	int8_t d;
+	
+	while( *s != '\0' )
+	{
+		d = printSizedChar(u8g,x,y,*s,scale);
+		x += d*scale;
+		t += d*scale;
+		s++;
+	}
+	return t;
+}
