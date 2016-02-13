@@ -771,6 +771,13 @@ class U8GLIB_DOGXL160_2X_GR : public U8GLIB
       { }
 };
 
+class U8GLIB_DOGXL160_RPI : public U8GLIB 
+{
+  public:
+    U8GLIB_DOGXL160_RPI(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_uc1610_dogxl160_rpi, cs, a0, reset)
+      { }
+};
 
 class U8GLIB_NHD27OLED_BW : public U8GLIB 
 {
