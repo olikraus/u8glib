@@ -52,6 +52,11 @@
 #    include <Arduino.h> 
 #  endif
 
+/* issue 353 */
+#if defined(ARDUINO_ARCH_SAMD)
+#    include <delay.h>
+#endif
+
 #  if defined(__AVR__)
 #    define USE_AVR_DELAY
 #  elif defined(__PIC32MX)
