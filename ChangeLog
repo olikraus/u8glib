@@ -159,8 +159,9 @@ u8glib ChangeLog
   * Fixed bug in u8g_DrawLine(), Github issue 343 
   * Fixed bug in u8g_DrawStr90P(), Github issue 331
   * Support for SSD1306 with 64x48 pixel
-2015-xx-xx	v1.19	
-  
+2016-04-05	v1.19	
+  * Fixed contrast (brightness) setting for SH1106 and SSD1306 devices
+  * Fixed compiler warnings
   
   
   
