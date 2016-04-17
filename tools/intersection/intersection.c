@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 uint8_t array[256];
 
@@ -303,6 +304,11 @@ void check_all(void)
 
 void main(void)
 {
+  assert( u8g_is_intersection_decision_tree(4, 6, 7, 9) == 0 );
+  assert( u8g_is_intersection_decision_tree(4, 6, 6, 9) != 0 );
+  assert( u8g_is_intersection_decision_tree(6, 9, 4, 6) != 0 );
+  assert( u8g_is_intersection_decision_tree(7, 9, 4, 6) == 0 );
+  
   conditioninit();
   check_all();
   /*
