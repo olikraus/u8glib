@@ -41,6 +41,12 @@ uint8_t u8g_InitCom(u8g_t *u8g, u8g_dev_t *dev, uint8_t clk_cycle_time)
   return dev->com_fn(u8g, U8G_COM_MSG_INIT, clk_cycle_time, NULL);
 }
 
+uint8_t u8g_InitExtCom(u8g_t *u8g, u8g_dev_t *dev, u8g_com_t *args)
+{
+  /* for compatibility, the clock cycle time is also the value of arg_val */
+  return dev->com_fn(u8g, U8G_COM_MSG_INIT, args->clk_cycle_time, args);
+}
+
 void u8g_StopCom(u8g_t *u8g, u8g_dev_t *dev)
 {
   dev->com_fn(u8g, U8G_COM_MSG_STOP, 0, NULL);

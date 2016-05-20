@@ -898,6 +898,13 @@ defined(__18CXX) || defined(__PIC32MX)
 /*===============================================================*/
 /* com api */
 
+struct _u8g_com_t
+{
+  uint8_t clk_cycle_time;
+  uint8_t clk_mode;
+};
+typedef struct _u8g_com_t u8g_com_t;
+
 #define U8G_SPI_CLK_CYCLE_50NS 1
 #define U8G_SPI_CLK_CYCLE_100NS 2
 #define U8G_SPI_CLK_CYCLE_200NS 3
@@ -906,7 +913,15 @@ defined(__18CXX) || defined(__PIC32MX)
 #define U8G_SPI_CLK_CYCLE_1000NS 6
 #define U8G_SPI_CLK_CYCLE_NONE 255
 
+/* https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus#Clock_polarity_and_phase */
+#define U8G_SPI_MODE_0 0
+#define U8G_SPI_MODE_1 1
+#define U8G_SPI_MODE_2 2
+#define U8G_SPI_MODE_3 3
+#define U8G_SPI_MODE_NONE 255
+
 uint8_t u8g_InitCom(u8g_t *u8g, u8g_dev_t *dev, uint8_t clk_cycle_time);
+uint8_t u8g_InitExtCom(u8g_t *u8g, u8g_dev_t *dev, u8g_com_t *args);
 void u8g_StopCom(u8g_t *u8g, u8g_dev_t *dev);
 void u8g_EnableCom(u8g_t *u8g, u8g_dev_t *dev);         /* obsolete */
 void u8g_DisableCom(u8g_t *u8g, u8g_dev_t *dev);        /* obsolete */
