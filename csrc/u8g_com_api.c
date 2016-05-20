@@ -83,6 +83,16 @@ uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, const uint8_
   return dev->com_fn(u8g, U8G_COM_MSG_WRITE_SEQ_P, cnt, (void *)seq);
 }
 
+void u8g_AcquireCom(u8g_t *u8g, u8g_dev_t *dev)
+{
+  dev->com_fn(u8g, U8G_COM_MSG_ACQUIRE, 0, NULL);
+}
+
+void u8g_ReleaseCom(u8g_t *u8g, u8g_dev_t *dev)
+{
+  dev->com_fn(u8g, U8G_COM_MSG_RELEASE, 0, NULL);
+}
+
 /*
   sequence := { direct_value | escape_sequence }
   direct_value := 0..254

@@ -668,6 +668,9 @@ struct _u8g_dev_arg_irgb_t
 #define U8G_COM_MSG_WRITE_SEQ 6
 #define U8G_COM_MSG_WRITE_SEQ_P 7
 
+#define U8G_COM_MSG_ACQUIRE 8
+#define U8G_COM_MSG_RELEASE 9
+
 
 /* com driver */
 
@@ -911,6 +914,8 @@ void u8g_SetAddress(u8g_t *u8g, u8g_dev_t *dev, uint8_t address);
 uint8_t u8g_WriteByte(u8g_t *u8g, u8g_dev_t *dev, uint8_t val);
 uint8_t u8g_WriteSequence(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, uint8_t *seq);
 uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, const uint8_t *seq);
+void u8g_AcquireCom(u8g_t *u8g, u8g_dev_t *dev);
+void u8g_ReleaseCom(u8g_t *u8g, u8g_dev_t *dev);
 
 
 
