@@ -899,8 +899,11 @@ defined(__18CXX) || defined(__PIC32MX)
 /* com api */
 
 #define U8G_SPI_CLK_CYCLE_50NS 1
-#define U8G_SPI_CLK_CYCLE_300NS 2
-#define U8G_SPI_CLK_CYCLE_400NS 3
+#define U8G_SPI_CLK_CYCLE_100NS 2
+#define U8G_SPI_CLK_CYCLE_200NS 3
+#define U8G_SPI_CLK_CYCLE_300NS 4
+#define U8G_SPI_CLK_CYCLE_400NS 5
+#define U8G_SPI_CLK_CYCLE_1000NS 6
 #define U8G_SPI_CLK_CYCLE_NONE 255
 
 uint8_t u8g_InitCom(u8g_t *u8g, u8g_dev_t *dev, uint8_t clk_cycle_time);
