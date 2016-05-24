@@ -116,6 +116,11 @@
   Due NHD27OLED_GR u8g(10, 9)				HW SPI		FPS: Clip=34.1 Box=11.7  @=13.7 Pix=5.6
   Due NHD27OLED_2X_GR u8g(10, 9)			HW SPI		FPS: Clip=38.1 Box=15.5  @=20.0 Pix=8.8
 
+
+  28. Apr 2016
+  Uno DOGS102 u8g(13, 11, 10, 9);    			SW SPI	        FPS: Clip=26.6 Box=6.1  @=8.5 Pix=2.8		11548 Bytes
+  Uno DOGS102 u8g(10, 9);    					HW SPI	        FPS: Clip=33.1 Box=6.4  @=9.1 Pix=2.9		11366 Bytes
+
 */
 
 

@@ -494,6 +494,7 @@ extern u8g_dev_t u8g_dev_ssd1306_64x48_2x_i2c;
 extern u8g_dev_t u8g_dev_ld7032_60x32_sw_spi;
 extern u8g_dev_t u8g_dev_ld7032_60x32_hw_spi;
 extern u8g_dev_t u8g_dev_ld7032_60x32_parallel;
+extern u8g_dev_t u8g_dev_ld7032_60x32_i2c;		/* not test and not sure of this works */
 
 /* experimental 65K TFT with st7687 controller */
 extern u8g_dev_t u8g_dev_st7687_c144mvgd_sw_spi;
