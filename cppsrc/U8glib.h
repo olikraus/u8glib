@@ -192,6 +192,7 @@ class U8GLIB : public Print
     u8g_uint_t getStrPixelWidthP(u8g_pgm_uint8_t *s) { return u8g_GetStrPixelWidthP(&u8g, s); }
     u8g_uint_t getStrWidth(const char *s) { return u8g_GetStrWidth(&u8g, s); } 
     u8g_uint_t getStrWidthP(u8g_pgm_uint8_t *s) { return u8g_GetStrWidthP(&u8g, s); }
+    int8_t getGlyphDeltaX(uint8_t requested_encoding) { return u8g_GetGlyphDeltaX(&u8g, requested_encoding); }
     
     void setHardwareBackup(u8g_state_cb backup_cb) { u8g_SetHardwareBackup(&u8g, backup_cb); }
     
