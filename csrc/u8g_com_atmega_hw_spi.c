@@ -65,7 +65,7 @@
 
 
 /* Some AVR models assign the hardware SPI to different pins. */
-#if defined(__AVR_ATmega128__)
+#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega329P__) || defined(__AVR_ATmega3290P__)
 #define U8G_ATMEGA_HW_SPI_MOSI_PIN         (_BV(2))
 #define U8G_ATMEGA_HW_SPI_SCK_PIN          (_BV(1))
 #define U8G_ATMEGA_HW_SPI_SLAVE_SELECT_PIN (_BV(0))
