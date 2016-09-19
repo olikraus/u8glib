@@ -30,12 +30,7 @@
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-  
-  
-  Assumes, that 
-    MOSI is at PORTB, Pin 3
-  and
-    SCK is at PORTB, Pin 5
+
 
   Update for ATOMIC operation done (01 Jun 2013)
     U8G_ATOMIC_OR(ptr, val)
@@ -69,6 +64,18 @@
 #include <avr/io.h>
 
 
+/* Some AVR models assign the hardware SPI to different pins. */
+#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega329P__) || defined(__AVR_ATmega3290P__)
+#define U8G_ATMEGA_HW_SPI_MOSI_PIN         (_BV(2))
+#define U8G_ATMEGA_HW_SPI_SCK_PIN          (_BV(1))
+#define U8G_ATMEGA_HW_SPI_SLAVE_SELECT_PIN (_BV(0))
+#else
+#define U8G_ATMEGA_HW_SPI_MOSI_PIN         (_BV(3))
+#define U8G_ATMEGA_HW_SPI_SCK_PIN          (_BV(5))
+#define U8G_ATMEGA_HW_SPI_SLAVE_SELECT_PIN (_BV(2))
+#endif
+
+
 static uint8_t u8g_atmega_spi_out(uint8_t data)
 {
   /* unsigned char x = 100; */
@@ -97,25 +104,13 @@ uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
       
       U8G_ATOMIC_START();
 
-#if defined (__AVR_ATmega128__)
+      DDRB |= U8G_ATMEGA_HW_SPI_MOSI_PIN;
+      DDRB |= U8G_ATMEGA_HW_SPI_SCK_PIN;
+      DDRB |= U8G_ATMEGA_HW_SPI_SLAVE_SELECT_PIN;
 
-      DDRB |= _BV(2);          /* D0, MOSI */
-      DDRB |= _BV(1);          /* SCK */
-      DDRB |= _BV(0);           /* slave select */
+      PORTB &= ~U8G_ATMEGA_HW_SPI_MOSI_PIN;
+      PORTB &= ~U8G_ATMEGA_HW_SPI_SCK_PIN;
 
-      PORTB &= ~_BV(2);        /* D0, MOSI = 0 */
-      PORTB &= ~_BV(1);        /* SCK = 0 */
-#else
-      
-      DDRB |= _BV(3);          /* D0, MOSI */
-      DDRB |= _BV(5);          /* SCK */
-      DDRB |= _BV(2);		/* slave select */
-    
-      PORTB &= ~_BV(3);        /* D0, MOSI = 0 */
-      PORTB &= ~_BV(5);        /* SCK = 0 */
-
-#endif
-      
       U8G_ATOMIC_END();
       
       u8g_SetPILevel(u8g, U8G_PI_CS, 1);
@@ -148,11 +143,7 @@ uint8_t u8g_com_atmega_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void 
       }
       else
       {
-#if defined (__AVR_ATmega128__)
-        PORTB &= ~_BV(1);        /* SCK = 0 */
-#else
-        PORTB &= ~_BV(5);        /* SCK = 0 */
-#endif
+	PORTB &= ~U8G_ATMEGA_HW_SPI_SCK_PIN;
         /* enable */
         u8g_SetPILevel(u8g, U8G_PI_CS, 0); /* CS = 0 (low active) */
       }

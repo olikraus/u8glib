@@ -87,6 +87,12 @@ static void u8g_i2c_set_error(uint8_t code, uint8_t pos)
 #if __AVR_ARCH__ == 25
 #undef U8G_ATMEGA_HW_TWI
 #endif
+
+/* Some ATmegas also lack dedicated I2C hardware. */
+#if defined(__AVR_ATmega329P__) || defined(__AVR_ATmega3290P__)
+#undef U8G_ATMEGA_HW_TWI
+#endif
+
 #endif
 
 #if defined(U8G_ATMEGA_HW_TWI)
