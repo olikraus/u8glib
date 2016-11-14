@@ -1,6 +1,8 @@
 
 # U8glib
 
+Note: There will be no more development for U8glib. Please use [u8g2](https://github.com/olikraus/u8glib).
+
 A graphics library with support for many different monochrome displays.
 
 ![nhd_oled180.jpg](https://github.com/olikraus/u8glib/wiki/otherpic/nhd_oled180.jpg) ![dogs102_180.jpg](https://github.com/olikraus/u8glib/wiki/otherpic/dogs102_180.jpg)
