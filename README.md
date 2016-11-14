@@ -1,7 +1,7 @@
 
 # U8glib
 
-Note: There will be no more development for U8glib. Please use [u8g2](https://github.com/olikraus/u8glib).
+Note: There will be no more development for U8glib. Please use [u8g2](https://github.com/olikraus/u8g2/wiki).
 
 A graphics library with support for many different monochrome displays.
 
