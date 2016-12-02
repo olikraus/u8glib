@@ -59,11 +59,11 @@ uint8_t u8g_com_uart(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr) {
 //U8GLIB u8g(&u8g_dev_a2_micro_printer_192x120_ds, (u8g_com_fnptr)u8g_com_uart);
 
 // full resolution, requires to uncomment U8G_16BIT in u8g.h
-//U8GLIB u8g(&u8g_dev_a2_micro_printer_384x240, (u8g_com_fnptr)u8g_com_uart);
+U8GLIB u8g(&u8g_dev_a2_micro_printer_384x240, (u8g_com_fnptr)u8g_com_uart);
 
 // half resolution, extra log, requires to uncomment U8G_16BIT in u8g.h
 //U8GLIB u8g(&u8g_dev_a2_micro_printer_192x360_ds, (u8g_com_fnptr)u8g_com_uart);
-U8GLIB u8g(&u8g_dev_a2_micro_printer_192x720_ds, (u8g_com_fnptr)u8g_com_uart);
+//U8GLIB u8g(&u8g_dev_a2_micro_printer_192x720_ds, (u8g_com_fnptr)u8g_com_uart);
 
 
 

@@ -62,6 +62,10 @@ int main(void)
   u8g_t u8g;
   u8g_Init(&u8g, &u8g_dev_sdl_1bit);
   u8g_FirstPage(&u8g);
+ 
+  
+  printf("%d\n", ((u8g_pb_t *)(u8g.dev->dev_mem))->p.page_height);
+  printf("%d\n", ((u8g_pb_t *)(u8g.dev->dev_mem))->p.total_height);
   
   do
   {
