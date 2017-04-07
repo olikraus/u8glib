@@ -144,10 +144,10 @@ void u8g_i2c_init(uint8_t options)
   u8g_i2c_clear_error();
 }
 
-uint8_t u8g_i2c_wait(uint8_t mask, uint8_t pos)
+uint8_t u8g_i2c_wait(uint8_t mask, uint8_t value, uint8_t pos)
 {
   volatile uint16_t cnt = 2000;	/* timout value should be > 280 for 50KHz Bus and 16 Mhz CPU, however the start condition might need longer */
-  while( !(TWCR & mask) )
+  while( (TWCR & mask) != value )
   {
       if ( cnt == 0 )
       {
@@ -175,7 +175,7 @@ uint8_t u8g_i2c_start(uint8_t sla)
   TWCR = _BV(TWINT) |  _BV(TWSTA)  |  _BV(TWEN);
    
   /* wait */
-  if ( u8g_i2c_wait(_BV(TWINT), 1) == 0 )
+  if ( u8g_i2c_wait(_BV(TWINT), _BV(TWINT), 1) == 0 )
     return 0;
   
   status = TW_STATUS;
@@ -194,7 +194,7 @@ uint8_t u8g_i2c_start(uint8_t sla)
   TWCR = _BV(TWINT)  |  _BV(TWEN);
 
   /* wait */
-  if ( u8g_i2c_wait(_BV(TWINT), 2) == 0 )
+  if ( u8g_i2c_wait(_BV(TWINT), _BV(TWINT), 2) == 0 )
     return 0;
 
   if ( u8g_i2c_opt & U8G_I2C_OPT_NO_ACK )
@@ -220,7 +220,7 @@ uint8_t u8g_i2c_send_byte(uint8_t data)
   register uint8_t status;
   TWDR = data;
   TWCR = _BV(TWINT)  |  _BV(TWEN);
-  if ( u8g_i2c_wait(_BV(TWINT), 3) == 0 )
+  if ( u8g_i2c_wait(_BV(TWINT), _BV(TWINT), 3) == 0 )
     return 0;
     
   if ( u8g_i2c_opt & U8G_I2C_OPT_NO_ACK )
@@ -246,7 +246,7 @@ void u8g_i2c_stop(void)
   TWCR = _BV(TWINT) | _BV(TWEN) | _BV(TWSTO);
 
   /* no error is checked for the stop condition */  
-  u8g_i2c_wait(_BV(TWSTO), 4);
+  u8g_i2c_wait(_BV(TWSTO), 0, 4);
   
 }
 
@@ -612,7 +612,7 @@ uint8_t u8g_i2c_send_byte(uint8_t data) {
    return 1;
 }
 
-uint8_t u8g_i2c_wait(uint8_t mask, uint8_t pos)
+uint8_t u8g_i2c_wait(uint8_t mask, uint8_t value, uint8_t pos)
 {
   return 1;
 }
@@ -626,7 +626,7 @@ void u8g_i2c_init(uint8_t options)
   u8g_i2c_clear_error();
 }
 
-uint8_t u8g_i2c_wait(uint8_t mask, uint8_t pos)
+uint8_t u8g_i2c_wait(uint8_t mask, uint8_t value, uint8_t pos)
 {
   return 1;
 }
