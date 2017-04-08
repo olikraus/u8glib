@@ -299,6 +299,11 @@ extern u8g_dev_t u8g_dev_st7565_lm6063_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_lm6063_hw_spi;
 extern u8g_dev_t u8g_dev_st7565_lm6063_2x_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_lm6063_2x_hw_spi;
+/* Display: Pax Instruments pi13264 */
+extern u8g_dev_t u8g_dev_st7567_pi13264_sw_spi;
+extern u8g_dev_t u8g_dev_st7567_pi13264_hw_spi;
+extern u8g_dev_t u8g_dev_st7567_pi13264_2x_sw_spi;
+extern u8g_dev_t u8g_dev_st7567_pi13264_2x_hw_spi;
 /* Display: Newhaven NHD-C12864 */
 extern u8g_dev_t u8g_dev_st7565_nhd_c12864_sw_spi;
 extern u8g_dev_t u8g_dev_st7565_nhd_c12864_hw_spi;
