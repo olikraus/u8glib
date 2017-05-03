@@ -669,6 +669,9 @@ struct _u8g_dev_arg_irgb_t
 #define U8G_COM_MSG_WRITE_SEQ 6
 #define U8G_COM_MSG_WRITE_SEQ_P 7
 
+#define U8G_COM_MSG_ACQUIRE 8
+#define U8G_COM_MSG_RELEASE 9
+
 
 /* com driver */
 
@@ -896,12 +899,30 @@ defined(__18CXX) || defined(__PIC32MX)
 /*===============================================================*/
 /* com api */
 
+struct _u8g_com_t
+{
+  uint8_t clk_cycle_time;
+  uint8_t clk_mode;
+};
+typedef struct _u8g_com_t u8g_com_t;
+
 #define U8G_SPI_CLK_CYCLE_50NS 1
-#define U8G_SPI_CLK_CYCLE_300NS 2
-#define U8G_SPI_CLK_CYCLE_400NS 3
+#define U8G_SPI_CLK_CYCLE_100NS 2
+#define U8G_SPI_CLK_CYCLE_200NS 3
+#define U8G_SPI_CLK_CYCLE_300NS 4
+#define U8G_SPI_CLK_CYCLE_400NS 5
+#define U8G_SPI_CLK_CYCLE_1000NS 6
 #define U8G_SPI_CLK_CYCLE_NONE 255
 
+/* https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus#Clock_polarity_and_phase */
+#define U8G_SPI_MODE_0 0
+#define U8G_SPI_MODE_1 1
+#define U8G_SPI_MODE_2 2
+#define U8G_SPI_MODE_3 3
+#define U8G_SPI_MODE_NONE 255
+
 uint8_t u8g_InitCom(u8g_t *u8g, u8g_dev_t *dev, uint8_t clk_cycle_time);
+uint8_t u8g_InitExtCom(u8g_t *u8g, u8g_dev_t *dev, u8g_com_t *args);
 void u8g_StopCom(u8g_t *u8g, u8g_dev_t *dev);
 void u8g_EnableCom(u8g_t *u8g, u8g_dev_t *dev);         /* obsolete */
 void u8g_DisableCom(u8g_t *u8g, u8g_dev_t *dev);        /* obsolete */
@@ -912,6 +933,8 @@ void u8g_SetAddress(u8g_t *u8g, u8g_dev_t *dev, uint8_t address);
 uint8_t u8g_WriteByte(u8g_t *u8g, u8g_dev_t *dev, uint8_t val);
 uint8_t u8g_WriteSequence(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, uint8_t *seq);
 uint8_t u8g_WriteSequenceP(u8g_t *u8g, u8g_dev_t *dev, uint8_t cnt, const uint8_t *seq);
+void u8g_AcquireCom(u8g_t *u8g, u8g_dev_t *dev);
+void u8g_ReleaseCom(u8g_t *u8g, u8g_dev_t *dev);
 
 
 
