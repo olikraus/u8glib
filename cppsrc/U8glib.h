@@ -1177,6 +1177,17 @@ class U8GLIB_ST7687_C144MVGD: public U8GLIB
       { }
 };
 
+class U8GLIB_ILI9163C_128x128 : public U8GLIB 
+{
+public:
+    U8GLIB_ILI9163C_128x128(uint8_t sck, uint8_t mosi, uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ili9163c_128x128_sw_spi, sck, mosi, cs, a0, reset)
+      { }
+    U8GLIB_ILI9163C_128x128(uint8_t cs, uint8_t a0, uint8_t reset = U8G_PIN_NONE) 
+      : U8GLIB(&u8g_dev_ili9163c_128x128_hw_spi, cs, a0, reset)
+      { }
+};
+
 class U8GLIB_ILI9325D_320x240 : public U8GLIB 
 {
   public:
