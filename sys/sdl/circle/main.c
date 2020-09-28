@@ -31,6 +31,11 @@ int main(void)
       u8g_DrawFilledEllipse(&u8g, 48, 35, 20, rad, U8G_DRAW_UPPER_LEFT);
       u8g_DrawFilledEllipse(&u8g, 48, 37, 20, rad, U8G_DRAW_LOWER_LEFT);
       
+      /*
+      u8g_DrawRFrame(&u8g, 5,0,25,5,2);
+      u8g_DrawRFrame(&u8g, 35,0,25,6,2);
+      */
+      
     } while( u8g_NextPage(&u8g) );
 
   while( u8g_sdl_get_key() < 0 )

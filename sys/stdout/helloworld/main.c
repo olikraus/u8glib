@@ -18,7 +18,7 @@ int main(void)
     u8g_SetFont(&u8g, u8g_font_10x20);
     w = u8g_GetFontBBXWidth(&u8g);
     h = u8g_GetFontBBXHeight(&u8g);
-    u8g_DrawStr(&u8g, 0, h, 0, "ABCgdef");
+    u8g_DrawStr(&u8g, 0, h, "ABCgdef");
     //u8g_DrawStr(&u8g, 0, 5, 0, "g");
     //u8g_DrawStr(&u8g, 10, 7, 0, "g");
     //u8g_DrawStr(&u8g, 20, 9, 0, "g");

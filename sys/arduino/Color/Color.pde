@@ -7,7 +7,7 @@
   >>> Before compiling: Please remove comment from the constructor of the 
   >>> connected graphics display (see below).
   
-  Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
+  Universal 8bit Graphics Library, https://github.com/olikraus/u8glib/
   
   Copyright (c) 2012, olikraus@gmail.com
   All rights reserved.
@@ -43,7 +43,7 @@
 
 // setup u8g object, please remove comment from one of the following constructor calls
 // IMPORTANT NOTE: The following list is incomplete. The complete list of supported 
-// devices with all constructor calls is here: http://code.google.com/p/u8glib/wiki/device
+// devices with all constructor calls is here: https://github.com/olikraus/u8glib/wiki/device
 //U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_2X_BW u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
