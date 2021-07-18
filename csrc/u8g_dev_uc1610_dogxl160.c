@@ -273,6 +273,42 @@ uint8_t u8g_dev_uc1610_dogxl160_2x_gr_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg
   return u8g_dev_pb16v2_base_fn(u8g, dev, msg, arg);
 }
 
+uint8_t u8g_dev_uc1610_dogxl160_rpi_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
+{
+  switch(msg)
+  {
+    case U8G_DEV_MSG_INIT:
+      u8g_InitCom(u8g, dev, U8G_SPI_CLK_CYCLE_300NS);
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_uc1610_dogxl160_init_seq);
+      break;
+    case U8G_DEV_MSG_STOP:
+      break;
+    case U8G_DEV_MSG_PAGE_NEXT:
+      {
+        u8g_pb_t *pb = (u8g_pb_t *)(dev->dev_mem);
+        
+        for (uint8_t j = 0; j < 26; j++) {
+            u8g_WriteEscSeqP(u8g, dev, u8g_dev_uc1610_dogxl160_data_start);    
+            u8g_WriteByte(u8g, dev, 0x060 | (pb->p.page*2+j) ); /* select current page (UC1610) */
+            u8g_SetAddress(u8g, dev, 1);           /* data mode */
+            if ( u8g_WriteSequence(u8g, dev, WIDTH, (uint8_t *)(pb->buf)+WIDTH*j) == 0 )
+              return 0;
+        }
+        
+        u8g_SetChipSelect(u8g, dev, 0);
+      }
+      break;
+    case U8G_DEV_MSG_CONTRAST:
+      u8g_SetChipSelect(u8g, dev, 1);
+      u8g_SetAddress(u8g, dev, 0);          /* instruction mode */
+      u8g_WriteByte(u8g, dev, 0x081);
+      u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 1);
+      u8g_SetChipSelect(u8g, dev, 0);      
+      return 1;
+  }
+  return u8g_dev_pb208v2_base_fn(u8g, dev, msg, arg);
+}
+
 U8G_PB_DEV(u8g_dev_uc1610_dogxl160_bw_sw_spi, WIDTH, HEIGHT, 8, u8g_dev_uc1610_dogxl160_bw_fn, U8G_COM_SW_SPI);
 U8G_PB_DEV(u8g_dev_uc1610_dogxl160_bw_hw_spi, WIDTH, HEIGHT, 8, u8g_dev_uc1610_dogxl160_bw_fn, U8G_COM_HW_SPI);
 
@@ -288,3 +324,7 @@ uint8_t u8g_dev_uc1610_dogxl160_2x_gr_buf[WIDTH*2] U8G_NOCOMMON ;
 u8g_pb_t u8g_dev_uc1610_dogxl160_2x_gr_pb = { {8, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_uc1610_dogxl160_2x_gr_buf}; 
 u8g_dev_t u8g_dev_uc1610_dogxl160_2x_gr_sw_spi = { u8g_dev_uc1610_dogxl160_2x_gr_fn, &u8g_dev_uc1610_dogxl160_2x_gr_pb, U8G_COM_SW_SPI };
 u8g_dev_t u8g_dev_uc1610_dogxl160_2x_gr_hw_spi = { u8g_dev_uc1610_dogxl160_2x_gr_fn, &u8g_dev_uc1610_dogxl160_2x_gr_pb, U8G_COM_HW_SPI };
+
+uint8_t u8g_dev_uc1610_dogxl160_rpi_buf[WIDTH*26] U8G_NOCOMMON ; 
+u8g_pb_t u8g_dev_uc1610_dogxl160_rpi_pb = { {HEIGHT, HEIGHT, 0, 0, 0},  WIDTH, u8g_dev_uc1610_dogxl160_rpi_buf}; 
+u8g_dev_t u8g_dev_uc1610_dogxl160_rpi = { u8g_dev_uc1610_dogxl160_rpi_fn, &u8g_dev_uc1610_dogxl160_rpi_pb, U8G_COM_HW_SPI };
