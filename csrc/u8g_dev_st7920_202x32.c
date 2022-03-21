@@ -63,6 +63,26 @@ static const uint8_t u8g_dev_st7920_202x32_init_seq[] PROGMEM = {
   U8G_ESC_END                /* end of sequence */
 };
 
+static const uint8_t  u8g_dev_st7920_202x32_sleep_on[] PROGMEM = {
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),            /* enable chip */
+  0x038,                    /* 8 Bit interface (DL=1), basic instruction set (RE=0) */
+  0x008,                    /* display off */
+  0x034,                    /* 8 Bit interface (DL=1), extended instruction set (RE=1) */
+  0x001,                    /* Standby mode */
+  U8G_ESC_CS(0),            /* disable chip */
+  U8G_ESC_END               /* end of sequence */
+};
+
+static const uint8_t  u8g_dev_st7920_202x32_sleep_off[] PROGMEM = {
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),            /* enable chip */
+  0x038,                    /* 8 Bit interface (DL=1), basic instruction set (RE=0) */
+  0x00c,                    /* display on, cursor & blink off */
+  U8G_ESC_CS(0),            /* disable chip */
+  U8G_ESC_END               /* end of sequence */
+};
+
 uint8_t u8g_dev_st7920_202x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
@@ -97,6 +117,12 @@ uint8_t u8g_dev_st7920_202x32_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *
         u8g_SetChipSelect(u8g, dev, 0);
       }
       break;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7920_202x32_sleep_on);
+      return 1;
+    case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7920_202x32_sleep_off);
+      return 1;
   }
   return u8g_dev_pb8h1_base_fn(u8g, dev, msg, arg);
 }
@@ -135,6 +161,12 @@ uint8_t u8g_dev_st7920_202x32_4x_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, voi
         u8g_SetChipSelect(u8g, dev, 0);
       }
       break;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7920_202x32_sleep_on);
+      return 1;
+    case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_st7920_202x32_sleep_off);
+      return 1;
   }
   return u8g_dev_pb32h1_base_fn(u8g, dev, msg, arg);
 }
