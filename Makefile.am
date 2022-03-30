@@ -67,6 +67,7 @@ SRC_COMMON_ALG= \
     csrc/u8g_pb16h2.c \
     csrc/u8g_pb16v1.c \
     csrc/u8g_pb16v2.c \
+    csrc/u8g_pb208v2.c \
     csrc/u8g_pb32h1.c \
     csrc/u8g_pb8h1.c \
     csrc/u8g_pb8h1f.c \
