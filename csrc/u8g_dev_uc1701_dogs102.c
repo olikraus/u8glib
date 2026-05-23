@@ -77,6 +77,24 @@ static const uint8_t u8g_dev_dogs102_data_start[] PROGMEM = {
   U8G_ESC_END                /* end of sequence */
 };
 
+static const uint8_t u8g_dev_dogs102_sleep_on[] PROGMEM = {
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),            /* enable chip */
+  0x0ae,                    /* display off */
+  0x0a5,                    /* enter powersafe: all pixel on */
+  U8G_ESC_CS(0),            /* disable chip */
+  U8G_ESC_END               /* end of sequence */
+};
+
+static const uint8_t u8g_dev_dogs102_sleep_off[] PROGMEM = {
+  U8G_ESC_ADR(0),           /* instruction mode */
+  U8G_ESC_CS(1),            /* enable chip */
+  0x0a4,                    /* display on */
+  0x0af,                    /* all pixel off */
+  U8G_ESC_CS(0),            /* disable chip */
+  U8G_ESC_END               /* end of sequence */
+};
+
 uint8_t u8g_dev_dogs102_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
 {
   switch(msg)
@@ -104,6 +122,12 @@ uint8_t u8g_dev_dogs102_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, void *arg)
       u8g_WriteByte(u8g, dev, 0x081);
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 2);
       u8g_SetChipSelect(u8g, dev, 0);      
+      return 1;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_dogs102_sleep_on);
+      return 1;
+    case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_dogs102_sleep_off);
       return 1;
   }
   return u8g_dev_pb8v1_base_fn(u8g, dev, msg, arg);
@@ -142,6 +166,12 @@ uint8_t u8g_dev_uc1701_dogs102_2x_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, vo
       u8g_WriteByte(u8g, dev, 0x081);
       u8g_WriteByte(u8g, dev, (*(uint8_t *)arg) >> 2);
       u8g_SetChipSelect(u8g, dev, 0);      
+      return 1;
+    case U8G_DEV_MSG_SLEEP_ON:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_dogs102_sleep_on);
+      return 1;
+    case U8G_DEV_MSG_SLEEP_OFF:
+      u8g_WriteEscSeqP(u8g, dev, u8g_dev_dogs102_sleep_off);
       return 1;
   }
   return u8g_dev_pb16v1_base_fn(u8g, dev, msg, arg);

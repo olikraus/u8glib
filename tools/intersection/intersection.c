@@ -1,8 +1,15 @@
+/*
 
+  intersection.c
+  
+  coverage: gcc -fprofile-arcs -ftest-coverage intersection.c
+
+*/
 
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 uint8_t array[256];
 
@@ -243,7 +250,7 @@ void check(uint8_t b1, uint8_t b2)
   clear();
   line(a1, a2, 1);
   line(b1, b2, 2);
-  show();
+  //show();
   intersection = is_array_intersection();
   p = conditionpattern(b1, b2); 
   pla[p] |= intersection+1;
@@ -288,7 +295,7 @@ void check_size(uint8_t size)
 void check_all(void)
 {
   uint8_t size;
-  for( size =1; size < 255; size++ )
+  for( size =0; size < 255; size++ )
   {
     printf("size=%d\n", size);
     check_size(size);
@@ -297,6 +304,11 @@ void check_all(void)
 
 void main(void)
 {
+  assert( u8g_is_intersection_decision_tree(4, 6, 7, 9) == 0 );
+  assert( u8g_is_intersection_decision_tree(4, 6, 6, 9) != 0 );
+  assert( u8g_is_intersection_decision_tree(6, 9, 4, 6) != 0 );
+  assert( u8g_is_intersection_decision_tree(7, 9, 4, 6) == 0 );
+  
   conditioninit();
   check_all();
   /*

@@ -123,7 +123,7 @@ uint8_t u8g_dev_uc1610_dogxl160_bw_fn(u8g_t *u8g, u8g_dev_t *dev, uint8_t msg, v
         u8g_SetAddress(u8g, dev, 1);           /* data mode */
         for( i = 0; i < WIDTH; i++ )
         {
-          u8g_WriteByte(u8g, dev, u8g_dev_1to2( ((uint8_t *)(pb->buf))[i] >> 4 ) );          
+          u8g_WriteByte(u8g, dev, u8g_dev_1to2( ((uint8_t *)(pb->buf))[i] >> 4 ) );
         }
         
         u8g_SetChipSelect(u8g, dev, 0);

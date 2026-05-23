@@ -7,7 +7,7 @@
   >>> Before compiling: Please remove comment from the constructor of the 
   >>> connected graphics display (see below).
   
-  Universal 8bit Graphics Library, http://code.google.com/p/u8glib/
+  Universal 8bit Graphics Library, https://github.com/olikraus/u8glib/
   
   Copyright (c) 2012, olikraus@gmail.com
   All rights reserved.
@@ -44,7 +44,7 @@
 
 // setup u8g object, please remove comment from one of the following constructor calls
 // IMPORTANT NOTE: The following list is incomplete. The complete list of supported 
-// devices with all constructor calls is here: http://code.google.com/p/u8glib/wiki/device
+// devices with all constructor calls is here: https://github.com/olikraus/u8glib/wiki/device
 //U8GLIB_NHD27OLED_BW u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_2X_BW u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_NHD27OLED_GR u8g(13, 11, 10, 9);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
@@ -96,6 +96,9 @@
 //U8GLIB_SSD1306_128X32 u8g(13, 11, 10, 9);	// SW SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_SSD1306_128X32 u8g(10, 9);             // HW SPI Com: CS = 10, A0 = 9 (Hardware Pins are  SCK = 13 and MOSI = 11)
 //U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE);	// I2C / TWI 
+//U8GLIB_SSD1306_64X48 u8g(13, 11, 10, 9);	// SW SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
+//U8GLIB_SSD1306_64X48 u8g(10, 9);             // HW SPI Com: CS = 10, A0 = 9 (Hardware Pins are  SCK = 13 and MOSI = 11)
+//U8GLIB_SSD1306_64X48 u8g(U8G_I2C_OPT_NONE);	// I2C / TWI 
 //U8GLIB_SH1106_128X64 u8g(13, 11, 10, 9);	// SW SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_SH1106_128X64 u8g(4, 5, 6, 7);	// SW SPI Com: SCK = 4, MOSI = 5, CS = 6, A0 = 7 (new blue HalTec OLED)
 //U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);	// I2C / TWI 
@@ -107,9 +110,12 @@
 //U8GLIB_UC1611_DOGM240 u8g(U8G_I2C_OPT_NONE);	// I2C
 //U8GLIB_UC1611_DOGM240 u8g(13, 11, 10, 9);	// SW SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_UC1611_DOGM240 u8g(10, 9);		// HW SPI Com: CS = 10, A0 = 9 (Hardware Pins are  SCK = 13 and MOSI = 11)
+//U8GLIB_UC1611_DOGM240 u8g(10, 9);		// HW SPI Com: CS = 10, A0 = 9 (Hardware Pins are  SCK = 13 and MOSI = 11)
+//U8GLIB_UC1611_DOGM240 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 3, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs=3, di/a0=17,rw=16
 //U8GLIB_UC1611_DOGXL240 u8g(U8G_I2C_OPT_NONE);	// I2C
 //U8GLIB_UC1611_DOGXL240 u8g(13, 11, 10, 9);	// SW SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9
 //U8GLIB_UC1611_DOGXL240 u8g(10, 9);		// HW SPI Com: CS = 10, A0 = 9 (Hardware Pins are  SCK = 13 and MOSI = 11)
+//U8GLIB_UC1611_DOGXL240 u8g(8, 9, 10, 11, 4, 5, 6, 7, 18, 3, 17, 16);   // 8Bit Com: D0..D7: 8,9,10,11,4,5,6,7 en=18, cs=3, di/a0=17,rw=16
 //U8GLIB_NHD_C12864 u8g(13, 11, 10, 9, 8);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RST = 8
 //U8GLIB_NHD_C12832 u8g(13, 11, 10, 9, 8);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RST = 8
 //U8GLIB_LD7032_60x32 u8g(13, 11, 10, 9, 8);	// SPI Com: SCK = 13, MOSI = 11, CS = 10, A0 = 9, RST = 8
@@ -135,20 +141,19 @@
 //U8GLIB_SSD1351_128X128GH_332 u8g(8, 9, 7); // Arduino, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (Freetronics OLED)
 //U8GLIB_SSD1351_128X128GH_HICOLOR u8g(8, 9, 7); // Arduino, HW SPI Com: SCK = 76, MOSI = 75, CS = 8, A0 = 9, RESET = 7 (Freetronics OLED)
 
-U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
 
 // DOGS102 shield configuration values
-uint8_t uiKeyPrev = 2;
-uint8_t uiKeyNext = 4;
-uint8_t uiKeySelect = 5;
-uint8_t uiKeyBack = 3;
+// uint8_t uiKeyPrev = 2;
+// uint8_t uiKeyNext = 4;
+// uint8_t uiKeySelect = 5;
+// uint8_t uiKeyBack = 3;
 
 // DOGM128-Shield	 configuration values
 // DOGXL60-Shield configuration values
-//uint8_t uiKeyPrev = 7;
-//uint8_t uiKeyNext = 3;
-//uint8_t uiKeySelect = 2;
-//uint8_t uiKeyBack = 8;
+uint8_t uiKeyPrev = 7;
+uint8_t uiKeyNext = 3;
+uint8_t uiKeySelect = 2;
+uint8_t uiKeyBack = 8;
 
 uint8_t uiKeyCodeFirst = CHESS_KEY_NONE;
 uint8_t uiKeyCodeSecond = CHESS_KEY_NONE;
@@ -158,14 +163,10 @@ uint8_t uiKeyCode = CHESS_KEY_NONE;
 void uiSetup(void) {
   // configure input keys 
 #if defined(ARDUINO)
-  pinMode(uiKeyPrev, INPUT);           // set pin to input
-  digitalWrite(uiKeyPrev, HIGH);       // turn on pullup resistors
-  pinMode(uiKeyNext, INPUT);           // set pin to input
-  digitalWrite(uiKeyNext, HIGH);       // turn on pullup resistors
-  pinMode(uiKeySelect, INPUT);           // set pin to input
-  digitalWrite(uiKeySelect, HIGH);       // turn on pullup resistors
-  pinMode(uiKeyBack, INPUT);           // set pin to input
-  digitalWrite(uiKeyBack, HIGH);       // turn on pullup resistors
+  pinMode(uiKeyPrev, INPUT_PULLUP);           // set pin to input
+  pinMode(uiKeyNext, INPUT_PULLUP);           // set pin to input
+  pinMode(uiKeySelect, INPUT_PULLUP);           // set pin to input
+  pinMode(uiKeyBack, INPUT_PULLUP);           // set pin to input
 #endif
 }
 

@@ -9,7 +9,7 @@ U8GLIB_ST7920_128X64 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com:
 //U8GLIB_ST7920_192X32 u8g(18, 16, 17, U8G_PIN_NONE);                  // SPI Com: SCK = en = 18, MOSI = rw = 16, CS = di = 17
 
 /*
-  the pb object is (usually) the device name from http://code.google.com/p/u8glib/wiki/device
+  the pb object is (usually) the device name from https://github.com/olikraus/u8glib/wiki/device
   with "_pb" added at the end.
 */
 extern u8g_pb_t u8g_dev_st7920_192x32_sw_spi_pb;
